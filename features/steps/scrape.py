@@ -7,10 +7,17 @@ from nose.tools import assert_equal
 def step_impl(context, uri):
     context.scraper = Scraper(uri)
 
+
 @when("I scrape this page")
 def step_impl(context):
     context.scraper.run()
 
+
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     assert_equal(context.scraper.dataURI, uri)
+
+
+@step('the title should be "{title}"')
+def step_impl(context, title):
+    assert_equal(context.scraper.title, title)
