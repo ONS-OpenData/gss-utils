@@ -15,9 +15,29 @@ def step_impl(context):
 
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
-    assert_equal(context.scraper.dataURI, uri)
+    assert_equal(context.scraper.data_uri, uri)
 
 
 @step('the title should be "{title}"')
 def step_impl(context, title):
     assert_equal(context.scraper.title, title)
+
+
+@step('the publication date should be "{date}"')
+def step_impl(context, date):
+    assert_equal(context.scraper.publication_date, date)
+
+
+@step('the next release date should be "{date}"')
+def step_impl(context, date):
+    assert_equal(context.scraper.next_release, date)
+
+
+@step('the description should read "{description}"')
+def step_impl(context, description):
+    assert_equal(context.scraper.description, description)
+
+
+@step('the contact email address should be "{email}"')
+def step_impl(context, email):
+    assert_equal(context.scraper.contact, email)

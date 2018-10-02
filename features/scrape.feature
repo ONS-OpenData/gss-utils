@@ -8,3 +8,7 @@ Feature: Scrape dataset info
     When I scrape this page
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/annualforeigndirectinvestmentinward2016.xls"
     And the title should be "Foreign direct investment involving UK companies: Inward tables"
+    And the publication date should be "2017-12-01"
+    And the next release date should be "2018-12-03"
+    And the description should read "Inward datasets including data for flows, positions and earnings."
+    And the contact email address should be "mailto:fdi@ons.gov.uk"
