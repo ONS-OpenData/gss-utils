@@ -1,0 +1,115 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.19.1]
+    method: GET
+    uri: https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Allow: ['DELETE, GET, HEAD, POST, PUT, OPTIONS']
+      CF-Cache-Status: [EXPIRED]
+      CF-RAY: [4636a4c47d0513a1-LHR]
+      Cache-Control: ['public, max-age=14400']
+      Connection: [keep-alive]
+      Content-Encoding: [gzip]
+      Content-Type: [text/html;charset=utf-8]
+      Date: ['Tue, 02 Oct 2018 10:56:39 GMT']
+      Expect-CT: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
+      Expires: ['Tue, 02 Oct 2018 14:56:39 GMT']
+      Server: [cloudflare]
+      Set-Cookie: ['__cfduid=d27e034441545323e0e2c3bd10bfd26191538477799; expires=Wed,
+          02-Oct-19 10:56:39 GMT; path=/; domain=.ons.gov.uk; HttpOnly']
+      Strict-Transport-Security: [max-age=31536000; includeSubDomains]
+      Transfer-Encoding: [chunked]
+      Vary: ['Accept-Encoding, User-Agent']
+      X-Frame-Options: [SAMEORIGIN, SAMEORIGIN]
+      X-XSS-Protection: ['1']
+    status: {code: 200, message: OK}
+version: 1

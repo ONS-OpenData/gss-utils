@@ -1,16 +1,20 @@
 from behave import *
 from gssutils import Scraper
 from nose.tools import assert_equal
+import vcr
+import requests
 
-@given(
-    'a dataset page "{uri}"')
+
+@given('a dataset page "{uri}"')
 def step_impl(context, uri):
-    context.scraper = Scraper(uri)
+    context.scraper = Scraper(uri, requests.Session())
 
 
+@vcr.use_cassette('features/fixtures/scrape.yml')
 @when("I scrape this page")
 def step_impl(context):
-    context.scraper.run()
+    with vcr.use_cassette('features/fixtures/scrape.yml'):
+        context.scraper.run()
 
 
 @then('the data can be downloaded from "{uri}"')

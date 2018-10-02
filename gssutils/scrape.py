@@ -5,14 +5,18 @@ from cachecontrol.heuristics import LastModified
 from lxml import html
 from urllib.parse import urlparse, urljoin
 from dateutil.parser import parse
+import vcr
 
 
 class Scraper:
-    def __init__(self, uri):
+    def __init__(self, uri, session=None):
         self.uri = uri
-        self.session = CacheControl(requests.Session(),
-                                    cache=FileCache('.cache'),
-                                    heuristic=LastModified())
+        if session:
+            self.session = session
+        else:
+            self.session = CacheControl(requests.Session(),
+                                        cache=FileCache('.cache'),
+                                        heuristic=LastModified())
 
     def run(self):
         page = self.session.get(self.uri)

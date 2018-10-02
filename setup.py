@@ -13,6 +13,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/ONS-OpenData/gss-utils",
     packages=setuptools.find_packages(),
+    install_requires=['requests', 'python_dateutil', 'CacheControl'],
+    tests_require=['behave', 'nose', 'vcrpy'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
