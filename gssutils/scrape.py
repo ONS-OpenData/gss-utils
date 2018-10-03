@@ -1,3 +1,4 @@
+from functools import lru_cache
 from io import BytesIO
 
 import messytables
@@ -106,7 +107,6 @@ class Scraper:
         for k, v in kwargs.items():
             self._dist_filters.append(lambda x: x.__dict__[k] == v)
 
-
     @property
     def the_distribution(self):
         if len(self._dist_filters) > 0:
@@ -129,15 +129,20 @@ class Scraper:
     def data_uri(self):
         return self.the_distribution.downloadURL
 
+    @lru_cache(maxsize=2)
+    def _get_databaker_excel(self, url):
+        # monkeypatches from databaker
+        from databaker import overrides
+        fobj = BytesIO(self.session.get(url).content)
+        tableset = messytables.excel.XLSTableSet(fobj)
+        tabs = list(xypath.loader.get_sheets(tableset, "*"))
+        return tabs
+
     @property
     def as_databaker(self):
         dist = self.the_distribution
         if dist.mediaType == 'application/vnd.ms-excel':
-            fobj = BytesIO(self.session.get(dist.downloadURL).content)
-            self._tableset = messytables.excel.XLSTableSet(fobj)
-            # following from https://github.com/sensiblecodeio/databaker/blob/master/databaker/framework.py#L17
-            tabs = list(xypath.loader.get_sheets(self._tableset, "*"))
-            return tabs
+            return self._get_databaker_excel(dist.downloadURL)
 
     @property
     def title(self):

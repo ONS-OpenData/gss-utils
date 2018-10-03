@@ -5,3 +5,4 @@ Feature: distribution downloading
     When I scrape this page
     And fetch the distribution as a databaker object
     Then the sheet names are [Contents, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, Geography, SIC]
+    And I can access excel_ref 'A4' in the '1.1' tab

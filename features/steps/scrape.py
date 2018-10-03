@@ -1,6 +1,6 @@
 from behave import *
 from gssutils import Scraper
-from nose.tools import assert_equal
+from nose.tools import *
 import vcr
 import requests
 from gssutils.metadata import DCTERMS, DCAT, namespaces
@@ -78,3 +78,9 @@ def step_impl(context, namelist):
     names = [name.strip() for name in namelist.split(',')]
     tabnames = [tab.name for tab in context.databaker]
     assert_equal(names, tabnames)
+
+
+@step("I can access excel_ref '{ref}' in the '{name}' tab")
+def step_impl(context, ref, name):
+    sheet = [tab for tab in context.databaker if tab.name == name][0]
+    assert_true(sheet.excel_ref(ref))
