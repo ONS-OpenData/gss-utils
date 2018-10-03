@@ -11,10 +11,10 @@ def step_impl(context, uri):
     context.scraper = Scraper(uri, requests.Session())
 
 
-@vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes')
 @when("I scrape this page")
 def step_impl(context):
-    context.scraper.run()
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+        context.scraper.run()
 
 
 @then('the data can be downloaded from "{uri}"')
@@ -65,3 +65,16 @@ def step_impl(context, title):
 def step_impl(context, prefix, property, object):
     ns = {'dct': DCTERMS, 'dcat': DCAT}.get(prefix)
     assert_equal(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
+
+
+@step("fetch the distribution as a databaker object")
+def step_impl(context):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+        context.databaker = context.scraper.as_databaker
+
+
+@then("the sheet names are [{namelist}]")
+def step_impl(context, namelist):
+    names = [name.strip() for name in namelist.split(',')]
+    tabnames = [tab.name for tab in context.databaker]
+    assert_equal(names, tabnames)

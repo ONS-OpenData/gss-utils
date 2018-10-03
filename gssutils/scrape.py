@@ -1,3 +1,6 @@
+from io import BytesIO
+
+import messytables
 import requests
 from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
@@ -5,6 +8,8 @@ from cachecontrol.heuristics import LastModified
 from lxml import html
 from urllib.parse import urlparse, urljoin
 from dateutil.parser import parse
+import xypath.loader
+
 from gssutils.metadata import Dataset, Distribution
 import re
 import html2text
@@ -24,6 +29,7 @@ class Scraper:
         self.dataset = Dataset()
         self.distributions = []
         self._dist_filters = []
+        self._tableset = None
         if session:
             self.session = session
         else:
@@ -94,13 +100,15 @@ class Scraper:
                 self.dataset.publisher = urljoin(self.uri, from_link[0])
         else:
             raise NotImplementedError(f'No scraper for {self.uri}')
+        return self
 
     def dist_filter(self, **kwargs):
         for k, v in kwargs.items():
             self._dist_filters.append(lambda x: x.__dict__[k] == v)
 
+
     @property
-    def data_uri(self):
+    def the_distribution(self):
         if len(self._dist_filters) > 0:
             dists = [dist for dist in self.distributions if all(
                 [f(dist) for f in self._dist_filters])]
@@ -109,13 +117,27 @@ class Scraper:
             elif len(dists) == 0:
                 raise DistributionFilterError('no distributions match given filter(s)')
             else:
-                return dists[0].downloadURL
+                return dists[0]
         if len(self.distributions) == 1:
-            return self.distributions[0].downloadURL
+            return self.distributions[0]
         elif len(self.distributions) > 1:
             raise DistributionFilterError('more than one distribution, but no filters given.')
         else:
             raise DistributionFilterError('no distributions.')
+
+    @property
+    def data_uri(self):
+        return self.the_distribution.downloadURL
+
+    @property
+    def as_databaker(self):
+        dist = self.the_distribution
+        if dist.mediaType == 'application/vnd.ms-excel':
+            fobj = BytesIO(self.session.get(dist.downloadURL).content)
+            self._tableset = messytables.excel.XLSTableSet(fobj)
+            # following from https://github.com/sensiblecodeio/databaker/blob/master/databaker/framework.py#L17
+            tabs = list(xypath.loader.get_sheets(self._tableset, "*"))
+            return tabs
 
     @property
     def title(self):

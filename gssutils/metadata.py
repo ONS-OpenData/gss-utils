@@ -1,6 +1,8 @@
 from enum import Enum
 from rdflib import Dataset, Literal, URIRef, Graph
 from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager
+import messytables
+
 DCAT = Namespace('http://www.w3.org/ns/dcat#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
 PMD = Namespace('http://publishmydata.com/def/dataset#')
@@ -39,6 +41,13 @@ class Metadata:
     def asTrig(self):
         quads = Dataset()
         return ""
+
+    def _repr_html_(self):
+        s = f'<b>{type(self).__name__}</b>:\n<dl>\n'
+        for k, v in self.__dict__.items():
+            s = s + f'<dt>{k}</dt><dd>{v}</dd>\n'
+        s = s + '</dl>'
+        return s
 
 
 class Status(Enum):
