@@ -3,6 +3,7 @@ from nose.tools import *
 from rdflib.compare import to_isomorphic, graph_diff
 from rdflib import Graph
 from dateutil.parser import parse
+from datetime import datetime
 
 
 @step("set the base URI to <{uri}>")
@@ -51,3 +52,19 @@ def step_impl(context, license):
         'OGLv3': 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
     }.get(license)
     context.scraper.dataset.license = license_url
+
+
+@then("the dataset URI should be <{uri}>")
+def step_impl(context, uri):
+    eq_(str(context.scraper.dataset.uri), uri)
+
+
+@step("the metadata graph should be <{uri}>")
+def step_impl(context, uri):
+    eq_(str(context.scraper.dataset.graph), uri)
+
+
+@step("the modified date should be quite recent")
+def step_impl(context):
+    now = datetime.now()
+    ok_((abs(now - context.scraper.dataset.modified)).total_seconds() < 60)

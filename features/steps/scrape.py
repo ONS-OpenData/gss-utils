@@ -4,6 +4,7 @@ from nose.tools import *
 import vcr
 import requests
 from gssutils.metadata import DCTERMS, DCAT, namespaces
+import os
 
 
 @given('a dataset page "{uri}"')
@@ -84,3 +85,8 @@ def step_impl(context, namelist):
 def step_impl(context, ref, name):
     sheet = [tab for tab in context.databaker if tab.name == name][0]
     assert_true(sheet.excel_ref(ref))
+
+
+@step("the '{env}' environment variable is '{value}'")
+def step_impl(context, env, value):
+    os.environ[env] = value

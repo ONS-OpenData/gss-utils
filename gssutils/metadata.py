@@ -22,6 +22,7 @@ namespaces.bind('gov', GOV)
 namespaces.bind('gdp', GDP)
 namespaces.bind('qb', QB)
 namespaces.bind('void', VOID)
+namespaces.bind('dct', DCTERMS)
 
 
 class Status(Enum):
@@ -126,7 +127,7 @@ class PMDDataset(QBDataSet):
         'nextUpdateDue': (PMD.nextUpdateDue, Status.recommended, lambda d: Literal(d)),  # date/time
         'family': (GDP.family, Status.recommended, lambda f: GDP[f.lower()]),
         'sparqlEndpoint': (VOID.sparqlEndpoint, Status.recommended, lambda s: URIRef(s)),
-        'graph': (PMD.graph, Status.mandatory, lambda s: URIRef(s)),
+        'inGraph': (PMD.graph, Status.mandatory, lambda s: URIRef(s)),
         'contactEmail': (PMD.contactEmail, Status.recommended, lambda s: URIRef(s)),
         'license': (DCTERMS.license, Status.recommended, lambda s: URIRef(s)),
         'creator': (DCTERMS.creator, Status.recommended, lambda s: URIRef(s))

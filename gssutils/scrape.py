@@ -12,8 +12,11 @@ from dateutil.parser import parse
 import xypath.loader
 
 from gssutils.metadata import PMDDataset, Distribution
+from gssutils.utils import pathify
 import re
 import html2text
+import os
+from datetime import datetime
 
 
 class DistributionFilterError(Exception):
@@ -28,6 +31,7 @@ class Scraper:
     def __init__(self, uri, session=None):
         self.uri = uri
         self.dataset = PMDDataset()
+        self.dataset.modified = datetime.now()
         self.distributions = []
         self._dist_filters = []
         self._tableset = None
@@ -38,6 +42,12 @@ class Scraper:
             self.session = CacheControl(requests.Session(),
                                         cache=FileCache('.cache'),
                                         heuristic=LastModified())
+        if 'JOB_NAME' in os.environ:
+            self.set_base_uri('http://gss-data.org.uk')
+            if os.environ['JOB_NAME'].startswith('GSS/'):
+                self.set_dataset_id(pathify(os.environ['JOB_NAME'][len('GSS/'):]))
+            else:
+                self.set_dataset_id(pathify(os.environ['JOB_NAME']))
 
     @staticmethod
     def to_markdown(node):
@@ -152,7 +162,7 @@ class Scraper:
     def set_dataset_id(self, id):
         self.dataset.set_uri(urljoin(self._base_uri, f'data/{id}'))
         self.dataset.set_graph(urljoin(self._base_uri, f'graph/{id}/metadata'))
-        self.dataset.graph = urljoin(self._base_uri, f'graph/{id}')
+        self.dataset.inGraph = urljoin(self._base_uri, f'graph/{id}')
 
     def set_family(self, family):
         self.dataset.family = family

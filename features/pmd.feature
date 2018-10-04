@@ -45,3 +45,12 @@ Feature: PMD metadata
         rdfs:comment "Inward datasets including data for flows, positions and earnings."@en .
       }
       """
+
+    Scenario: convention over configuration
+      Given the 'JOB_NAME' environment variable is 'GSS/Trade/ONS-FDI-inward'
+      And a dataset page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
+      When I scrape this page
+      And generate TriG
+      Then the dataset URI should be <http://gss-data.org.uk/data/trade/ons-fdi-inward>
+      And the metadata graph should be <http://gss-data.org.uk/graph/trade/ons-fdi-inward/metadata>
+      And the modified date should be quite recent
