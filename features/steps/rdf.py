@@ -1,0 +1,53 @@
+from behave import *
+from nose.tools import *
+from rdflib.compare import to_isomorphic, graph_diff
+from rdflib import Graph
+from dateutil.parser import parse
+
+
+@step("set the base URI to <{uri}>")
+def step_impl(context, uri):
+    context.scraper.set_base_uri(uri)
+
+
+@step("set the dataset ID to <{dataset_id}>")
+def step_impl(context, dataset_id):
+    context.scraper.set_dataset_id(dataset_id)
+
+
+@step("generate TriG")
+def step_impl(context):
+    context.trig = context.scraper.generate_trig()
+
+
+@then("the TriG should contain")
+def step_impl(context):
+    g1 = to_isomorphic(Graph().parse(format='trig', data=context.trig))
+    g2 = to_isomorphic(Graph().parse(format='trig', data=context.text))
+    in_both, only_in_first, only_in_second = graph_diff(g1, g2)
+    ok_(len(only_in_second) == 0, f"""
+<<<
+{only_in_first.serialize(format='n3').decode('utf-8')}
+===
+{only_in_second.serialize(format='n3').decode('utf-8')}
+>>>
+""")
+
+
+@step("set the family to '{family}'")
+def step_impl(context, family):
+    context.scraper.set_family(family)
+
+
+@step("set the modified time to '{datetime}'")
+def step_impl(context, datetime):
+    modified = parse(datetime)
+    context.scraper.dataset.modified = modified
+
+
+@step("set the license to '{license}'")
+def step_impl(context, license):
+    license_url = {
+        'OGLv3': 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+    }.get(license)
+    context.scraper.dataset.license = license_url

@@ -11,7 +11,7 @@ from urllib.parse import urlparse, urljoin
 from dateutil.parser import parse
 import xypath.loader
 
-from gssutils.metadata import Dataset, Distribution
+from gssutils.metadata import PMDDataset, Distribution
 import re
 import html2text
 
@@ -27,10 +27,11 @@ class DistributionFilterError(Exception):
 class Scraper:
     def __init__(self, uri, session=None):
         self.uri = uri
-        self.dataset = Dataset()
+        self.dataset = PMDDataset()
         self.distributions = []
         self._dist_filters = []
         self._tableset = None
+        self._base_uri = None
         if session:
             self.session = session
         else:
@@ -143,6 +144,21 @@ class Scraper:
         dist = self.the_distribution
         if dist.mediaType == 'application/vnd.ms-excel':
             return self._get_databaker_excel(dist.downloadURL)
+
+    def set_base_uri(self, uri):
+        self._base_uri = uri
+        self.dataset.sparqlEndpoint = urljoin(uri, '/sparql')
+
+    def set_dataset_id(self, id):
+        self.dataset.set_uri(urljoin(self._base_uri, f'data/{id}'))
+        self.dataset.set_graph(urljoin(self._base_uri, f'graph/{id}/metadata'))
+        self.dataset.graph = urljoin(self._base_uri, f'graph/{id}')
+
+    def set_family(self, family):
+        self.dataset.family = family
+
+    def generate_trig(self):
+        return self.dataset.as_quads().serialize(format='trig')
 
     @property
     def title(self):
