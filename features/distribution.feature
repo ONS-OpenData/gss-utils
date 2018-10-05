@@ -15,3 +15,13 @@ Feature: distribution downloading
     And fetch the distribution as a databaker object
     Then the sheet names contain [Contents, Metadata, Net-Council Area-Sex]
     And I can access excel_ref 'B6' in the 'Net-Council Area-Sex' tab
+
+  Scenario: pandas with nrscotland XLSX
+    Given a dataset page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
+    When I scrape this page
+    And select the distribution given by
+      | key       | value                                                      |
+      | mediaType | application/vnd.ms-excel                                   |
+      | title     | Migration between Scotland and overseas by age             |
+    And fetch the 'SYOA Females (2001-)' tab as a pandas DataFrame
+    Then the dataframe should have 62 rows

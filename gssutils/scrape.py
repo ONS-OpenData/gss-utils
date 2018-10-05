@@ -16,7 +16,7 @@ from lxml import html
 import gssutils.scrapers
 from gssutils.metadata import PMDDataset
 from gssutils.utils import pathify
-
+import pandas as pd
 
 class DistributionFilterError(Exception):
     """ Raised when filters don't uniquely identify a distribution
@@ -107,6 +107,12 @@ class Scraper:
         dist = self.the_distribution
         if dist.mediaType == 'application/vnd.ms-excel':
             return self._get_databaker_excel(dist.downloadURL)
+
+    def as_pandas(self, **kwargs):
+        dist = self.the_distribution
+        if dist.mediaType == 'application/vnd.ms-excel':
+            fobj = BytesIO(self.session.get(dist.downloadURL).content)
+            return pd.read_excel(fobj, **kwargs)
 
     def set_base_uri(self, uri):
         self._base_uri = uri

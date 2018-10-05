@@ -100,3 +100,14 @@ def step_impl(context):
     for row in context.table:
         d[row[0]] = row[1]
     context.scraper.dist_filter(**d)
+
+
+@step("fetch the '{tabname}' tab as a pandas DataFrame")
+def step_impl(context, tabname):
+    context.pandas = context.scraper.as_pandas(sheet_name=tabname)
+
+
+@then("the dataframe should have {rows:d} rows")
+def step_impl(context, rows):
+    dfrows, dfcols = context.pandas.shape
+    eq_(rows, dfrows)

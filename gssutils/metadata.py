@@ -2,6 +2,7 @@ from enum import Enum
 from rdflib import Dataset as Quads, Literal, URIRef, Graph, BNode
 from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager, VOID
 from inspect import getmro
+import html
 
 DCAT = Namespace('http://www.w3.org/ns/dcat#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
@@ -79,14 +80,17 @@ class Metadata:
                     graph.add((self.uri, RDF.type, c._type))
         for local_name, profile in self._properties_metadata.items():
             if local_name in self.__dict__:
-                property, status, f = self._properties_metadata[local_name]
-                graph.add((self.uri, property, f(self.__dict__[local_name])))
+                prop, status, f = profile
+                graph.add((self.uri, prop, f(self.__dict__[local_name])))
         return quads
 
     def _repr_html_(self):
-        s = f'<b>{type(self).__name__}</b>:\n<dl>\n'
-        for k, v in self.__dict__.items():
-            s = s + f'<dt>{k}</dt><dd>{v}</dd>\n'
+        s = f'<h3>{type(self).__name__}</h3>\n<dl>'
+        for local_name, profile in self._properties_metadata.items():
+            if local_name in self.__dict__:
+                prop, status, f = profile
+                s = s + f'<dt>{html.escape(prop.n3(namespaces))}</dt>'
+                s = s + f'<dd>{html.escape(f(self.__dict__[local_name]).n3())}</dd>\n'
         s = s + '</dl>'
         return s
 
