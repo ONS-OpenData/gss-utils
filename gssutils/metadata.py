@@ -90,7 +90,11 @@ class Metadata:
             if local_name in self.__dict__:
                 prop, status, f = profile
                 s = s + f'<dt>{html.escape(prop.n3(namespaces))}</dt>'
-                s = s + f'<dd>{html.escape(f(self.__dict__[local_name]).n3())}</dd>\n'
+                term = f(self.__dict__[local_name])
+                if type(term) == URIRef:
+                    s = s + f'<dd><a href={str(term)}>{html.escape(term.n3())}</a></dd>\n'
+                else:
+                    s = s + f'<dd>{html.escape(term.n3())}</dd>\n'
         s = s + '</dl>'
         return s
 
