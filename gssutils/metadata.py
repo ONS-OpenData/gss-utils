@@ -150,17 +150,17 @@ class Distribution(Metadata):
     _type = DCAT.Distribution
     _properties_metadata = dict(Metadata._properties_metadata)
     _properties_metadata.update({
-        'title': (DCTERMS.title, Status.mandatory),
-        'description': (DCTERMS.description, Status.mandatory),
-        'issued': (DCTERMS.issued, Status.mandatory),
-        'modified': (DCTERMS.modified, Status.recommended),
-        'license': (DCTERMS.license, Status.mandatory),
-        'rights': (DCTERMS.rights, Status.mandatory),
-        'accessURL': (DCAT.accessURL, Status.mandatory),
-        'downloadURL': (DCAT.downloadURL, Status.mandatory),
-        'mediaType': (DCAT.mediaType, Status.mandatory),
-        'format': (DCTERMS.format, Status.recommended),
-        'byteSize': (DCAT.byteSize, Status.recommended),
-        'checksum': (SPDX.checksum, Status.recommended),
-        'language': (DCTERMS.language, Status.mandatory)
+        'title': (DCTERMS.title, Status.mandatory, lambda s: Literal(s, 'en')),
+        'description': (DCTERMS.description, Status.mandatory, lambda s: Literal(s, 'en')),
+        'issued': (DCTERMS.issued, Status.mandatory, lambda d: Literal(d)),
+        'modified': (DCTERMS.modified, Status.recommended, lambda d: Literal(d)),
+        'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
+        'rights': (DCTERMS.rights, Status.mandatory, lambda s: Literal(s, 'en')),
+        'accessURL': (DCAT.accessURL, Status.mandatory, lambda u: URIRef(u)),
+        'downloadURL': (DCAT.downloadURL, Status.mandatory, lambda u: URIRef(u)),
+        'mediaType': (DCAT.mediaType, Status.mandatory, lambda s: Literal(s)),
+        'format': (DCTERMS.format, Status.recommended, lambda s: Literal(s)),
+        'byteSize': (DCAT.byteSize, Status.recommended, lambda i: Literal(i)),
+        'checksum': (SPDX.checksum, Status.recommended, lambda i: Literal(i)),
+        'language': (DCTERMS.language, Status.mandatory, lambda s: Literal(s))
     })

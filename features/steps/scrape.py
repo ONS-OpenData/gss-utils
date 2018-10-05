@@ -38,9 +38,9 @@ def step_impl(context, date):
     assert_equal(context.scraper.next_release, date)
 
 
-@step('the description should read "{description}"')
+@step('the description should start "{description}"')
 def step_impl(context, description):
-    assert_equal(context.scraper.description, description)
+    ok_(context.scraper.description.startswith(description))
 
 
 @step('the contact email address should be "{email}"')
@@ -50,11 +50,12 @@ def step_impl(context, email):
 
 @step('select "{extension}" files')
 def step_impl(context, extension):
-    mimetype = {
+    mediaType = {
         "ODS": "application/vnd.oasis.opendocument.spreadsheet",
-        "XLS": "application/vnd.ms-excel"
+        "XLS": "application/vnd.ms-excel",
+        "XLSX": "application/vnd.ms-excel"
     }.get(extension)
-    context.scraper.dist_filter(mimeType=mimetype)
+    context.scraper.dist_filter(mediaType=mediaType)
 
 
 @step('select files with title "{title}"')
@@ -74,11 +75,11 @@ def step_impl(context):
         context.databaker = context.scraper.as_databaker
 
 
-@then("the sheet names are [{namelist}]")
+@then("the sheet names contain [{namelist}]")
 def step_impl(context, namelist):
     names = [name.strip() for name in namelist.split(',')]
     tabnames = [tab.name for tab in context.databaker]
-    assert_equal(names, tabnames)
+    ok_(set(names).issubset(set(tabnames)))
 
 
 @step("I can access excel_ref '{ref}' in the '{name}' tab")

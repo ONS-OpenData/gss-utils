@@ -10,7 +10,7 @@ Feature: Scrape dataset info
     And the title should be "Foreign direct investment involving UK companies: Inward tables"
     And the publication date should be "2017-12-01"
     And the next release date should be "2018-12-03"
-    And the description should read "Inward datasets including data for flows, positions and earnings."
+    And the description should start "Inward datasets including data for flows, positions and earnings."
     And the contact email address should be "mailto:fdi@ons.gov.uk"
 
   Scenario: ONS metadata profile
@@ -28,3 +28,16 @@ Feature: Scrape dataset info
     And select "ODS" files
     And select files with title "Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1"
     Then the data can be downloaded from "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/683359/entry-visas1-oct-dec-2017-tables.ods"
+
+  Scenario: Scrape nrscotland
+    Given a dataset page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
+    When I scrape this page
+    Then the title should be "Migration between Scotland and Overseas"
+    And the description should start "Migration between Scotland and overseas refers to people moving between"
+
+  Scenario: nrscotland downloads
+    Given a dataset page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
+    When I scrape this page
+    And select "XLSX" files
+    And select files with title "Migration between Scotland and overseas by age"
+    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/2018-july/tab-z2-overseas-mig-flows-by-age-scotland-2001-02-latest-july-18.xlsx"
