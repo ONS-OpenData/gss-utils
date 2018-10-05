@@ -38,6 +38,8 @@ Feature: Scrape dataset info
   Scenario: nrscotland downloads
     Given a dataset page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
     When I scrape this page
-    And select "XLSX" files
-    And select files with title "Migration between Scotland and overseas by age"
-    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/2018-july/tab-z2-overseas-mig-flows-by-age-scotland-2001-02-latest-july-18.xlsx"
+    And select the distribution given by
+      | key       | value                                                      |
+      | mediaType | application/vnd.ms-excel                                   |
+      | title     | Migration between administrative areas and overseas by sex |
+    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/2018-july/tab-z1-overseas-mig-flows-admin-sex-hb-2001-02-latest-july-18.xlsx"

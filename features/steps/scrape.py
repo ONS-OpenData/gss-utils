@@ -91,3 +91,12 @@ def step_impl(context, ref, name):
 @step("the '{env}' environment variable is '{value}'")
 def step_impl(context, env, value):
     os.environ[env] = value
+
+
+@step("select the distribution given by")
+def step_impl(context):
+    print(context.table)
+    d = {}
+    for row in context.table:
+        d[row[0]] = row[1]
+    context.scraper.dist_filter(**d)

@@ -70,7 +70,7 @@ class Scraper:
 
     def dist_filter(self, **kwargs):
         for k, v in kwargs.items():
-            self._dist_filters.append(lambda x: x.__dict__[k] == v)
+            self._dist_filters.append(lambda x, k=k, v=v: x.__dict__[k] == v)
 
     @property
     def the_distribution(self):
