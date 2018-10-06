@@ -1,13 +1,9 @@
 import os
 from datetime import datetime
-from functools import lru_cache
-from io import BytesIO
 from urllib.parse import urljoin
 
 import html2text
-import messytables
 import requests
-import xypath.loader
 from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
@@ -16,7 +12,7 @@ from lxml import html
 import gssutils.scrapers
 from gssutils.metadata import PMDDataset
 from gssutils.utils import pathify
-import pandas as pd
+
 
 class DistributionFilterError(Exception):
     """ Raised when filters don't uniquely identify a distribution
@@ -32,7 +28,6 @@ class Scraper:
         self.dataset = PMDDataset()
         self.dataset.modified = datetime.now()
         self.distributions = []
-        self._dist_filters = []
         self._tableset = None
         self._base_uri = None
         if session:
@@ -68,51 +63,17 @@ class Scraper:
             raise NotImplementedError(f'No scraper for {self.uri}')
         return self
 
-    def dist_filter(self, **kwargs):
-        for k, v in kwargs.items():
-            self._dist_filters.append(lambda x, k=k, v=v: x.__dict__[k] == v)
-
-    @property
-    def the_distribution(self):
-        if len(self._dist_filters) > 0:
-            dists = [dist for dist in self.distributions if all(
-                [f(dist) for f in self._dist_filters])]
-            if len(dists) > 1:
-                raise DistributionFilterError('more than one distribution matches given filter(s)')
-            elif len(dists) == 0:
-                raise DistributionFilterError('no distributions match given filter(s)')
-            else:
-                return dists[0]
-        if len(self.distributions) == 1:
-            return self.distributions[0]
-        elif len(self.distributions) > 1:
-            raise DistributionFilterError('more than one distribution, but no filters given.')
+    def distribution(self, **kwargs):
+        matching_dists = [
+            dist for dist in self.distributions if all(
+                [dist.__dict__[k] == v for k, v in kwargs.items()]
+            )]
+        if len(matching_dists) > 1:
+            raise DistributionFilterError('more than one distribution matches given filter(s)')
+        elif len(matching_dists) == 0:
+            raise DistributionFilterError('no distributions match given filter(s)')
         else:
-            raise DistributionFilterError('no distributions.')
-
-    @property
-    def data_uri(self):
-        return self.the_distribution.downloadURL
-
-    @lru_cache(maxsize=2)
-    def _get_databaker_excel(self, url):
-        # monkeypatches from databaker
-        fobj = BytesIO(self.session.get(url).content)
-        tableset = messytables.excel.XLSTableSet(fobj)
-        tabs = list(xypath.loader.get_sheets(tableset, "*"))
-        return tabs
-
-    @property
-    def as_databaker(self):
-        dist = self.the_distribution
-        if dist.mediaType == 'application/vnd.ms-excel':
-            return self._get_databaker_excel(dist.downloadURL)
-
-    def as_pandas(self, **kwargs):
-        dist = self.the_distribution
-        if dist.mediaType == 'application/vnd.ms-excel':
-            fobj = BytesIO(self.session.get(dist.downloadURL).content)
-            return pd.read_excel(fobj, **kwargs)
+            return matching_dists[0]
 
     def set_base_uri(self, uri):
         self._base_uri = uri

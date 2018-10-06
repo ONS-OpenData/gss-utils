@@ -25,8 +25,10 @@ Feature: Scrape dataset info
   Scenario: Scrape gov.uk template
     Given a dataset page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
     When I scrape this page
-    And select "ODS" files
-    And select files with title "Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1"
+    And select the distribution given by
+      | key       | value                                                      |
+      | mediaType | application/vnd.oasis.opendocument.spreadsheet             |
+      | title     | Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1 |
     Then the data can be downloaded from "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/683359/entry-visas1-oct-dec-2017-tables.ods"
 
   Scenario: Scrape nrscotland

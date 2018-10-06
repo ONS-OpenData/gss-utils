@@ -19,7 +19,7 @@ def scrape(scraper, tree):
         for anchor in node.xpath('following-sibling::a'):
             file_type = anchor.text.strip().lower()
             if file_type in ['excel', 'csv']:
-                distribution = Distribution()
+                distribution = Distribution(scraper)
                 distribution.downloadURL = urljoin(scraper.uri, anchor.get('href'))
                 distribution.title = node.text.strip()
                 distribution.mediaType = {

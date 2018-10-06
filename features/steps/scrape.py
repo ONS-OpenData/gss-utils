@@ -20,7 +20,9 @@ def step_impl(context):
 
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
-    assert_equal(context.scraper.data_uri, uri)
+    if not hasattr(context, 'distribution'):
+        context.distribution = context.scraper.distribution()
+    assert_equal(context.distribution.downloadURL, uri)
 
 
 @step('the title should be "{title}"')
@@ -48,21 +50,6 @@ def step_impl(context, email):
     assert_equal(context.scraper.contact, email)
 
 
-@step('select "{extension}" files')
-def step_impl(context, extension):
-    mediaType = {
-        "ODS": "application/vnd.oasis.opendocument.spreadsheet",
-        "XLS": "application/vnd.ms-excel",
-        "XLSX": "application/vnd.ms-excel"
-    }.get(extension)
-    context.scraper.dist_filter(mediaType=mediaType)
-
-
-@step('select files with title "{title}"')
-def step_impl(context, title):
-    context.scraper.dist_filter(title=title)
-
-
 @then("{prefix}:{property} should be `{object}`")
 def step_impl(context, prefix, property, object):
     ns = {'dct': DCTERMS, 'dcat': DCAT}.get(prefix)
@@ -72,7 +59,9 @@ def step_impl(context, prefix, property, object):
 @step("fetch the distribution as a databaker object")
 def step_impl(context):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
-        context.databaker = context.scraper.as_databaker
+        if not hasattr(context, 'distribution'):
+            context.distribution = context.scraper.distribution()
+        context.databaker = context.distribution.as_databaker()
 
 
 @then("the sheet names contain [{namelist}]")
@@ -95,16 +84,15 @@ def step_impl(context, env, value):
 
 @step("select the distribution given by")
 def step_impl(context):
-    print(context.table)
-    d = {}
+    args = {}
     for row in context.table:
-        d[row[0]] = row[1]
-    context.scraper.dist_filter(**d)
+        args[row[0]] = row[1]
+    context.distribution = context.scraper.distribution(**args)
 
 
 @step("fetch the '{tabname}' tab as a pandas DataFrame")
 def step_impl(context, tabname):
-    context.pandas = context.scraper.as_pandas(sheet_name=tabname)
+    context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
 @then("the dataframe should have {rows:d} rows")

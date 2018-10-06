@@ -14,7 +14,7 @@ def scrape(scraper, tree):
         "//span[text() = 'Contact: ']/following-sibling::a[1]/@href")[0].strip()
     scraper.dataset.description = tree.xpath(
         "//h2[text() = 'About this dataset']/following-sibling::p/text()")[0].strip()
-    distribution = Distribution()
+    distribution = Distribution(scraper)
     distribution.downloadURL = urljoin(scraper.uri, tree.xpath(
         "//a[starts-with(@title, 'Download as xls')]/@href")[0].strip())
     distribution.mediaType = 'application/vnd.ms-excel'

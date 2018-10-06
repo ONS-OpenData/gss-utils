@@ -1,4 +1,9 @@
 from enum import Enum
+from io import BytesIO
+import xypath.loader
+import pandas as pd
+
+import messytables
 from rdflib import Dataset as Quads, Literal, URIRef, Graph, BNode
 from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager, VOID
 from inspect import getmro
@@ -153,6 +158,14 @@ class PMDDataset(QBDataSet):
         super().__setattr__(key, value)
 
 
+class FormatError(Exception):
+    """ Raised when the available file format can't be used
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+
 class Distribution(Metadata):
 
     _type = DCAT.Distribution
@@ -172,3 +185,20 @@ class Distribution(Metadata):
         'checksum': (SPDX.checksum, Status.recommended, lambda i: Literal(i)),
         'language': (DCTERMS.language, Status.mandatory, lambda s: Literal(s))
     })
+
+    def __init__(self, scraper):
+        super().__init__()
+        self.session = scraper.session
+
+    def as_databaker(self, **kwargs):
+        if self.mediaType == 'application/vnd.ms-excel':
+            fobj = BytesIO(self.session.get(self.downloadURL).content)
+            tableset = messytables.excel.XLSTableSet(fobj)
+            tabs = list(xypath.loader.get_sheets(tableset, "*"))
+            return tabs
+        raise FormatError('Databaker requires Excel spreadsheets.')
+
+    def as_pandas(self, **kwargs):
+        if self.mediaType == 'application/vnd.ms-excel':
+            fobj = BytesIO(self.session.get(self.downloadURL).content)
+            return pd.read_excel(fobj, **kwargs)

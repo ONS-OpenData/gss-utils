@@ -18,7 +18,7 @@ def scrape(scraper, tree):
         if match:
             scraper.dataset.modified = parse(match.group(0)).date()
     for attachment_section in tree.xpath("//section[contains(concat(' ', @class, ' '), 'attachment')]"):
-        distribution = Distribution()
+        distribution = Distribution(scraper)
         distribution.downloadURL = urljoin(scraper.uri, attachment_section.xpath(
             "div/h2[@class='title']/a/@href")[0].strip())
         distribution.title = attachment_section.xpath("div/h2[@class='title']/a/text()")[0].strip()
