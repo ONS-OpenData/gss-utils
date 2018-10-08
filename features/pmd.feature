@@ -4,8 +4,7 @@ Feature: PMD metadata
   PMD specific terms are used.
 
   Scenario: generate metadata
-    Given a dataset page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-    When I scrape this page
+    Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
     And set the base URI to <http://gss-data.org.uk>
     And set the dataset ID to <foreign-direct-investment-inward>
     And set the family to 'trade'
@@ -48,8 +47,7 @@ Feature: PMD metadata
 
     Scenario: convention over configuration
       Given the 'JOB_NAME' environment variable is 'GSS/Trade/ONS-FDI-inward'
-      And a dataset page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-      When I scrape this page
+      And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
       Then the dataset URI should be <http://gss-data.org.uk/data/trade/ons-fdi-inward>
       And the metadata graph should be <http://gss-data.org.uk/graph/trade/ons-fdi-inward/metadata>

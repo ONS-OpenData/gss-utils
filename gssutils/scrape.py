@@ -10,7 +10,7 @@ from cachecontrol.heuristics import LastModified
 from lxml import html
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset
+from gssutils.metadata import PMDDataset, Distribution, Excel, ODS
 from gssutils.utils import pathify
 
 
@@ -43,6 +43,21 @@ class Scraper:
             else:
                 self.set_dataset_id(pathify(os.environ['JOB_NAME']))
 
+        self._run()
+
+    def _repr_markdown_(self):
+        md = f"""
+## {self.dataset.label}
+
+{self.dataset.comment}
+"""
+        if len(self.distributions) > 0:
+            md = md + "### Distributions\n\n"
+            for d in self.distributions:
+                t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
+                md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+        return md
+
     @staticmethod
     def to_markdown(node):
         if type(node) == list:
@@ -50,7 +65,7 @@ class Scraper:
         else:
             return html2text.html2text(html.tostring(node, encoding='unicode'))
 
-    def run(self):
+    def _run(self):
         page = self.session.get(self.uri)
         tree = html.fromstring(page.text)
         scraped = False

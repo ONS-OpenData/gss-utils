@@ -7,15 +7,10 @@ from gssutils.metadata import DCTERMS, DCAT, namespaces
 import os
 
 
-@given('a dataset page "{uri}"')
+@given('I scrape the page "{uri}"')
 def step_impl(context, uri):
-    context.scraper = Scraper(uri, requests.Session())
-
-
-@when("I scrape this page")
-def step_impl(context):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
-        context.scraper.run()
+        context.scraper = Scraper(uri, requests.Session())
 
 
 @then('the data can be downloaded from "{uri}"')
@@ -92,7 +87,8 @@ def step_impl(context):
 
 @step("fetch the '{tabname}' tab as a pandas DataFrame")
 def step_impl(context, tabname):
-    context.pandas = context.distribution.as_pandas(sheet_name=tabname)
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+        context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
 @then("the dataframe should have {rows:d} rows")

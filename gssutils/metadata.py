@@ -8,6 +8,7 @@ from rdflib import Dataset as Quads, Literal, URIRef, Graph, BNode
 from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager, VOID
 from inspect import getmro
 import html
+import pyexcel
 
 DCAT = Namespace('http://www.w3.org/ns/dcat#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
@@ -16,6 +17,9 @@ GOV = Namespace('https://www.gov.uk/government/organisations/')
 QB = Namespace('http://purl.org/linked-data/cube#')
 GDP = Namespace(f'http://gss-data.org.uk/def/gdp#')
 OGL_3 = URIRef('http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/')
+
+ODS = 'application/vnd.oasis.opendocument.spreadsheet'
+Excel = 'application/vnd.ms-excel'
 
 namespaces = NamespaceManager(Graph())
 namespaces.bind('dcat', DCAT)
@@ -191,14 +195,22 @@ class Distribution(Metadata):
         self.session = scraper.session
 
     def as_databaker(self, **kwargs):
-        if self.mediaType == 'application/vnd.ms-excel':
+        if self.mediaType == Excel:
             fobj = BytesIO(self.session.get(self.downloadURL).content)
             tableset = messytables.excel.XLSTableSet(fobj)
+            tabs = list(xypath.loader.get_sheets(tableset, "*"))
+            return tabs
+        elif self.mediaType == ODS:
+            ods_obj = BytesIO(self.session.get(self.downloadURL).content)
+            excel_obj = BytesIO()
+            book = pyexcel.get_book(file_type='ods', file_content=ods_obj, library='pyexcel-ods3')
+            book.save_to_memory(file_type='xls', stream=excel_obj)
+            tableset = messytables.excel.XLSTableSet(excel_obj)
             tabs = list(xypath.loader.get_sheets(tableset, "*"))
             return tabs
         raise FormatError('Databaker requires Excel spreadsheets.')
 
     def as_pandas(self, **kwargs):
-        if self.mediaType == 'application/vnd.ms-excel':
+        if self.mediaType == Excel:
             fobj = BytesIO(self.session.get(self.downloadURL).content)
             return pd.read_excel(fobj, **kwargs)
