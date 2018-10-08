@@ -40,3 +40,15 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Migration between administrative areas and overseas by sex |
     Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/2018-july/tab-z1-overseas-mig-flows-admin-sex-hb-2001-02-latest-july-18.xlsx"
+
+  Scenario: Scrape NISRA
+    Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
+    Then the title should be "2017 Mid Year Population Estimates for Northern Ireland (NEW FORMAT TABLES)"
+    And dct:issued should be `"2018-06-28"^^xsd:date`
+    And dcat:keyword should be `"Population, Mid Year Population Estimates"@en`
+    And dct:publisher should be `gov:northern-ireland-statistics-and-research-agency`
+    And select the distribution given by
+      | key       | value                                       |
+      | mediaType | application/vnd.ms-excel                    |
+      | title     | All areas - Components of population change |
+    And the data can be downloaded from "https://www.nisra.gov.uk/sites/nisra.gov.uk/files/publications/MYE17_CoC.xlsx"
