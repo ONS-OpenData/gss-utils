@@ -3,7 +3,7 @@ from gssutils import Scraper
 from nose.tools import *
 import vcr
 import requests
-from gssutils.metadata import DCTERMS, DCAT, namespaces
+from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
 import os
 
 
@@ -47,7 +47,7 @@ def step_impl(context, email):
 
 @then("{prefix}:{property} should be `{object}`")
 def step_impl(context, prefix, property, object):
-    ns = {'dct': DCTERMS, 'dcat': DCAT}.get(prefix)
+    ns = {'dct': DCTERMS, 'dcat': DCAT, 'rdfs': RDFS}.get(prefix)
     assert_equal(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
 
 
@@ -95,3 +95,9 @@ def step_impl(context, tabname):
 def step_impl(context, rows):
     dfrows, dfcols = context.pandas.shape
     eq_(rows, dfrows)
+
+
+@then('select the distribution whose title starts with "{title_start}"')
+def step_impl(context, title_start):
+    dist = context.scraper.distribution(title=lambda x: x.startswith(title_start))
+    assert_is_not_none(dist)

@@ -17,6 +17,7 @@ setuptools.setup(
                       'python_dateutil',
                       'CacheControl',
                       'databaker',
+                      'ipython',
                       'pandas',
                       'pyexcel',
                       'pyexcel-ods3',

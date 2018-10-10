@@ -16,6 +16,12 @@ def step_impl(context, dataset_id):
     context.scraper.set_dataset_id(dataset_id)
 
 
+@step(
+    "set the description to '{description}'")
+def step_impl(context, description):
+    context.scraper.set_description(description
+                                    )
+
 @step("generate TriG")
 def step_impl(context):
     context.trig = context.scraper.generate_trig()
@@ -68,3 +74,8 @@ def step_impl(context, uri):
 def step_impl(context):
     now = datetime.now()
     ok_((abs(now - context.scraper.dataset.modified)).total_seconds() < 60)
+
+
+@step('the comment should be "{comment}"')
+def step_impl(context, comment):
+    eq_(context.scraper.dataset.comment, comment)

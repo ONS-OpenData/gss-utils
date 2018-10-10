@@ -12,7 +12,7 @@ def scrape(scraper, tree):
         "//span[text() = 'Next release: ']/parent::node()/text()")[1].strip()).date()
     scraper.dataset.contactPoint = tree.xpath(
         "//span[text() = 'Contact: ']/following-sibling::a[1]/@href")[0].strip()
-    scraper.dataset.description = tree.xpath(
+    scraper.dataset.comment = tree.xpath(
         "//h2[text() = 'About this dataset']/following-sibling::p/text()")[0].strip()
     distribution = Distribution(scraper)
     distribution.downloadURL = urljoin(scraper.uri, tree.xpath(

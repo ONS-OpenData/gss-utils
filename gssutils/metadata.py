@@ -17,6 +17,7 @@ GOV = Namespace('https://www.gov.uk/government/organisations/')
 QB = Namespace('http://purl.org/linked-data/cube#')
 GDP = Namespace(f'http://gss-data.org.uk/def/gdp#')
 OGL_3 = URIRef('http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/')
+MARKDOWN = URIRef('https://www.w3.org/ns/iana/media-types/text/markdown#Resource')
 
 ODS = 'application/vnd.oasis.opendocument.spreadsheet'
 Excel = 'application/vnd.ms-excel'
@@ -114,7 +115,7 @@ class Dataset(Metadata):
     _properties_metadata = dict(Metadata._properties_metadata)
     _properties_metadata.update({
         'title': (DCTERMS.title, Status.mandatory, lambda s: Literal(s, 'en')),
-        'description': (DCTERMS.description, Status.mandatory, lambda s: Literal(s, 'en')),
+        'description': (DCTERMS.description, Status.mandatory, lambda s: Literal(s, datatype=MARKDOWN)),
         'publisher': (DCTERMS.publisher, Status.mandatory, lambda s: URIRef(s)),
         'issued': (DCTERMS.issued, Status.mandatory, lambda d: Literal(d)), # date/time
         'modified': (DCTERMS.modified, Status.recommended, lambda d: Literal(d)),
@@ -153,8 +154,6 @@ class PMDDataset(QBDataSet):
     def __setattr__(self, key, value):
         if key == 'title':
             self.label = value
-        elif key == 'description':
-            self.comment = value
         elif key == 'contactPoint' and value.startswith('mailto:'):
             self.contactEmail = value
         elif key == 'publisher':

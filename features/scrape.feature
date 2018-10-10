@@ -9,13 +9,13 @@ Feature: Scrape dataset info
     And the title should be "Foreign direct investment involving UK companies: Inward tables"
     And the publication date should be "2017-12-01"
     And the next release date should be "2018-12-03"
-    And the description should start "Inward datasets including data for flows, positions and earnings."
+    And the comment should be "Inward datasets including data for flows, positions and earnings."
     And the contact email address should be "mailto:fdi@ons.gov.uk"
 
   Scenario: ONS metadata profile
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
     Then dct:title should be `"Foreign direct investment involving UK companies: Inward tables"@en`
-    And dct:description should be `"Inward datasets including data for flows, positions and earnings."@en`
+    And rdfs:comment should be `"Inward datasets including data for flows, positions and earnings."@en`
     And dct:publisher should be `gov:office-for-national-statistics`
     And dct:issued should be `"2017-12-01"^^xsd:date`
     And dcat:contactPoint should be `<mailto:fdi@ons.gov.uk>`

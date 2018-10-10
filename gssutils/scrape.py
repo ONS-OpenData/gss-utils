@@ -81,7 +81,8 @@ class Scraper:
     def distribution(self, **kwargs):
         matching_dists = [
             dist for dist in self.distributions if all(
-                [dist.__dict__[k] == v for k, v in kwargs.items()]
+                [v(dist.__dict__[k]) if callable(v) else dist.__dict__[k] == v
+                 for k, v in kwargs.items()]
             )]
         if len(matching_dists) > 1:
             raise DistributionFilterError('more than one distribution matches given filter(s)')
@@ -101,6 +102,9 @@ class Scraper:
 
     def set_family(self, family):
         self.dataset.family = family
+
+    def set_description(self, description):
+        self.dataset.description = description
 
     def generate_trig(self):
         return self.dataset.as_quads().serialize(format='trig')

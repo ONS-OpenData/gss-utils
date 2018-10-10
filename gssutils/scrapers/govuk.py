@@ -8,6 +8,7 @@ def scrape(scraper, tree):
     date_re = re.compile(r'[0-9]{1,2} (January|February|March|April|May|June|' +
                          'July|August|September|October|November|December) [0-9]{4}')
     scraper.dataset.title = tree.xpath("//h1/text()")[0].strip()
+    scraper.dataset.comment = tree.xpath("//p[contains(@class, 'lead-paragraph')]/text()")[0].strip()
     dates = tree.xpath("//div[contains(concat(' ', @class, ' '), 'app-c-published-dates')]/text()")
     if len(dates) > 0 and dates[0].strip().startswith('Published '):
         match = date_re.search(dates[0])

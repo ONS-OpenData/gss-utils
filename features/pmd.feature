@@ -10,6 +10,7 @@ Feature: PMD metadata
     And set the family to 'trade'
     And set the license to 'OGLv3'
     And set the modified time to '2018-09-14T10:04:33.141484+01:00'
+    And set the description to 'Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)'
     And generate TriG
     Then the TriG should contain
 
@@ -41,7 +42,8 @@ Feature: PMD metadata
         dct:publisher <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:title "Foreign direct investment involving UK companies: Inward tables"@en ;
         void:sparqlEndpoint <http://gss-data.org.uk/sparql> ;
-        rdfs:comment "Inward datasets including data for flows, positions and earnings."@en .
+        rdfs:comment "Inward datasets including data for flows, positions and earnings."@en ;
+        dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"^^<https://www.w3.org/ns/iana/media-types/text/markdown#Resource> .
       }
       """
 
