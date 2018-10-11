@@ -46,11 +46,13 @@ class Scraper:
         self._run()
 
     def _repr_markdown_(self):
-        md = f"""
-## {self.dataset.label}
-
-{self.dataset.comment}
-"""
+        md = ""
+        if hasattr(self.dataset, 'label'):
+            md = md + f'## {self.dataset.label}\n\n'
+        if hasattr(self.dataset, 'comment'):
+            md = md + f'{self.dataset.comment}\n\n'
+        if hasattr(self.dataset, 'description'):
+            md = md + f'### Description\n\n{self.dataset.description}\n\n'
         if len(self.distributions) > 0:
             md = md + "### Distributions\n\n"
             for d in self.distributions:
