@@ -1,9 +1,9 @@
-test: virtualenv
-	.env/bin/pip install behave nose vcrpy
-	.env/bin/behave
+PYTHONUSERBASE=.pip
 
-virtualenv: .env/bin/activate
-.env/bin/activate: setup.py
-	test -d .env || virtualenv .env
-	.env/bin/pip install .
-	touch .env/bin/activate
+.EXPORT_ALL_VARIABLES:
+
+behave: .pip/bin/behave setup.py
+	python setup.py behave_test
+
+.pip/bin/behave:
+	pip install --cache-dir=.pipcache --user behave nose vcrpy
