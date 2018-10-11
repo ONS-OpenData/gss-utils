@@ -37,3 +37,7 @@ Feature: distribution downloading
   Scenario: Select ditribution by start of title
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
     Then select the distribution whose title starts with "Northern Ireland - Migration flows by type"
+
+  Scenario: ONS distributions with no titles
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/migrationwithintheuk/datasets/localareamigrationindicatorsunitedkingdom"
+    Then select the distribution whose title starts with "Local area migration indicators"

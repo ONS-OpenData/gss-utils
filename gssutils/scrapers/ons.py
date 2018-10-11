@@ -18,5 +18,6 @@ def scrape(scraper, tree):
     distribution.downloadURL = urljoin(scraper.uri, tree.xpath(
         "//a[starts-with(@title, 'Download as xls')]/@href")[0].strip())
     distribution.mediaType = 'application/vnd.ms-excel'
+    distribution.title = scraper.dataset.title
     scraper.distributions.append(distribution)
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
