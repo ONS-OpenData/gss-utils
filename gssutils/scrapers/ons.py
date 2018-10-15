@@ -21,3 +21,5 @@ def scrape(scraper, tree):
     distribution.title = scraper.dataset.title
     scraper.distributions.append(distribution)
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
+    scraper.dataset.license = tree.xpath(
+        "//div[@class='footer-license']//a")[0].get('href')

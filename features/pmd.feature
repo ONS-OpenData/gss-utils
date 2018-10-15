@@ -54,3 +54,7 @@ Feature: PMD metadata
       Then the dataset URI should be <http://gss-data.org.uk/data/trade/ons-fdi-inward>
       And the metadata graph should be <http://gss-data.org.uk/graph/trade/ons-fdi-inward/metadata>
       And the modified date should be quite recent
+
+    Scenario: licensed dataset
+      Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
+      Then dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
