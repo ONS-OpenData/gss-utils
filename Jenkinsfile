@@ -12,7 +12,7 @@ pipeline {
                 }
             }
             steps {
-                sh "test.sh"
+                sh "./test.sh"
             }
         }
     }
