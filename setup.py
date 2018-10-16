@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gssutils",
-    version="0.1.1",
+    version="0.1.2",
     author="Alex Tucker",
     author_email="alex@floop.org.uk",
     description="Common functions used by GSS data transformations",
@@ -20,13 +20,14 @@ setuptools.setup(
                       'ipython',
                       'pandas',
                       'pyexcel',
+                      'pyexcel-xls',
                       'pyexcel-ods3',
                       'xypath',
                       'html2text',
                       'rdflib',
-                      'messytables',
+                      'messytables==0.15.1',
                       'lxml'],
-    tests_require=['behave', 'nose', 'vcrpy'],
+    tests_require=['behave', 'parse', 'nose', 'vcrpy'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
