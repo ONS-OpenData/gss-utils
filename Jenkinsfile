@@ -16,4 +16,9 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            cucumber 'test-results.json'
+        }
+    }
 }
