@@ -97,7 +97,14 @@ def step_impl(context, rows):
     eq_(rows, dfrows)
 
 
-@then('select the distribution whose title starts with "{title_start}"')
+@step('select the distribution whose title starts with "{title_start}"')
 def step_impl(context, title_start):
-    dist = context.scraper.distribution(title=lambda x: x.startswith(title_start))
-    assert_is_not_none(dist)
+    context.distribution = context.scraper.distribution(title=lambda x: x.startswith(title_start))
+    assert_is_not_none(context.distribution)
+
+
+@then("fetch the tabs as a dict of pandas DataFrames")
+def step_impl(context):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+        context.pandas = context.distribution.as_pandas()
+        eq_(type(context.pandas), dict)

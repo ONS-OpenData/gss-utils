@@ -207,9 +207,23 @@ class Distribution(Metadata):
             tableset = messytables.excel.XLSTableSet(excel_obj)
             tabs = list(xypath.loader.get_sheets(tableset, "*"))
             return tabs
-        raise FormatError('Databaker requires Excel spreadsheets.')
+        raise FormatError('Unable to load {self.mediaType} into Databaker.')
 
     def as_pandas(self, **kwargs):
         if self.mediaType == Excel:
             fobj = BytesIO(self.session.get(self.downloadURL).content)
             return pd.read_excel(fobj, **kwargs)
+        elif self.mediaType == ODS:
+            ods_obj = BytesIO(self.session.get(self.downloadURL).content)
+            if 'sheet_name' in kwargs:
+                sheet = pyexcel.get_sheet(file_content=ods_obj,
+                                           file_type='ods',
+                                           sheet_name=kwargs['sheet_name'],
+                                           library='pyexcel-ods3')
+                return pd.DataFrame(sheet.get_array())
+            else:
+                book = pyexcel.get_book(file_content=ods_obj,
+                                        file_type='ods',
+                                        library='pyexcel-ods3')
+                return {sheet.name: pd.DataFrame(sheet.get_array()) for sheet in book}
+        raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')

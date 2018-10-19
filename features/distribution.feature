@@ -41,3 +41,13 @@ Feature: distribution downloading
   Scenario: ONS distributions with no titles
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/migrationwithintheuk/datasets/localareamigrationindicatorsunitedkingdom"
     Then select the distribution whose title starts with "Local area migration indicators"
+
+  Scenario: Home Office ODS tab as Pandas DataFrame
+    Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
+    And select the distribution whose title starts with "Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1"
+    And fetch the 'vi_05' tab as a pandas DataFrame
+
+  Scenario: Home Office ODS tabs as dict of Pandas DataFrames
+    Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
+    And select the distribution whose title starts with "Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1"
+    Then fetch the tabs as a dict of pandas DataFrames
