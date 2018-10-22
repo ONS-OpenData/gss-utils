@@ -5,7 +5,7 @@ import pandas as pd
 
 import messytables
 from rdflib import Dataset as Quads, Literal, URIRef, Graph, BNode
-from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager, VOID
+from rdflib.namespace import DCTERMS, RDF, RDFS, XSD, Namespace, NamespaceManager, VOID, FOAF
 from inspect import getmro
 import html
 import pyexcel
@@ -91,7 +91,12 @@ class Metadata:
         for local_name, profile in self._properties_metadata.items():
             if local_name in self.__dict__:
                 prop, status, f = profile
-                graph.add((self.uri, prop, f(self.__dict__[local_name])))
+                v = self.__dict__[local_name]
+                if type(v) == list:
+                    for obj in v:
+                        graph.add((self.uri, prop, f(obj)))
+                else:
+                    graph.add((self.uri, prop, f(v)))
         return quads
 
     def _repr_html_(self):
@@ -227,3 +232,22 @@ class Distribution(Metadata):
                                         library='pyexcel-ods3')
                 return {sheet.name: pd.DataFrame(sheet.get_array()) for sheet in book}
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
+
+class Catalog(Metadata):
+    _type = DCAT.Catalog
+    _properties_metadata = dict(Metadata._properties_metadata)
+    _properties_metadata.update({
+        'title': (DCTERMS.title, Status.mandatory, lambda s: Literal(s, 'en')),
+        'description': (DCTERMS.description, Status.mandatory, lambda s: Literal(s, 'en')),
+        'issued': (DCTERMS.issued, Status.mandatory, lambda d: Literal(d)),
+        'modified': (DCTERMS.modified, Status.recommended, lambda d: Literal(d)),
+        'language': (DCTERMS.language, Status.mandatory, lambda s: Literal(s)),
+        'homepage': (FOAF.homepage, Status.mandatory, lambda s: URIRef(s)),
+        'publisher': (DCTERMS.publisher, Status.mandatory, lambda s: URIRef(s)),
+        'spatial': (DCTERMS.spatial, Status.mandatory, lambda s: URIRef(s)),
+        'themeTaxonomy': (DCAT.themeTaxonomy, Status.recommended, lambda s: URIRef(s)),
+        'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
+        'rights': (DCTERMS.rights, Status.mandatory, lambda s: Literal(s, 'en'))
+    })
+
+

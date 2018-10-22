@@ -10,7 +10,7 @@ from cachecontrol.heuristics import LastModified
 from lxml import html
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Distribution, Excel, ODS
+from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
 from gssutils.utils import pathify
 
 
@@ -25,7 +25,9 @@ class DistributionFilterError(Exception):
 class Scraper:
     def __init__(self, uri, session=None):
         self.uri = uri
+        self.datasets = []
         self.dataset = PMDDataset()
+        self.catalog = Catalog()
         self.dataset.modified = datetime.now()
         self.distributions = []
         self._tableset = None

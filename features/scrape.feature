@@ -52,3 +52,11 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.ms-excel                    |
       | title     | All areas - Components of population change |
     And the data can be downloaded from "https://www.nisra.gov.uk/sites/nisra.gov.uk/files/publications/MYE17_CoC.xlsx"
+    
+  Scenario: Scrape HMRC
+    Given I scrape the page "https://www.uktradeinfo.com/Statistics/Pages/TaxAndDutybulletins.aspx"
+    And select the distribution given by
+      | key       | value                                                      |
+      | mediaType | application/vnd.ms-excel                                   |
+      | title     | Alcohol Duty July 2018                                     |
+    Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/Tax%20and%20Duty%20Bulletins/Alcohol0718.xls"
