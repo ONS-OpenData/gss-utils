@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gssutils",
-    version="0.1.3",
+    version="0.1.4",
     author="Alex Tucker",
     author_email="alex@floop.org.uk",
     description="Common functions used by GSS data transformations",
