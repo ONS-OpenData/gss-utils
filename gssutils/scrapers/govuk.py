@@ -1,10 +1,10 @@
 import re
 from dateutil.parser import parse
-from gssutils.metadata import Distribution
+from gssutils.metadata import Distribution, ODS, ZIP, Excel
 from urllib.parse import urljoin
 
 
-def scrape(scraper, tree):
+def scrape_common(scraper, tree):
     date_re = re.compile(r'[0-9]{1,2} (January|February|March|April|May|June|' +
                          'July|August|September|October|November|December) [0-9]{4}')
     scraper.dataset.title = tree.xpath("//h1/text()")[0].strip()
@@ -18,6 +18,10 @@ def scrape(scraper, tree):
         match = date_re.search(dates[1])
         if match:
             scraper.dataset.modified = parse(match.group(0)).date()
+
+
+def scrape_stats(scraper, tree):
+    scrape_common(scraper, tree)
     for attachment_section in tree.xpath("//section[contains(concat(' ', @class, ' '), 'attachment')]"):
         distribution = Distribution(scraper)
         distribution.downloadURL = urljoin(scraper.uri, attachment_section.xpath(
@@ -42,3 +46,21 @@ def scrape(scraper, tree):
         "//span[contains(concat(' ', @class, ' '), 'app-c-publisher-metadata__definition_sentence')]/a/@href")
     if len(from_link) > 0:
         scraper.dataset.publisher = urljoin(scraper.uri, from_link[0])
+
+
+def scrape_sds(scraper, tree):
+    scrape_common(scraper, tree)
+    for attachment_link in tree.xpath("//span[contains(concat(' ', @class, ' '), ' attachment-inline ')]/a"):
+        dist = Distribution(scraper)
+        dist.title = attachment_link.text.strip()
+        dist.downloadURL = urljoin(scraper.uri, attachment_link.get('href'))
+        filetype = attachment_link.getparent().xpath("span[@class='type']//text()")[0].strip()
+        if filetype == 'ODS':
+            dist.mediaType = ODS
+        elif filetype == 'ZIP':
+            dist.mediaType = ZIP
+        elif filetype == 'MS Excel Spreadsheet':
+            dist.mediaType = Excel
+        scraper.distributions.append(dist)
+    email_link = tree.xpath("//div[contains(concat(' ', @class, ' '), ' contact ')]//a[@class='email']")[0]
+    scraper.dataset.contactPoint = email_link.get('href')

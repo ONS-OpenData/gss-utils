@@ -60,3 +60,10 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Alcohol Duty July 2018                                     |
     Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/Tax%20and%20Duty%20Bulletins/Alcohol0718.xls"
+
+  Scenario: Scrape gov.uk statistical-data-sets
+    Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras51-reported-drinking-and-driving"
+    Then the title should be "Reported drinking and driving (RAS51)"
+    And the publication date should be "2014-02-06"
+    And the comment should be "Data about the reported drink-drive accidents and casualties, produced by Department for Transport."
+    And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
