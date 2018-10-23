@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gssutils",
-    version="0.1.4",
+    version_format='{tag}.dev{commitcount}+{gitsha}',
     author="Alex Tucker",
     author_email="alex@floop.org.uk",
     description="Common functions used by GSS data transformations",
@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/ONS-OpenData/gss-utils",
     packages=setuptools.find_packages(),
+    setup_requires=['setuptools-git-version'],
     install_requires=['requests',
                       'python_dateutil',
                       'CacheControl',
