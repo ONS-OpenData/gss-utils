@@ -22,6 +22,7 @@ MARKDOWN = URIRef('https://www.w3.org/ns/iana/media-types/text/markdown#Resource
 ODS = 'application/vnd.oasis.opendocument.spreadsheet'
 Excel = 'application/vnd.ms-excel'
 ZIP = 'application/zip'
+PDF = 'application/pdf'
 
 namespaces = NamespaceManager(Graph())
 namespaces.bind('dcat', DCAT)

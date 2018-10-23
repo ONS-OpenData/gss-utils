@@ -64,3 +64,9 @@ Feature: distribution downloading
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Reported killed or seriously injured casualties (estimates), chart: Great Britain, rolling annual totals from 2002 |
     Then the data can be downloaded from "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/473717/ras45012.xls"
+    
+  Scenario: NI DoJ Excel data as DataBaker
+    Given I scrape the page "https://www.justice-ni.gov.uk/publications/research-and-statistical-bulletin-82017-views-alcohol-and-drug-related-issues-findings-october-2016"
+    And select the distribution whose title starts with "October 2016 alcohol and drugs findings data table"
+    And fetch the distribution as a databaker object
+    Then the sheet names contain [Metadata, Table A1]
