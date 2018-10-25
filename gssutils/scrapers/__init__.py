@@ -1,4 +1,4 @@
-from gssutils.scrapers import ons, govuk, nrscotland, nisra, hmrc, ni_doj
+from gssutils.scrapers import ons, govuk, nrscotland, nisra, hmrc, ni_govuk
 
 scraper_list = [
     ('https://www.ons.gov.uk/', ons.scrape),
@@ -7,5 +7,6 @@ scraper_list = [
     ('https://www.nrscotland.gov.uk/statistics-and-data/statistics/', nrscotland.scrape),
     ('https://www.nisra.gov.uk/publications/', nisra.scrape),
     ('https://www.uktradeinfo.com/Statistics/Pages/', hmrc.scrape),
-    ('https://www.justice-ni.gov.uk/publications/', ni_doj.scrape)
+    ('https://www.justice-ni.gov.uk/publications/', ni_govuk.scrape),
+    ('https://www.health-ni.gov.uk/publications/', ni_govuk.scrape)
 ]
