@@ -5,9 +5,9 @@ def pathify(label):
     """
       Convert a label into something that can be used in a URI path segment.
     """
-    return re.sub('-\$', '',
-                  re.sub('-+', '-',
-                         re.sub('[^\\w/]', '-', label.lower())))
+    return re.sub(r'-$', '',
+                  re.sub(r'-+', '-',
+                         re.sub(r'[^\w/]', '-', label.lower())))
 
 
 def is_interactive():
