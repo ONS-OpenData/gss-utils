@@ -14,10 +14,10 @@ def scrape_common(scraper, tree):
         match = date_re.search(dates[0])
         if match:
             scraper.dataset.issued = parse(match.group(0)).date()
-    if len(dates) > 1 and dates[1].strip().startswith('Last updated '):
-        match = date_re.search(dates[1])
-        if match:
-            scraper.dataset.modified = parse(match.group(0)).date()
+    #if len(dates) > 1 and dates[1].strip().startswith('Last updated '):
+    #    match = date_re.search(dates[1])
+    #    if match:
+    #        scraper.dataset.modified = parse(match.group(0)).date()
     from_link = tree.xpath(
         "//span[contains(concat(' ', @class, ' '), 'app-c-publisher-metadata__definition-sentence')]/a/@href")
     if len(from_link) > 0:
@@ -25,6 +25,7 @@ def scrape_common(scraper, tree):
     licenses = tree.xpath("//a[@rel='license']/@href")
     if len(licenses) > 0:
         scraper.dataset.license = licenses[0]
+
 
 def scrape_stats(scraper, tree):
     scrape_common(scraper, tree)

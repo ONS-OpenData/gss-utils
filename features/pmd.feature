@@ -58,3 +58,8 @@ Feature: PMD metadata
     Scenario: licensed dataset
       Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       Then dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
+
+    Scenario: modified or updated
+      Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
+      Then the modified date should be quite recent
+
