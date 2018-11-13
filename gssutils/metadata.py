@@ -60,6 +60,12 @@ class Metadata:
         else:
             super().__setattr__(name, value)
 
+    def get_unset(self):
+        for local_name, profile in self._properties_metadata.items():
+            prop, status, f = profile
+            if status == Status.mandatory and local_name not in self.__dict__:
+                yield local_name
+
     def get_property(self, p):
         obs = []
         for k in self._properties_metadata:
@@ -154,7 +160,7 @@ class PMDDataset(QBDataSet):
         'sparqlEndpoint': (VOID.sparqlEndpoint, Status.recommended, lambda s: URIRef(s)),
         'inGraph': (PMD.graph, Status.mandatory, lambda s: URIRef(s)),
         'contactEmail': (PMD.contactEmail, Status.recommended, lambda s: URIRef(s)),
-        'license': (DCTERMS.license, Status.recommended, lambda s: URIRef(s)),
+        'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
         'creator': (DCTERMS.creator, Status.recommended, lambda s: URIRef(s))
     })
 

@@ -67,6 +67,7 @@ Feature: Scrape dataset info
     And the publication date should be "2014-02-06"
     And the comment should be "Data about the reported drink-drive accidents and casualties, produced by Department for Transport."
     And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
+    And dct:publisher should be `gov:department-for-transport`
 
   Scenario: Scrape NI DoJ
     Given I scrape the page "https://www.justice-ni.gov.uk/publications/research-and-statistical-bulletin-82017-views-alcohol-and-drug-related-issues-findings-october-2016"

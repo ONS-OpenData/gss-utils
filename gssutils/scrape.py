@@ -75,6 +75,7 @@ class Scraper:
         scraped = False
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
+                self.dataset.landingPage = self.uri
                 scrape(self, tree)
                 scraped = True
                 break

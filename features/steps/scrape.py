@@ -108,3 +108,9 @@ def step_impl(context):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
         context.pandas = context.distribution.as_pandas()
         eq_(type(context.pandas), dict)
+
+
+@step("all mandatory fields are set")
+def step_impl(context):
+    unset = list(context.scraper.dataset.get_unset())
+    ok_(len(unset) == 0, f"Not all mandatory fields are set: {unset}")

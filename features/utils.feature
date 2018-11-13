@@ -6,4 +6,5 @@ Feature: Common utilities
     Given a table of labels and corresponding paths
       | label                                | path                               |
       | Something with (brackets at the end) | something-with-brackets-at-the-end |
+      | Family: Partner (for immediate settlement) | family-partner-for-immediate-settlement |
     Then the pathify function should convert labels to paths

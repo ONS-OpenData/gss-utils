@@ -18,7 +18,13 @@ def scrape_common(scraper, tree):
         match = date_re.search(dates[1])
         if match:
             scraper.dataset.modified = parse(match.group(0)).date()
-
+    from_link = tree.xpath(
+        "//span[contains(concat(' ', @class, ' '), 'app-c-publisher-metadata__definition-sentence')]/a/@href")
+    if len(from_link) > 0:
+        scraper.dataset.publisher = urljoin(scraper.uri, from_link[0])
+    licenses = tree.xpath("//a[@rel='license']/@href")
+    if len(licenses) > 0:
+        scraper.dataset.license = licenses[0]
 
 def scrape_stats(scraper, tree):
     scrape_common(scraper, tree)
@@ -42,10 +48,6 @@ def scrape_stats(scraper, tree):
         ).date()
     scraper.dataset.description = scraper.to_markdown(tree.xpath(
         "//h2[text() = 'Details']/following-sibling::div")[0])
-    from_link = tree.xpath(
-        "//span[contains(concat(' ', @class, ' '), 'app-c-publisher-metadata__definition_sentence')]/a/@href")
-    if len(from_link) > 0:
-        scraper.dataset.publisher = urljoin(scraper.uri, from_link[0])
 
 
 def scrape_sds(scraper, tree):
