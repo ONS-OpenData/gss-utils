@@ -4,7 +4,7 @@ from rdflib.compare import to_isomorphic, graph_diff
 from rdflib import Graph
 from dateutil.parser import parse
 from datetime import datetime
-
+from gssutils.metadata import THEME
 
 @step("set the base URI to <{uri}>")
 def step_impl(context, uri):
@@ -16,11 +16,10 @@ def step_impl(context, dataset_id):
     context.scraper.set_dataset_id(dataset_id)
 
 
-@step(
-    "set the description to '{description}'")
+@step("set the description to '{description}'")
 def step_impl(context, description):
-    context.scraper.set_description(description
-                                    )
+    context.scraper.set_description(description)
+
 
 @step("generate TriG")
 def step_impl(context):
@@ -44,6 +43,11 @@ def step_impl(context):
 @step("set the family to '{family}'")
 def step_impl(context, family):
     context.scraper.set_family(family)
+
+
+@step("set the theme to <{theme}>")
+def step_impl(context, theme):
+    context.scraper.set_theme(getattr(THEME, theme))
 
 
 @step("set the modified time to '{datetime}'")

@@ -7,6 +7,7 @@ Feature: PMD metadata
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
     And set the base URI to <http://gss-data.org.uk>
     And set the dataset ID to <foreign-direct-investment-inward>
+    And set the theme to <business-industry-trade-energy>
     And set the family to 'trade'
     And set the license to 'OGLv3'
     And set the modified time to '2018-09-14T10:04:33.141484+01:00'
@@ -16,6 +17,7 @@ Feature: PMD metadata
 
       """
       @prefix dct: <http://purl.org/dc/terms/> .
+      @prefix dcat: <http://www.w3.org/ns/dcat#> .
       @prefix gdp: <http://gss-data.org.uk/def/gdp#> .
       @prefix ns1: <http://gss-data.org.uk/graph/foreign-direct-investment-inward/> .
       @prefix pmd: <http://publishmydata.com/def/dataset#> .
@@ -31,6 +33,7 @@ Feature: PMD metadata
           pmd:LinkedDataset,
           qb:DataSet ;
         rdfs:label "Foreign direct investment involving UK companies: Inward tables"@en ;
+        dcat:theme <http://gss-data.org.uk/def/concept/statistics-authority-themes/business-industry-trade-energy>;
         gdp:family gdp:trade ;
         pmd:contactEmail <mailto:fdi@ons.gov.uk> ;
         pmd:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
@@ -62,4 +65,3 @@ Feature: PMD metadata
     Scenario: modified or updated
       Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
       Then the modified date should be quite recent
-

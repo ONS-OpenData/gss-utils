@@ -16,6 +16,7 @@ PMD = Namespace('http://publishmydata.com/def/dataset#')
 GOV = Namespace('https://www.gov.uk/government/organisations/')
 QB = Namespace('http://purl.org/linked-data/cube#')
 GDP = Namespace(f'http://gss-data.org.uk/def/gdp#')
+THEME = Namespace('http://gss-data.org.uk/def/concept/statistics-authority-themes/')
 OGL_3 = URIRef('http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/')
 MARKDOWN = URIRef('https://www.w3.org/ns/iana/media-types/text/markdown#Resource')
 
@@ -33,6 +34,7 @@ namespaces.bind('rdfs', RDFS)
 namespaces.bind('xsd', XSD)
 namespaces.bind('gov', GOV)
 namespaces.bind('gdp', GDP)
+namespaces.bind('theme', THEME)
 namespaces.bind('qb', QB)
 namespaces.bind('void', VOID)
 namespaces.bind('dct', DCTERMS)
@@ -257,5 +259,3 @@ class Catalog(Metadata):
         'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
         'rights': (DCTERMS.rights, Status.mandatory, lambda s: Literal(s, 'en'))
     })
-
-
