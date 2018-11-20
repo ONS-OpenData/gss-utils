@@ -27,7 +27,8 @@ setuptools.setup(
                       'html2text',
                       'rdflib',
                       'messytables==0.15.1',
-                      'lxml'],
+                      'lxml',
+                      'wheel'],
     tests_require=['behave', 'parse', 'nose', 'vcrpy'],
     classifiers=[
         "Programming Language :: Python :: 3",
