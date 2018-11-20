@@ -108,6 +108,9 @@ class Scraper:
     def set_family(self, family):
         self.dataset.family = family
 
+    def set_theme(self, theme):
+        self.dataset.theme = theme
+
     def set_description(self, description):
         self.dataset.description = description
 
