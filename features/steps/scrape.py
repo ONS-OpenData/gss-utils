@@ -118,5 +118,5 @@ def step_impl(context):
 
 @then("the catalog has more than one dataset")
 def step_impl(context):
-    eq_(type(context.scraper.catalog.dataset), list)a
+    eq_(type(context.scraper.catalog.dataset), list)
     assert(len(context.scraper.catalog.dataset) > 1)
