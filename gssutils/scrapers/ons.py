@@ -1,3 +1,4 @@
+import logging
 from urllib.parse import urljoin
 from dateutil.parser import parse
 from gssutils.metadata import Distribution
@@ -8,8 +9,11 @@ def scrape(scraper, tree):
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
         "//span[text() = 'Release date: ']/parent::node()/text()")[1].strip()).date()
-    scraper.dataset.nextUpdateDue = parse(tree.xpath(
-        "//span[text() = 'Next release: ']/parent::node()/text()")[1].strip()).date()
+    try:
+        scraper.dataset.nextUpdateDue = parse(tree.xpath(
+            "//span[text() = 'Next release: ']/parent::node()/text()")[1].strip()).date()
+    except ValueError as e:
+        logging.warning('Unexpected "next release" field: ' + str(e))
     scraper.dataset.contactPoint = tree.xpath(
         "//span[text() = 'Contact: ']/following-sibling::a[1]/@href")[0].strip()
     scraper.dataset.comment = tree.xpath(

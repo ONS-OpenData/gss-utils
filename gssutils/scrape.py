@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import datetime
 from urllib.parse import urljoin
@@ -24,6 +25,7 @@ class DistributionFilterError(Exception):
 
 class Scraper:
     def __init__(self, uri, session=None):
+        logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
         self.uri = uri
         self.datasets = []
         self.dataset = PMDDataset()
