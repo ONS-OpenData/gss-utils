@@ -257,5 +257,6 @@ class Catalog(Metadata):
         'spatial': (DCTERMS.spatial, Status.mandatory, lambda s: URIRef(s)),
         'themeTaxonomy': (DCAT.themeTaxonomy, Status.recommended, lambda s: URIRef(s)),
         'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
-        'rights': (DCTERMS.rights, Status.mandatory, lambda s: Literal(s, 'en'))
+        'rights': (DCTERMS.rights, Status.mandatory, lambda s: Literal(s, 'en')),
+        'dataset': (DCAT.dataset, Status.mandatory, lambda d: URIRef(d.uri))
     })

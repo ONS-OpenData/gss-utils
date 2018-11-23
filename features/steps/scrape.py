@@ -114,3 +114,9 @@ def step_impl(context):
 def step_impl(context):
     unset = list(context.scraper.dataset.get_unset())
     ok_(len(unset) == 0, f"Not all mandatory fields are set: {unset}")
+
+
+@then("the catalog has more than one dataset")
+def step_impl(context):
+    eq_(type(context.scraper.catalog.dataset), list)a
+    assert(len(context.scraper.catalog.dataset) > 1)
