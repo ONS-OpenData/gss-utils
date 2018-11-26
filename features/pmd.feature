@@ -65,3 +65,8 @@ Feature: PMD metadata
     Scenario: modified or updated
       Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
       Then the modified date should be quite recent
+
+    Scenario: catalog scraped datasets
+      Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
+      And I select the dataset "National Drug and Alcohol Treatment Waiting Times"
+      Then generate TriG
