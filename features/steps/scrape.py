@@ -116,7 +116,12 @@ def step_impl(context):
     ok_(len(unset) == 0, f"Not all mandatory fields are set: {unset}")
 
 
-@then("the catalog has more than one dataset")
+@step("the catalog has more than one dataset")
 def step_impl(context):
     eq_(type(context.scraper.catalog.dataset), list)
     assert(len(context.scraper.catalog.dataset) > 1)
+
+
+@step('I select the dataset "{title}"')
+def step_impl(context, title):
+    context.scraper.select_dataset(title=title)

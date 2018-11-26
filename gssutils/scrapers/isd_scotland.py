@@ -6,14 +6,18 @@ from urllib.parse import urldefrag, urljoin, urlparse
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import Distribution, PDF, Excel, Dataset
+from gssutils.metadata import Distribution, PDF, Excel, Dataset, PMDDataset, GOV
+from gssutils.utils import pathify
 
 
 def scrape(scraper, tree):
     size_re = re.compile(r'\[([0-9]+)(kb|Mb)\]')
-    scraper.catalog.title = tree.xpath('//h1/text()')[0]
+    scraper.catalog.title = tree.xpath('//h2/text()')[0].strip()
     scraper.catalog.dataset = []
     scraper.catalog.uri = scraper.uri + "#catalog"
+    scraper.catalog.rights = 'http://www.isdscotland.org/Copyright.asp'
+    scraper.catalog.publisher = GOV['information-services-division-scotland']
+    title2dataset = {}
 
     @lru_cache()
     def fetch_page(url):
@@ -21,6 +25,18 @@ def scrape(scraper, tree):
         return html.fromstring(page.text)
 
     for record in tree.xpath("//div[contains(concat(' ', @class, ' '), ' pubtitlel ')]"):
+        dataset_title = record.text.strip()
+        if dataset_title not in title2dataset:
+            dataset = PMDDataset()
+            dataset.uri = urljoin(scraper.uri, f'#{pathify(dataset_title)}')
+            dataset.title = dataset_title
+            dataset.publisher = scraper.catalog.publisher
+            dataset.rights = scraper.catalog.rights
+            dataset.distribution = []
+            title2dataset[dataset_title] = dataset
+        else:
+            dataset = title2dataset[dataset_title]
+
         datatables_urls = record.xpath("following-sibling::table/descendant::tr[td["
                                        "contains(text(), 'Data Tables')]]/td["
                                        "contains(concat(' ', @class, ' '), 'pubcontentr')]/a/@href")
@@ -36,13 +52,16 @@ def scrape(scraper, tree):
         if len(anchors) == 0:
             logging.warning(f"Broken link to dataset {datatables_urls[0]}")
             continue
-        dataset = Dataset()
-        dataset.uri = urljoin(scraper.uri, doc_url)
-        dataset.distribution = []
+
         # publication date is in paragraph before!
+        # this is actually the issued date of the distribution
         published = anchors[0].xpath("../preceding-sibling::p[1]/child::*/text()")
+        dist_issued = None
         if len(published) > 0 and published[0].startswith('Published '):
-            dataset.issued = parse(published[0][len('Published '):])
+            dist_issued = parse(published[0][len('Published '):])
+            # we'll use the latest publication date for the dataset
+            if not (hasattr(dataset, 'issued') and dist_issued <= dataset.issued):
+                dataset.issued = dist_issued
         dist_rows = anchors[0].xpath("../following-sibling::table[1]/descendant::tr")
         for row in dist_rows:
             distribution = Distribution(scraper)
@@ -55,6 +74,8 @@ def scrape(scraper, tree):
             else:
                 break
             distribution.title = title_node.text
+            if dist_issued is not None:
+                distribution.issues = dist_issued
             distribution.downloadURL = download_node[0].get('href')
             type_image = type_node[0].get('src').lower()
             if 'excel' in type_image:
@@ -69,4 +90,5 @@ def scrape(scraper, tree):
                     elif size_match.group(2) == 'kb': # should be either kB or KB    https://en.wikipedia.org/wiki/Kilobyte kB = 1000 while KB = 1024
                         distribution.byteSize = int(size_match.group(1)) * 1000
             dataset.distribution.append(distribution)
-        scraper.catalog.dataset.append(dataset)
+
+    scraper.catalog.dataset = list(title2dataset.values())

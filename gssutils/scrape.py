@@ -15,8 +15,8 @@ from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
 from gssutils.utils import pathify
 
 
-class DistributionFilterError(Exception):
-    """ Raised when filters don't uniquely identify a distribution
+class FilterError(Exception):
+    """ Raised when filters don't uniquely identify a thing
     """
 
     def __init__(self, message):
@@ -27,7 +27,6 @@ class Scraper:
     def __init__(self, uri, session=None):
         logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
         self.uri = uri
-        self.datasets = []
         self.dataset = PMDDataset()
         self.catalog = Catalog()
         self.dataset.modified = datetime.now()
@@ -51,17 +50,21 @@ class Scraper:
 
     def _repr_markdown_(self):
         md = ""
-        if hasattr(self.dataset, 'label'):
-            md = md + f'## {self.dataset.label}\n\n'
-        if hasattr(self.dataset, 'comment'):
-            md = md + f'{self.dataset.comment}\n\n'
-        if hasattr(self.dataset, 'description'):
-            md = md + f'### Description\n\n{self.dataset.description}\n\n'
-        if len(self.distributions) > 0:
-            md = md + "### Distributions\n\n"
-            for d in self.distributions:
-                t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
-                md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+        if hasattr(self.catalog, 'dataset') and len(self.catalog.dataset) > 1 and len(self.distributions) == 0:
+            md = md + f'## {self.catalog.title}\n\nThis is a catalog of datasets; choose one from the following:\n\n'
+            md = md + '\n'.join([f'* {d.label}' for d in self.catalog.dataset])
+        else:
+            if hasattr(self.dataset, 'label'):
+                md = md + f'## {self.dataset.label}\n\n'
+            if hasattr(self.dataset, 'comment'):
+                md = md + f'{self.dataset.comment}\n\n'
+            if hasattr(self.dataset, 'description'):
+                md = md + f'### Description\n\n{self.dataset.description}\n\n'
+            if len(self.distributions) > 0:
+                md = md + "### Distributions\n\n"
+                for d in self.distributions:
+                    t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
+                    md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
         return md
 
     @staticmethod
@@ -85,18 +88,27 @@ class Scraper:
             raise NotImplementedError(f'No scraper for {self.uri}')
         return self
 
-    def distribution(self, **kwargs):
-        matching_dists = [
-            dist for dist in self.distributions if all(
-                [v(dist.__dict__[k]) if callable(v) else dist.__dict__[k] == v
+    @staticmethod
+    def _filter_one(things, **kwargs):
+        matches = [
+            d for d in things if all(
+                [v(d.__dict__[k]) if callable(v) else d.__dict__[k] == v
                  for k, v in kwargs.items()]
             )]
-        if len(matching_dists) > 1:
-            raise DistributionFilterError('more than one distribution matches given filter(s)')
-        elif len(matching_dists) == 0:
-            raise DistributionFilterError('no distributions match given filter(s)')
+        if len(matches) > 1:
+            raise FilterError('more than one match for given filter(s)')
+        elif len(matches) == 0:
+            raise FilterError('nothing matches given filter(s)')
         else:
-            return matching_dists[0]
+            return matches[0]
+
+    def select_dataset(self, **kwargs):
+        dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
+        self.dataset = dataset
+        self.distributions = dataset.distribution
+
+    def distribution(self, **kwargs):
+        return Scraper._filter_one(self.distributions, **kwargs)
 
     def set_base_uri(self, uri):
         self._base_uri = uri

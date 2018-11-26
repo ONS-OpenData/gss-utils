@@ -76,5 +76,8 @@ Feature: Scrape dataset info
 
   Scenario: Scrape ISD Scotland
     Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
-    Then the catalog has more than one dataset
+    And the catalog has more than one dataset
+    When I select the dataset "National Drug and Alcohol Treatment Waiting Times"
+    Then the title should be "National Drug and Alcohol Treatment Waiting Times"
+    And dct:publisher should be `gov:information-services-division-scotland`
 
