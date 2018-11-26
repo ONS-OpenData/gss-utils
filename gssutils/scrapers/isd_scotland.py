@@ -13,7 +13,6 @@ from gssutils.utils import pathify
 def scrape(scraper, tree):
     size_re = re.compile(r'\[([0-9]+)(kb|Mb)\]')
     scraper.catalog.title = tree.xpath('//h2/text()')[0].strip()
-    scraper.catalog.dataset = []
     scraper.catalog.set_uri(scraper.uri + "#catalog")
     scraper.catalog.rights = 'http://www.isdscotland.org/Copyright.asp'
     scraper.catalog.publisher = GOV['information-services-division-scotland']

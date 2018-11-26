@@ -143,7 +143,7 @@ class Dataset(Metadata):
         'accrualPeriodicity': (DCTERMS.accrualPeriodicity, Status.mandatory, lambda s: URIRef(s)), # dct:Frequency
         'landingPage': (DCAT.landingPage, Status.mandatory, lambda s: URIRef(s)), # foaf:Document
         'theme': (DCAT.theme, Status.mandatory, lambda s: URIRef(s)), # skos:Concept
-        'distribution': (DCAT.distribution, Status.mandatory, lambda o: o)
+        'distribution': (DCAT.distribution, Status.mandatory, lambda o: o.uri)
     })
 
 

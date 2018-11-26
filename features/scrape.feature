@@ -55,10 +55,8 @@ Feature: Scrape dataset info
     
   Scenario: Scrape HMRC
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/Pages/TaxAndDutybulletins.aspx"
-    And select the distribution given by
-      | key       | value                                                      |
-      | mediaType | application/vnd.ms-excel                                   |
-      | title     | Alcohol Duty July 2018                                     |
+    And the catalog has more than one dataset
+    When I select the dataset "Alcohol Duty"
     Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/Tax%20and%20Duty%20Bulletins/Alcohol0718.xls"
 
   Scenario: Scrape gov.uk statistical-data-sets

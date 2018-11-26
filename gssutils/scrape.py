@@ -92,7 +92,7 @@ class Scraper:
     def _filter_one(things, **kwargs):
         matches = [
             d for d in things if all(
-                [v(d.__dict__[k]) if callable(v) else d.__dict__[k] == v
+                [v(d.__dict__[k]) if callable(v) else (hasattr(d, k) and d.__dict__[k] == v)
                  for k, v in kwargs.items()]
             )]
         if len(matches) > 1:
