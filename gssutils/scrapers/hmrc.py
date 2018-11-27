@@ -6,7 +6,7 @@ from dateutil.parser import parse
 def scrape(scraper, tree):
     scraper.catalog.title = tree.xpath("//title/text()")[0].strip()
     scraper.catalog.dataset = []
-    scraper.catalog.set_uri(scraper.uri + "#catalog")
+    scraper.catalog.uri = scraper.uri + "#catalog"
     scraper.catalog.publisher = GOV['hm-revenue-customs']
     scraper.catalog.rights = "https://www.uktradeinfo.com/AboutUs/Pages/TermsAndConditions.aspx"
     # from above terms, link to crown copyright at the National Archives says default license is OGL

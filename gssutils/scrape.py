@@ -1,7 +1,7 @@
 import logging
 import os
 from datetime import datetime
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import html2text
 import requests
@@ -9,6 +9,7 @@ from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
 from lxml import html
+from rdflib import BNode, URIRef
 
 import gssutils.scrapers
 from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
@@ -31,8 +32,7 @@ class Scraper:
         self.catalog = Catalog()
         self.dataset.modified = datetime.now()
         self.distributions = []
-        self._tableset = None
-        self._base_uri = None
+
         if session:
             self.session = session
         else:
@@ -40,12 +40,16 @@ class Scraper:
                                         cache=FileCache('.cache'),
                                         heuristic=LastModified())
         if 'JOB_NAME' in os.environ:
-            self.set_base_uri('http://gss-data.org.uk')
+            self._base_uri = URIRef('http://gss-data.org.uk')
             if os.environ['JOB_NAME'].startswith('GSS/'):
-                self.set_dataset_id(pathify(os.environ['JOB_NAME'][len('GSS/'):]))
+                self._dataset_id = pathify(os.environ['JOB_NAME'][len('GSS/'):])
             else:
-                self.set_dataset_id(pathify(os.environ['JOB_NAME']))
-
+                self._dataset_id = pathify(os.environ['JOB_NAME'])
+        else:
+            self._base_uri = BNode()
+            parsed_scrape_uri = urlparse(self.uri)
+            self._dataset_id = parsed_scrape_uri.netloc.replace('.', '/') + parsed_scrape_uri.path
+        self.update_dataset_uris()
         self._run()
 
     def _repr_markdown_(self):
@@ -105,6 +109,7 @@ class Scraper:
     def select_dataset(self, **kwargs):
         dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
+        self.update_dataset_uris()
         self.distributions = dataset.distribution
 
     def distribution(self, **kwargs):
@@ -112,12 +117,21 @@ class Scraper:
 
     def set_base_uri(self, uri):
         self._base_uri = uri
-        self.dataset.sparqlEndpoint = urljoin(uri, '/sparql')
+        self.update_dataset_uris()
 
     def set_dataset_id(self, id):
-        self.dataset.set_uri(urljoin(self._base_uri, f'data/{id}'))
-        self.dataset.set_graph(urljoin(self._base_uri, f'graph/{id}/metadata'))
-        self.dataset.inGraph = urljoin(self._base_uri, f'graph/{id}')
+        self._dataset_id = id
+        self.update_dataset_uris()
+
+#        self.dataset._dataset_uri = urljoin(self._base_uri, f'data/{id}')
+#        self.dataset._dataset_metadata_graph = urljoin(self._base_uri, f'graph/{id}/metadata')
+#        self.dataset._dataset_graph = urljoin(self._base_uri, f'graph/{id}')
+
+    def update_dataset_uris(self):
+        self.dataset.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
+        self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}/metadata')
+        self.dataset.inGraph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
+        self.dataset.sparqlEndpoint = urljoin(self._base_uri, '/sparql')
 
     def set_family(self, family):
         self.dataset.family = family

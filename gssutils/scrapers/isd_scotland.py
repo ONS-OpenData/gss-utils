@@ -13,7 +13,7 @@ from gssutils.utils import pathify
 def scrape(scraper, tree):
     size_re = re.compile(r'\[([0-9]+)(kb|Mb)\]')
     scraper.catalog.title = tree.xpath('//h2/text()')[0].strip()
-    scraper.catalog.set_uri(scraper.uri + "#catalog")
+    scraper.catalog.uri = scraper.uri + "#catalog"
     scraper.catalog.rights = 'http://www.isdscotland.org/Copyright.asp'
     scraper.catalog.publisher = GOV['information-services-division-scotland']
     title2dataset = {}
@@ -27,7 +27,6 @@ def scrape(scraper, tree):
         dataset_title = record.text.strip()
         if dataset_title not in title2dataset:
             dataset = PMDDataset()
-            dataset.set_uri(urljoin(scraper.uri, f'#{pathify(dataset_title)}'))
             dataset.title = dataset_title
             dataset.publisher = scraper.catalog.publisher
             dataset.rights = scraper.catalog.rights

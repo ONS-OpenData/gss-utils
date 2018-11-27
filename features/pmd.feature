@@ -67,6 +67,7 @@ Feature: PMD metadata
       Then the modified date should be quite recent
 
     Scenario: catalog scraped datasets
+      Given the 'JOB_NAME' environment variable is 'GSS/Health/ISD-Drugs-and-Alcohol'
       Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
       And I select the dataset "National Drug and Alcohol Treatment Waiting Times"
       Then generate TriG

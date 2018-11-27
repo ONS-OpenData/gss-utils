@@ -53,8 +53,25 @@ class Metadata:
     }
 
     def __init__(self):
-        self.uri = BNode()
-        self.graph = BNode()
+        self._uri = BNode()
+        self._graph = BNode()
+
+    @property
+    def uri(self):
+        return str(self._uri)
+
+    @uri.setter
+    def uri(self, uri):
+        self._uri = URIRef(uri)
+
+    @property
+    def graph(self):
+        return str(self._graph)
+
+    @graph.setter
+    def graph(self, uri):
+        self._graph = URIRef(uri)
+
 
     def __setattr__(self, name, value):
         if name in self._properties_metadata:
@@ -81,32 +98,30 @@ class Metadata:
         else:
             return obs
 
-    def set_uri(self, uri):
-        self.uri = URIRef(uri)
-
-    def set_graph(self, uri):
-        self.graph = URIRef(uri)
-
     def as_quads(self):
         quads = Quads()
         quads.namespace_manager = namespaces
-        graph = quads.graph(self.graph)
+        graph = quads.graph(self._graph)
         for c in getmro(type(self)):
             if hasattr(c, '_type'):
                 if type(c._type) == tuple:
                     for t in c._type:
-                        graph.add((self.uri, RDF.type, t))
+                        graph.add((self._uri, RDF.type, t))
                 else:
-                    graph.add((self.uri, RDF.type, c._type))
+                    graph.add((self._uri, RDF.type, c._type))
         for local_name, profile in self._properties_metadata.items():
             if local_name in self.__dict__:
                 prop, status, f = profile
                 v = self.__dict__[local_name]
                 if type(v) == list:
                     for obj in v:
-                        graph.add((self.uri, prop, f(obj)))
+                        graph.add((self._uri, prop, f(obj)))
+                        if isinstance(obj, Metadata):
+                            graph.addN(obj.as_quads())
                 else:
-                    graph.add((self.uri, prop, f(v)))
+                    graph.add((self._uri, prop, f(v)))
+                    if isinstance(v, Metadata):
+                        graph.addN(v.as_quads())
         return quads
 
     def _repr_html_(self):
@@ -143,7 +158,7 @@ class Dataset(Metadata):
         'accrualPeriodicity': (DCTERMS.accrualPeriodicity, Status.mandatory, lambda s: URIRef(s)), # dct:Frequency
         'landingPage': (DCAT.landingPage, Status.mandatory, lambda s: URIRef(s)), # foaf:Document
         'theme': (DCAT.theme, Status.mandatory, lambda s: URIRef(s)), # skos:Concept
-        'distribution': (DCAT.distribution, Status.mandatory, lambda o: o.uri)
+        'distribution': (DCAT.distribution, Status.mandatory, lambda d: URIRef(d.uri))
     })
 
 
