@@ -123,10 +123,6 @@ class Scraper:
         self._dataset_id = id
         self.update_dataset_uris()
 
-#        self.dataset._dataset_uri = urljoin(self._base_uri, f'data/{id}')
-#        self.dataset._dataset_metadata_graph = urljoin(self._base_uri, f'graph/{id}/metadata')
-#        self.dataset._dataset_graph = urljoin(self._base_uri, f'graph/{id}')
-
     def update_dataset_uris(self):
         self.dataset.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
         self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}/metadata')
@@ -159,7 +155,7 @@ class Scraper:
 
     @property
     def next_release(self):
-        return self.dataset.nextUpdateDue.isoformat()
+        return self.dataset.updateDueOn.isoformat()
 
     @property
     def contact(self):

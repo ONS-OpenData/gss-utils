@@ -37,7 +37,7 @@ Feature: PMD metadata
         gdp:family gdp:trade ;
         pmd:contactEmail <mailto:fdi@ons.gov.uk> ;
         pmd:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
-        pmd:nextUpdateDue "2018-12-03"^^xsd:date ;
+        pmd:updateDueOn "2018-12-03"^^xsd:date ;
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:issued "2017-12-01"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;

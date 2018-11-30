@@ -44,7 +44,7 @@ def scrape_stats(scraper, tree):
         scraper.distributions.append(distribution)
     next_release_nodes = tree.xpath("//p[starts-with(text(), 'Next release of these statistics:')]/text()")
     if next_release_nodes and (len(next_release_nodes) > 0):
-        scraper.dataset.nextUpdateDue = parse(
+        scraper.dataset.updateDueOn = parse(
             next_release_nodes[0].strip().split(':')[1].split('.')[0].strip()
         ).date()
     scraper.dataset.description = scraper.to_markdown(tree.xpath(

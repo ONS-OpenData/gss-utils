@@ -125,3 +125,8 @@ def step_impl(context):
 @step('I select the dataset "{title}"')
 def step_impl(context, title):
     context.scraper.select_dataset(title=title)
+
+
+@when('I select the dataset whose title starts with "{title}"')
+def step_impl(context, title):
+    context.scraper.select_dataset(title=lambda x: x.startswith(title))

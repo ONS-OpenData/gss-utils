@@ -79,3 +79,7 @@ Feature: Scrape dataset info
     Then the title should be "National Drug and Alcohol Treatment Waiting Times"
     And dct:publisher should be `gov:information-services-division-scotland`
 
+  Scenario: Scrape uktradeinfo OTSReports
+    Given I scrape the page "https://www.uktradeinfo.com/Statistics/OverseasTradeStatistics/AboutOverseastradeStatistics/Pages/OTSReports.aspx"
+    And the catalog has more than one dataset
+    When I select the dataset whose title starts with "UK Trade in Goods by Business Characteristics"

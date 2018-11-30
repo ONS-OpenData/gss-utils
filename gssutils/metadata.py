@@ -172,7 +172,7 @@ class PMDDataset(QBDataSet):
     _type = (PMD.LinkedDataset, PMD.Dataset)
     _properties_metadata = dict(QBDataSet._properties_metadata)
     _properties_metadata.update({
-        'nextUpdateDue': (PMD.nextUpdateDue, Status.recommended, lambda d: Literal(d)),  # date/time
+        'updateDueOn': (PMD.updateDueOn, Status.recommended, lambda d: Literal(d)),  # date/time
         'family': (GDP.family, Status.recommended, lambda f: GDP[f.lower()]),
         'sparqlEndpoint': (VOID.sparqlEndpoint, Status.recommended, lambda s: URIRef(s)),
         'inGraph': (PMD.graph, Status.mandatory, lambda s: URIRef(s)),
