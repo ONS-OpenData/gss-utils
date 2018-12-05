@@ -83,3 +83,9 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/OverseasTradeStatistics/AboutOverseastradeStatistics/Pages/OTSReports.aspx"
     And the catalog has more than one dataset
     When I select the dataset whose title starts with "UK Trade in Goods by Business Characteristics"
+
+  Scenario: Scrape ONS User Requested Data
+    Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/adhocs/008596individualcountrydatagoodsonamonthlybasisfromjanuary1998toapril2018"
+    Then the title should be "Individual country data (goods) on a monthly basis from January 1998 to April 2018"
+    And the comment should be "Exports and imports goods data by individual country for UK trade in goods."
+    And the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/adhocs/008596individualcountrydatagoodsonamonthlybasisfromjanuary1998toapril2018/04.allcountriesapril2018.xls"
