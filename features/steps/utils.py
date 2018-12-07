@@ -7,6 +7,7 @@ from nose.tools import *
 def step_impl(context):
     context.pathify_tests = context.table
 
+
 @then("the pathify function should convert labels to paths")
 def step_impl(context):
     for row in context.pathify_tests:

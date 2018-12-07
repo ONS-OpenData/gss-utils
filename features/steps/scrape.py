@@ -6,10 +6,11 @@ import requests
 from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
 import os
 
+RECORD='none'
 
 @given('I scrape the page "{uri}"')
 def step_impl(context, uri):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         context.scraper = Scraper(uri, requests.Session())
 
 
@@ -53,7 +54,7 @@ def step_impl(context, prefix, property, object):
 
 @step("fetch the distribution as a databaker object")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         if not hasattr(context, 'distribution'):
             context.distribution = context.scraper.distribution()
         context.databaker = context.distribution.as_databaker()
@@ -87,7 +88,7 @@ def step_impl(context):
 
 @step("fetch the '{tabname}' tab as a pandas DataFrame")
 def step_impl(context, tabname):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
@@ -105,7 +106,7 @@ def step_impl(context, title_start):
 
 @then("fetch the tabs as a dict of pandas DataFrames")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode='new_episodes'):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         context.pandas = context.distribution.as_pandas()
         eq_(type(context.pandas), dict)
 
