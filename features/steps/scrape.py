@@ -8,6 +8,7 @@ import os
 
 RECORD='none'
 
+
 @given('I scrape the page "{uri}"')
 def step_impl(context, uri):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):

@@ -1,8 +1,9 @@
-from gssutils.metadata import Distribution
+from gssutils.metadata import Distribution, GOV
 from urllib.parse import urljoin
 
 
 def scrape(scraper, tree):
+    scraper.dataset.publisher = GOV['national-records-of-scotland']
     scraper.dataset.title = tree.xpath('//div[@property = "dc:title"]/h2/text()')[0].strip()
     after_background = tree.xpath(
         '//h3[contains(descendant-or-self::*[text()], "Background")]/following-sibling::*')

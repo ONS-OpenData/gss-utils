@@ -1,16 +1,18 @@
 from dateutil.parser import parse
-from gssutils.metadata import Distribution, PDF, Excel
+from gssutils.metadata import Distribution, PDF, Excel, GOV
 import re
 
 type_size_re = re.compile(r"([^\s]*)\s+\(([0-9\.]+)\s+([KMG]B)")
+
 
 def scrape(scraper, tree):
     scraper.dataset.title = tree.xpath("//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
         "//p[contains(concat(' ', @class, ' '), ' date-pub ')]/span[@class='date-display-single']/text()")[0]).date()
+    scraper.catalog.publisher = GOV['department-of-health-northern-ireland']
     for doc_link in tree.xpath(
-        "//div[contains(concat(' ', @class, ' '), ' publicationDocs ')]"
-        "//div[contains(concat(' ', @class, ' '), ' nigovfile ')]/a"):
+            "//div[contains(concat(' ', @class, ' '), ' publicationDocs ')]"
+            "//div[contains(concat(' ', @class, ' '), ' nigovfile ')]/a"):
         dist = Distribution(scraper)
         dist.downloadURL = doc_link.get('href')
         dist.title = doc_link.xpath("text()")[0].strip()
