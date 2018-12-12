@@ -89,3 +89,7 @@ Feature: Scrape dataset info
     Then the title should be "Individual country data (goods) on a monthly basis from January 1998 to April 2018"
     And the comment should be "Exports and imports goods data by individual country for UK trade in goods."
     And the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/adhocs/008596individualcountrydatagoodsonamonthlybasisfromjanuary1998toapril2018/04.allcountriesapril2018.xls"
+
+  Scenario: Scrape DoH Northern Ireland
+    Given I scrape the page "https://www.health-ni.gov.uk/publications/census-drug-and-alcohol-treatment-services-northern-ireland-2017"
+    Then dct:publisher should be `gov:department-of-health-northern-ireland`
