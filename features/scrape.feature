@@ -93,3 +93,10 @@ Feature: Scrape dataset info
   Scenario: Scrape DoH Northern Ireland
     Given I scrape the page "https://www.health-ni.gov.uk/publications/census-drug-and-alcohol-treatment-services-northern-ireland-2017"
     Then dct:publisher should be `gov:department-of-health-northern-ireland`
+
+  Scenario: Scrape gov.uk collection
+    Given I scrape the page "https://www.gov.uk/government/collections/national-insurance-number-allocations-to-adult-overseas-nationals-entering-the-uk"
+    And the catalog has more than one dataset
+    When I select the dataset whose title starts with "National Insurance number allocations to adult overseas nationals to September 2018"
+    Then dct:title should be `"National Insurance number allocations to adult overseas nationals to September 2018"@en`
+    And dct:publisher should be `gov:department-for-work-pensions`

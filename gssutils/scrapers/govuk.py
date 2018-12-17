@@ -1,5 +1,6 @@
 import re
 from dateutil.parser import parse
+
 from gssutils.metadata import Distribution, ODS, ZIP, Excel
 from urllib.parse import urljoin
 
@@ -67,3 +68,24 @@ def scrape_sds(scraper, tree):
         scraper.distributions.append(dist)
     email_link = tree.xpath("//div[contains(concat(' ', @class, ' '), ' contact ')]//a[@class='email']")[0]
     scraper.dataset.contactPoint = email_link.get('href')
+
+
+def scrape_collection(scraper, tree):
+    date_re = re.compile(r'[0-9]{1,2} (January|February|March|April|May|June|' +
+                         'July|August|September|October|November|December) [0-9]{4}')
+    scraper.catalog.title = tree.xpath("//h1/text()")[0].strip()
+    scraper.catalog.comment = tree.xpath('//p[contains(concat(" ", @class, " "), " gem-c-lead-paragraph ")]/text()')[0].strip()
+    dates = tree.xpath("//div[contains(concat(' ', @class, ' '), 'app-c-published-dates')]/text()")
+    if len(dates) > 0 and dates[0].strip().startswith('Published '):
+        match = date_re.search(dates[0])
+        if match:
+            scraper.dataset.issued = parse(match.group(0)).date()
+    latest_releases = tree.xpath('//h3[@id="latest-releases"]/following-sibling::div/child::ol/li/a')
+    scraper.catalog.dataset = []
+    for release in latest_releases:
+        if release.get('href').startswith('/government/statistics'):
+            from gssutils import Scraper
+            ds_scraper = Scraper(urljoin(scraper.uri, release.get('href')))
+            ds = ds_scraper.dataset
+            ds.distribution = ds_scraper.distributions
+            scraper.catalog.dataset.append(ds)

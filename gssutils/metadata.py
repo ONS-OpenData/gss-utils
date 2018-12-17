@@ -72,7 +72,6 @@ class Metadata:
     def graph(self, uri):
         self._graph = URIRef(uri)
 
-
     def __setattr__(self, name, value):
         if name in self._properties_metadata:
             self.__dict__[name] = value
