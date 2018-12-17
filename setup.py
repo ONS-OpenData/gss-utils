@@ -28,6 +28,7 @@ setuptools.setup(
                       'rdflib',
                       'messytables==0.15.1',
                       'lxml',
+                      'unidecode',
                       'wheel'],
     tests_require=['behave', 'parse', 'nose', 'vcrpy'],
     classifiers=[

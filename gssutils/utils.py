@@ -1,5 +1,7 @@
 import re
 
+from unidecode import unidecode
+
 
 def pathify(label):
     """
@@ -7,7 +9,7 @@ def pathify(label):
     """
     return re.sub(r'-$', '',
                   re.sub(r'-+', '-',
-                         re.sub(r'[^\w/]', '-', label.lower())))
+                         re.sub(r'[^\w/]', '-', unidecode(label).lower())))
 
 
 def is_interactive():
