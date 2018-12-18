@@ -17,6 +17,7 @@ setuptools.setup(
     install_requires=['requests',
                       'python_dateutil',
                       'CacheControl',
+                      'lockfile',
                       'databaker',
                       'ipython',
                       'pandas',
