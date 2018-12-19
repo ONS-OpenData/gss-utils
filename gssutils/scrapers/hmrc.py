@@ -63,8 +63,8 @@ def scrape_ots_reports(scraper, tree):
             columns = [t.strip() for t in row.xpath("th/text()")]
             header = False
         else:
+            publication_date = None
             for k, v in zip(columns, row.xpath("td")):
-                publication_date = None
                 if k == 'Published':
                     try:
                         if v.text is not None:

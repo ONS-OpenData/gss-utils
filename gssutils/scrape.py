@@ -109,6 +109,7 @@ class Scraper:
     def select_dataset(self, **kwargs):
         dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
+        self.dataset.modified = datetime.now()
         self.update_dataset_uris()
         self.distributions = dataset.distribution
 
