@@ -100,3 +100,8 @@ Feature: Scrape dataset info
     When I select the dataset whose title starts with "National Insurance number allocations to adult overseas nationals to September 2018"
     Then dct:title should be `"National Insurance number allocations to adult overseas nationals to September 2018"@en`
     And dct:publisher should be `gov:department-for-work-pensions`
+
+  Scenario: Cope with bad mailto URIs
+    Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
+    Then the title should be "UK trade time series"
+    And dcat:contactPoint should be `<mailto:trade@ons.gov.uk>`

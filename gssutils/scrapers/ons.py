@@ -50,8 +50,10 @@ def scrape(scraper, tree):
         except IndexError:
             logging.warning('Unable to find "next release" field')
         try:
-            scraper.dataset.contactPoint = tree.xpath(
+            mailto = tree.xpath(
                 "//span[text() = 'Contact: ']/following-sibling::a[1]/@href")[0].strip()
+            # guard against extraneous, invalid spaces
+            scraper.dataset.contactPoint = re.sub(r'^mailto:\s+', 'mailto:', mailto)
         except IndexError:
             logging.warning('Unable to find "contact" field.')
         scraper.dataset.comment = tree.xpath(

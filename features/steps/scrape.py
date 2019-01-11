@@ -6,7 +6,7 @@ import requests
 from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
 import os
 
-RECORD = 'old'
+RECORD = 'none'
 
 
 @given('I scrape the page "{uri}"')
