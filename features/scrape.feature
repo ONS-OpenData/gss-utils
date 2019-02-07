@@ -105,3 +105,12 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
     Then the title should be "UK trade time series"
     And dcat:contactPoint should be `<mailto:trade@ons.gov.uk>`
+
+  Scenario: Scrape HMRC RTS downloads page
+    Given I scrape the page "https://www.uktradeinfo.com/Statistics/RTS/Pages/default.aspx"
+    Then the title should be "UK Regional Trade Statistics (RTS"
+    And select the distribution given by
+      | key       | value                                                      |
+      | mediaType | application/zip                                            |
+      | title     | RTS 2017                                                   |
+    Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/RTS/Documents/Rtsweb%202017.zip"

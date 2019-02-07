@@ -1,8 +1,10 @@
 import logging
 import mimetypes
+import string
 from urllib.parse import urljoin
-from gssutils.metadata import Dataset, Excel, Distribution, PMDDataset, GOV
+from gssutils.metadata import Dataset, Excel, Distribution, PMDDataset, GOV, THEME
 from dateutil.parser import parse
+from lxml import html
 
 
 def scrape_pages(scraper, tree):
@@ -100,3 +102,50 @@ def scrape_ots_reports(scraper, tree):
     if len(dataset_titles) > 0:
         scraper.catalog.dataset = list(dataset_titles.values())
 
+
+def scrape_rts(scraper, metadata_tree):
+    """
+        HMRC RTS is a special case, where the main page is:
+          https://www.uktradeinfo.com/Statistics/RTS/Pages/default.aspx
+        the RTS dataset metadata is available from:
+          https://www.uktradeinfo.com/Lists/HMRC%20%20Metadata/DispForm.aspx?ID=3&ContentTypeId=0x0100E95984F4DBD401488EB2E5697A7B38EF
+        and the zipped data files are linked from:
+          https://www.uktradeinfo.com/Statistics/RTS/Pages/RTS-Downloads.aspx
+    """
+    METADATA_URL = 'https://www.uktradeinfo.com/Lists/HMRC%20%20Metadata/DispForm.aspx?ID=3&ContentTypeId=0x0100E95984F4DBD401488EB2E5697A7B38EF'
+    DISTRIBUTION_URL = 'https://www.uktradeinfo.com/Statistics/RTS/Pages/RTS-Downloads.aspx'
+    # from above terms, link to crown copyright at the National Archives says default license is OGL
+    scraper.dataset.license = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+    # Ideally, as this looks like a Snarepoint site, we should be able to fetch the metadata as JSON via tha Snarepoint
+    # "REST" (where MS still wrongly say REST means CRUD) interface. But we can't, so let's just scrape.
+    metadata_page = scraper.session.get(METADATA_URL)
+    metadata_tree = html.fromstring(metadata_page.text)
+
+    def metadata_value(prop):
+        return ' '.join(metadata_tree.xpath(f"//tr[td/h3/text() = '{prop}']/td[2]/text()")).strip()
+
+    scraper.dataset.title = metadata_value('Title')
+    scraper.dataset.description = metadata_value('Identification:Abstract')
+    assert metadata_value('Organisation:Responsible Organisation') == 'HM Revenue & Customs – Trade Statistics.', \
+        "Expecting org to be 'HM Revenue & Customs – Trade Statistics.', got '" + \
+        metadata_value('Organisation:Responsible Organisation') + "'."
+    scraper.dataset.publisher = GOV['hm-revenue-customs']
+    scraper.dataset.rights = "https://www.uktradeinfo.com/AboutUs/Pages/TermsAndConditions.aspx"
+    scraper.contactPoint = f"mailto:{metadata_value('Organisation:Email Address')}"
+    scraper.dataset.keyword = [
+        keyword.strip().rstrip('.') for keyword in metadata_value('Classification:Keyword').split(',')]
+    assert metadata_value('Classification:National Statistics Theme') == 'Business and Energy', \
+        "Expecting National Statistics Theme to be 'Business and Energy"
+    assert metadata_value('Classification:Sub-theme') == 'International Trade', \
+        "Expecting sub-theme to be 'International Trade"
+    scraper.dataset.theme = THEME['business-industry-trade-energy']
+
+    # now fetch list of distributions
+    distributions_page = scraper.session.get(DISTRIBUTION_URL)
+    distributions_tree = html.fromstring(distributions_page.text)
+    for anchor in distributions_tree.xpath("//div[h1[text()='closed periods']]/ul/li/a"):
+        dist = Distribution(scraper)
+        dist.title = anchor.text.strip()
+        dist.downloadURL = urljoin(scraper.uri, anchor.get('href'))
+        dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+        scraper.distributions.append(dist)
