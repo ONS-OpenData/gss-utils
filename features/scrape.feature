@@ -109,6 +109,7 @@ Feature: Scrape dataset info
   Scenario: Scrape HMRC RTS downloads page
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/RTS/Pages/default.aspx"
     Then the title should be "UK Regional Trade Statistics (RTS"
+    And the contact email address should be "mailto:uktradeinfo@hmrc.gsi.gov.uk"
     And select the distribution given by
       | key       | value                                                      |
       | mediaType | application/zip                                            |

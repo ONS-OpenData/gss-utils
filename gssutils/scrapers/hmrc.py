@@ -131,7 +131,7 @@ def scrape_rts(scraper, metadata_tree):
         metadata_value('Organisation:Responsible Organisation') + "'."
     scraper.dataset.publisher = GOV['hm-revenue-customs']
     scraper.dataset.rights = "https://www.uktradeinfo.com/AboutUs/Pages/TermsAndConditions.aspx"
-    scraper.dataset.contactPoint = f"mailto:{metadata_value('Organisation:Email Address')}"
+    scraper.dataset.contactPoint = metadata_tree.xpath("//tr[td/h3/text() = 'Organisation:Email Address']/td[2]/a/@href")[0]
     scraper.dataset.keyword = [
         keyword.strip().rstrip('.') for keyword in metadata_value('Classification:Keyword').split(',')]
     assert metadata_value('Classification:National Statistics Theme') == 'Business and Energy', \
