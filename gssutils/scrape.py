@@ -94,13 +94,17 @@ class Scraper:
 
     @staticmethod
     def _filter_one(things, **kwargs):
+        latest = kwargs.pop('latest', False)
         matches = [
             d for d in things if all(
                 [v(d.__dict__[k]) if callable(v) else (hasattr(d, k) and d.__dict__[k] == v)
                  for k, v in kwargs.items()]
             )]
         if len(matches) > 1:
-            raise FilterError('more than one match for given filter(s)')
+            if latest:
+                return max(matches, key=lambda d: d.issued)
+            else:
+                raise FilterError('more than one match for given filter(s)')
         elif len(matches) == 0:
             raise FilterError('nothing matches given filter(s)')
         else:

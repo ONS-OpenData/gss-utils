@@ -79,12 +79,12 @@ def scrape_collection(scraper, tree):
         match = date_re.search(dates[0])
         if match:
             scraper.dataset.issued = parse(match.group(0)).date()
-    latest_releases = tree.xpath('//h3[@id="latest-releases"]/following-sibling::div/child::ol/li/a')
+    doclist = tree.xpath('//ol[@class="gem-c-document-list"]/li/a')
     scraper.catalog.dataset = []
-    for release in latest_releases:
-        if release.get('href').startswith('/government/statistics'):
+    for doc in doclist:
+        if doc.get('href').startswith('/government/statistics'):
             from gssutils import Scraper
-            ds_scraper = Scraper(urljoin(scraper.uri, release.get('href')))
+            ds_scraper = Scraper(urljoin(scraper.uri, doc.get('href')))
             ds = ds_scraper.dataset
             ds.distribution = ds_scraper.distributions
             scraper.catalog.dataset.append(ds)

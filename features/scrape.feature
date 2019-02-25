@@ -123,3 +123,10 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.ms-excel                                                                         |
       | title     | Regional trade in goods statistics disaggregated by smaller geographical areas: Data Tables 2017 |
     Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/763405/Local_Area_Tables_2017.xls"
+
+  Scenario: Scrape another gov.uk collection
+    Given I scrape the page "https://www.gov.uk/government/collections/alcohol-and-drug-misuse-and-treatment-statistics"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
+    Then dct:title should be `"Substance misuse treatment for adults: statistics 2017 to 2018"@en`
+    And dct:publisher should be `gov:public-health-england`

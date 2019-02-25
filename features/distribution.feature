@@ -34,7 +34,7 @@ Feature: distribution downloading
     And fetch the distribution as a databaker object
     Then the sheet names contain [CONTENTS, 1, 2, 3, 4]
 
-  Scenario: Select ditribution by start of title
+  Scenario: Select distribution by start of title
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
     Then select the distribution whose title starts with "Northern Ireland - Migration flows by type"
 

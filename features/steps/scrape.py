@@ -134,6 +134,11 @@ def step_impl(context, title):
     context.scraper.select_dataset(title=lambda x: x.startswith(title))
 
 
+@when('I select the latest dataset whose title starts with "{title}"')
+def step_impl(context, title):
+    context.scraper.select_dataset(title=lambda x: x.startswith(title), latest=True)
+
+
 @then('the dataset media type should be "application/vnd.ms-excel"')
 def step_impl(context):
     """

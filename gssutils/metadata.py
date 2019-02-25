@@ -22,6 +22,8 @@ MARKDOWN = URIRef('https://www.w3.org/ns/iana/media-types/text/markdown#Resource
 
 ODS = 'application/vnd.oasis.opendocument.spreadsheet'
 Excel = 'application/vnd.ms-excel'
+ExcelOpenXML = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+ExcelTypes = (Excel, ExcelOpenXML)
 ZIP = 'application/zip'
 PDF = 'application/pdf'
 
@@ -223,7 +225,7 @@ class Distribution(Metadata):
         self.session = scraper.session
 
     def as_databaker(self, **kwargs):
-        if self.mediaType == Excel:
+        if self.mediaType in ExcelTypes:
             fobj = BytesIO(self.session.get(self.downloadURL).content)
             tableset = messytables.excel.XLSTableSet(fobj)
             tabs = list(xypath.loader.get_sheets(tableset, "*"))
