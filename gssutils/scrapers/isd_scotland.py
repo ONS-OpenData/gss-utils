@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 import re
 from functools import lru_cache
 from urllib.parse import urldefrag, urljoin, urlparse
@@ -80,6 +81,8 @@ def scrape(scraper, tree):
                 distribution.mediaType = Excel
             elif 'swf' in type_image:
                 distribution.mediaType = 'application/vnd.adobe.flash.movie'
+            else:
+                distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
             if size_node is not None and size_node.text is not None:
                 size_match = size_re.match(size_node.text)
                 if size_match:

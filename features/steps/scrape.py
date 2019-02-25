@@ -132,3 +132,11 @@ def step_impl(context, title):
 @when('I select the dataset whose title starts with "{title}"')
 def step_impl(context, title):
     context.scraper.select_dataset(title=lambda x: x.startswith(title))
+
+
+@then('the dataset media type should be "application/vnd.ms-excel"')
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    raise NotImplementedError(u'STEP: Then the dataset media type should be "application/vnd.ms-excel"')

@@ -1,3 +1,5 @@
+import mimetypes
+
 from gssutils.metadata import Distribution, GOV
 from urllib.parse import urljoin
 
@@ -26,5 +28,8 @@ def scrape(scraper, tree):
                 distribution.mediaType = {
                     'csv': 'text/csv',
                     'excel': 'application/vnd.ms-excel'
-                }.get(file_type)
+                }.get(
+                    file_type,
+                    mimetypes.guess_type(distribution.downloadURL)[0]
+                )
                 scraper.distributions.append(distribution)

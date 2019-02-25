@@ -236,7 +236,7 @@ class Distribution(Metadata):
             tableset = messytables.excel.XLSTableSet(excel_obj)
             tabs = list(xypath.loader.get_sheets(tableset, "*"))
             return tabs
-        raise FormatError('Unable to load {self.mediaType} into Databaker.')
+        raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
 
     def as_pandas(self, **kwargs):
         if self.mediaType == Excel:

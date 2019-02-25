@@ -1,3 +1,4 @@
+import mimetypes
 import re
 from dateutil.parser import parse
 
@@ -37,11 +38,9 @@ def scrape_stats(scraper, tree):
         distribution.title = attachment_section.xpath("div/h2[@class='title']/a/text()")[0].strip()
         fileExtension = attachment_section.xpath(
             "div/p[@class='metadata']/span[@class='type']/descendant-or-self::*/text()")[0].strip()
-        distribution.mediaType = {
-            'ODS': 'application/vnd.oasis.opendocument.spreadsheet',
-            'XLS': 'application/vnd.ms-excel',
-            'XLSX': 'application/vnd.ms-excel'
-        }.get(fileExtension, fileExtension)
+        distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
+        if distribution.mediaType is None:
+            distribution.mediaType, encoding = mimetypes.guess_type(f'dummy.{fileExtension}')
         scraper.distributions.append(distribution)
     next_release_nodes = tree.xpath("//p[starts-with(text(), 'Next release of these statistics:')]/text()")
     if next_release_nodes and (len(next_release_nodes) > 0):

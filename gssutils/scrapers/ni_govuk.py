@@ -1,3 +1,5 @@
+import mimetypes
+
 from dateutil.parser import parse
 from gssutils.metadata import Distribution, PDF, Excel, GOV
 import re
@@ -23,6 +25,8 @@ def scrape(scraper, tree):
                 dist.mediaType = PDF
             elif match.group(1) == 'Excel':
                 dist.mediaType = Excel
+            else:
+                dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
             size = float(match.group(2))
             if match.group(3) == 'KB':  # https://en.wikipedia.org/wiki/Kilobyte kB = 1000 while KB = 1024
                 dist.byteSize = int(size * 1024)

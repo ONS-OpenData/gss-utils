@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 import re
 from urllib.parse import urljoin
 from dateutil.parser import parse
@@ -40,6 +41,8 @@ def scrape(scraper, tree):
                         distribution.mediaType = Excel
                     elif file_type == 'ods':
                         distribution.mediaType = ODS
+                    else:
+                        distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
 
     else:
         try:

@@ -1,3 +1,4 @@
+import mimetypes
 from urllib.parse import urljoin
 from dateutil.parser import parse
 from gssutils.metadata import Distribution, Excel, ODS, GOV
@@ -22,7 +23,10 @@ def scrape(scraper, tree):
         type_size_re = re.compile(r'(.*?)\s*\(([^)]+)\)')
         m = type_size_re.match(anchor.xpath('span/text()')[0].strip())
         if m:
-            dist.mediaType = {'Excel': Excel}.get(m.group(1), m.group(1))
+            if m.group(1) == 'Excel':
+                dist.mediaType = Excel
+            else:
+                dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
             size = m.group(2)
             if size.strip() != '':
                 if size.upper().endswith(' KB'):

@@ -115,3 +115,11 @@ Feature: Scrape dataset info
       | mediaType | application/zip                                            |
       | title     | RTS 2017                                                   |
     Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/RTS/Documents/Rtsweb%202017.zip"
+
+  Scenario: Get media type right
+    Given I scrape the page "https://www.gov.uk/government/statistics/regional-trade-in-goods-statistics-dis-aggregated-by-smaller-geographical-areas-2017"
+    And select the distribution given by
+      | key       | value                                                                                            |
+      | mediaType | application/vnd.ms-excel                                                                         |
+      | title     | Regional trade in goods statistics disaggregated by smaller geographical areas: Data Tables 2017 |
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/763405/Local_Area_Tables_2017.xls"
