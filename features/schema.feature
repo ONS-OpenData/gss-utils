@@ -10,5 +10,4 @@ Feature: Manage CSVW schema for validation
       | HO Country of Nationality | Period    | Age | Sex | Measure Type | Value | Unit         |
       | africa-north              | year/2008 | all | T   | Count        | 883   | applications |
     When I create a CSVW schema 'schema.json'
-    Then The schema is valid JSON
-    And cloudfluff/csvlint validates ok
+    Then the schema is valid JSON

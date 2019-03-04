@@ -50,5 +50,5 @@ def step_impl(context):
                                     },
                                     working_dir='/workspace', detach=True)
     response = csvlint.wait()
-    sys.stdout.write(csvlint.logs().decode(sys.stdout.encoding))
+    sys.stdout.write(csvlint.logs().decode('utf-8'))
     assert_equal(response['StatusCode'], 0)
