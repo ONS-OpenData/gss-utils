@@ -31,7 +31,7 @@ setuptools.setup(
                       'lxml',
                       'unidecode',
                       'wheel'],
-    tests_require=['behave', 'parse', 'nose', 'vcrpy'],
+    tests_require=['behave', 'parse', 'nose', 'vcrpy', 'docker'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
