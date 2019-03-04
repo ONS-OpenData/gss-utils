@@ -44,9 +44,11 @@ def step_impl(context):
 def step_impl(context):
     abs_schema_dir = context.schema_filename.resolve().parent
     client = docker.from_env()
-    logs = client.containers.run('cloudfluff/csvlint', ['csvlint', '-s', 'schema.json'],
-                                 volumes={
-                                     str(abs_schema_dir): {'bind': '/workspace', 'mode': 'ro'}
-                                 },
-                                 working_dir='/workspace')
-    sys.stdout.write(logs.decode(sys.stdout.encoding))
+    csvlint = client.containers.run('cloudfluff/csvlint', ['csvlint', '-s', 'schema.json'],
+                                    volumes={
+                                        str(abs_schema_dir): {'bind': '/workspace', 'mode': 'ro'}
+                                    },
+                                    working_dir='/workspace', detach=True)
+    response = csvlint.wait()
+    sys.stdout.write(csvlint.logs().decode(sys.stdout.encoding))
+    assert_equal(response['StatusCode'], 0)
