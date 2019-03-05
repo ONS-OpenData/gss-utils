@@ -11,3 +11,4 @@ Feature: Manage CSVW schema for validation
       | africa-north              | year/2008 | all | T   | Count        | 883   | applications |
     When I create a CSVW schema 'schema.json'
     Then the schema is valid JSON
+    And cloudfluff/csvlint validates ok

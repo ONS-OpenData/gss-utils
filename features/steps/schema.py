@@ -2,10 +2,14 @@ import sys
 import csv
 import json
 import tempfile
+import time
+from io import BytesIO, SEEK_END, StringIO, TextIOWrapper
 from pathlib import Path
+from tarfile import TarFile, TarInfo
 
 import docker as docker
 from behave import *
+from docker.errors import NotFound
 from nose.tools import *
 
 from gssutils import CSVWSchema
@@ -18,37 +22,58 @@ def step_impl(context, url):
 
 @step("a CSV file '{filename}'")
 def step_impl(context, filename):
-    context.work_dir = tempfile.TemporaryDirectory()
-    context.cwd = Path(context.work_dir.name)
-    context.csv_filename = context.cwd / filename
-    with open(context.csv_filename, 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(context.table.headings)
-        for row in context.table:
-            writer.writerow(row)
+    context.csv_filename = Path(filename)
+    context.csv_io = StringIO()
+    writer = csv.writer(context.csv_io)
+    writer.writerow(context.table.headings)
+    for row in context.table:
+        writer.writerow(row)
 
 
 @when("I create a CSVW schema '{filename}'")
 def step_impl(context, filename):
-    context.schema_filename = context.cwd / filename
-    context.schema.create(context.csv_filename, context.schema_filename)
+    context.schema_filename = Path(filename)
+    context.schema_io = StringIO()
+    context.csv_io.seek(0)
+    context.schema.create_io(
+        context.csv_io,
+        context.schema_io,
+        str(context.csv_filename.relative_to(context.schema_filename.parent))
+    )
 
 
 @then("The schema is valid JSON")
 def step_impl(context):
-    with open(context.schema_filename) as schema_file:
-        json.load(schema_file)
+    context.schema_io.seek(0)
+    json.load(context.schema_io)
 
 
 @step("cloudfluff/csvlint validates ok")
 def step_impl(context):
-    abs_schema_dir = context.schema_filename.resolve().parent
     client = docker.from_env()
-    csvlint = client.containers.run('cloudfluff/csvlint', ['csvlint', '-s', 'schema.json'],
-                                    volumes={
-                                        str(abs_schema_dir): {'bind': '/workspace', 'mode': 'ro'}
-                                    },
-                                    working_dir='/workspace', detach=True)
+    csvlint = client.containers.create(
+        'cloudfluff/csvlint',
+        command=f'csvlint -s /tmp/{context.schema_filename}'
+    )
+    archive = BytesIO()
+    context.schema_io.seek(0, SEEK_END)
+    schema_size = context.schema_io.tell()
+    context.schema_io.seek(0)
+    context.csv_io.seek(0, SEEK_END)
+    csv_size = context.csv_io.tell()
+    context.csv_io.seek(0)
+    with TarFile(fileobj=archive, mode='w') as t:
+        tis = TarInfo(str(context.schema_filename))
+        tis.size = schema_size
+        tis.mtime = time.time()
+        t.addfile(tis, BytesIO(context.schema_io.getvalue().encode('utf-8')))
+        tic = TarInfo(str(context.csv_filename))
+        tic.size = csv_size
+        tic.mtime = time.time()
+        t.addfile(tic, BytesIO(context.csv_io.getvalue().encode('utf-8')))
+    archive.seek(0)
+    csvlint.put_archive('/tmp/', archive)
+    csvlint.start()
     response = csvlint.wait()
     sys.stdout.write(csvlint.logs().decode('utf-8'))
     assert_equal(response['StatusCode'], 0)
