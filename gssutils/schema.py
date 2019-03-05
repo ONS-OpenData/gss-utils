@@ -1,3 +1,4 @@
+import argparse
 import csv
 import json
 from codecs import iterdecode
@@ -82,3 +83,21 @@ class CSVWSchema:
         }
 
         json.dump(schema, schema_io, indent=2)
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Create CSV schema')
+    parser.add_argument(
+        'config_base_url',
+        help='Base URL for table2qb configuration files, columns.csv, components,csv and codelists-metadata.json'
+    )
+    parser.add_argument('csv_file', type=argparse.FileType('r'),
+                        help='Input CSV file with headers matching definitions in columns.csv.')
+    parser.add_argument('schema_file', type=argparse.FileType('w'),
+                        help='Output JSON file for use by CSVW validation tool, e.g. csvlint.')
+    args = parser.parse_args()
+    schema = CSVWSchema(args.config_base_url)
+    schema.create_io(
+        args.csv_file,
+        args.schema_file,
+        str(Path(args.csv_file.name).relative_to(Path(args.schema_file.name).parent)))

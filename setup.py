@@ -30,6 +30,7 @@ setuptools.setup(
                       'messytables==0.15.1',
                       'lxml',
                       'unidecode',
+                      'argparse',
                       'wheel'],
     tests_require=['behave', 'parse', 'nose', 'vcrpy', 'docker'],
     classifiers=[
@@ -37,4 +38,7 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': ['create-schema=gssutils.schema:main']
+    }
 )
