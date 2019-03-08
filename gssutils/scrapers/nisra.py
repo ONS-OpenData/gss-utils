@@ -29,8 +29,8 @@ def scrape(scraper, tree):
                 dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
             size = m.group(2)
             if size.strip() != '':
-                if size.upper().endswith(' KB'):
+                if size.upper().endswith(' KB'): # https://en.wikipedia.org/wiki/Kilobyte kB = 1000 while KB = 1024
                     dist.byteSize = int(float(size[:-3]) * 1024)
-                elif size.upper().endswith(' MB'):
-                    dist.byteSize = int(float(size[:-3]) * 1024 * 1024)
+                elif size.upper().endswith(' MB'): # https://en.wikipedia.org/wiki/Megabyte MB = 10^6 bytes
+                    dist.byteSize = int(float(size[:-3]) * 1000000)
         scraper.distributions.append(dist)

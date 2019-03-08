@@ -130,3 +130,11 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
     Then dct:title should be `"Substance misuse treatment for adults: statistics 2017 to 2018"@en`
     And dct:publisher should be `gov:public-health-england`
+
+  Scenario: Scrape NHS digital
+    Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Statistics on Alcohol, England"
+    Then dct:title should be `"Statistics on Alcohol, England 2019 [PAS]"@en`
+    And dct:publisher should be `gov:nhs-digital`
+    
