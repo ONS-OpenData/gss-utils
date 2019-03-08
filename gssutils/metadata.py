@@ -224,38 +224,43 @@ class Distribution(Metadata):
         super().__init__()
         self.session = scraper.session
 
+    def open(self):
+        stream = self.session.get(self.downloadURL, stream=True).raw
+        stream.decode_content = True
+        return stream
+
     def as_databaker(self, **kwargs):
         if self.mediaType in ExcelTypes:
-            fobj = BytesIO(self.session.get(self.downloadURL).content)
-            tableset = messytables.excel.XLSTableSet(fobj)
-            tabs = list(xypath.loader.get_sheets(tableset, "*"))
-            return tabs
+            with self.open() as fobj:
+                tableset = messytables.excel.XLSTableSet(fileobj=fobj)
+                tabs = list(xypath.loader.get_sheets(tableset, "*"))
+                return tabs
         elif self.mediaType == ODS:
-            ods_obj = BytesIO(self.session.get(self.downloadURL).content)
-            excel_obj = BytesIO()
-            book = pyexcel.get_book(file_type='ods', file_content=ods_obj, library='pyexcel-ods3')
-            book.save_to_memory(file_type='xls', stream=excel_obj)
-            tableset = messytables.excel.XLSTableSet(excel_obj)
-            tabs = list(xypath.loader.get_sheets(tableset, "*"))
-            return tabs
+            with self.open() as ods_obj:
+                excel_obj = BytesIO()
+                book = pyexcel.get_book(file_type='ods', file_content=ods_obj, library='pyexcel-ods3')
+                book.save_to_memory(file_type='xls', stream=excel_obj)
+                tableset = messytables.excel.XLSTableSet(fileobj=excel_obj)
+                tabs = list(xypath.loader.get_sheets(tableset, "*"))
+                return tabs
         raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
 
     def as_pandas(self, **kwargs):
         if self.mediaType == Excel:
-            fobj = BytesIO(self.session.get(self.downloadURL).content)
-            return pd.read_excel(fobj, **kwargs)
+            with self.open() as fobj:
+                return pd.read_excel(fobj, **kwargs)
         elif self.mediaType == ODS:
-            ods_obj = BytesIO(self.session.get(self.downloadURL).content)
-            if 'sheet_name' in kwargs:
-                return pd.DataFrame(pyexcel.get_array(file_content=ods_obj,
-                                                      file_type='ods',
-                                                      library='pyexcel-ods3',
-                                                      **kwargs))
-            else:
-                book = pyexcel.get_book(file_content=ods_obj,
-                                        file_type='ods',
-                                        library='pyexcel-ods3')
-                return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
+            with self.open() as ods_obj:
+                if 'sheet_name' in kwargs:
+                    return pd.DataFrame(pyexcel.get_array(file_content=ods_obj,
+                                                          file_type='ods',
+                                                          library='pyexcel-ods3',
+                                                          **kwargs))
+                else:
+                    book = pyexcel.get_book(file_content=ods_obj,
+                                            file_type='ods',
+                                            library='pyexcel-ods3')
+                    return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
 
 
