@@ -2,7 +2,7 @@ import mimetypes
 import re
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, ODS, ZIP, Excel
+from gssutils.metadata import Distribution, ODS, ZIP, Excel, PDF
 from urllib.parse import urljoin
 
 
@@ -36,11 +36,14 @@ def scrape_stats(scraper, tree):
         distribution.downloadURL = urljoin(scraper.uri, attachment_section.xpath(
             "div/h2[@class='title']/a/@href")[0].strip())
         distribution.title = attachment_section.xpath("div/h2[@class='title']/a/text()")[0].strip()
-        fileExtension = attachment_section.xpath(
+        fileType = attachment_section.xpath(
             "div/p[@class='metadata']/span[@class='type']/descendant-or-self::*/text()")
-        if fileExtension is not None and len(fileExtension) > 0:
-            distribution.mediaType, encoding = mimetypes.guess_type(f'dummy.{fileExtension[0].strip()}')
-        else:
+        if fileType is not None and len(fileType) > 0:
+            if 'Excel' in fileType:
+                distribution.mediaType = Excel
+            elif 'PDF' in fileType:
+                distribution.mediaType = PDF
+        if not hasattr(distribution, 'mediaType') or distribution.mediaType is None:
             distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
         scraper.distributions.append(distribution)
     next_release_nodes = tree.xpath("//p[starts-with(text(), 'Next release of these statistics:')]/text()")
