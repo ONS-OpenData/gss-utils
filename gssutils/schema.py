@@ -43,7 +43,7 @@ class CSVWSchema:
             if column in self._col_def:
                 schema_columns.append({
                     "titles": column,
-                    "required": True,
+                    "required": self._col_def[column]['component_attachment'] not in ['qb:attribute'],
                     "name": self._col_def[column]['name']
                 })
                 if column in self._comp_def:
@@ -63,7 +63,7 @@ class CSVWSchema:
                         })
                     elif codelist.startswith('http://gss-data.org.uk/def/concept-scheme'):
                         print(f"Potentially missing concept scheme <{codelist}>")
-                if self._col_def[column]['component_attachment'] != '':
+                if self._col_def[column]['component_attachment'] not in ['', 'qb:attribute']:
                     schema_keys.append(self._col_def[column]['name'])
             else:
                 print(f'"{column}" not defined')
