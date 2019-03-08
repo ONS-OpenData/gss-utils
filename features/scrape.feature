@@ -137,4 +137,10 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Statistics on Alcohol, England"
     Then dct:title should be `"Statistics on Alcohol, England 2019 [PAS]"@en`
     And dct:publisher should be `gov:nhs-digital`
-    
+
+  Scenario: Scrape PHE fingertips reference via gov.uk collection
+    Given I scrape the page "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Local Alcohol Profiles"
+    Then dct:title should be `"Local Alcohol Profiles for England: February 2019 data update"@en`
+    And dct:publisher should be `gov:public-health-england`

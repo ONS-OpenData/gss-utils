@@ -37,10 +37,11 @@ def scrape_stats(scraper, tree):
             "div/h2[@class='title']/a/@href")[0].strip())
         distribution.title = attachment_section.xpath("div/h2[@class='title']/a/text()")[0].strip()
         fileExtension = attachment_section.xpath(
-            "div/p[@class='metadata']/span[@class='type']/descendant-or-self::*/text()")[0].strip()
-        distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
-        if distribution.mediaType is None:
-            distribution.mediaType, encoding = mimetypes.guess_type(f'dummy.{fileExtension}')
+            "div/p[@class='metadata']/span[@class='type']/descendant-or-self::*/text()")
+        if fileExtension is not None and len(fileExtension) > 0:
+            distribution.mediaType, encoding = mimetypes.guess_type(f'dummy.{fileExtension[0].strip()}')
+        else:
+            distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
         scraper.distributions.append(distribution)
     next_release_nodes = tree.xpath("//p[starts-with(text(), 'Next release of these statistics:')]/text()")
     if next_release_nodes and (len(next_release_nodes) > 0):
