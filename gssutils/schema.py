@@ -3,7 +3,6 @@ import csv
 import json
 from codecs import iterdecode
 from pathlib import Path
-from os.path import relpath
 from urllib import request, parse
 from gssutils.utils import pathify
 
@@ -20,6 +19,7 @@ class CSVWSchema:
         for table in json.load(request.urlopen(parse.urljoin(ref_base, 'codelists-metadata.json')))['tables']:
             codelist_url = f'http://gss-data.org.uk/def/concept-scheme/{pathify(table["rdfs:label"])}'
             self._codelists[codelist_url] = table
+        # need to resolve ref_common against relative URIs
 
     @staticmethod
     def _csv_lookup(url, key):
@@ -41,30 +41,44 @@ class CSVWSchema:
         columns = next(reader)
         for column in columns:
             if column in self._col_def:
-                schema_columns.append({
-                    "titles": column,
-                    "required": self._col_def[column]['component_attachment'] not in ['qb:attribute'],
-                    "name": self._col_def[column]['name']
-                })
+                column_def = self._col_def[column]
+                is_unit = column_def['property_template'] == 'http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure'
+                column_schema = {
+                    'titles': column,
+                    'required': is_unit or (column_def['component_attachment'] not in ['qb:attribute']),
+                    'name': column_def['name']
+                }
+                if 'regex' in column_def and column_def['regex'] not in (None, ''):
+                    if column_def['datatype'] != 'string':
+                        print(f"Column definition has regular expression guard '{column_def['regex']}' but datatype is '{column_def['datatype']}'")
+                    else:
+                        column_schema['datatype'] = {
+                            'format': column_def['regex']
+                        }
+                else:
+                    column_schema['datatype'] = column_def['datatype']
+                schema_columns.append(column_schema)
                 if column in self._comp_def:
-                    codelist = self._comp_def[column]['Codelist']
+                    component_def = self._comp_def[column]
+                    codelist = component_def['Codelist']
                     if codelist in self._codelists:
-                        reference = parse.urljoin(self._ref_base, self._codelists[self._comp_def[column]['Codelist']]['url'])
+                        reference = parse.urljoin(self._ref_base,
+                                                  self._codelists[component_def['Codelist']]['url'])
                         schema_tables.append({
-                            "url": reference,
-                            "tableSchema": self._codelists[self._comp_def[column]['Codelist']]['tableSchema']
+                            'url': reference,
+                            'tableSchema': self._codelists[component_def['Codelist']]['tableSchema']
                         })
                         schema_references.append({
-                            "columnReference": self._col_def[column]['name'],
-                            "reference": {
-                                "resource": reference,
-                                "columnReference": "notation"
+                            'columnReference': column_def['name'],
+                            'reference': {
+                                'resource': reference,
+                                'columnReference': 'notation'
                             }
                         })
                     elif codelist.startswith('http://gss-data.org.uk/def/concept-scheme'):
                         print(f"Potentially missing concept scheme <{codelist}>")
-                if self._col_def[column]['component_attachment'] not in ['', 'qb:attribute']:
-                    schema_keys.append(self._col_def[column]['name'])
+                if is_unit or (column_def['component_attachment'] not in ['', 'qb:attribute']):
+                    schema_keys.append(column_def['name'])
             else:
                 print(f'"{column}" not defined')
 
