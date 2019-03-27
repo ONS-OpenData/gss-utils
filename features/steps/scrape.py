@@ -139,9 +139,6 @@ def step_impl(context, title):
     context.scraper.select_dataset(title=lambda x: x.startswith(title), latest=True)
 
 
-@then('the dataset media type should be "application/vnd.ms-excel"')
+@step("fetch the distribution as a pandas dataframe")
 def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    raise NotImplementedError(u'STEP: Then the dataset media type should be "application/vnd.ms-excel"')
+    context.pandas = context.pandas = context.distribution.as_pandas()

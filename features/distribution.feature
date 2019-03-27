@@ -70,3 +70,10 @@ Feature: distribution downloading
     And select the distribution whose title starts with "October 2016 alcohol and drugs findings data table"
     And fetch the distribution as a databaker object
     Then the sheet names contain [Metadata, Table A1]
+
+  Scenario: StatsWales OData API
+    Given I scrape the page "https://statswales.gov.wales/Catalogue/Housing/Dwelling-Stock-Estimates/dwellingstockestimates-by-localauthority-tenure"
+    And select the distribution whose title starts with "Dataset"
+    Then the data can be downloaded from "http://open.statswales.gov.wales/dataset/hous0501"
+    And fetch the distribution as a pandas dataframe
+    And the dataframe should have 2854 rows

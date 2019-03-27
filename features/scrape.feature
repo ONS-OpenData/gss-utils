@@ -144,3 +144,11 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Local Alcohol Profiles"
     Then dct:title should be `"Local Alcohol Profiles for England: February 2019 data update"@en`
     And dct:publisher should be `gov:public-health-england`
+
+  Scenario: Scrape StatsWales OData
+    Given I scrape the page "https://statswales.gov.wales/Catalogue/Housing/Dwelling-Stock-Estimates/dwellingstockestimates-by-localauthority-tenure"
+    Then dct:title should be `"Dwelling Stock Estimates"@en`
+    And rdfs:comment should be `"Estimates of the number of dwellings in Wales by tenure and for each local authority, as at 31 March each year."@en`
+    And dct:publisher should be `gov:welsh-government`
+    And dct:issued should be `"2018-04-26"^^xsd:date`
+    And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`

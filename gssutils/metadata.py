@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 from io import BytesIO
 import xypath.loader
@@ -261,6 +262,18 @@ class Distribution(Metadata):
                                             file_type='ods',
                                             library='pyexcel-ods3')
                     return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
+        elif self.mediaType == 'application/json':
+            # Assume odata
+            to_fetch = self.downloadURL
+            tables = []
+            while to_fetch is not None:
+                data = self.session.get(to_fetch).json()
+                tables.append(pd.read_json(json.dumps(data['value']), orient='records'))
+                if 'odata.nextLink' in data and data['odata.nextLink'] != '':
+                    to_fetch = data['odata.nextLink']
+                else:
+                    to_fetch = None
+            return pd.concat(tables)
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
 
 
