@@ -273,7 +273,7 @@ class Distribution(Metadata):
                     to_fetch = data['odata.nextLink']
                 else:
                     to_fetch = None
-            return pd.concat(tables)
+            return pd.concat(tables, ignore_index=True)
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
 
 
