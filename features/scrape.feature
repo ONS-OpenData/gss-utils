@@ -152,3 +152,10 @@ Feature: Scrape dataset info
     And dct:publisher should be `gov:welsh-government`
     And dct:issued should be `"2018-04-26"^^xsd:date`
     And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
+
+  Scenario: Scrape old gov.scot dataset page
+    Given I scrape the page "https://www2.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables"
+    Then dct:title should be `"Stock by tenure"@en`
+    And the data can be downloaded from "https://www2.gov.scot/Resource/0054/00540622.xls"
+    And dct:publisher should be `gov:the-scottish-government`
+    And dct:issued should be `"2018-09-21"^^xsd:date`
