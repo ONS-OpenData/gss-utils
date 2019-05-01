@@ -9,6 +9,7 @@ from gssutils.metadata import Distribution, GOV
 
 def scrape(scraper, tree):
     scraper.dataset.publisher = GOV['the-scottish-government']
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
     scraper.dataset.title = tree.xpath(
         "//div[@id='body2']//h2/text()")[0].strip()
     scraper.dataset.description = scraper.to_markdown(tree.xpath(
