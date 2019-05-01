@@ -1,4 +1,6 @@
+import urllib
 from io import StringIO
+from urllib.parse import urlparse
 
 import rdflib
 from dateutil.parser import parse
@@ -30,7 +32,9 @@ def scrape(scraper, tree):
     for pageDist in pageGraph.subjects(RDF.type, DCAT.Distribution):
         dist = Distribution(scraper)
         dist.title = pageGraph.value(pageDist, DCTERMS.title).value.strip()
-        dist.downloadURL = str(pageGraph.value(pageDist, DCAT.accessURL))
+        # Access URLs seem to have spaces in their query strings
+        url_parts = urlparse(pageGraph.value(pageDist, DCAT.accessURL))
+        dist.downloadURL = url_parts._replace(query=url_parts.query.replace(' ', '+')).geturl()
         dist.mediaType = pageGraph.value(pageDist, DCAT.mediaType).value.strip()
         scraper.distributions.append(dist)
 

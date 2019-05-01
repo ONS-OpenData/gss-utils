@@ -77,3 +77,8 @@ Feature: distribution downloading
     Then the data can be downloaded from "http://open.statswales.gov.wales/dataset/hous0501"
     And fetch the distribution as a pandas dataframe
     And the dataframe should have 2854 rows
+
+  Scenario: StatsWales OData API codelists URL without spaces
+    Given I scrape the page "https://statswales.gov.wales/Catalogue/Housing/Dwelling-Stock-Estimates/dwellingstockestimates-by-localauthority-tenure"
+    And select the distribution whose title starts with "Items"
+    Then the data can be downloaded from "http://open.statswales.gov.wales/en-gb/discover/datasetdimensionitems?$filter=Dataset+eq+'hous0501'"
