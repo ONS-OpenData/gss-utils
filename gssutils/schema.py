@@ -32,7 +32,7 @@ class CSVWSchema:
             with open(schema_filename, 'w') as schema_io:
                 self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
-    def create_io(self, csv_io, schema_io, csv_url):
+    def create_io(self, csv_io, schema_io, csv_url, with_transform=False):
         schema_columns = []
         schema_tables = []
         schema_references = []

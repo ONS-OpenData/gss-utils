@@ -40,6 +40,20 @@ def step_impl(context):
 """)
 
 
+@step("the RDF should contain")
+def step_impl(context):
+    g1 = to_isomorphic(Graph().parse(format='turtle', data=context.turtle))
+    g2 = to_isomorphic(Graph().parse(format='turtle', data=context.text))
+    in_both, only_in_first, only_in_second = graph_diff(g1, g2)
+    ok_(len(only_in_second) == 0, f"""
+<<<
+{only_in_first.serialize(format='n3').decode('utf-8')}
+===
+{only_in_second.serialize(format='n3').decode('utf-8')}
+>>>
+""")
+
+
 @step("set the family to '{family}'")
 def step_impl(context, family):
     context.scraper.set_family(family)

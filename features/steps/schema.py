@@ -77,3 +77,34 @@ def step_impl(context):
     response = csvlint.wait()
     sys.stdout.write(csvlint.logs().decode('utf-8'))
     assert_equal(response['StatusCode'], 0)
+
+
+@when("I create a CSVW metadata file '{filename}'")
+def step_impl(context, filename):
+    context.metadata_filename = Path(filename)
+    context.metadata_io = StringIO()
+    context.csv_io.seek(0)
+    context.schema.create_io(
+        context.csv_io,
+        context.metadata_io,
+        str(context.csv_filename.relative_to(context.schema_filename.parent)),
+        with_transform=True
+    )
+
+
+@then("the metadata is valid JSON-LD")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    raise NotImplementedError(u'STEP: Then the metadata is valid JSON-LD')
+
+
+@step("cloudfluff/csv2rdf generates RDF")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    raise NotImplementedError(u'STEP: And cloudfluff/csv2rdf generates RDF')
+
+
