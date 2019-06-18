@@ -2,8 +2,10 @@ import argparse
 import csv
 import json
 from codecs import iterdecode
-from pathlib import Path
+from pathlib import Path, PosixPath
 from urllib import request, parse
+from urllib.parse import urljoin
+
 from gssutils.utils import pathify
 
 
@@ -32,7 +34,7 @@ class CSVWSchema:
             with open(schema_filename, 'w') as schema_io:
                 self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
-    def create_io(self, csv_io, schema_io, csv_url, with_transform=False):
+    def create_io(self, csv_io, schema_io, csv_url, with_transform=False, base_url=None, base_path=None):
         schema_columns = []
         schema_tables = []
         schema_references = []
@@ -57,8 +59,12 @@ class CSVWSchema:
                         }
                 else:
                     column_schema['datatype'] = column_def['datatype']
+                if with_transform:
+                    column_schema['propertyUrl'] = column_def['property_template']
+                    if 'value_template' in column_def and column_def['value_template'] != '' and column_def['value_template'] is not None:
+                        column_schema['valueUrl'] = column_def['value_template']
                 schema_columns.append(column_schema)
-                if column in self._comp_def:
+                if column in self._comp_def and not with_transform:
                     component_def = self._comp_def[column]
                     codelist = component_def['Codelist']
                     if codelist in self._codelists:
@@ -77,10 +83,24 @@ class CSVWSchema:
                         })
                     elif codelist.startswith('http://gss-data.org.uk/def/concept-scheme'):
                         print(f"Potentially missing concept scheme <{codelist}>")
-                if is_unit or (column_def['component_attachment'] not in ['', 'qb:attribute']):
+                if (is_unit and not with_transform) or (column_def['component_attachment'] not in ['', 'qb:attribute']):
                     schema_keys.append(column_def['name'])
             else:
                 print(f'"{column}" not defined')
+
+        if with_transform:
+            schema_columns.append({
+                'name': 'dataset_ref',
+                'virtual': True,
+                'propertyUrl': 'qb:dataSet',
+                'valueUrl': urljoin(base_url, base_path)
+            })
+            schema_columns.append({
+                'name': 'qbtype',
+                'virtual': True,
+                'propertyUrl': 'rdf:type',
+                'valueUrl': 'qb:Observation'
+            })
 
         schema_tables.append({
             "url": csv_url,
@@ -90,6 +110,12 @@ class CSVWSchema:
                 "primaryKey": schema_keys
             }
         })
+        if with_transform:
+            about_path = PosixPath(base_path)
+            for key in schema_keys:
+                about_path = about_path / f'{{{key}}}'
+            about_url = urljoin(base_url, str(about_path))
+            schema_tables[-1]['tableSchema']['aboutUrl'] = about_url
 
         schema = {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],

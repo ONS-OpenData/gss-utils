@@ -81,8 +81,8 @@ def step_impl(context):
     assert_equal(response['StatusCode'], 0)
 
 
-@when("I create a CSVW metadata file '{filename}'")
-def step_impl(context, filename):
+@when("I create a CSVW metadata file '{filename}' for base '{base}' and path '{path}'")
+def step_impl(context, filename, base, path):
     context.metadata_filename = Path(filename)
     context.metadata_io = StringIO()
     context.csv_io.seek(0)
@@ -90,7 +90,9 @@ def step_impl(context, filename):
         context.csv_io,
         context.metadata_io,
         str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-        with_transform=True
+        with_transform=True,
+        base_url=base,
+        base_path=path
     )
 
 

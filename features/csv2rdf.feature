@@ -7,30 +7,20 @@ Feature: Manage CSVW metadata for transformation to RDF
     Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
       | Sex | Value | Period    | Underlying Cause of Death  | Measure Type | Unit   |
-      | F   | 1990  | year/2017 | all-alcohol-related-deaths | count        | deaths |
-      | F   | 0     | year/2017 | e24-4                      | count        | deaths |
-      | F   | 177   | year/2017 | f10                        | count        | deaths |
-      | F   | 0     | year/2017 | g31-2                      | count        | deaths |
-      | F   | 0     | year/2017 | g62-1                      | count        | deaths |
-      | F   | 0     | year/2017 | g72-1                      | count        | deaths |
-      | F   | 19    | year/2017 | i42-6                      | count        | deaths |
-      | F   | 6     | year/2017 | k29-2                      | count        | deaths |
-      | F   | 1643  | year/2017 | k70                        | count        | deaths |
-      | F   | 22    | year/2017 | k85-2                      | count        | deaths |
-      | F   | 1     | year/2017 | k86-0                      | count        | deaths |
-      | F   | 0     | year/2017 | q86-0                      | count        | deaths |
-      | F   | 0     | year/2017 | r78-0                      | count        | deaths |
-      | F   | 119   | year/2017 | x45                        | count        | deaths |
-      | F   | 2     | year/2017 | x65                        | count        | deaths |
-      | F   | 1     | year/2017 | y15                        | count        | deaths |
-    When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json'
+      | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
+      | F   | 0.0     | year/2017 | e24-4                      | count        | deaths |
+      | F   | 177.0   | year/2017 | f10                        | count        | deaths |
+      | F   | 0.0     | year/2017 | g31-2                      | count        | deaths |
+      | F   | 0.0     | year/2017 | g62-1                      | count        | deaths |
+    When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths'
     Then the metadata is valid JSON-LD
     And cloudfluff/csv2rdf generates RDF
     And the RDF should contain
     """
+      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
           <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/all-alcohol-related-deaths/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/all-alcohol-related-deaths> ;
-          <http://gss-data.org.uk/def/measure/count> 1990.0 ;
+          <http://gss-data.org.uk/def/measure/count> "1990"^^xsd:double;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
           <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
@@ -40,7 +30,7 @@ Feature: Manage CSVW metadata for transformation to RDF
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/e24-4/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/e24-4> ;
-          <http://gss-data.org.uk/def/measure/count> 0.0 ;
+          <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
           <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
@@ -50,7 +40,7 @@ Feature: Manage CSVW metadata for transformation to RDF
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/f10/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/f10> ;
-          <http://gss-data.org.uk/def/measure/count> 177.0 ;
+          <http://gss-data.org.uk/def/measure/count> "177.0"^^xsd:double ;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
           <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
@@ -60,7 +50,7 @@ Feature: Manage CSVW metadata for transformation to RDF
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/g31-2/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/g31-2> ;
-          <http://gss-data.org.uk/def/measure/count> 0.0 ;
+          <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
           <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
@@ -70,7 +60,7 @@ Feature: Manage CSVW metadata for transformation to RDF
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/g62-1/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/g62-1> ;
-          <http://gss-data.org.uk/def/measure/count> 0.0 ;
+          <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
           <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
