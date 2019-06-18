@@ -27,6 +27,7 @@ setuptools.setup(
                       'xypath',
                       'html2text',
                       'rdflib',
+                      'rdflib-jsonld',
                       'messytables==0.15.1',
                       'lxml',
                       'unidecode',
