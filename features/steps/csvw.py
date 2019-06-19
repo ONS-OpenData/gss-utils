@@ -1,25 +1,23 @@
 import sys
 import csv
 import json
-import tempfile
 import time
-from io import BytesIO, SEEK_END, StringIO, TextIOWrapper
+from io import BytesIO, SEEK_END, StringIO
 from pathlib import Path
 from tarfile import TarFile, TarInfo
 
 import docker as docker
 from behave import *
-from docker.errors import NotFound
 from nose.tools import *
 from rdflib import Graph
 
+from gssutils import CSVWMetadata
 from features.environment import BytesIOWrapper
-from gssutils import CSVWSchema
 
 
 @given("table2qb configuration at '{url}'")
 def step_impl(context, url):
-    context.schema = CSVWSchema(url)
+    context.schema = CSVWMetadata(url)
 
 
 @step("a CSV file '{filename}'")
@@ -100,7 +98,7 @@ def step_impl(context, filename, base, path):
 def step_impl(context):
     g = Graph()
     context.metadata_io.seek(0)
-    #g.parse(source=BytesIOWrapper(context.metadata_io), format='json-ld')
+    g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
 @step("cloudfluff/csv2rdf generates RDF")

@@ -18,7 +18,7 @@ Feature: Manage CSVW metadata for transformation to RDF
     And the RDF should contain
     """
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-          <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/all-alcohol-related-deaths/count>
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/all-alcohol-related-deaths/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/all-alcohol-related-deaths> ;
           <http://gss-data.org.uk/def/measure/count> "1990"^^xsd:double;
           <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;

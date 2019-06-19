@@ -9,13 +9,13 @@ from urllib.parse import urljoin
 from gssutils.utils import pathify
 
 
-class CSVWSchema:
+class CSVWMetadata:
 
     def __init__(self, ref_base):
         self._ref_base = ref_base
-        self._col_def = CSVWSchema._csv_lookup(
+        self._col_def = CSVWMetadata._csv_lookup(
             parse.urljoin(ref_base, 'columns.csv'), 'title')
-        self._comp_def = CSVWSchema._csv_lookup(
+        self._comp_def = CSVWMetadata._csv_lookup(
             parse.urljoin(ref_base, 'components.csv'), 'Label')
         self._codelists = {}
         for table in json.load(request.urlopen(parse.urljoin(ref_base, 'codelists-metadata.json')))['tables']:
@@ -125,7 +125,7 @@ class CSVWSchema:
         json.dump(schema, schema_io, indent=2)
 
 
-def main():
+def create_schema():
     parser = argparse.ArgumentParser(description='Create CSV schema')
     parser.add_argument(
         'config_base_url',
@@ -136,8 +136,35 @@ def main():
     parser.add_argument('schema_file', type=argparse.FileType('w'),
                         help='Output JSON file for use by CSVW validation tool, e.g. csvlint.')
     args = parser.parse_args()
-    schema = CSVWSchema(args.config_base_url)
-    schema.create_io(
+    csvw = CSVWMetadata(args.config_base_url)
+    csvw.create_io(
         args.csv_file,
         args.schema_file,
         str(Path(args.csv_file.name).relative_to(Path(args.schema_file.name).parent)))
+
+
+def create_transform():
+    parser = argparse.ArgumentParser(description='Create CSVW JSON for transformation')
+    parser.add_argument(
+        'config_base_url',
+        help='Base URL for table2qb style configuration files, columns.csv, components.csv and codelsits-metadata.json'
+    )
+    parser.add_argument(
+        'about_base_url',
+        help='Base URL for the eventual observations.'
+    )
+    parser.add_argument(
+        'about_path',
+        help='Path to append to URL for observations.'
+    )
+    parser.add_argument('csv_file', type=argparse.FileType('r'),
+                        help='Input CSV file with headers matching definitions in columns.csv.')
+    parser.add_argument('json_file', type=argparse.FileType('w'),
+                        help='Output CSVW JSON file for use by csv2rdf transformation.')
+    args = parser.parse_args()
+    csvw = CSVWMetadata(args.config_base_url)
+    csvw.create_io(
+        args.csv_file,
+        args.json_file,
+        str(Path(args.csv_file.name).relative_to(Path(args.json_file.name).parent)),
+        True, args.about_base_url, args.about_path)
