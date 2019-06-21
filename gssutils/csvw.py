@@ -39,9 +39,12 @@ class CSVWMetadata:
         schema_tables = []
         schema_references = []
         schema_keys = []
-        reader = csv.reader(csv_io)
-        columns = next(reader)
-        for column in columns:
+        dsd_components = []
+        reader = csv.DictReader(csv_io)
+        measure_types = set()
+        if with_transform: # need to figure out the measure types used
+            measure_types.update(row['Measure Type'] for row in reader)
+        for column in reader.fieldnames:
             if column in self._col_def:
                 column_def = self._col_def[column]
                 is_unit = column_def['property_template'] == 'http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure'
@@ -85,10 +88,27 @@ class CSVWMetadata:
                         print(f"Potentially missing concept scheme <{codelist}>")
                 if (is_unit and not with_transform) or (column_def['component_attachment'] not in ['', 'qb:attribute']):
                     schema_keys.append(column_def['name'])
+                if with_transform and column_def['component_attachment'] != '':
+                    dsd_components.append({
+                        '@id': urljoin(base_url, base_path) + '/component/' + column_def['name'],
+                        '@type': 'qb:ComponentSpecification',
+                        column_def['component_attachment']: {
+                            '@id': column_def['property_template']
+                        }
+                    })
             else:
                 print(f'"{column}" not defined')
 
         if with_transform:
+            for measure_type in measure_types:
+                measure_def = next(d for d in self._col_def.values() if d['name'] == measure_type)
+                dsd_components.append({
+                    '@id': urljoin(base_url, base_path) + '/component/' + measure_type,
+                    '@type': 'qb:ComponentSpecification',
+                    measure_def['component_attachment']: {
+                        '@id': measure_def['property_template']
+                    }
+                })
             schema_columns.append({
                 'name': 'dataset_ref',
                 'virtual': True,
@@ -121,6 +141,18 @@ class CSVWMetadata:
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": schema_tables
         }
+        if with_transform:
+            dataset_uri = urljoin(base_url, base_path)
+            schema['@id'] = dataset_uri + '#tablegroup'
+            schema['prov:hadDerivation'] = {
+                '@id': dataset_uri,
+                '@type': 'qb:DataSet',
+                'qb:structure': {
+                    '@id': urljoin(dataset_uri + '/', 'structure'),
+                    '@type': 'qb:DataStructureDefinition',
+                    'qb:component': dsd_components
+                }
+            }
 
         json.dump(schema, schema_io, indent=2)
 

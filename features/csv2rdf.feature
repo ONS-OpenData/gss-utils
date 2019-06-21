@@ -18,53 +18,95 @@ Feature: Manage CSVW metadata for transformation to RDF
     And the RDF should contain
     """
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/all-alcohol-related-deaths/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/all-alcohol-related-deaths> ;
           <http://gss-data.org.uk/def/measure/count> "1990"^^xsd:double;
-          <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
-          <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2017> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#sex> <http://purl.org/linked-data/sdmx/2009/code#sex-F> ;
-          a <http://purl.org/linked-data/cube#Observation> .
+          a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/e24-4/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/e24-4> ;
           <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
-          <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
-          <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2017> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#sex> <http://purl.org/linked-data/sdmx/2009/code#sex-F> ;
-          a <http://purl.org/linked-data/cube#Observation> .
+          a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/f10/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/f10> ;
           <http://gss-data.org.uk/def/measure/count> "177.0"^^xsd:double ;
-          <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
-          <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2017> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#sex> <http://purl.org/linked-data/sdmx/2009/code#sex-F> ;
-          a <http://purl.org/linked-data/cube#Observation> .
+          a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/g31-2/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/g31-2> ;
           <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
-          <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
-          <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2017> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#sex> <http://purl.org/linked-data/sdmx/2009/code#sex-F> ;
-          a <http://purl.org/linked-data/cube#Observation> .
+          a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/F/year/2017/g62-1/count>
           <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> <http://gss-data.org.uk/def/concept/underlying-cause-of-death/g62-1> ;
           <http://gss-data.org.uk/def/measure/count> "0.0"^^xsd:double ;
-          <http://purl.org/linked-data/cube#dataSet> <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
-          <http://purl.org/linked-data/cube#measureType> <http://gss-data.org.uk/def/measure/count> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/count> ;
           <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://gss-data.org.uk/def/concept/measurement-units/deaths> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> <http://reference.data.gov.uk/id/year/2017> ;
           <http://purl.org/linked-data/sdmx/2009/dimension#sex> <http://purl.org/linked-data/sdmx/2009/code#sex-F> ;
-          a <http://purl.org/linked-data/cube#Observation> .
+          a qb:Observation .
+    """
+    And the RDF should contain
+    """
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths>
+          qb:structure <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/structure> ;
+          a qb:DataSet .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/count>
+          qb:measure <http://gss-data.org.uk/def/measure/count> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/measure_type>
+          qb:dimension qb:measureType ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/period>
+          qb:dimension <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/sex>
+          qb:dimension <http://purl.org/linked-data/sdmx/2009/dimension#sex> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/underlying_cause_of_death>
+          qb:dimension <http://gss-data.org.uk/def/dimension/underlying-cause-of-death> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/unit>
+          qb:attribute <http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/structure>
+          qb:component
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/count>,
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/measure_type>,
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/period>,
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/sex>,
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/underlying_cause_of_death>,
+            <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/unit> ;
+          a qb:DataStructureDefinition .
     """
