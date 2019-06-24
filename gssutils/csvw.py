@@ -202,30 +202,30 @@ class CSVWMetadata:
                     'qb:component': dsd_components
                 }
             }
-
-            def csvw_prefix(uri):
-                for prefix, namespace in csvw_namespaces.items():
-                    if uri.startswith(namespace):
-                        return f'{prefix}:{uri[len(namespace):]}'
-                return None
-            for s, p, o, g in dataset_metadata.quads((URIRef(dataset_uri), None, None, None)):
-                if p == RDF.type:
-                    t = csvw_prefix(str(o))
-                    if t is not None:
-                        ds_meta['@type'].append(t)
-                else:
-                    prefixed_p = csvw_prefix(str(p))
-                    if prefixed_p is not None:
-                        if type(o) == Literal:
-                            if o.datatype is not None:
-                                ds_meta[prefixed_p] = {
-                                    '@value': str(o),
-                                    '@type': o.datatype
-                                }
-                            else:
-                                ds_meta[prefixed_p] = str(o)
-                        elif type(o) == URIRef:
-                            ds_meta[prefixed_p] = { '@id': str(o) }
+            if dataset_metadata is not None:
+                def csvw_prefix(uri):
+                    for prefix, namespace in csvw_namespaces.items():
+                        if uri.startswith(namespace):
+                            return f'{prefix}:{uri[len(namespace):]}'
+                    return None
+                for s, p, o, g in dataset_metadata.quads((URIRef(dataset_uri), None, None, None)):
+                    if p == RDF.type:
+                        t = csvw_prefix(str(o))
+                        if t is not None:
+                            ds_meta['@type'].append(t)
+                    else:
+                        prefixed_p = csvw_prefix(str(p))
+                        if prefixed_p is not None:
+                            if type(o) == Literal:
+                                if o.datatype is not None:
+                                    ds_meta[prefixed_p] = {
+                                        '@value': str(o),
+                                        '@type': o.datatype
+                                    }
+                                else:
+                                    ds_meta[prefixed_p] = str(o)
+                            elif type(o) == URIRef:
+                                ds_meta[prefixed_p] = { '@id': str(o) }
             schema['prov:hadDerivation'] = ds_meta
 
         json.dump(schema, schema_io, indent=2)
