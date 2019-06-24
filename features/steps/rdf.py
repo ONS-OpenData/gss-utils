@@ -6,6 +6,7 @@ from dateutil.parser import parse
 from datetime import datetime
 from gssutils.metadata import THEME
 
+
 @step("set the base URI to <{uri}>")
 def step_impl(context, uri):
     context.scraper.set_base_uri(uri)

@@ -5,6 +5,7 @@ import time
 from io import BytesIO, SEEK_END, StringIO
 from pathlib import Path
 from tarfile import TarFile, TarInfo
+from urllib.parse import urljoin
 
 import docker as docker
 from behave import *
@@ -138,3 +139,22 @@ def step_impl(context):
     with TarFile(fileobj=output_archive, mode='r') as t:
         output_ttl = t.extractfile('output.ttl')
         context.turtle = output_ttl.read()
+
+
+@when("I create a CSVW metadata file '{filename}' for base '{base}' and path '{path}' with dataset metadata")
+def step_impl(context, filename, base, path):
+    context.metadata_filename = Path(filename)
+    context.metadata_io = StringIO()
+    context.csv_io.seek(0)
+    context.scraper.set_base_uri(urljoin(base, '/'))
+    context.scraper.set_dataset_id(path)
+    quads = context.scraper.dataset.as_quads()
+    context.schema.create_io(
+        context.csv_io,
+        context.metadata_io,
+        str(context.csv_filename.relative_to(context.metadata_filename.parent)),
+        with_transform=True,
+        base_url=base,
+        base_path=path,
+        dataset_metadata=quads
+    )

@@ -6,7 +6,55 @@ from pathlib import Path, PosixPath
 from urllib import request, parse
 from urllib.parse import urljoin
 
+from rdflib import URIRef, RDF, Literal
+
 from gssutils.utils import pathify
+
+
+csvw_namespaces = {
+    "as": "https://www.w3.org/ns/activitystreams#",
+    "cc": "http://creativecommons.org/ns#",
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "ctag": "http://commontag.org/ns#",
+    "dc": "http://purl.org/dc/terms/",
+    "dc11": "http://purl.org/dc/elements/1.1/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "dctypes": "http://purl.org/dc/dcmitype/",
+    "dqv": "http://www.w3.org/ns/dqv#",
+    "duv": "https://www.w3.org/TR/vocab-duv#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "gr": "http://purl.org/goodrelations/v1#",
+    "grddl": "http://www.w3.org/2003/g/data-view#",
+    "ical": "http://www.w3.org/2002/12/cal/icaltzd#",
+    "ldp": "http://www.w3.org/ns/ldp#",
+    "ma": "http://www.w3.org/ns/ma-ont#",
+    "oa": "http://www.w3.org/ns/oa#",
+    "og": "http://ogp.me/ns#",
+    "org": "http://www.w3.org/ns/org#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "prov": "http://www.w3.org/ns/prov#",
+    "qb": "http://purl.org/linked-data/cube#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfa": "http://www.w3.org/ns/rdfa#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rev": "http://purl.org/stuff/rev#",
+    "rif": "http://www.w3.org/2007/rif#",
+    "rr": "http://www.w3.org/ns/r2rml#",
+    "schema": "http://schema.org/",
+    "sd": "http://www.w3.org/ns/sparql-service-description#",
+    "sioc": "http://rdfs.org/sioc/ns#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "skosxl": "http://www.w3.org/2008/05/skos-xl#",
+    "v": "http://rdf.data-vocabulary.org/#",
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "void": "http://rdfs.org/ns/void#",
+    "wdr": "http://www.w3.org/2007/05/powder#",
+    "wrds": "http://www.w3.org/2007/05/powder-s#",
+    "xhv": "http://www.w3.org/1999/xhtml/vocab#",
+    "xml": "rdf:XMLLiteral",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+}
 
 
 class CSVWMetadata:
@@ -34,7 +82,8 @@ class CSVWMetadata:
             with open(schema_filename, 'w') as schema_io:
                 self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
-    def create_io(self, csv_io, schema_io, csv_url, with_transform=False, base_url=None, base_path=None):
+    def create_io(self, csv_io, schema_io, csv_url, with_transform=False,
+                  base_url=None, base_path=None, dataset_metadata=None):
         schema_columns = []
         schema_tables = []
         schema_references = []
@@ -144,15 +193,40 @@ class CSVWMetadata:
         if with_transform:
             dataset_uri = urljoin(base_url, base_path)
             schema['@id'] = dataset_uri + '#tablegroup'
-            schema['prov:hadDerivation'] = {
+            ds_meta = {
                 '@id': dataset_uri,
-                '@type': 'qb:DataSet',
+                '@type': ['qb:DataSet'],
                 'qb:structure': {
                     '@id': urljoin(dataset_uri + '/', 'structure'),
                     '@type': 'qb:DataStructureDefinition',
                     'qb:component': dsd_components
                 }
             }
+
+            def csvw_prefix(uri):
+                for prefix, namespace in csvw_namespaces.items():
+                    if uri.startswith(namespace):
+                        return f'{prefix}:{uri[len(namespace):]}'
+                return None
+            for s, p, o, g in dataset_metadata.quads((URIRef(dataset_uri), None, None, None)):
+                if p == RDF.type:
+                    t = csvw_prefix(str(o))
+                    if t is not None:
+                        ds_meta['@type'].append(t)
+                else:
+                    prefixed_p = csvw_prefix(str(p))
+                    if prefixed_p is not None:
+                        if type(o) == Literal:
+                            if o.datatype is not None:
+                                ds_meta[prefixed_p] = {
+                                    '@value': str(o),
+                                    '@type': o.datatype
+                                }
+                            else:
+                                ds_meta[prefixed_p] = str(o)
+                        elif type(o) == URIRef:
+                            ds_meta[prefixed_p] = { '@id': str(o) }
+            schema['prov:hadDerivation'] = ds_meta
 
         json.dump(schema, schema_io, indent=2)
 
