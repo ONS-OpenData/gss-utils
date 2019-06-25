@@ -6,6 +6,7 @@ from dateutil.parser import parse
 from datetime import datetime
 from gssutils.metadata import THEME
 
+
 @step("set the base URI to <{uri}>")
 def step_impl(context, uri):
     context.scraper.set_base_uri(uri)
@@ -30,6 +31,20 @@ def step_impl(context):
 def step_impl(context):
     g1 = to_isomorphic(Graph().parse(format='trig', data=context.trig))
     g2 = to_isomorphic(Graph().parse(format='trig', data=context.text))
+    in_both, only_in_first, only_in_second = graph_diff(g1, g2)
+    ok_(len(only_in_second) == 0, f"""
+<<<
+{only_in_first.serialize(format='n3').decode('utf-8')}
+===
+{only_in_second.serialize(format='n3').decode('utf-8')}
+>>>
+""")
+
+
+@step("the RDF should contain")
+def step_impl(context):
+    g1 = to_isomorphic(Graph().parse(format='turtle', data=context.turtle))
+    g2 = to_isomorphic(Graph().parse(format='turtle', data=context.text))
     in_both, only_in_first, only_in_second = graph_diff(g1, g2)
     ok_(len(only_in_second) == 0, f"""
 <<<

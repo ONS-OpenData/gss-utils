@@ -27,6 +27,7 @@ setuptools.setup(
                       'xypath',
                       'html2text',
                       'rdflib',
+                      'rdflib-jsonld',
                       'messytables==0.15.1',
                       'lxml',
                       'unidecode',
@@ -39,6 +40,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': ['create-schema=gssutils.schema:main']
+        'console_scripts': ['create-schema=gssutils.csvw:create_schema',
+                            'create-transform=gssutils.csvw:create_transform']
     }
 )
