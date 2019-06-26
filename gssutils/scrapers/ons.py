@@ -2,20 +2,24 @@ import logging
 import mimetypes
 import re
 from urllib.parse import urljoin
+
 from dateutil.parser import parse
+
 from gssutils.metadata import Distribution, Excel, ODS
 
 
 def scrape(scraper, tree):
-    page_type = tree.xpath(
-        "//h1/span/text()")[0].strip()
     scraper.dataset.title = tree.xpath(
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
         "//span[text() = 'Release date: ']/parent::node()/text()")[1].strip()).date()
     distribution = Distribution(scraper)
 
-    if page_type == 'User requested data:':
+    user_requested = tree.xpath(
+        "//h2[text() = 'Summary of request']"
+    )
+
+    if len(user_requested) > 0:
         scraper.dataset.identifier = tree.xpath(
             "//span[text() = 'Reference number: ']/parent::node()/text()")[1].strip()
         scraper.dataset.comment = tree.xpath(
