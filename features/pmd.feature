@@ -32,20 +32,19 @@ Feature: PMD metadata
         <http://gss-data.org.uk/data/foreign-direct-investment-inward> a pmd:Dataset,
           pmd:LinkedDataset,
           qb:DataSet ;
-        rdfs:label "Foreign direct investment involving UK companies: Inward tables"@en ;
+        rdfs:label "Foreign direct investment involving UK companies: inward"@en ;
         dcat:theme <http://gss-data.org.uk/def/concept/statistics-authority-themes/business-industry-trade-energy>;
         gdp:family gdp:trade ;
         pmd:contactEmail <mailto:fdi@ons.gov.uk> ;
         pmd:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
-        pmd:updateDueOn "2018-12-03"^^xsd:date ;
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
-        dct:issued "2017-12-01"^^xsd:date ;
+        dct:issued "2018-12-04"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
         dct:modified "2018-09-14T10:04:33.141484+01:00"^^xsd:dateTime ;
         dct:publisher <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
-        dct:title "Foreign direct investment involving UK companies: Inward tables"@en ;
+        dct:title "Foreign direct investment involving UK companies: inward"@en ;
         void:sparqlEndpoint <http://gss-data.org.uk/sparql> ;
-        rdfs:comment "Inward datasets including data for flows, positions and earnings."@en ;
+        rdfs:comment "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."@en ;
         dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"^^<https://www.w3.org/ns/iana/media-types/text/markdown#Resource> .
       }
       """

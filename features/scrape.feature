@@ -5,19 +5,18 @@ Feature: Scrape dataset info
 
   Scenario: Scrape ONS
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/annualforeigndirectinvestmentinward2016.xls"
-    And the title should be "Foreign direct investment involving UK companies: Inward tables"
-    And the publication date should be "2017-12-01"
-    And the next release date should be "2018-12-03"
-    And the comment should be "Inward datasets including data for flows, positions and earnings."
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/annualforeigndirectinvestment2017inward.xls"
+    And the title should be "Foreign direct investment involving UK companies: inward"
+    And the publication date should be "2018-12-04"
+    And the comment should be "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."
     And the contact email address should be "mailto:fdi@ons.gov.uk"
 
   Scenario: ONS metadata profile
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-    Then dct:title should be `"Foreign direct investment involving UK companies: Inward tables"@en`
-    And rdfs:comment should be `"Inward datasets including data for flows, positions and earnings."@en`
+    Then dct:title should be `"Foreign direct investment involving UK companies: inward"@en`
+    And rdfs:comment should be `"Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."@en`
     And dct:publisher should be `gov:office-for-national-statistics`
-    And dct:issued should be `"2017-12-01"^^xsd:date`
+    And dct:issued should be `"2018-12-04"^^xsd:date`
     And dcat:contactPoint should be `<mailto:fdi@ons.gov.uk>`
 
   Scenario: Scrape gov.uk template
@@ -29,17 +28,17 @@ Feature: Scrape dataset info
     Then the data can be downloaded from "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/683359/entry-visas1-oct-dec-2017-tables.ods"
 
   Scenario: Scrape nrscotland
-    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
+    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-flows/migration-between-scotland-and-overseas"
     Then the title should be "Migration between Scotland and Overseas"
     And the description should start "Migration between Scotland and overseas refers to people moving between"
 
   Scenario: nrscotland downloads
-    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-between-scotland-and-overseas"
+    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-flows/migration-between-scotland-and-overseas"
     And select the distribution given by
       | key       | value                                                      |
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Migration between administrative areas and overseas by sex |
-    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/2018-july/tab-z1-overseas-mig-flows-admin-sex-hb-2001-02-latest-july-18.xlsx"
+    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/flows/apr-19/mig-overseas-admin-sex-tab1.xlsx"
 
   Scenario: Scrape NISRA
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
@@ -57,7 +56,7 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/Pages/TaxAndDutybulletins.aspx"
     And the catalog has more than one dataset
     When I select the dataset "Alcohol Duty"
-    Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/Tax%20and%20Duty%20Bulletins/Alcohol0718.xls"
+    Then the data can be downloaded from "https://www.uktradeinfo.com/Statistics/Tax%20and%20Duty%20Bulletins/Alcohol0419.xls"
 
   Scenario: Scrape gov.uk statistical-data-sets
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras51-reported-drinking-and-driving"
@@ -142,7 +141,7 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Local Alcohol Profiles"
-    Then dct:title should be `"Local Alcohol Profiles for England: February 2019 data update"@en`
+    Then dct:title should be `"Local Alcohol Profiles for England: May 2019 data update"@en`
     And dct:publisher should be `gov:public-health-england`
 
   Scenario: Scrape StatsWales OData
