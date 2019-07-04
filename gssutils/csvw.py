@@ -77,10 +77,15 @@ class CSVWMetadata:
         reader = csv.DictReader(iterdecode(stream, 'utf-8'))
         return {row[key]: row for row in reader}
 
-    def create(self, csv_filename, schema_filename):
+    def create(self, csv_filename, schema_filename, with_transform=False,
+               base_url=None, base_path=None, dataset_metadata=None):
         with open(csv_filename) as csv_io:
             with open(schema_filename, 'w') as schema_io:
-                self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
+                if with_transform:
+                    self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)),
+                                   with_transform, base_url, base_path, dataset_metadata)
+                else:
+                    self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
     def create_io(self, csv_io, schema_io, csv_url, with_transform=False,
                   base_url=None, base_path=None, dataset_metadata=None):
