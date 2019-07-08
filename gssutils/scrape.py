@@ -4,8 +4,9 @@ from datetime import datetime
 from urllib.parse import urljoin, urlparse
 
 import html2text
+import msgpack
 import requests
-from cachecontrol import CacheControl
+from cachecontrol import CacheControl, serialize
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
 from lxml import html
@@ -14,6 +15,18 @@ from rdflib import BNode, URIRef
 import gssutils.scrapers
 from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
 from gssutils.utils import pathify
+
+
+class BiggerSerializer(serialize.Serializer):
+
+    def _loads_v4(self, request, data):
+        try:
+            cached = msgpack.loads(
+                data, encoding='utf-8', max_bin_len=100*1000*1000) # 100MB
+        except ValueError:
+            return
+
+        return self.prepare_response(request, cached)
 
 
 class FilterError(Exception):
@@ -38,6 +51,7 @@ class Scraper:
         else:
             self.session = CacheControl(requests.Session(),
                                         cache=FileCache('.cache'),
+                                        serializer=BiggerSerializer(),
                                         heuristic=LastModified())
         if 'JOB_NAME' in os.environ:
             self._base_uri = URIRef('http://gss-data.org.uk')
