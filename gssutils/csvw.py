@@ -121,7 +121,7 @@ class CSVWMetadata:
                     if 'value_template' in column_def and column_def['value_template'] != '' and column_def['value_template'] is not None:
                         column_schema['valueUrl'] = column_def['value_template']
                 schema_columns.append(column_schema)
-                if column in self._comp_def and not with_transform:
+                if column in self._comp_def:
                     component_def = self._comp_def[column]
                     codelist = component_def['Codelist']
                     if codelist in self._codelists:
@@ -129,7 +129,8 @@ class CSVWMetadata:
                                                   self._codelists[component_def['Codelist']]['url'])
                         schema_tables.append({
                             'url': reference,
-                            'tableSchema': self._codelists[component_def['Codelist']]['tableSchema']
+                            'tableSchema': self._codelists[component_def['Codelist']]['tableSchema'],
+                            'suppressOutput': True
                         })
                         schema_references.append({
                             'columnReference': column_def['name'],
