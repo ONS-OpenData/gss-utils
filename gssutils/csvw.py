@@ -104,7 +104,7 @@ class CSVWMetadata:
                 is_unit = column_def['property_template'] == 'http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure'
                 column_schema = {
                     'titles': column,
-                    'required': is_unit or (column_def['component_attachment'] not in ['qb:attribute']),
+                    'required': is_unit or (column_def['component_attachment'] not in ['qb:attribute', '']),
                     'name': column_def['name']
                 }
                 if 'regex' in column_def and column_def['regex'] not in (None, ''):
