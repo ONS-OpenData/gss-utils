@@ -165,7 +165,7 @@ def step_impl(context):
     client = docker.from_env()
     cube_tests = client.containers.create(
         'cloudfluff/gdp-sparql-tests',
-        command=f'sparql-test-runner -t /usr/local/tests -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
+        command=f'sparql-test-runner -t /usr/local/tests/qb -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
     )
     archive = BytesIO()
     with TarFile(fileobj=archive, mode='w') as t:

@@ -179,3 +179,104 @@ Feature: Manage CSVW metadata for transformation to RDF
           dcat:contactPoint <mailto:mortality@ons.gov.uk> ;
           dcat:landingPage <https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/causesofdeath/datasets/alcoholspecificdeathsintheukmaindataset> .
     """
+
+  @skip
+  Scenario: CSVW transformation with data markers
+    Given table2qb configuration at 'https://ons-opendata.github.io/ref_migration/'
+    And a CSV file 'observations.csv'
+      | Year | Country of Residence | Migration Flow | IPS Citizenship | Sex | Age     | Measure Type | Value | IPS Marker     | CI  | Unit             |
+      | 2017 | south-asia           | inflow         | all             | T   | agq/0-4 | count        | 1.7   |                | 1.5 | people-thousands |
+      | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | count        |       | not-applicable | .   | people-thousands |
+    When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/migration/ons-ltim-passenger-survey-4-01'
+    Then the metadata is valid JSON-LD
+    And cloudfluff/csv2rdf generates RDF
+    And the RDF should contain
+    """
+      @prefix sdmxa: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+      @prefix sdmxd: <http://purl.org/linked-data/sdmx/2009/dimension#> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+      @prefix gd: <http://gss-data.org.uk/def/dimension/> .
+      @prefix ga: <http://gss-data.org.uk/def/attribute/> .
+      @prefix gm: <http://gss-data.org.uk/def/measure/> .
+      @prefix prov: <http://www.w3.org/ns/prov#> .
+      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      @prefix xml: <http://www.w3.org/XML/1998/namespace> .
+      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/2017/south-asia/inflow/all/T/agq/0-4/count> a qb:Observation ;
+          ga:ci "1.5" ;
+          gd:citizenship <http://gss-data.org.uk/def/concept/ips-citizenship/all> ;
+          gd:migration <http://gss-data.org.uk/def/concept/migration-directions/inflow> ;
+          gd:residence <http://gss-data.org.uk/def/concept/country-of-residence/south-asia> ;
+          gm:count 1.7e+00 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01> ;
+          qb:measureType gm:count ;
+          sdmxa:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/people-thousands> ;
+          sdmxd:age <http://gss-data.org.uk/def/concept/ages/agq/0-4> ;
+          sdmxd:refPeriod <http://reference.data.gov.uk/id/year/2017> ;
+          sdmxd:sex <http://purl.org/linked-data/sdmx/2009/code#sex-T> .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/2017/south-east-asia/inflow/all/T/agq/0-4/count> a qb:Observation ;
+          ga:ci "." ;
+          gd:citizenship <http://gss-data.org.uk/def/concept/ips-citizenship/all> ;
+          gd:migration <http://gss-data.org.uk/def/concept/migration-directions/inflow> ;
+          gd:residence <http://gss-data.org.uk/def/concept/country-of-residence/south-east-asia> ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01> ;
+          qb:measureType gm:count ;
+          sdmxa:obsStatus <http://gss-data.org.uk/def/concept/ips-marker/not-applicable> ;
+          sdmxa:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/people-thousands> ;
+          sdmxd:age <http://gss-data.org.uk/def/concept/ages/agq/0-4> ;
+          sdmxd:refPeriod <http://reference.data.gov.uk/id/year/2017> ;
+          sdmxd:sex <http://purl.org/linked-data/sdmx/2009/code#sex-T> .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/age> a qb:ComponentSpecification ;
+          qb:dimension sdmxd:age .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ci> a qb:ComponentSpecification ;
+          qb:attribute ga:ci .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/count> a qb:ComponentSpecification ;
+          qb:measure gm:count .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/country_of_residence> a qb:ComponentSpecification ;
+          qb:dimension gd:residence .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ips_citizenship> a qb:ComponentSpecification ;
+          qb:dimension gd:citizenship .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ips_marker> a qb:ComponentSpecification ;
+          qb:attribute sdmxa:obsStatus .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/measure_type> a qb:ComponentSpecification ;
+          qb:dimension qb:measureType .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/migration_flow> a qb:ComponentSpecification ;
+          qb:dimension gd:migration .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/sex> a qb:ComponentSpecification ;
+          qb:dimension sdmxd:sex .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/unit> a qb:ComponentSpecification ;
+          qb:attribute sdmxa:unitMeasure .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/year> a qb:ComponentSpecification ;
+          qb:dimension sdmxd:refPeriod .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/structure> a qb:DataStructureDefinition ;
+          qb:component <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/age>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ci>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/count>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/country_of_residence>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ips_citizenship>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/ips_marker>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/measure_type>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/migration_flow>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/sex>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/unit>,
+              <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/component/year> .
+
+      <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01> a qb:DataSet ;
+          qb:structure <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/structure> .
+    """
+    And the RDF should pass the Data Cube integrity constraints

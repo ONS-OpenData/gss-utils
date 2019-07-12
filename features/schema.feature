@@ -13,6 +13,7 @@ Feature: Manage CSVW schema for validation
     Then the schema is valid JSON
     And cloudfluff/csvlint validates ok
 
+  @skip
   Scenario: Cope with data markers
     Given table2qb configuration at 'https://ons-opendata.github.io/ref_migration/'
     And a CSV file 'observations.csv'
