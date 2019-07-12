@@ -84,7 +84,7 @@ Feature: Manage CSVW metadata for transformation to RDF
   Scenario: Create CSVW metadata for CSV2RDF with DSD
     Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
-      | Sex | Value | Period    | Underlying Cause of Death  | Measure Type | Unit   |
+      | Sex | Value   | Period    | Underlying Cause of Death  | Measure Type | Unit   |
       | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
       | F   | 0.0     | year/2017 | e24-4                      | count        | deaths |
       | F   | 177.0   | year/2017 | f10                        | count        | deaths |
@@ -138,6 +138,7 @@ Feature: Manage CSVW metadata for transformation to RDF
                             <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/measure_type>,
                             <http://gss-data.org.uk/data/gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths/component/count> .
     """
+    And the RDF should pass the Data Cube integrity constraints
 
   Scenario: Create CSVW metadata for CSV2RDF with dataset metadata
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/causesofdeath/datasets/alcoholspecificdeathsintheukmaindataset"

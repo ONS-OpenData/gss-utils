@@ -158,3 +158,24 @@ def step_impl(context, filename, base, path):
         base_path=path,
         dataset_metadata=quads
     )
+
+
+@step("the RDF should pass the Data Cube integrity constraints")
+def step_impl(context):
+    client = docker.from_env()
+    cube_tests = client.containers.create(
+        'cloudfluff/gdp-sparql-tests',
+        command=f'sparql-test-runner -t /usr/local/tests -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
+    )
+    archive = BytesIO()
+    with TarFile(fileobj=archive, mode='w') as t:
+        ttl = TarInfo('cube.ttl')
+        ttl.size = len(context.turtle)
+        ttl.mtime = time.time()
+        t.addfile(ttl, BytesIO(context.turtle))
+    archive.seek(0)
+    cube_tests.put_archive('/tmp/', archive)
+    cube_tests.start()
+    response = cube_tests.wait()
+    sys.stdout.write(cube_tests.logs().decode('utf-8'))
+    assert_equal(response['StatusCode'], 0)

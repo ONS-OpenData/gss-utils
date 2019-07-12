@@ -144,26 +144,41 @@ class CSVWMetadata:
                 if (is_unit and not with_transform) or (column_def['component_attachment'] not in ['', 'qb:attribute']):
                     schema_keys.append(column_def['name'])
                 if with_transform and column_def['component_attachment'] != '':
-                    dsd_components.append({
+                    comp_attach = {
+                        '@id': column_def['property_template'],
+                        '@type': {
+                            'qb:dimension': 'qb:DimensionProperty',
+                            'qb:attribute': 'qb:AttributeProperty'
+                        }.get(column_def['component_attachment'])
+                    }
+                    if 'range' in column_def and column_def['range'] not in ['', None]:
+                        comp_attach['rdfs:range'] = {'@id': column_def['range']}
+                    dsd_def = {
                         '@id': urljoin(base_url, base_path) + '/component/' + column_def['name'],
                         '@type': 'qb:ComponentSpecification',
-                        column_def['component_attachment']: {
-                            '@id': column_def['property_template']
-                        }
-                    })
+                        'qb:componentProperty': {'@id': column_def['property_template']},
+                        column_def['component_attachment']: comp_attach
+                    }
+                    dsd_components.append(dsd_def)
             else:
                 print(f'"{column}" not defined')
 
         if with_transform:
             for measure_type in measure_types:
                 measure_def = next(d for d in self._col_def.values() if d['name'] == measure_type)
-                dsd_components.append({
+                comp_attach = {
+                    '@id': measure_def['property_template'],
+                    '@type': 'qb:MeasureProperty'
+                }
+                if 'range' in measure_def and measure_def['range'] not in ['', None]:
+                    comp_attach['rdfs:range'] = {'@id': measure_def['range']}
+                dsd_def = {
                     '@id': urljoin(base_url, base_path) + '/component/' + measure_type,
                     '@type': 'qb:ComponentSpecification',
-                    measure_def['component_attachment']: {
-                        '@id': measure_def['property_template']
-                    }
-                })
+                    'qb:componentProperty': {'@id': measure_def['property_template']},
+                    measure_def['component_attachment']: comp_attach
+                }
+                dsd_components.append(dsd_def)
             schema_columns.append({
                 'name': 'dataset_ref',
                 'virtual': True,
