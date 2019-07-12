@@ -150,7 +150,7 @@ class CSVWMetadata:
                             'qb:dimension': 'qb:DimensionProperty',
                             'qb:attribute': 'qb:AttributeProperty'
                         }.get(column_def['component_attachment']),
-                        'rdfs:label': column_def['Title']
+                        'rdfs:label': column_def['title']
                     }
                     if 'range' in column_def and column_def['range'] not in ['', None]:
                         comp_attach['rdfs:range'] = {'@id': column_def['range']}
@@ -170,7 +170,7 @@ class CSVWMetadata:
                 comp_attach = {
                     '@id': measure_def['property_template'],
                     '@type': 'qb:MeasureProperty',
-                    'rdfs:label': measure_def['Title']
+                    'rdfs:label': measure_def['title']
                 }
                 if 'range' in measure_def and measure_def['range'] not in ['', None]:
                     comp_attach['rdfs:range'] = {'@id': measure_def['range']}
