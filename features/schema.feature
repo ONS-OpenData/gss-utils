@@ -19,7 +19,7 @@ Feature: Manage CSVW schema for validation
     And a CSV file 'observations.csv'
       | Year | Country of Residence | Migration Flow | IPS Citizenship | Sex | Age     | Measure Type | Value | IPS Marker | CI  | Unit             |
       | 2017 | south-asia           | inflow         | all             | T   | agq/0-4 | Count        | 1.7   |            | 1.5 | people-thousands |
-      | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | Count        |       | .          | .   | people-thousands |
+      | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | Count        |       | no-contact | .   | people-thousands |
     When I create a CSVW schema 'schema.json'
     Then the schema is valid JSON
     And cloudfluff/csvlint validates ok
