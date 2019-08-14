@@ -224,7 +224,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           gd:residence <http://gss-data.org.uk/def/concept/country-of-residence/south-east-asia> ;
           qb:dataSet <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01> ;
           qb:measureType gm:count ;
-          sdmxa:obsStatus <http://gss-data.org.uk/def/concept/ips-marker/not-applicable> ;
+          sdmxa:obsStatus <http://gss-data.org.uk/def/concept/ips-markers/not-applicable> ;
           sdmxa:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/people-thousands> ;
           sdmxd:age <http://gss-data.org.uk/def/concept/ages/agq/0-4> ;
           sdmxd:refPeriod <http://reference.data.gov.uk/id/year/2017> ;
