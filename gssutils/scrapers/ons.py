@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, Excel, ODS
+from gssutils.metadata import Distribution, Excel, ODS, CSV, CSDB
 
 
 def scrape(scraper, tree):
@@ -13,8 +13,6 @@ def scrape(scraper, tree):
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
         "//span[text() = 'Release date: ']/parent::node()/text()")[1].strip()).date()
-    distribution = Distribution(scraper)
-
     user_requested = tree.xpath(
         "//h2[text() = 'Summary of request']"
     )
@@ -27,6 +25,7 @@ def scrape(scraper, tree):
         distribution_link = tree.xpath(
             "//h2[text()='Download associated with request ']/following-sibling::*/descendant::a")
         if len(distribution_link) > 0:
+            distribution = Distribution(scraper)
             distribution.downloadURL = urljoin(scraper.uri, distribution_link[0].get('href'))
             distribution.title = distribution_link[0].text
             distribution_info = distribution_link[0].xpath(
@@ -47,7 +46,7 @@ def scrape(scraper, tree):
                         distribution.mediaType = ODS
                     else:
                         distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
-
+            scraper.distributions.append(distribution)
     else:
         try:
             scraper.dataset.updateDueOn = parse(tree.xpath(
@@ -66,11 +65,31 @@ def scrape(scraper, tree):
         scraper.dataset.comment = tree.xpath(
             "//h2[text() = 'About this dataset']/following-sibling::p/text()")[0].strip()
 
-        distribution.downloadURL = urljoin(scraper.uri, tree.xpath(
-            "//a[starts-with(@title, 'Download as xls')]/@href")[0].strip())
-        distribution.mediaType = 'application/vnd.ms-excel'
-        distribution.title = scraper.dataset.title
-    scraper.distributions.append(distribution)
+        for anchor in tree.xpath("//a[starts-with(@title, 'Download as ')]"):
+            distribution = Distribution(scraper)
+            distribution.downloadURL = urljoin(scraper.uri, anchor.get('href'))
+            type_size_re = re.compile(r'([^(]*)\(([0-9.]+)\s+([^s]+)\)')
+            type_size_match = type_size_re.match(anchor.text)
+            if type_size_match is not None:
+                typ, size, mult = type_size_match.groups()
+                if mult == 'kB':
+                    distribution.byteSize = float(size) * 1024
+                elif mult == 'MB':
+                    distribution.byteSize = float(size) * 1000000
+                else:
+                    distribution.byteSize = float(size)
+                if typ.strip() == 'csv':
+                    distribution.mediaType = CSV
+                elif typ.strip() == 'xlsx':
+                    distribution.mediaType = Excel
+                elif typ.strip() == 'ods':
+                    distribution.mediaType = ODS
+                elif typ.strip() == 'structured text':
+                    distribution.mediaType = CSDB
+                else:
+                    distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
+            distribution.title = scraper.dataset.title
+            scraper.distributions.append(distribution)
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
     scraper.dataset.license = tree.xpath(
         "//div[@class='footer-license']//a")[0].get('href')

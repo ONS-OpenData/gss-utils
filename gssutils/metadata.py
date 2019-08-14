@@ -27,6 +27,8 @@ ExcelOpenXML = 'application/vnd.openxmlformats-officedocument.spreadsheetml.shee
 ExcelTypes = (Excel, ExcelOpenXML)
 ZIP = 'application/zip'
 PDF = 'application/pdf'
+CSV = 'text/csv'
+CSDB = 'text/prs.ons+csdb'
 
 namespaces = NamespaceManager(Graph())
 namespaces.bind('dcat', DCAT)
