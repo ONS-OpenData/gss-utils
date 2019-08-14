@@ -141,4 +141,5 @@ def step_impl(context, title):
 
 @step("fetch the distribution as a pandas dataframe")
 def step_impl(context):
-    context.pandas = context.pandas = context.distribution.as_pandas()
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+        context.pandas = context.pandas = context.distribution.as_pandas()
