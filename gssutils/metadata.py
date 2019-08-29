@@ -251,7 +251,9 @@ class Distribution(Metadata):
     def as_pandas(self, **kwargs):
         if self.mediaType == Excel:
             with self.open() as fobj:
-                return pd.read_excel(fobj, **kwargs)
+                # pandas 0.25 now tries to seek(0), so we need to read and buffer the stream
+                buffered_fobj = BytesIO(fobj.read())
+                return pd.read_excel(buffered_fobj, **kwargs)
         elif self.mediaType == ODS:
             with self.open() as ods_obj:
                 if 'sheet_name' in kwargs:
