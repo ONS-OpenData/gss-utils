@@ -85,14 +85,25 @@ def step_impl(context, filename, base, path):
     context.metadata_filename = Path(filename)
     context.metadata_io = StringIO()
     context.csv_io.seek(0)
-    context.schema.create_io(
-        context.csv_io,
-        context.metadata_io,
-        str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-        with_transform=True,
-        base_url=base,
-        base_path=path
-    )
+    if hasattr(context, 'json_io'):
+        context.json_io.seek(0)
+        context.schema.create_io(
+            context.csv_io,
+            context.metadata_io,
+            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
+            mapping=context.json_io,
+            base_url=base,
+            base_path=path
+        )
+    else:
+        context.schema.create_io(
+            context.csv_io,
+            context.metadata_io,
+            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
+            with_transform=True,
+            base_url=base,
+            base_path=path
+        )
 
 
 @then("the metadata is valid JSON-LD")
@@ -179,3 +190,16 @@ def step_impl(context):
     response = cube_tests.wait()
     sys.stdout.write(cube_tests.logs().decode('utf-8'))
     assert_equal(response['StatusCode'], 0)
+
+
+@step("a JSON map file '{map_file}'")
+def step_impl(context, map_file):
+    context.json_filename = Path(map_file)
+    context.json_io = StringIO()
+    mapping = json.loads(context.text)
+    json.dump(mapping, context.json_io)
+
+
+@step("component registry at '{url}'")
+def step_impl(context, url):
+    context.schema = CSVWMetadata(url)

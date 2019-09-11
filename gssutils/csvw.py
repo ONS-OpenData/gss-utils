@@ -3,6 +3,7 @@ import csv
 import json
 from codecs import iterdecode
 from pathlib import Path, PosixPath
+from typing import Dict, Any
 from urllib import request, parse
 from urllib.parse import urljoin
 
@@ -59,20 +60,20 @@ csvw_namespaces = {
 
 class CSVWMetadata:
 
-    def __init__(self, ref_base):
+    def __init__(self, ref_base: str):
         self._ref_base = ref_base
         self._col_def = CSVWMetadata._csv_lookup(
             parse.urljoin(ref_base, 'columns.csv'), 'title')
         self._comp_def = CSVWMetadata._csv_lookup(
             parse.urljoin(ref_base, 'components.csv'), 'Label')
-        self._codelists = {}
+        self._codelists: Dict[str, Any] = {}
         for table in json.load(request.urlopen(parse.urljoin(ref_base, 'codelists-metadata.json')))['tables']:
             codelist_url = f'http://gss-data.org.uk/def/concept-scheme/{pathify(table["rdfs:label"])}'
             self._codelists[codelist_url] = table
         # need to resolve ref_common against relative URIs
 
     @staticmethod
-    def _csv_lookup(url, key):
+    def _csv_lookup(url: str, key: str) -> Dict[str, Dict[str, str]]:
         stream = request.urlopen(url)
         reader = csv.DictReader(iterdecode(stream, 'utf-8'))
         return {row[key]: row for row in reader}
@@ -87,7 +88,7 @@ class CSVWMetadata:
                 else:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
-    def create_io(self, csv_io, schema_io, csv_url, with_transform=False,
+    def create_io(self, csv_io, schema_io, csv_url, with_transform=False, mapping=None,
                   base_url=None, base_path=None, dataset_metadata=None):
         schema_columns = []
         schema_tables = []
@@ -98,8 +99,13 @@ class CSVWMetadata:
         measure_types = set()
         if with_transform: # need to figure out the measure types used
             measure_types.update(row['Measure Type'] for row in reader)
+        column_map = {}
+        if mapping is not None:
+            column_map = json.load(mapping)
         for column in reader.fieldnames:
-            if column in self._col_def:
+            if column in column_map:
+                pass
+            elif column in self._col_def:
                 column_def = self._col_def[column]
                 is_unit = column_def['property_template'] == 'http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure'
                 column_schema = {
