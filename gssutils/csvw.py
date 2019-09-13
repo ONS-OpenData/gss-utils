@@ -127,9 +127,11 @@ class CSVWMetadata:
                     if codelist in self._codelists:
                         reference = parse.urljoin(self._ref_base,
                                                   self._codelists[component_def['Codelist']]['url'])
+                        table_schema_url = urljoin(self._ref_base,
+                                                   self._codelists[component_def['Codelist']]['tableSchema'])
                         schema_tables.append({
                             'url': reference,
-                            'tableSchema': self._codelists[component_def['Codelist']]['tableSchema'],
+                            'tableSchema': table_schema_url,
                             'suppressOutput': True
                         })
                         schema_references.append({
