@@ -4,7 +4,7 @@ Feature: Manage CSVW metadata for transformation to RDF
   I want to include dataset definitions and dataset metadata in the CSVW metadata.
 
   Scenario: Create CSVW metadata for CSV2RDF to generate qb:Observations
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
       | Sex | Value | Period    | Underlying Cause of Death  | Measure Type | Unit   |
       | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
@@ -82,7 +82,7 @@ Feature: Manage CSVW metadata for transformation to RDF
     """
 
   Scenario: Create CSVW metadata for CSV2RDF with DSD
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
       | Sex | Value   | Period    | Underlying Cause of Death  | Measure Type | Unit   |
       | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
@@ -145,7 +145,7 @@ Feature: Manage CSVW metadata for transformation to RDF
     And set the family to 'health'
     And set the theme to <http://gss-data.org.uk/def/concept/statistics-authority-themes/health-social-care>
     And set the modified time to '2019-03-13T13:17:12'
-    And table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    And table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'observations.csv'
       | Age | Geography | CI Lower | Measure Type             | Sex | Unit   | CI Upper | Value | Year |
       | all | K02000001 | 0        | count                    | T   | deaths | 0        | 5701  | 2001 |
@@ -182,7 +182,7 @@ Feature: Manage CSVW metadata for transformation to RDF
 
   @skip
   Scenario: CSVW transformation with data markers
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_migration/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_migration/'
     And a CSV file 'observations.csv'
       | Year | Country of Residence | Migration Flow | IPS Citizenship | Sex | Age     | Measure Type | Value | IPS Marker     | CI  | Unit             |
       | 2017 | south-asia           | inflow         | all             | T   | agq/0-4 | count        | 1.7   |                | 1.5 | people-thousands |
