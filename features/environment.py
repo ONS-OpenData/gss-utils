@@ -20,6 +20,6 @@ class BytesIOWrapper:
 
 def before_all(context):
     client = docker.from_env()
-    client.images.pull('cloudfluff/gdp-sparql-tests:latest')
-    client.images.pull('cloudfluff/csvlint:latest')
-    client.images.pull('cloudfluff/csv2rdf:latest')
+    client.images.pull('gsscogs/gdp-sparql-tests:latest')
+    client.images.pull('gsscogs/csvlint:latest')
+    client.images.pull('gsscogs/csv2rdf:latest')

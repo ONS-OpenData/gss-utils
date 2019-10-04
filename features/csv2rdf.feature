@@ -14,7 +14,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | F   | 0.0     | year/2017 | g62-1                      | count        | deaths |
     When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
@@ -92,7 +92,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | F   | 0.0     | year/2017 | g62-1                      | count        | deaths |
     When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix qb: <http://purl.org/linked-data/cube#> .
@@ -152,7 +152,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | all | K02000001 | 10       | rate_per_100_000_persons | T   | deaths | 10       | 10    | 2001 |
     When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/ons_alcohol_deaths_uk' with dataset metadata
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -189,7 +189,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | count        |       | not-applicable | .   | people-thousands |
     When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/migration/ons-ltim-passenger-survey-4-01'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix sdmxa: <http://purl.org/linked-data/sdmx/2009/attribute#> .

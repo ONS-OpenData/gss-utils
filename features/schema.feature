@@ -11,7 +11,7 @@ Feature: Manage CSVW schema for validation
       | africa-north              | year/2008 | all | T   | Count        | 883   | applications |
     When I create a CSVW schema 'schema.json'
     Then the schema is valid JSON
-    And cloudfluff/csvlint validates ok
+    And gsscogs/csvlint validates ok
 
   @skip
   Scenario: Cope with data markers
@@ -22,4 +22,13 @@ Feature: Manage CSVW schema for validation
       | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | Count        |       | no-contact | .   | people-thousands |
     When I create a CSVW schema 'schema.json'
     Then the schema is valid JSON
-    And cloudfluff/csvlint validates ok
+    And gsscogs/csvlint validates ok
+
+  Scenario: Configuration redirection
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_migration/'
+    And a CSV file 'observations.csv'
+      | HO Country of Nationality | Period    | Age | Sex | Measure Type | Value | Unit         |
+      | africa-north              | year/2008 | all | T   | Count        | 883   | applications |
+    When I create a CSVW schema 'schema.json'
+    Then the schema is valid JSON
+    And gsscogs/csvlint validates ok

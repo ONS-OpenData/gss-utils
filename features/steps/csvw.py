@@ -49,11 +49,11 @@ def step_impl(context):
     json.load(context.schema_io)
 
 
-@step("cloudfluff/csvlint validates ok")
+@step("gsscogs/csvlint validates ok")
 def step_impl(context):
     client = docker.from_env()
     csvlint = client.containers.create(
-        'cloudfluff/csvlint',
+        'gsscogs/csvlint',
         command=f'csvlint -s /tmp/{context.schema_filename}'
     )
     archive = BytesIO()
@@ -102,11 +102,11 @@ def step_impl(context):
     g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
-@step("cloudfluff/csv2rdf generates RDF")
+@step("gsscogs/csv2rdf generates RDF")
 def step_impl(context):
     client = docker.from_env()
     csv2rdf = client.containers.create(
-        'cloudfluff/csv2rdf',
+        'gsscogs/csv2rdf',
         command=f'csv2rdf -m annotated -o /tmp/output.ttl -t /tmp/{context.csv_filename} -u /tmp/{context.metadata_filename}'
     )
     archive = BytesIO()
@@ -164,7 +164,7 @@ def step_impl(context, filename, base, path):
 def step_impl(context):
     client = docker.from_env()
     cube_tests = client.containers.create(
-        'cloudfluff/gdp-sparql-tests',
+        'gsscogs/gdp-sparql-tests',
         command=f'sparql-test-runner -t /usr/local/tests/qb -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
     )
     archive = BytesIO()
