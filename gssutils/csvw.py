@@ -1,6 +1,7 @@
 import argparse
 import csv
 import json
+import logging
 from codecs import iterdecode
 from pathlib import Path, PosixPath
 from urllib import request, parse
@@ -60,7 +61,13 @@ csvw_namespaces = {
 class CSVWMetadata:
 
     def __init__(self, ref_base):
-        self._ref_base = ref_base
+        # Reference data has moved, but rather than change every notebook,
+        # we redirect and log a deprecation.
+        if ref_base.startswith('https://ons-opendata'):
+            self.ref_base = f"https://gss-cogs{ref_base[len('https://ons-opendata'):]}"
+            logging.warning(f"{ref_base} has been re-written to {self.ref_base}, please update usage.")
+        else:
+            self._ref_base = ref_base
         self._col_def = CSVWMetadata._csv_lookup(
             parse.urljoin(ref_base, 'columns.csv'), 'title')
         self._comp_def = CSVWMetadata._csv_lookup(
