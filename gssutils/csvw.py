@@ -64,16 +64,16 @@ class CSVWMetadata:
         # Reference data has moved, but rather than change every notebook,
         # we redirect and log a deprecation.
         if ref_base.startswith('https://ons-opendata'):
-            self.ref_base = f"https://gss-cogs{ref_base[len('https://ons-opendata'):]}"
-            logging.warning(f"{ref_base} has been re-written to {self.ref_base}, please update usage.")
+            self._ref_base = f"https://gss-cogs{ref_base[len('https://ons-opendata'):]}"
+            logging.warning(f"{ref_base} has been re-written to {self._ref_base}, please update usage.")
         else:
             self._ref_base = ref_base
         self._col_def = CSVWMetadata._csv_lookup(
-            parse.urljoin(ref_base, 'columns.csv'), 'title')
+            parse.urljoin(self._ref_base, 'columns.csv'), 'title')
         self._comp_def = CSVWMetadata._csv_lookup(
-            parse.urljoin(ref_base, 'components.csv'), 'Label')
+            parse.urljoin(self._ref_base, 'components.csv'), 'Label')
         self._codelists = {}
-        for table in json.load(request.urlopen(parse.urljoin(ref_base, 'codelists-metadata.json')))['tables']:
+        for table in json.load(request.urlopen(parse.urljoin(self._ref_base, 'codelists-metadata.json')))['tables']:
             codelist_url = f'http://gss-data.org.uk/def/concept-scheme/{pathify(table["rdfs:label"])}'
             self._codelists[codelist_url] = table
         # need to resolve ref_common against relative URIs
