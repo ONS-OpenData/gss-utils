@@ -49,7 +49,7 @@ class Scraper:
         logging.basicConfig(format='%(levelname)s:%(message)s', level=log_level)
 
         if debug:
-            logging.debug("Running in debugging mode. Remove the debug=False keyword to change this.")
+            logging.debug("Running in debugging mode. Remove the debug=True keyword to change this.")
 
         self.uri = uri
         self.dataset = PMDDataset()
