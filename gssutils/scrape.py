@@ -38,13 +38,25 @@ class FilterError(Exception):
 
 
 class Scraper:
-    def __init__(self, uri, session=None):
-        logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
+    def __init__(self, uri, session=None, debug=False):
+
+        # Setup some basic logging. WARNING unless a user specifies they're debugging
+        if debug:
+            log_level = logging.DEBUG
+        else:
+            log_level = logging.WARNING
+
+        logging.basicConfig(format='%(levelname)s:%(message)s', level=log_level)
+
+        if debug:
+            logging.debug("Running in debugging mode. Remove the debug=False keyword to change this.")
+
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
         self.dataset.modified = datetime.now()
         self.distributions = []
+        self.debug = debug
 
         if session:
             self.session = session
@@ -94,6 +106,14 @@ class Scraper:
 
     def _run(self):
         page = self.session.get(self.uri)
+
+        # TODO - this should go into a bucket, we should be logging out a nice clickable link to said bucket
+        if self.debug:
+            out_path = '{}/debug_scrape.html'.format(os.getcwd())
+            logging.debug("Writing scrape as simple html to: " + out_path)
+            with open(out_path, "w") as f:
+                f.write(page.text)
+
         tree = html.fromstring(page.text)
         scraped = False
         for start_uri, scrape in gssutils.scrapers.scraper_list:
