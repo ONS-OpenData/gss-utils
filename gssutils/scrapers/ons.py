@@ -26,19 +26,16 @@ def prefered_distribution_type(list_of_urls):
     :return use_me:          the chosen truncated url endpoint
     """
 
-    reverse_ordered_suffix_preferences = [".csv", "xls", ".xlsx"]
-    use_me = None
+    reverse_ordered_suffix_preferences = [".csv", ".xls", ".xlsx"]
+
     for url_in_dict in list_of_urls:
-        url = next(iter(url_in_dict.values()))
-        for prefered_suffix in reverse_ordered_suffix_preferences:
-            if url.endswith(prefered_suffix):
-                use_me = url
+        for k, url in url_in_dict.items():
+            if str(k).strip() == "file":
+                for prefered_suffix in reverse_ordered_suffix_preferences:
+                    if str(url).endswith(prefered_suffix):
+                        return url
 
-    if use_me == None:
-        raise ValueError("Aborting operation. Could not find a supported type from '{}' in" \
-                "any of '{}'.".format(",".join(reverse_ordered_suffix_preferences), ",".join(list_of_urls)))
-
-    return use_me
+    return None
 
 
 def scrape(scraper, tree):
@@ -61,7 +58,7 @@ def scrape(scraper, tree):
         p = tree.xpath("//p/text()")[0].strip()
         initial_page = json.loads(p)
     except:
-        scraper.logger.warning("This is not json-able content. Attempting to parse with depreciated html scraper.")
+        logging.warning("This is not json-able content. Attempting to parse with depreciated html scraper.")
         depreciated_scraper(scraper, tree)
         return
 
@@ -75,7 +72,7 @@ def scrape(scraper, tree):
     if page_type not in page_handlers:
         raise ValueError("Aborting. The ONS scraper does not handle ./data pages of type: " + page_type)
 
-    scraper.logger.debug("Calling handler for page type: " + page_type)
+    logging.debug("Calling handler for page type: " + page_type)
 
     handler = page_handlers[page_type]
     handler(scraper, initial_page)
@@ -105,7 +102,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
     # Acquire basic metadata from dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"]
-    scraper.dataset.issued = landing_page["description"]["releaseDate"] # TODO time format
+    scraper.dataset.issued = landing_page["description"]["releaseDate"]  # TODO time format
 
     # Get json "scrape" of the ./current page
     page_url = ONS_PREFIX+landing_page["datasets"][0]["uri"]+"/data"
@@ -121,7 +118,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
     # now we've got a list of distributions as urls, lets create those objects
     for distro_url in distributions_url_list:
-        scraper.logger.debug("Identified distribution url, building distribution object for: " + distro_url)
+        logging.debug("Identified distribution url, building distribution object for: " + distro_url)
 
         r = requests.get(distro_url)
         if r.status_code != 200:
@@ -134,7 +131,12 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
         # Get the download url (use our preference where there're multiple formats)
         distribution_formats = this_page["downloads"]
+
+        # If the downloadable link does not come in csv, xls or xlsx format, we don't want it
         chosen_format_endpoint = prefered_distribution_type(distribution_formats)
+        if chosen_format_endpoint == None:
+            break
+
         download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+chosen_format_endpoint
         this_distribution.downloadURL = download_url
         this_distribution.mediaType = download_url.split('.')[1]
@@ -155,6 +157,8 @@ def onshandler_dataset_landing_page(scraper, landing_page):
                 file_size_text = lines_in_html_page[i+2]
                 break
         this_distribution.byteSize = float(file_size_text[1:].split(" ")[0]) * 1000
+
+        this_distribution = scraper.dataset.title
 
         scraper.distributions.append(this_distribution)
 
