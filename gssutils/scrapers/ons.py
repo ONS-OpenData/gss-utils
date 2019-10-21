@@ -14,29 +14,6 @@ import json
 ONS_PREFIX = "http://www.ons.gov.uk"
 ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
-def prefered_distribution_type(list_of_urls):
-    """
-    Helper function, where a distribution is available in multiple formats we need to pick one.
-    # TODO: something of this ilk probably makes more sense as a global resource
-
-    For now, I'm going with a preference of excel over csv and blow up for neither. But we might
-    need to be a bit cleverer than that.
-
-    :param list_of_urls:     list of truncated url endpoints with different formats
-    :return use_me:          the chosen truncated url endpoint
-    """
-
-    reverse_ordered_suffix_preferences = [".csv", ".xls", ".xlsx"]
-
-    for url_in_dict in list_of_urls:
-        for k, url in url_in_dict.items():
-            if str(k).strip() == "file":
-                for prefered_suffix in reverse_ordered_suffix_preferences:
-                    if str(url).endswith(prefered_suffix):
-                        return url
-
-    return None
-
 
 def scrape(scraper, tree):
     """
@@ -44,8 +21,10 @@ def scrape(scraper, tree):
     'types'. Rather than trying to account for the journey from every single type that we might
     start from (possible, but spagetti), I'm putting in a switch.
 
-    Basically, you'll get the handler for the page type you've provided. Or you'll get a
-    exception telling you we don't handle it.
+    Basically, if the pge is jason-able you'll get the handler for the page type you've provided,
+    or you'll get a exception telling you we don't handle it (yet...).
+
+    If it's not json-able, we'll call the older scraper with a depreciation warning.
 
     :param scraper:     The Scraper Object
     :param tree:        an lxml tree of the initial scrape
@@ -83,26 +62,22 @@ def onshandler_dataset_landing_page(scraper, landing_page):
     This is the handler for the page type of "dataset_landing_page"
 
     The intention is to get the basic metadata from this page, then look at the provided
-    /current link to get the specific distributions with distribution-level metadata
+    /current link (and its "previous version" info) to get all distributions and their
+    associated metadata.
 
     :param scraper:         the Scraper object
     :param landing_page:    the /data representation of this page
     :return:
     """
 
-    # sanity check, in case we do something silly
-    if landing_page["type"] != "dataset_landing_page":
-        raise ValueError("Aborting. Scraper is expecting to start on page of type 'dataset_landing_page'" \
-                "not '{}'.".format(landing_page["type"]))
-
-    # sanity check, in case they do something silly
+    # sanity check, make sure the page really is just dealing with one dataset
     if len(landing_page["datasets"]) != 1:
         raise ValueError("Aborting. More than one dataset linked on a dataset landing page: {}." \
                          .format(",".join(landing_page["datasets"])))
 
     # Acquire basic metadata from dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"]
-    scraper.dataset.issued = landing_page["description"]["releaseDate"]  # TODO time format
+    scraper.dataset.issued = landing_page["description"]["releaseDate"]
 
     # Get json "scrape" of the ./current page
     page_url = ONS_PREFIX+landing_page["datasets"][0]["uri"]+"/data"
@@ -112,12 +87,18 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
     current_dataset_page = r.json() # dict-ify
 
-    distributions_url_list = [ONS_PREFIX + landing_page["datasets"][0]["uri"]+"/data"]
-    for version_as_dict in current_dataset_page["versions"]:
-        distributions_url_list.append(ONS_PREFIX+version_as_dict["uri"]+"/data")
+    # start a dictionary of distributions as {url: release_date}
+    distributions_url_dict = {ONS_PREFIX + landing_page["datasets"][0]["uri"]+"/data":
+                                  landing_page["description"]["releaseDate"]}
 
-    # now we've got a list of distributions as urls, lets create those objects
-    for distro_url in distributions_url_list:
+    # add all the older version to that dictionary
+    for version_as_dict in current_dataset_page["versions"]:
+        distributions_url_dict.update({ONS_PREFIX+version_as_dict["uri"]+"/data":
+                                    version_as_dict["updateDate"]})
+
+    # iterate through the lot, creating a distribution objects for each
+    # add adding it to the list scraper.distributions[]
+    for distro_url, release_date in distributions_url_dict.items():
         logging.debug("Identified distribution url, building distribution object for: " + distro_url)
 
         r = requests.get(distro_url)
@@ -126,41 +107,78 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
         this_page = r.json()    # dict-ify
 
-        # Distribution object to represent this distribution
-        this_distribution = Distribution(scraper)
-
-        # Get the download url (use our preference where there're multiple formats)
+        # Get the download urls, if there's more than 1,each forms a separate distribution
         distribution_formats = this_page["downloads"]
+        for dl in distribution_formats:
 
-        # If the downloadable link does not come in csv, xls or xlsx format, we don't want it
-        chosen_format_endpoint = prefered_distribution_type(distribution_formats)
-        if chosen_format_endpoint == None:
-            break
+            # Distribution object to represent this distribution
+            this_distribution = Distribution(scraper)
+            this_distribution.issued = release_date
 
-        download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+chosen_format_endpoint
-        this_distribution.downloadURL = download_url
-        this_distribution.mediaType = download_url.split('.')[1]
+            assert 'file' in dl.keys(), "Aborting, expecting dict with 'file' key. Instead " \
+                    + "we got: {}.".format(str(dl))
 
-        # Get file size
-        """
-        # TODO - this is a bit nasty.
-        
-        It's because my old pal zebedee (ONS content file server) is resisting all attempts to give
-        out file information beyond letting you download the whole thing.
-        
-        Am having to switch back to the html page and nip out the hard coded file size.
-        """
-        lines_in_html_page = [x for x in requests.get(distro_url[:-5]).text.split("\n")]
-        file_size_text = None
-        for i in range(0, len(lines_in_html_page)):
-            if 'data-gtm-date="Latest"' in lines_in_html_page[i]:
-                file_size_text = lines_in_html_page[i+2]
-                break
-        this_distribution.byteSize = float(file_size_text[1:].split(" ")[0]) * 1000
 
-        this_distribution = scraper.dataset.title
+            download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+dl["file"]
+            this_distribution.downloadURL = download_url
+            this_distribution.mediaType = download_url.split('.')[1]
 
-        scraper.distributions.append(this_distribution)
+            # Get file size
+            """
+            # TODO - better, this is a bit nasty.
+            
+            It's because my old pal zebedee (ONS content file server) is resisting all 
+            attempts to give out file information beyond letting you download the file.
+            
+            Am having to switch back to the html page and nip out the hard coded file size.
+            """
+
+            lines_in_html_page = [x for x in requests.get(distro_url[:-5]).text.split("\n")]
+
+            file_extension_sought = download_url.split(".")[-1]
+            file_size_text = None
+
+            for i in range(0, len(lines_in_html_page)):
+                if "MB)" in lines_in_html_page[i]:
+                    previous_line = lines_in_html_page[i-1]
+
+                    # the text for csv or xlsx should match the file type
+                    if previous_line.strip() == file_extension_sought:
+                        file_size_text = lines_in_html_page[i]
+
+                    # otherwise specifically check it its csdb
+                    elif previous_line.strip() == "text" and file_extension_sought == "csdb":
+                        file_size_text = lines_in_html_page[i]
+
+            assert file_size_text != None, "Unable to find file size for '{}' from '{}'." \
+                    .format(download_url, distro_url[:-5])
+
+            # We'll use a wordy try catch as this is the bit most likely to blow up
+            should_be_floatable = file_size_text[1:].split(" ")[0]
+            try:
+                this_distribution.byteSize = float(should_be_floatable) * 1000
+            except ValueError as ve:
+                raise ValueError("Issue encountered attempting to turn '{}' from '{}' into float. "
+                            "Source page was '{}', for source format '{}'.".format(should_be_floatable,
+                                                file_size_text, distro_url[:-5], dl["file"])) from ve
+
+            logging.debug("Captured filesize for '{}' as '{}'".format(distro_url,
+                                                    str(this_distribution.byteSize)))
+
+            # We'll get the mediaType from the file extension
+            file_types = {
+                ".csv": CSV,
+                ".xlsx": Excel,
+                ".ods": ODS,
+                ".csdb": CSDB
+            }
+            for ft in file_types:
+                if download_url.endswith(ft):
+                    this_distribution.mediaType = file_types[ft]
+
+            this_distribution.title = scraper.dataset.title
+
+            scraper.distributions.append(this_distribution)
 
     # boiler plate
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
