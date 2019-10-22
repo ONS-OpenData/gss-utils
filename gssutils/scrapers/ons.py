@@ -77,7 +77,13 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
     # Acquire basic metadata from dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"]
-    scraper.dataset.issued = landing_page["description"]["releaseDate"]
+    scraper.dataset.description = landing_page["description"]["metaDescription"]
+    scraper.dataset.issued = parse(landing_page["description"]["releaseDate"])
+    scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
+
+    # get contact info now, as it's only available via json at the landing_page level
+    contact_dict = landing_page["description"]["contact"]
+    scraper.dataset.contactPoint = "mailto:"+contact_dict["email"]
 
     # Get json "scrape" of the ./current page
     page_url = ONS_PREFIX+landing_page["datasets"][0]["uri"]+"/data"
@@ -105,6 +111,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
         if r.status_code != 200:
             raise ValueError("Aborting. Scraper unable to acquire the page: "+ distro_url)
 
+
         this_page = r.json()    # dict-ify
 
         # Get the download urls, if there's more than 1,each forms a separate distribution
@@ -113,7 +120,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
             # Distribution object to represent this distribution
             this_distribution = Distribution(scraper)
-            this_distribution.issued = release_date
+            this_distribution.issued = parse(release_date)
 
             assert 'file' in dl.keys(), "Aborting, expecting dict with 'file' key. Instead " \
                     + "we got: {}.".format(str(dl))
@@ -163,7 +170,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
                                                 file_size_text, distro_url[:-5], dl["file"])) from ve
 
             logging.debug("Captured filesize for '{}' as '{}'".format(distro_url,
-                                                    str(this_distribution.byteSize)))
+                            str(this_distribution.byteSize)))
 
             # We'll get the mediaType from the file extension
             file_types = {
@@ -176,7 +183,10 @@ def onshandler_dataset_landing_page(scraper, landing_page):
                 if download_url.endswith(ft):
                     this_distribution.mediaType = file_types[ft]
 
+            # inherit metadata from the dataset where it hasn't explicitly been changed
             this_distribution.title = scraper.dataset.title
+            this_distribution.description = scraper.dataset.description
+            this_distribution.contactPoint = "mailto:" + contact_dict["email"]
 
             scraper.distributions.append(this_distribution)
 
