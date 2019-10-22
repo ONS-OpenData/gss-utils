@@ -17,17 +17,16 @@ ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
 def scrape(scraper, tree):
     """
-    The ONS pages vary a bit, they're (nearly!) all availible in json but they have distinct
-    'types'. Rather than trying to account for the journey from every single type that we might
-    start from (possible, but spagetti), I'm putting in a switch.
+    This top level scrap-class uses the initial "tree" provided to choose  between using a
+    page-type specific json scraper or using the pre-existing html scraper.
 
-    Basically, if the pge is jason-able you'll get the handler for the page type you've provided,
+    If the pge is json-able you'll get the handler for the page type you've provided,
     or you'll get a exception telling you we don't handle it (yet...).
 
     If it's not json-able, we'll call the older scraper with a depreciation warning.
 
     :param scraper:     The Scraper Object
-    :param tree:        an lxml tree of the initial scrape
+    :param tree:        an lxml etree of the initial scrape
     :return:
     """
 
@@ -41,13 +40,13 @@ def scrape(scraper, tree):
         depreciated_scraper(scraper, tree)
         return
 
-    # note - add as needed
+    # handers, one per page_type, add to this as needed
     page_handlers = {
         "dataset_landing_page": onshandler_dataset_landing_page
     }
 
+    # throw an exception if it's a json page type we don't handle
     page_type = initial_page["type"]
-
     if page_type not in page_handlers:
         raise ValueError("Aborting. The ONS scraper does not handle ./data pages of type: " + page_type)
 
@@ -62,11 +61,11 @@ def onshandler_dataset_landing_page(scraper, landing_page):
     This is the handler for the page type of "dataset_landing_page"
 
     The intention is to get the basic metadata from this page, then look at the provided
-    /current link (and its "previous version" info) to get all distributions and their
-    associated metadata.
+    /current link (and its "previous version" info) and create a .distribution for each
+    format type of each previous version of said dataset.
 
     :param scraper:         the Scraper object
-    :param landing_page:    the /data representation of this page
+    :param landing_page:    the json representation of a dataset_landing_page
     :return:
     """
 
@@ -75,13 +74,14 @@ def onshandler_dataset_landing_page(scraper, landing_page):
         raise ValueError("Aborting. More than one dataset linked on a dataset landing page: {}." \
                          .format(",".join(landing_page["datasets"])))
 
-    # Acquire basic metadata from dataset_landing_page
+    # Acquire basic metadata from the dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"]
     scraper.dataset.description = landing_page["description"]["metaDescription"]
     scraper.dataset.issued = parse(landing_page["description"]["releaseDate"])
     scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
 
     # get contact info now, as it's only available via json at the landing_page level
+    # note, adding mailto: prefix so the property gets correctly identified by metadata.py
     contact_dict = landing_page["description"]["contact"]
     scraper.dataset.contactPoint = "mailto:"+contact_dict["email"]
 
@@ -89,28 +89,29 @@ def onshandler_dataset_landing_page(scraper, landing_page):
     page_url = ONS_PREFIX+landing_page["datasets"][0]["uri"]+"/data"
     r = requests.get(page_url)
     if r.status_code != 200:
-        raise ValueError("Scrape of url '{}' failed with status code {}.".format(page_url, r.status_code))
+        raise ValueError("Scrape of url '{}' failed with status code {}." \
+                         .format(page_url, r.status_code))
 
     current_dataset_page = r.json() # dict-ify
 
-    # start a dictionary of distributions as {url: release_date}
-    distributions_url_dict = {ONS_PREFIX + landing_page["datasets"][0]["uri"]+"/data":
-                                  landing_page["description"]["releaseDate"]}
+    # start a dictionary of dataset versions (to hold current + all previous) as
+    # {url: release_date}, start with just the current/latest version
+    versions_dict = {ONS_PREFIX + landing_page["datasets"][0]["uri"]+"/data":
+                                    landing_page["description"]["releaseDate"]}
 
-    # add all the older version to that dictionary
+    # then add all the older version to that dictionary
     for version_as_dict in current_dataset_page["versions"]:
-        distributions_url_dict.update({ONS_PREFIX+version_as_dict["uri"]+"/data":
+        versions_dict.update({ONS_PREFIX+version_as_dict["uri"]+"/data":
                                     version_as_dict["updateDate"]})
 
     # iterate through the lot, creating a distribution objects for each
-    # add adding it to the list scraper.distributions[]
-    for distro_url, release_date in distributions_url_dict.items():
+    # then add it to the list scraper.distributions[]
+    for distro_url, release_date in versions_dict.items():
         logging.debug("Identified distribution url, building distribution object for: " + distro_url)
 
         r = requests.get(distro_url)
         if r.status_code != 200:
             raise ValueError("Aborting. Scraper unable to acquire the page: "+ distro_url)
-
 
         this_page = r.json()    # dict-ify
 
@@ -188,6 +189,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
             this_distribution.description = scraper.dataset.description
             this_distribution.contactPoint = "mailto:" + contact_dict["email"]
 
+            logging.debug("Created distribution for download '{}'.".format(download_url))
             scraper.distributions.append(this_distribution)
 
     # boiler plate
