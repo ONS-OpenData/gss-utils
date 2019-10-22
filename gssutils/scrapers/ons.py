@@ -12,7 +12,7 @@ def scrape(scraper, tree):
     scraper.dataset.title = tree.xpath(
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
-        "//span[text() = 'Release date: ']/parent::node()/text()")[1].strip()).date()
+        "//span[text() = 'Release date:']/parent::node()/text()")[1].strip()).date()
     user_requested = tree.xpath(
         "//h2[text() = 'Summary of request']"
     )
