@@ -126,53 +126,8 @@ def onshandler_dataset_landing_page(scraper, landing_page):
             assert 'file' in dl.keys(), "Aborting, expecting dict with 'file' key. Instead " \
                     + "we got: {}.".format(str(dl))
 
-
             download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+dl["file"]
             this_distribution.downloadURL = download_url
-            this_distribution.mediaType = download_url.split('.')[1]
-
-            # Get file size
-            """
-            # TODO - better, this is a bit nasty.
-
-            It's because my old pal zebedee (ONS content file server) is resisting all
-            attempts to give out file information beyond letting you download the file.
-
-            Am having to switch back to the html page and nip out the hard coded file size.
-            """
-
-            lines_in_html_page = [x for x in requests.get(distro_url[:-5]).text.split("\n")]
-
-            file_extension_sought = download_url.split(".")[-1]
-            file_size_text = None
-
-            for i in range(0, len(lines_in_html_page)):
-                if "MB)" in lines_in_html_page[i]:
-                    previous_line = lines_in_html_page[i-1]
-
-                    # the text for csv or xlsx should match the file type
-                    if previous_line.strip() == file_extension_sought:
-                        file_size_text = lines_in_html_page[i]
-
-                    # otherwise specifically check it its csdb
-                    elif previous_line.strip() == "text" and file_extension_sought == "csdb":
-                        file_size_text = lines_in_html_page[i]
-
-            assert file_size_text != None, "Unable to find file size for '{}' from '{}'." \
-                    .format(download_url, distro_url[:-5])
-
-            # We'll use a wordy try catch as this is the bit most likely to blow up
-            should_be_floatable = file_size_text[1:].split(" ")[0]
-            try:
-                this_distribution.byteSize = float(should_be_floatable) * 1000
-            except ValueError as ve:
-                raise ValueError("Issue encountered attempting to turn '{}' from '{}' into float. "
-                            "Source page was '{}', for source format '{}'.".format(should_be_floatable,
-                                                file_size_text, distro_url[:-5], dl["file"])) from ve
-
-            logging.debug("Captured filesize for '{}' as '{}'".format(distro_url,
-                            str(this_distribution.byteSize)))
-
             this_distribution.mediaType, encoding = mimetypes.guess_type(this_distribution.downloadURL)
 
             # inherit metadata from the dataset where it hasn't explicitly been changed
