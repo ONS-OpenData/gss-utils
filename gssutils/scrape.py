@@ -13,7 +13,7 @@ from lxml import html
 from rdflib import BNode, URIRef
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
+from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML
 from gssutils.utils import pathify
 
 

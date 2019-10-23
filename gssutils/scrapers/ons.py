@@ -11,7 +11,7 @@ import requests
 
 import json
 
-ONS_PREFIX = "http://www.ons.gov.uk"
+ONS_PREFIX = "https://www.ons.gov.uk"
 ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
 
@@ -75,9 +75,10 @@ def onshandler_dataset_landing_page(scraper, landing_page):
                          .format(",".join(landing_page["datasets"])))
 
     # Acquire basic metadata from the dataset_landing_page
-    scraper.dataset.title = landing_page["description"]["title"]
+    scraper.dataset.title = landing_page["description"]["title"].strip()
     scraper.dataset.description = landing_page["description"]["metaDescription"]
     scraper.dataset.issued = parse(landing_page["description"]["releaseDate"])
+    scraper.dataset.comment = landing_page["description"]["summary"].strip()
 
     # next release is sometimes blank, so use a conditional
     if landing_page["description"]["nextRelease"] != "":

@@ -3,10 +3,10 @@ from gssutils import Scraper
 from nose.tools import *
 import vcr
 import requests
-from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
+from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
 
-RECORD = 'new_episodes'
+RECORD = 'all'
 
 
 @given('I scrape the page "{uri}"')
@@ -18,7 +18,7 @@ def step_impl(context, uri):
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution()
+        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
     assert_equal(context.distribution.downloadURL, uri)
 
 
