@@ -9,21 +9,22 @@ from gssutils.metadata import Distribution, Excel, ODS, CSV, CSDB
 
 
 def scrape(scraper, tree):
+
     scraper.dataset.title = tree.xpath(
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
-        "//span[text() = 'Release date:']/parent::node()/text()")[1].strip()).date()
+        "//span[starts-with(text(),'Release date:')]/parent::node()/text()")[1].strip()).date()
     user_requested = tree.xpath(
-        "//h2[text() = 'Summary of request']"
+        "//h2[starts-with(text(),'Summary of request')]"
     )
 
     if len(user_requested) > 0:
         scraper.dataset.identifier = tree.xpath(
-            "//span[text() = 'Reference number: ']/parent::node()/text()")[1].strip()
+            "//span[starts-with(text(), 'Reference number:')]/parent::node()/text()")[1].strip()
         scraper.dataset.comment = tree.xpath(
-            "//h2[text() = 'Summary of request']/following-sibling::p/text()")[0].strip()
+            "//h2[starts-with(text(), 'Summary of request')]/following-sibling::p/text()")[0].strip()
         distribution_link = tree.xpath(
-            "//h2[text()='Download associated with request ']/following-sibling::*/descendant::a")
+            "//h2[starts-with(text(), 'Download associated with request')]/following-sibling::*/descendant::a")
         if len(distribution_link) > 0:
             distribution = Distribution(scraper)
             distribution.downloadURL = urljoin(scraper.uri, distribution_link[0].get('href'))
@@ -50,20 +51,20 @@ def scrape(scraper, tree):
     else:
         try:
             scraper.dataset.updateDueOn = parse(tree.xpath(
-                "//span[text() = 'Next release: ']/parent::node()/text()")[1].strip()).date()
+                "//span[starts-with(text(),'Next release:')]/parent::node()/text()")[1].strip()).date()
         except ValueError as e:
             logging.warning('Unexpected "next release" field: ' + str(e))
         except IndexError:
             logging.warning('Unable to find "next release" field')
         try:
             mailto = tree.xpath(
-                "//span[text() = 'Contact: ']/following-sibling::a[1]/@href")[0].strip()
+                "//span[starts-with(text(),'Contact:')]/following-sibling::a[1]/@href")[0].strip()
             # guard against extraneous, invalid spaces
             scraper.dataset.contactPoint = re.sub(r'^mailto:\s+', 'mailto:', mailto)
         except IndexError:
             logging.warning('Unable to find "contact" field.')
         scraper.dataset.comment = tree.xpath(
-            "//h2[text() = 'About this dataset']/following-sibling::p/text()")[0].strip()
+            "//h2[starts-with(text(),'About this dataset')]/following-sibling::p/text()")[0].strip()
 
         for anchor in tree.xpath("//a[starts-with(@title, 'Download as ')]"):
             distribution = Distribution(scraper)
