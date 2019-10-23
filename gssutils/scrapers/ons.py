@@ -78,7 +78,10 @@ def onshandler_dataset_landing_page(scraper, landing_page):
     scraper.dataset.title = landing_page["description"]["title"]
     scraper.dataset.description = landing_page["description"]["metaDescription"]
     scraper.dataset.issued = parse(landing_page["description"]["releaseDate"])
-    scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
+
+    # next release is sometimes blank, so use a conditional
+    if landing_page["description"]["nextRelease"] != "":
+        scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
 
     # get contact info now, as it's only available via json at the landing_page level
     # note, adding mailto: prefix so the property gets correctly identified by metadata.py
