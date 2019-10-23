@@ -173,21 +173,12 @@ def onshandler_dataset_landing_page(scraper, landing_page):
             logging.debug("Captured filesize for '{}' as '{}'".format(distro_url,
                             str(this_distribution.byteSize)))
 
-            # We'll get the mediaType from the file extension
-            file_types = {
-                ".csv": CSV,
-                ".xlsx": Excel,
-                ".ods": ODS,
-                ".csdb": CSDB
-            }
-            for ft in file_types:
-                if download_url.endswith(ft):
-                    this_distribution.mediaType = file_types[ft]
+            this_distribution.mediaType, encoding = mimetypes.guess_type(this_distribution.downloadURL)
 
             # inherit metadata from the dataset where it hasn't explicitly been changed
             this_distribution.title = scraper.dataset.title
             this_distribution.description = scraper.dataset.description
-            this_distribution.contactPoint = "mailto:" + contact_dict["email"]
+            this_distribution.contactPoint = scraper.dataset.contactPoint
 
             logging.debug("Created distribution for download '{}'.".format(download_url))
             scraper.distributions.append(this_distribution)
