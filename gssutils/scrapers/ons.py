@@ -77,7 +77,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
     # Acquire basic metadata from the dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"].strip()
     scraper.dataset.description = landing_page["description"]["metaDescription"]
-    scraper.dataset.issued = parse(landing_page["description"]["releaseDate"])
+    scraper.dataset.issued = parse(landing_page["description"]["releaseDate"]).date()
     scraper.dataset.comment = landing_page["description"]["summary"].strip()
 
     # next release is sometimes blank, so use a conditional
@@ -125,7 +125,7 @@ def onshandler_dataset_landing_page(scraper, landing_page):
 
             # Distribution object to represent this distribution
             this_distribution = Distribution(scraper)
-            this_distribution.issued = parse(release_date)
+            this_distribution.issued = parse(release_date.strip()).date()
 
             assert 'file' in dl.keys(), "Aborting, expecting dict with 'file' key. Instead " \
                     + "we got: {}.".format(str(dl))

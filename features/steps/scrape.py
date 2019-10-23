@@ -6,7 +6,7 @@ import requests
 from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
 
-RECORD = 'all'
+RECORD = 'new_episodes'
 
 
 @given('I scrape the page "{uri}"')
