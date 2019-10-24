@@ -101,7 +101,7 @@ def step_impl(context, rows):
 
 @step('select the distribution whose title starts with "{title_start}"')
 def step_impl(context, title_start):
-    context.distribution = context.scraper.distribution(title=lambda x: x.startswith(title_start))
+    context.distribution = context.scraper.distribution(latest=True, title=lambda x: x.startswith(title_start))
     assert_is_not_none(context.distribution)
 
 
