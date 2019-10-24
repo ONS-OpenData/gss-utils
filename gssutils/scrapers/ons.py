@@ -17,14 +17,13 @@ ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
 def scrape(scraper, uri):
     """
-    This is the handler for the page type of "dataset_landing_page"
+    This is json scraper for ons.gov.uk pages
 
-    The intention is to get the basic metadata from this page, then look at the provided
-    /current link (and its "previous version" info) and create a .distribution for each
-    format type of each previous version of said dataset.
+    This scraper will attempt to gather metadata from "standard" fields shared across page types
+    then drop into page-type specific handlers.
 
     :param scraper:         the Scraper object
-    :param landing_page:    lxml etree
+    :param landing_page:    the provided url
     :return:
     """
 
@@ -40,28 +39,81 @@ def scrape(scraper, uri):
     except Exception as e:
         raise ValueError("Aborting operation This is not json-able content.") from e
 
-    # throw an exception if it's a json page type we don't handle
-    page_type = landing_page["type"]
-    if page_type.strip() != "dataset_landing_page":
-        raise ValueError("Aborting. The ONS scraper handles pages of /data json type " \
-                         "'dataset_landing_page', not {}."+ page_type)
-
     # Acquire basic metadata from the dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"].strip()
+
+    # Try metaDescription for a description, if its bank try markdown
     scraper.dataset.description = landing_page["description"]["metaDescription"]
+    if scraper.dataset.description == "":
+        scraper.dataset.description = landing_page["markdown"][0]
+
     scraper.dataset.issued = parse(landing_page["description"]["releaseDate"]).date()
-    scraper.dataset.comment = landing_page["description"]["summary"].strip()
 
-    # next release is sometimes blank or a string, so use a conditional before parsing time
-    if landing_page["description"]["nextRelease"] != "To be announced" and \
-            landing_page["description"]["nextRelease"] != "":
-        scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
+    # not all page types have a summary field
+    try:
+        scraper.dataset.comment = landing_page["description"]["summary"].strip()
+    except KeyError:
+        logging.debug("no description.summary key in json, skipping")
+
+    # not all page types have a next Release date field
+    try:
+        # next release is sometimes blank or a string, so use a conditional before parsing time
+        if landing_page["description"]["nextRelease"] != "To be announced" and \
+                landing_page["description"]["nextRelease"] != "":
+            scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
+    except KeyError:
+        logging.debug("no description.nextRelease key in json, skipping")
 
 
-    # get contact info now, as it's only available via json at the landing_page level
-    # note, adding mailto: prefix so the property gets correctly identified by metadata.py
-    contact_dict = landing_page["description"]["contact"]
-    scraper.dataset.contactPoint = "mailto:"+contact_dict["email"]
+    # not all page types have contact field
+    try:
+        contact_dict = landing_page["description"]["contact"]
+        scraper.dataset.contactPoint = "mailto:"+contact_dict["email"]
+    except KeyError:
+        logging.debug("no description.contact key in json, skipping")
+
+    # From this point the json structure can vary based on the page type
+    # so we're switching to a handler for each
+    page_handlers = {
+        "static_adhoc": handler_static_adhoc,
+        "dataset_landing_page": handler_dataset_landing_page
+    }
+
+    page_type = landing_page["type"]
+    if page_type not in page_handlers.keys():
+        raise ValueError("Aborting operation. Scraper cannot handle page of type '{}'.".format(page_type))
+
+    page_handlers[page_type](scraper, landing_page)
+
+
+def handler_static_adhoc(scraper, landing_page):
+
+    for download in landing_page["downloads"]:
+
+        title = download["title"]
+        file = download["file"]
+
+        # Distribution object to represent this distribution
+        this_distribution = Distribution(scraper)
+        this_distribution.issued = parse(landing_page["description"]["releaseDate"]).date()
+
+        download_url = ONS_DOWNLOAD_PREFIX + landing_page["uri"] + file
+        this_distribution.downloadURL = download_url
+        this_distribution.mediaType, encoding = mimetypes.guess_type(this_distribution.downloadURL)
+
+        this_distribution.title = title
+
+        # inherit metadata from the dataset where it hasn't explicitly been changed
+        this_distribution.description = scraper.dataset.description
+
+        logging.debug("Created distribution for download '{}'.".format(download_url))
+        scraper.distributions.append(this_distribution)
+
+        # boiler plate
+        scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
+
+
+def handler_dataset_landing_page(scraper, landing_page):
 
     # Get json "scrape" of the "datasets"
     for dataset_page_url in landing_page["datasets"]:

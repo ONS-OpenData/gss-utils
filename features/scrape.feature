@@ -4,7 +4,7 @@ Feature: Scrape dataset info
   including the location to fetch the data from.
 
   Scenario: Scrape ONS
-    Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/data"
+    Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/annualforeigndirectinvestment2017inward.xls"
     And the title should be "Foreign direct investment involving UK companies: inward"
     And the publication date should be "2018-12-04"
