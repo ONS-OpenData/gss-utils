@@ -30,6 +30,8 @@ def scrape(scraper, uri):
     # If we can't load it as json we'll have to have to assume it's coming from an older recipe,
     # so we'll throw a depreciation warning and use the old scraper.
 
+
+
     r = requests.get(uri + "/data")
     if r.status_code != 200:
         raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
@@ -42,18 +44,15 @@ def scrape(scraper, uri):
     # Acquire basic metadata from the dataset_landing_page
     scraper.dataset.title = landing_page["description"]["title"].strip()
 
-    # Try metaDescription for a description, if its bank try markdown
     scraper.dataset.description = landing_page["description"]["metaDescription"]
-    if scraper.dataset.description == "":
-        scraper.dataset.description = landing_page["markdown"][0]
-
     scraper.dataset.issued = parse(landing_page["description"]["releaseDate"]).date()
 
-    # not all page types have a summary field
-    try:
+    # comments are not always in the same place...
+    page_type = landing_page["type"]
+    if page_type == "dataset_landing_page":
         scraper.dataset.comment = landing_page["description"]["summary"].strip()
-    except KeyError:
-        logging.debug("no description.summary key in json, skipping")
+    else:
+        scraper.dataset.comment = landing_page["markdown"][0]
 
     # not all page types have a next Release date field
     try:
@@ -63,7 +62,6 @@ def scrape(scraper, uri):
             scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
     except KeyError:
         logging.debug("no description.nextRelease key in json, skipping")
-
 
     # not all page types have contact field
     try:
@@ -79,7 +77,6 @@ def scrape(scraper, uri):
         "dataset_landing_page": handler_dataset_landing_page
     }
 
-    page_type = landing_page["type"]
     if page_type not in page_handlers.keys():
         raise ValueError("Aborting operation. Scraper cannot handle page of type '{}'.".format(page_type))
 
@@ -97,7 +94,7 @@ def handler_static_adhoc(scraper, landing_page):
         this_distribution = Distribution(scraper)
         this_distribution.issued = parse(landing_page["description"]["releaseDate"]).date()
 
-        download_url = ONS_DOWNLOAD_PREFIX + landing_page["uri"] + file
+        download_url = ONS_DOWNLOAD_PREFIX + landing_page["uri"] + "/" + file
         this_distribution.downloadURL = download_url
         this_distribution.mediaType, encoding = mimetypes.guess_type(this_distribution.downloadURL)
 
