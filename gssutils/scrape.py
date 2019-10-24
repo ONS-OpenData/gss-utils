@@ -113,7 +113,14 @@ class Scraper:
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
                 self.dataset.landingPage = self.uri
-                scrape(self, tree)
+
+                # TODO - we should probably be passing through the uri so the scrapers can choose their tools
+                # as an interim, am explicitly passing the uri where its the ONS scraper so we can get the json
+                if start_uri == 'https://www.ons.gov.uk/':
+                    scrape(self, self.uri)
+                else:
+                    scrape(self, tree)
+
                 scraped = True
                 break
         if not scraped:
