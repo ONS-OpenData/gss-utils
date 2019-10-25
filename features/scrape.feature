@@ -162,14 +162,14 @@ Feature: Scrape dataset info
   Scenario: ONS MRETS as csv, xlsx and structured text
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
     And select the distribution given by
-      | key       | value                                                                                            |
-      | mediaType | application/vnd.ms-excel                                                                         |
+      | key       | value                                                                    |
+      | mediaType | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet        |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.xlsx"
     And select the distribution given by
-      | key       | value                                                                            |
-      | mediaType | text/csv                                                                         |
+      | key       | value                           |
+      | mediaType | text/csv                        |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.csv"
     And select the distribution given by
-      | key       | value                                                                            |
-      | mediaType | text/prs.ons+csdb                                                                |
+      | key       | value                           |
+      | mediaType | text/prs.ons+csdb               |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.csdb"

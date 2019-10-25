@@ -57,8 +57,8 @@ def step_impl(context, prefix, property, object):
 def step_impl(context):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         if not hasattr(context, 'distribution'):
-            context.distribution = context.scraper.distribution()
-        context.databaker = context.distribution.as_databaker()
+            context.distribution = context.scraper.distribution(latest=True)
+        context.databaker = context.distribution.as_databaker(latest=True)
 
 
 @then("the sheet names contain [{namelist}]")
@@ -81,7 +81,7 @@ def step_impl(context, env, value):
 
 @step("select the distribution given by")
 def step_impl(context):
-    args = {}
+    args = {"latest":True}
     for row in context.table:
         args[row[0]] = row[1]
     context.distribution = context.scraper.distribution(**args)
@@ -101,7 +101,7 @@ def step_impl(context, rows):
 
 @step('select the distribution whose title starts with "{title_start}"')
 def step_impl(context, title_start):
-    context.distribution = context.scraper.distribution(title=lambda x: x.startswith(title_start))
+    context.distribution = context.scraper.distribution(latest=True, title=lambda x: x.startswith(title_start))
     assert_is_not_none(context.distribution)
 
 

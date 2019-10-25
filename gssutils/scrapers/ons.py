@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, Excel, ODS, CSV, CSDB
+from gssutils.metadata import Distribution, Excel, ODS, CSV, ExcelOpenXML, CSDB
 
 import requests
 
@@ -27,15 +27,10 @@ def scrape(scraper, uri):
     :return:
     """
 
-    # If we can't load it as json we'll have to have to assume it's coming from an older recipe,
-    # so we'll throw a depreciation warning and use the old scraper.
-
-
-
     r = requests.get(uri + "/data")
     if r.status_code != 200:
         raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
-                         "returned was '{}.".format(uri+"/data", r.status_code))
+                         " returned was '{}.".format(uri+"/data", r.status_code))
     try:
         landing_page = r.json()
     except Exception as e:
@@ -66,9 +61,13 @@ def scrape(scraper, uri):
     # not all page types have contact field
     try:
         contact_dict = landing_page["description"]["contact"]
-        scraper.dataset.contactPoint = "mailto:"+contact_dict["email"]
+        scraper.dataset.contactPoint = "mailto:"+contact_dict["email"].strip()
     except KeyError:
         logging.debug("no description.contact key in json, skipping")
+
+    # boiler plate
+    scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
+    scraper.dataset.license = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
 
     # From this point the json structure can vary based on the page type
     # so we're switching to a handler for each
@@ -106,10 +105,6 @@ def handler_static_adhoc(scraper, landing_page):
         logging.debug("Created distribution for download '{}'.".format(download_url))
         scraper.distributions.append(this_distribution)
 
-        # boiler plate
-        scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
-
-
 def handler_dataset_landing_page(scraper, landing_page):
 
     # Get json "scrape" of the "datasets"
@@ -123,30 +118,30 @@ def handler_dataset_landing_page(scraper, landing_page):
 
         this_dataset_page = r.json() # dict-ify
 
-        # start a dictionary of dataset versions (to hold current + all previous) as
-        # {url: release_date}, start with just the current/latest version
-        versions_dict = {ONS_PREFIX + this_dataset_page["uri"]+"/data":
-                                        landing_page["description"]["releaseDate"]}
+        # start a list of dataset versions (to hold current + all previous) as
+        # {start with just the current/latest version
+        versions_list = [ONS_PREFIX + this_dataset_page["uri"]+"/data"]
 
         # then add all the older version to that dictionary
         for version_as_dict in this_dataset_page["versions"]:
-            versions_dict.update({ONS_PREFIX+version_as_dict["uri"]+"/data":
-                                        version_as_dict["updateDate"]})
+            versions_list.append(ONS_PREFIX+version_as_dict["uri"]+"/data")
 
         # iterate through the lot, creating a distribution objects for each
         # then add it to the list scraper.distributions[]
-        for distro_url, release_date in versions_dict.items():
-            logging.debug("Identified distribution url, building distribution object for: " + distro_url)
+        for version_url in versions_list:
+            logging.debug("Identified distribution url, building distribution object for: " + version_url)
 
-            r = requests.get(distro_url)
+            r = requests.get(version_url)
             if r.status_code != 200:
-                raise ValueError("Aborting. Scraper unable to acquire the page: "+ distro_url)
+                raise ValueError("Aborting. Scraper unable to acquire the page: "+ version_url)
 
             this_page = r.json()    # dict-ify
 
             # Get the download urls, if there's more than 1,each forms a separate distribution
             distribution_formats = this_page["downloads"]
             for dl in distribution_formats:
+
+                release_date = this_page["description"]["releaseDate"]
 
                 # Distribution object to represent this distribution
                 this_distribution = Distribution(scraper)
@@ -155,9 +150,15 @@ def handler_dataset_landing_page(scraper, landing_page):
                 assert 'file' in dl.keys(), "Aborting, expecting dict with 'file' key. Instead " \
                         + "we got: {}.".format(str(dl))
 
-                download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+dl["file"]
+                download_url = ONS_DOWNLOAD_PREFIX+this_page["uri"]+"/"+dl["file"].strip()
                 this_distribution.downloadURL = download_url
-                this_distribution.mediaType, encoding = mimetypes.guess_type(this_distribution.downloadURL)
+
+                # guess media type, check None as csdb with url as the guess is failing
+                media_type, encoding = mimetypes.guess_type(this_distribution.downloadURL)
+                if download_url.endswith(".csdb"):
+                    media_type = CSDB
+
+                this_distribution.mediaType = media_type
 
                 # inherit metadata from the dataset where it hasn't explicitly been changed
                 this_distribution.title = scraper.dataset.title
@@ -166,7 +167,3 @@ def handler_dataset_landing_page(scraper, landing_page):
 
                 logging.debug("Created distribution for download '{}'.".format(download_url))
                 scraper.distributions.append(this_distribution)
-
-        # boiler plate
-        scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
-
