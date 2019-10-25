@@ -27,15 +27,10 @@ def scrape(scraper, uri):
     :return:
     """
 
-    # If we can't load it as json we'll have to have to assume it's coming from an older recipe,
-    # so we'll throw a depreciation warning and use the old scraper.
-
-
-
     r = requests.get(uri + "/data")
     if r.status_code != 200:
         raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
-                         "returned was '{}.".format(uri+"/data", r.status_code))
+                         " returned was '{}.".format(uri+"/data", r.status_code))
     try:
         landing_page = r.json()
     except Exception as e:
