@@ -67,7 +67,7 @@ def scrape(scraper, uri):
 
     # boiler plate
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
-    scraper.dataset.licence = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+    scraper.dataset.license = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
 
     # From this point the json structure can vary based on the page type
     # so we're switching to a handler for each
