@@ -4,6 +4,8 @@ from dateutil.parser import parse
 
 from gssutils.metadata import Distribution, Excel, ODS, CSV, ExcelOpenXML, CSDB
 
+import mimetypes
+
 import requests
 
 # save ourselves some typing later
@@ -152,7 +154,7 @@ def handler_dataset_landing_page(scraper, landing_page):
                     release_date = this_page["description"]["releaseDate"]
                     this_distribution.issued = parse(release_date.strip()).date()
                 except KeyError:
-                    logging.warning("Download {}. Of datasset versions {} of dataset {} does not have"
+                    logging.warning("Download {}. Of datasset versions {} of dataset {} does not have "
                                 "a release date".format(distribution_formats, version_url, dataset_page_url))
 
                 # I don't trust dicts with one constant field (they don't make sense), so just in case...
@@ -175,7 +177,7 @@ def handler_dataset_landing_page(scraper, landing_page):
                 elif download_url.endswith(".ods"):
                     media_type = ODS
                 else:
-                    raise ValueError("Aborting. Unable to ascertain media type for the file {}.".format(download_url))
+                    media_type, _ = mimetypes.guess_type(download_url)
 
                 this_distribution.mediaType = media_type
 
@@ -205,7 +207,7 @@ def handler_static_adhoc(scraper, landing_page):
         # if we can't get the release date, continue but throw a warning.
         try:
             this_distribution.issued = parse(landing_page["description"]["releaseDate"]).date()
-        except KeyError
+        except KeyError:
             logging.warning("Unable to acquire or parse release date")
 
         download_url = ONS_DOWNLOAD_PREFIX + landing_page["uri"] + "/" + file
@@ -223,7 +225,7 @@ def handler_static_adhoc(scraper, landing_page):
         elif download_url.endswith(".ods"):
             media_type = ODS
         else:
-            raise ValueError("Aborting. Unable to ascertain media type for the  {}.".format(download_url))
+            media_type, _ = mimetypes.guess_type(download_url)
         this_distribution.mediaType = media_type
 
         this_distribution.title = title
