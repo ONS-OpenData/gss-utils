@@ -51,7 +51,7 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.ms-excel                    |
       | title     | All areas - Components of population change |
     And the data can be downloaded from "https://www.nisra.gov.uk/sites/nisra.gov.uk/files/publications/MYE17_CoC.xlsx"
-    
+
   Scenario: Scrape HMRC
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/Pages/TaxAndDutybulletins.aspx"
     And the catalog has more than one dataset
@@ -163,7 +163,7 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
     And select the distribution given by
       | key       | value                                                                    |
-      | mediaType | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet        |
+      | mediaType | application/vnd.ms-excel        |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.xlsx"
     And select the distribution given by
       | key       | value                           |
