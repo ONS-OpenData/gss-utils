@@ -22,7 +22,7 @@ def scrape(scraper, tree):
             dataset.distribution = []
             dataset.publisher = scraper.catalog.publisher
             dataset.license = scraper.catalog.license
-            article_link = article.xpath('a')[0]
+            article_link = article.xpath('descendant::a')[0]
             dataset.title = article_link.get('title')
             href = article_link.get('href')
             dataset.landingPage = urljoin(scraper.uri, href)
