@@ -38,11 +38,7 @@ class FilterError(Exception):
 
 
 class Scraper:
-    def __init__(self, uri, session=None, log_level=logging.WARNING):
-
-        logging.basicConfig(format='%(levelname)s:%(message)s', level=log_level)
-
-        logging.debug("Running in debugging mode.")
+    def __init__(self, uri, session=None):
 
         self.uri = uri
         self.dataset = PMDDataset()
@@ -86,7 +82,11 @@ class Scraper:
                 md = md + "### Distributions\n\n"
                 for d in self.distributions:
                     t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
-                    md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+                    if hasattr(d, 'issued'):
+                        md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL})) - {d.issued}\n"
+                    else:
+                        md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+
         return md
 
     @staticmethod
@@ -108,19 +108,13 @@ class Scraper:
             with open(out_path, "w") as f:
                 f.write(page.text)
 
+        # TODO - not all scrapers will necessarily need the beautified HTML DOM
         tree = html.fromstring(page.text)
         scraped = False
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
                 self.dataset.landingPage = self.uri
-
-                # TODO - we should probably be passing through the uri so the scrapers can choose their tools
-                # as an interim, am explicitly passing the uri where its the ONS scraper so we can get the json
-                if start_uri == 'https://www.ons.gov.uk/':
-                    scrape(self, self.uri)
-                else:
-                    scrape(self, tree)
-
+                scrape(self, tree)
                 scraped = True
                 break
         if not scraped:

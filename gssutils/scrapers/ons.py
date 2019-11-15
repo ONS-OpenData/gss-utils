@@ -6,14 +6,12 @@ from gssutils.metadata import Distribution, Excel, ODS, CSV, ExcelOpenXML, CSDB
 
 import mimetypes
 
-import requests
-
 # save ourselves some typing later
 ONS_PREFIX = "https://www.ons.gov.uk"
 ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
 
-def scrape(scraper, uri):
+def scrape(scraper, tree):
     """
     This is json scraper for ons.gov.uk pages
 
@@ -28,7 +26,7 @@ def scrape(scraper, uri):
     # So we start from an ons url and append /data to it, to get json as per the following:
     # https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity/data
     # any issues getting it, or if we can't load the response into json - throw an error
-    r = requests.get(uri + "/data")
+    r = scraper.session.get(scraper.uri + "/data")
     if r.status_code != 200:
         raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
                          " returned was '{}.".format(uri+"/data", r.status_code))
@@ -107,7 +105,7 @@ def handler_dataset_landing_page(scraper, landing_page):
 
         # Get the page as json. Throw an information error if we fail for whatever reason
         dataset_page_json_url = ONS_PREFIX+dataset_page_url["uri"]+"/data"
-        r = requests.get(dataset_page_json_url)
+        r = scraper.session.get(dataset_page_json_url)
         if r.status_code != 200:
             raise ValueError("Scrape of url '{}' failed with status code {}." \
                              .format(dataset_page_json_url, r.status_code))
@@ -131,7 +129,7 @@ def handler_dataset_landing_page(scraper, landing_page):
         for version_url in versions_list:
             logging.debug("Identified distribution url, building distribution object for: " + version_url)
 
-            r = requests.get(version_url)
+            r = scraper.session.get(version_url)
             if r.status_code != 200:
                 raise ValueError("Aborting. Scraper unable to acquire the page: {} with http code {}." \
                                  .format(version_url, r.status_code))
