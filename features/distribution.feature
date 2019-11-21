@@ -82,3 +82,12 @@ Feature: distribution downloading
     Given I scrape the page "https://statswales.gov.wales/Catalogue/Housing/Dwelling-Stock-Estimates/dwellingstockestimates-by-localauthority-tenure"
     And select the distribution whose title starts with "Items"
     Then the data can be downloaded from "http://open.statswales.gov.wales/en-gb/discover/datasetdimensionitems?$filter=Dataset+eq+'hous0501'"
+    
+  Scenario: NHS Digital Open data CSV
+    Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-outcomes-framework-ascof"
+    When I select the latest dataset whose title starts with "Measures"
+    And select the distribution given by
+      | key       | value    |
+      | mediaType | text/csv |
+    And fetch the distribution as a pandas dataframe with encoding "Windows-1252"
+    Then the dataframe should have 75648 rows

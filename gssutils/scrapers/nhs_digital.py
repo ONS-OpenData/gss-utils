@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urljoin
+from dateutil.parser import parse
 
 from lxml import html
 
@@ -41,14 +42,14 @@ def scrape(scraper, tree):
                     else:
                         details[key].append(value)
             if 'Publication date:' in details:
-                dataset.issued = details['Publication date:']
+                dataset.issued = parse(details['Publication date:'][0])
             resources = article_tree.xpath("//ul[@data-uipath='ps.publication.resources-attachments']/li/a")
             for link in resources:
                 dist = Distribution(scraper)
                 dist.title = link.get('title')
                 dist.downloadURL = urljoin(dataset.landingPage, link.get('href'))
                 file_data = link.xpath("div[@class='block-link__body']")[0]
-                dist.mediaType = file_data.xpath("meta/@content")[0]
+                dist.mediaType = str(file_data.xpath("meta/@content")[0])
                 size = file_data.xpath("span/span[@class='fileSize']/span[@itemprop='contentSize']/text()")[0]
                 size_match = re.match(r'([0-9]+(\.[0-9]*)?)\s*(kB|MB|GB)', size)
                 if size_match and size_match.group(3) == 'kB': # https://en.wikipedia.org/wiki/Kilobyte kB = 1000 while KB = 1024

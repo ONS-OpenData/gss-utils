@@ -173,3 +173,9 @@ Feature: Scrape dataset info
       | key       | value                           |
       | mediaType | text/prs.ons+csdb               |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.csdb"
+
+  Scenario: NHS Digital collection select latest
+    Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-outcomes-framework-ascof"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Measures"
+    Then dct:title should be `"Measures from the Adult Social Care Outcomes Framework, England, 2018-19"@en`

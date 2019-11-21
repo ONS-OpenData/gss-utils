@@ -143,3 +143,9 @@ def step_impl(context, title):
 def step_impl(context):
     with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
         context.pandas = context.pandas = context.distribution.as_pandas()
+
+
+@step('fetch the distribution as a pandas dataframe with encoding "{encoding}"')
+def step_impl(context, encoding):
+    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+        context.pandas = context.pandas = context.distribution.as_pandas(encoding=encoding)

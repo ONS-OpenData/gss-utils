@@ -266,6 +266,9 @@ class Distribution(Metadata):
                                             file_type='ods',
                                             library='pyexcel-ods3')
                     return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
+        elif self.mediaType == 'text/csv':
+            with self.open() as csv_obj:
+                return pd.read_csv(csv_obj, **kwargs)
         elif self.mediaType == 'application/json':
             # Assume odata
             to_fetch = self.downloadURL
