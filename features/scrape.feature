@@ -134,7 +134,7 @@ Feature: Scrape dataset info
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Statistics on Alcohol, England"
-    Then dct:title should be `"Statistics on Alcohol, England 2019 [PAS]"@en`
+    Then dct:title should be `"Statistics on Alcohol, England 2020"@en`
     And dct:publisher should be `gov:nhs-digital`
 
   Scenario: Scrape PHE fingertips reference via gov.uk collection

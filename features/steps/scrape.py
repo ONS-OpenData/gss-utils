@@ -6,12 +6,14 @@ import requests
 from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
 
-RECORD = 'new_episodes'
+DEFAULT_RECORD_MODE = 'new_episodes'
 
 
 @given('I scrape the page "{uri}"')
 def step_impl(context, uri):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.scraper = Scraper(uri, requests.Session())
 
 
@@ -55,7 +57,9 @@ def step_impl(context, prefix, property, object):
 
 @step("fetch the distribution as a databaker object")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         if not hasattr(context, 'distribution'):
             context.distribution = context.scraper.distribution(latest=True)
         context.databaker = context.distribution.as_databaker(latest=True)
@@ -89,7 +93,9 @@ def step_impl(context):
 
 @step("fetch the '{tabname}' tab as a pandas DataFrame")
 def step_impl(context, tabname):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
@@ -107,7 +113,9 @@ def step_impl(context, title_start):
 
 @then("fetch the tabs as a dict of pandas DataFrames")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.distribution.as_pandas()
         eq_(type(context.pandas), dict)
 
@@ -141,11 +149,15 @@ def step_impl(context, title):
 
 @step("fetch the distribution as a pandas dataframe")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.pandas = context.distribution.as_pandas()
 
 
 @step('fetch the distribution as a pandas dataframe with encoding "{encoding}"')
 def step_impl(context, encoding):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.pandas = context.distribution.as_pandas(encoding=encoding)
