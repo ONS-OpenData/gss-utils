@@ -5,7 +5,7 @@ Feature: Scrape dataset info
 
   Scenario: Scrape ONS
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/annualforeigndirectinvestment2017inward.xls"
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/inwardfdistatisticaltables.xlsx"
     And the title should be "Foreign direct investment involving UK companies: inward"
     And the publication date should be "2018-12-04"
     And the comment should be "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."
@@ -149,7 +149,7 @@ Feature: Scrape dataset info
     Then dct:title should be `"Dwelling Stock Estimates"@en`
     And rdfs:comment should be `"Estimates of the number of dwellings in Wales by tenure and for each local authority, as at 31 March each year."@en`
     And dct:publisher should be `gov:welsh-government`
-    And dct:issued should be `"2018-04-26"^^xsd:date`
+    And dct:issued should be `"2019-09-10"^^xsd:date`
     And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
 
   Scenario: Scrape old gov.scot dataset page
