@@ -1,7 +1,8 @@
-from gssutils.scrapers import ons, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
+from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
     govscot
 
 scraper_list = [
+    ('https://api.beta.ons.gov.uk', onscmd.scrape),
     ('https://www.ons.gov.uk/', ons.scrape),
     ('https://www.gov.uk/government/statistics/', govuk.scrape_stats),
     ('https://www.gov.uk/government/statistical-data-sets/', govuk.scrape_sds),
