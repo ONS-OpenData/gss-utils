@@ -7,7 +7,7 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/inwardfdistatisticaltables.xlsx"
     And the title should be "Foreign direct investment involving UK companies: inward"
-    And the publication date should be "2018-12-04"
+    And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
     And the comment should be "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."
     And the contact email address should be "mailto:fdi@ons.gov.uk"
 
@@ -16,7 +16,7 @@ Feature: Scrape dataset info
     Then dct:title should be `"Foreign direct investment involving UK companies: inward"@en`
     And rdfs:comment should be `"Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."@en`
     And dct:publisher should be `gov:office-for-national-statistics`
-    And dct:issued should be `"2018-12-04"^^xsd:date`
+    And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
     And dcat:contactPoint should be `<mailto:fdi@ons.gov.uk>`
 
   Scenario: Scrape gov.uk template
@@ -43,7 +43,7 @@ Feature: Scrape dataset info
   Scenario: Scrape NISRA
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
     Then the title should be "2017 Mid Year Population Estimates for Northern Ireland (NEW FORMAT TABLES)"
-    And dct:issued should be `"2018-06-28"^^xsd:date`
+    And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
     And dcat:keyword should be `"Population, Mid Year Population Estimates"@en`
     And dct:publisher should be `gov:northern-ireland-statistics-and-research-agency`
     And select the distribution given by
@@ -61,7 +61,7 @@ Feature: Scrape dataset info
   Scenario: Scrape gov.uk statistical-data-sets
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras51-reported-drinking-and-driving"
     Then the title should be "Reported drinking and driving (RAS51)"
-    And the publication date should be "2014-02-06"
+    And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
     And the comment should be "Data about the reported drink-drive accidents and casualties, produced by Department for Transport."
     And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
     And dct:publisher should be `gov:department-for-transport`
@@ -69,7 +69,7 @@ Feature: Scrape dataset info
   Scenario: Scrape NI DoJ
     Given I scrape the page "https://www.justice-ni.gov.uk/publications/research-and-statistical-bulletin-82017-views-alcohol-and-drug-related-issues-findings-october-2016"
     Then the title should be "Research and Statistical Bulletin 8/2017 ‘Views on Alcohol and Drug Related Issues: Findings from the October 2016 Northern Ireland Omnibus Survey’"
-    And the publication date should be "2017-03-08"
+    And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
 
   Scenario: Scrape ISD Scotland
     Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
@@ -85,7 +85,7 @@ Feature: Scrape dataset info
 
   Scenario: Scrape ONS User Requested Data
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/adhocs/008596individualcountrydatagoodsonamonthlybasisfromjanuary1998toapril2018"
-    Then the title should be "Individual country data (goods) on a monthly basis from January 1998 to April 2018"
+    Then the title should match "Individual country data \(goods\) on a monthly basis.*"
     And the comment should be "Exports and imports goods data by individual country for UK trade in goods."
     And the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/adhocs/008596individualcountrydatagoodsonamonthlybasisfromjanuary1998toapril2018/04.allcountriesapril2018.xls"
 
@@ -127,21 +127,21 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.gov.uk/government/collections/alcohol-and-drug-misuse-and-treatment-statistics"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
-    Then dct:title should be `"Substance misuse treatment for adults: statistics 2017 to 2018"@en`
+    Then dct:title should match `"Substance misuse treatment for adults.*"@en`
     And dct:publisher should be `gov:public-health-england`
 
   Scenario: Scrape NHS digital
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Statistics on Alcohol, England"
-    Then dct:title should be `"Statistics on Alcohol, England 2020"@en`
+    Then dct:title should match `"Statistics on Alcohol, England.*"@en`
     And dct:publisher should be `gov:nhs-digital`
 
   Scenario: Scrape PHE fingertips reference via gov.uk collection
     Given I scrape the page "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Local Alcohol Profiles"
-    Then dct:title should be `"Local Alcohol Profiles for England: May 2019 data update"@en`
+    Then dct:title should match `"Local Alcohol Profiles for England.*"@en`
     And dct:publisher should be `gov:public-health-england`
 
   Scenario: Scrape StatsWales OData
@@ -149,7 +149,7 @@ Feature: Scrape dataset info
     Then dct:title should be `"Dwelling Stock Estimates"@en`
     And rdfs:comment should be `"Estimates of the number of dwellings in Wales by tenure and for each local authority, as at 31 March each year."@en`
     And dct:publisher should be `gov:welsh-government`
-    And dct:issued should be `"2019-09-10"^^xsd:date`
+    And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
     And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
 
   Scenario: Scrape old gov.scot dataset page
@@ -157,7 +157,7 @@ Feature: Scrape dataset info
     Then dct:title should be `"Stock by tenure"@en`
     And the data can be downloaded from "https://www2.gov.scot/Resource/0054/00540622.xls"
     And dct:publisher should be `gov:the-scottish-government`
-    And dct:issued should be `"2018-09-21"^^xsd:date`
+    And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
 
   Scenario: ONS MRETS as csv, xlsx and structured text
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
@@ -178,4 +178,4 @@ Feature: Scrape dataset info
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-outcomes-framework-ascof"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Measures"
-    Then dct:title should be `"Measures from the Adult Social Care Outcomes Framework, England, 2018-19"@en`
+    Then dct:title should match `"Measures from the Adult Social Care Outcomes Framework, England.*"@en`

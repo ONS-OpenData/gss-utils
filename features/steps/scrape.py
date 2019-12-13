@@ -29,14 +29,19 @@ def step_impl(context, title):
     assert_equal(context.scraper.title, title)
 
 
-@step('the publication date should be "{date}"')
-def step_impl(context, date):
-    assert_equal(context.scraper.publication_date, date)
+@step('the title should match "{title}"')
+def step_impl(context, title):
+    assert_regexp_matches(context.scraper.title, title)
 
 
-@step('the next release date should be "{date}"')
+@step('the publication date should match "{date}"')
 def step_impl(context, date):
-    assert_equal(context.scraper.next_release, date)
+    assert_regexp_matches(context.scraper.publication_date, date)
+
+
+@step('the next release date should match "{date}"')
+def step_impl(context, date):
+    assert_regexp_matches(context.scraper.next_release, date)
 
 
 @step('the description should start "{description}"')
@@ -53,6 +58,12 @@ def step_impl(context, email):
 def step_impl(context, prefix, property, object):
     ns = {'dct': DCTERMS, 'dcat': DCAT, 'rdfs': RDFS}.get(prefix)
     assert_equal(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
+
+
+@then("{prefix}:{property} should match `{object}`")
+def step_impl(context, prefix, property, object):
+    ns = {'dct': DCTERMS, 'dcat': DCAT, 'rdfs': RDFS}.get(prefix)
+    assert_regexp_matches(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
 
 
 @step("fetch the distribution as a databaker object")
