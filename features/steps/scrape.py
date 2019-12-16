@@ -24,6 +24,13 @@ def step_impl(context, uri):
     assert_equal(context.distribution.downloadURL, uri)
 
 
+@then('the data download URL should match "{uri}"')
+def step_impl(context, uri):
+    if not hasattr(context, 'distribution'):
+        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+    assert_regexp_matches(context.distribution.downloadURL, uri)
+
+
 @step('the title should be "{title}"')
 def step_impl(context, title):
     assert_equal(context.scraper.title, title)
