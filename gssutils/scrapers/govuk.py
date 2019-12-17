@@ -1,6 +1,7 @@
 import mimetypes
 import re
 from dateutil.parser import parse
+import logging
 
 from gssutils.metadata import Distribution, ODS, ZIP, Excel, PDF
 from urllib.parse import urljoin
@@ -69,9 +70,12 @@ def scrape_sds(scraper, tree):
         elif filetype == 'MS Excel Spreadsheet':
             dist.mediaType = Excel
         scraper.distributions.append(dist)
-    email_link = tree.xpath("//div[contains(concat(' ', @class, ' '), ' contact ')]//a[@class='email']")[0]
-    scraper.dataset.contactPoint = email_link.get('href')
-
+    try:
+        email_link = tree.xpath("//div[contains(concat(' ', @class, ' '), ' contact ')]//a[@class='email']")[0]
+        scraper.dataset.contactPoint = email_link.get('href')
+    except IndexError:
+        # sometimes we don't have an email address listed on the page, it's fine but throw a warning
+        logging.warning("no contact address for dataset provided on page, skipping")
 
 def scrape_collection(scraper, tree):
     date_re = re.compile(r'[0-9]{1,2} (January|February|March|April|May|June|' +
