@@ -3,8 +3,10 @@ import re
 from dateutil.parser import parse
 import logging
 
-from gssutils.metadata import Distribution, ODS, ZIP, Excel, PDF
-from urllib.parse import urljoin
+from lxml import html
+
+from gssutils.metadata import Distribution, ODS, ZIP, Excel, PDF, PMDDataset
+from urllib.parse import urljoin, urlparse
 
 
 def scrape_common(scraper, tree):
@@ -77,6 +79,7 @@ def scrape_sds(scraper, tree):
         # sometimes we don't have an email address listed on the page, it's fine but throw a warning
         logging.warning("no contact address for dataset provided on page, skipping")
 
+
 def scrape_collection(scraper, tree):
     date_re = re.compile(r'[0-9]{1,2} (January|February|March|April|May|June|' +
                          'July|August|September|October|November|December) [0-9]{4}')
@@ -96,3 +99,99 @@ def scrape_collection(scraper, tree):
             ds = ds_scraper.dataset
             ds.distribution = ds_scraper.distributions
             scraper.catalog.dataset.append(ds)
+
+
+def content_api(scraper, tree):
+    uri_components = urlparse(scraper.uri)
+    metadata = scraper.session.get(f'https://www.gov.uk/api/content/{uri_components.path}').json()
+    schema = metadata['schema_name']
+    if schema == 'document_collection':
+        content_api_collection(scraper, metadata)
+    elif schema == 'publication':
+        scraper.dataset = content_api_publication(scraper, metadata)
+        scraper.distributions = scraper.dataset.distribution
+    else:
+        logging.warning(f'Unknown schema type {schema}')
+
+
+def content_api_collection(scraper, metadata):
+    if 'title' in metadata:
+        scraper.catalog.title = metadata['title']
+    if 'description' in metadata:
+        scraper.catalog.comment = metadata['description']
+    if 'first_published_at' in metadata:
+        scraper.catalog.issued = metadata['first_published_at']
+    if 'updated_at' in metadata:
+        scraper.catalog.modified = metadata['updated_at']
+    if 'links' in metadata and 'organisations' in metadata['links']:
+        orgs = metadata['links']['organisations']
+        if len(orgs) == 0:
+            logging.warning("No publishing organisations listed.")
+        elif len(orgs) >= 1:
+            if len(orgs) > 1:
+                logging.warning('More than one organisation listed, taking the first.')
+            scraper.catalog.publisher = orgs[0]["web_url"]
+    scraper.catalog.dataset = []
+    if 'links' in metadata and 'documents' in metadata['links']:
+        for doc in metadata['links']['documents']:
+            if 'schema_name' in doc and doc['schema_name'] == 'publication':
+                ds = content_api_publication(scraper, doc)
+                scraper.catalog.dataset.append(ds)
+
+
+def content_api_publication(scraper, metadata):
+    ds = PMDDataset()
+    if 'title' in metadata:
+        ds.title = metadata['title']
+    if 'description' in metadata:
+        ds.description = metadata['description']
+    if 'api_url' in metadata:
+        doc_info = scraper.session.get(metadata['api_url']).json()
+    else:
+        doc_info = metadata
+    if 'first_published_at' in doc_info:
+        ds.issued = doc_info['first_published_at']
+    if 'links' in doc_info and 'organisations' in doc_info['links']:
+        orgs = doc_info['links']['organisations']
+        if len(orgs) == 0:
+            logging.warning("No publishing organisations listed.")
+        elif len(orgs) >= 1:
+            if len(orgs) > 1:
+                logging.warning('More than one organisation listed, taking the first.')
+            ds.publisher = orgs[0]["web_url"]
+    if 'details' in doc_info and 'documents' in doc_info['details']:
+        distributions = []
+        for link in doc_info['details']['documents']:
+            link_tree = html.fromstring(link)
+            div_attach = next(iter(link_tree.xpath("//div[@class='attachment-details']")), None)
+            if div_attach is not None:
+                div_metadata = next(iter(div_attach.xpath("p[@class='metadata']")), None)
+                if div_metadata is not None:
+                    span_type = next(iter(div_metadata.xpath("span[@class='type']")), None)
+                    if span_type is not None:
+                        span_size = next(iter(div_metadata.xpath("span[@class='file-size']/text()")), None)
+                        if span_size is not None:
+                            dist = Distribution(scraper)
+                            # https://en.wikipedia.org/wiki/Kilobyte kB = 1000 while KB = 1024
+                            # https://en.wikipedia.org/wiki/Megabyte MB = 10^6 bytes
+                            if span_size.endswith('KB'):
+                                dist.byteSize = int(float(span_size[:-2]) * 1024)
+                            elif span_size.endswith('kB'):
+                                dist.byteSize = int(float(span_size[:-2]) * 1000)
+                            elif span_size.endswith('MB'):
+                                dist.byteSize = int(float(span_size[:-2]) * 1000000)
+                            anchor = next(iter(div_attach.xpath("h2/a")), None)
+                            if anchor is not None:
+                                url = anchor.get('href')
+                                if url is not None:
+                                    dist.downloadURL = urljoin('https://www.gov.uk/', url)
+                                if hasattr(anchor, 'text'):
+                                    dist.title = anchor.text.strip()
+                            dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+                            abbr_type = next(iter(span_type.xpath("abbr/text()")), None)
+                            if abbr_type is not None:
+                                if abbr_type.upper() == 'PDF':
+                                    dist.mediaType = PDF
+                            distributions.append(dist)
+        ds.distribution = distributions
+    return ds

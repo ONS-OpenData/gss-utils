@@ -4,9 +4,7 @@ from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_go
 scraper_list = [
     ('https://api.beta.ons.gov.uk', onscmd.scrape),
     ('https://www.ons.gov.uk/', ons.scrape),
-    ('https://www.gov.uk/government/statistics/', govuk.scrape_stats),
-    ('https://www.gov.uk/government/statistical-data-sets/', govuk.scrape_sds),
-    ('https://www.gov.uk/government/collections/', govuk.scrape_collection),
+    ('https://www.gov.uk/government/', govuk.content_api),
     ('https://www.nrscotland.gov.uk/statistics-and-data/statistics/', nrscotland.scrape),
     ('https://www.nisra.gov.uk/publications/', nisra.scrape),
     ('https://www.uktradeinfo.com/Statistics/Pages/', hmrc.scrape_pages),
