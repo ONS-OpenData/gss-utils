@@ -60,8 +60,8 @@ def scrape(scraper, tree):
     # note: the reasons we're being this careful is the timer parser will throw an error for bad input
     # and kill the scrape dead.
     try:
-        if landing_page["description"]["nextRelease"] != "To be announced" and \
-                landing_page["description"]["nextRelease"] != "":
+        # TODO - a list of things that aren't a date won't scale. Put a real catch in if we get any more.
+        if landing_page["description"]["nextRelease"] not in ["To be announced", "Discontinued", ""]:
             scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
     except KeyError:
         # if there's no such key in the dict, python will throw a key error. Catch and control it.
