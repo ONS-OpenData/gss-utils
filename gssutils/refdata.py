@@ -2,83 +2,85 @@
 
 
 
-def create_ref_data(mainDat, paramDat, addPriority):
-    try:
-        #################################################################################################
-        #### Variable setup section
-        refClPath = Path('reference/codelists')
-        refClPath.mkdir(exist_ok=True, parents=True)
-        refPath = Path('reference')
-        noCodeListsCreated = 0
-        #### Initialise a temporary Columns dataset, this will be overwritten in the loop
-        colTbl = create_columns_csv_def('TEMP', 'TEMP', 'D')
-        #### Initialse a temporary Components dataset, this will be overwritten in the loop
-        comTbl = create_components_csv_def('TEMP', 'TEMP', 'D', '')
-        
-        #### Loop around each row of the Column Parameter dataset
-        for i in range(0, len(paramDat)):
-            ##################################################################################################
-            #### Set up some variables
-            columnName = paramDat.iloc[i,0]           #### Main Column Name.
-            createList = paramDat.iloc[i,1]           #### Create a codelist, Y or N
-            componentType = paramDat.iloc[i,2]        #### Component Type, Dimension, Attribute etc.
-            descript =  paramDat.iloc[i,3]            #### Description of the Column.
-            
-            #### Assign the Component type
-            if componentType == 'M':
-                compTpeCapital = 'Measure'
-                compTpeLower = 'measure'
-            elif componentType == 'A':
-                compTpeCapital = 'Attribute'
-                compTpeLower = 'attribute'
-            else:
-                compTpeCapital = 'Dimension'
-                compTpeLower = 'dimension'
-            
-            #### Slugify the column name, make lowercase and replace spaces, hyphens with underscores(_)
-            #### THIS MIGHT NEED OTHER THINGS TAKEN OUT OR REPLACED AS AND WHEN FOUND
-            slugColumnName = columnName.replace(' ','-').replace('_','-').lower()
-            
+class generate_ref_data:
+    
+    def create_ref_data(mainDat, paramDat, addPriority):
+        try:
             #################################################################################################
-            #### This is the CODELIST section, only create if value is Y
-            if createList == 'Y':
-                ret = create_codelist(mainDat[columnName], columnName, slugColumnName, addPriority, refClPath)
-                if ret == 'Success':
-                    noCodeListsCreated = noCodeListsCreated + 1
-            
-            #################################################################################################
-            #### This is the COLUMNS.CSV section, create new instance of columns during first loop and concatenate on further loops.
-            #### File will need to be altered by hand to change references to external ones
-            #### The Value column is created just like the others so will also need to be altered later.
-            if i == 1:
-                colTbl = create_columns_csv_def(columnName, slugColumnName, compTpeLower)
-            else:
-                colTbl = pd.concat([colTbl, create_columns_csv_def(columnName, slugColumnName, compTpeLower)])
-            
-            #################################################################################################
-            #### This is the COMPONENTS section, create new instance of columns during first loop and concatenate on further loops.
-            #### File will need to be altered by hand to change references to external ones
-            #### All Columns are put in file so any not needed will need to be removed after
-            if i == 1:
-                comTbl = create_components_csv_def(columnName, slugColumnName, compTpeCapital, descript)
-            else:
-                comTbl = pd.concat([comTbl, create_components_csv_def(columnName, slugColumnName, compTpeCapital, descript)])
-        
-        #####################################################################################################
-        #### OUT OF THE LOOP
-        
-        #### Output COLUMNS data to CSV
-        colTbl.to_csv(refPath / 'columns.csv', index = False)
-        
-        #### Output COMPONENTS data to CSV
-        comTbl.to_csv(refPath / 'components.csv', index = False)
-        
-        return f'{noCodeListsCreated} Codelists Created'
-    except Exception as e:
-        return "createReferenceData Error: " + str(e)
+            #### Variable setup section
+            refClPath = Path('reference/codelists')
+            refClPath.mkdir(exist_ok=True, parents=True)
+            refPath = Path('reference')
+            noCodeListsCreated = 0
+            #### Initialise a temporary Columns dataset, this will be overwritten in the loop
+            colTbl = create_columns_csv_def('TEMP', 'TEMP', 'D')
+            #### Initialse a temporary Components dataset, this will be overwritten in the loop
+            comTbl = create_components_csv_def('TEMP', 'TEMP', 'D', '')
 
+            #### Loop around each row of the Column Parameter dataset
+            for i in range(0, len(paramDat)):
+                ##################################################################################################
+                #### Set up some variables
+                columnName = paramDat.iloc[i,0]           #### Main Column Name.
+                createList = paramDat.iloc[i,1]           #### Create a codelist, Y or N
+                componentType = paramDat.iloc[i,2]        #### Component Type, Dimension, Attribute etc.
+                descript =  paramDat.iloc[i,3]            #### Description of the Column.
 
-def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
+                #### Assign the Component type
+                if componentType == 'M':
+                    compTpeCapital = 'Measure'
+                    compTpeLower = 'measure'
+                elif componentType == 'A':
+                    compTpeCapital = 'Attribute'
+                    compTpeLower = 'attribute'
+                else:
+                    compTpeCapital = 'Dimension'
+                    compTpeLower = 'dimension'
+
+                #### Slugify the column name, make lowercase and replace spaces, hyphens with underscores(_)
+                #### THIS MIGHT NEED OTHER THINGS TAKEN OUT OR REPLACED AS AND WHEN FOUND
+                slugColumnName = columnName.replace(' ','-').replace('_','-').lower()
+
+                #################################################################################################
+                #### This is the CODELIST section, only create if value is Y
+                if createList == 'Y':
+                    ret = create_codelist(mainDat[columnName], columnName, slugColumnName, addPriority, refClPath)
+                    if ret == 'Success':
+                        noCodeListsCreated = noCodeListsCreated + 1
+
+                #################################################################################################
+                #### This is the COLUMNS.CSV section, create new instance of columns during first loop and concatenate on further loops.
+                #### File will need to be altered by hand to change references to external ones
+                #### The Value column is created just like the others so will also need to be altered later.
+                if i == 1:
+                    colTbl = create_columns_csv_def(columnName, slugColumnName, compTpeLower)
+                else:
+                    colTbl = pd.concat([colTbl, create_columns_csv_def(columnName, slugColumnName, compTpeLower)])
+
+                #################################################################################################
+                #### This is the COMPONENTS section, create new instance of columns during first loop and concatenate on further loops.
+                #### File will need to be altered by hand to change references to external ones
+                #### All Columns are put in file so any not needed will need to be removed after
+                if i == 1:
+                    comTbl = create_components_csv_def(columnName, slugColumnName, compTpeCapital, descript)
+                else:
+                    comTbl = pd.concat([comTbl, create_components_csv_def(columnName, slugColumnName, compTpeCapital, descript)])
+
+            #####################################################################################################
+            #### OUT OF THE LOOP
+
+            #### Output COLUMNS data to CSV
+            colTbl.to_csv(refPath / 'columns.csv', index = False)
+
+            #### Output COMPONENTS data to CSV
+            comTbl.to_csv(refPath / 'components.csv', index = False)
+
+            return f'{noCodeListsCreated} Codelists Created'
+        except Exception as e:
+            return "createReferenceData Error: " + str(e)
+        
+        
+    def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
     try:
         #### Set up the columns headings for the file
         titles =(
@@ -108,9 +110,9 @@ def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
         return 'Success'
     except Exception as e:
         return "createCodeList Error: " + str(e)
-
-
-def create_columns_csv_def(colNme, slugColNme, compTpe):
+    
+    
+    def create_columns_csv_def(colNme, slugColNme, compTpe):
     try:
         #### Create column heading definition for the columns.csv file
         colTitles = (
@@ -140,9 +142,9 @@ def create_columns_csv_def(colNme, slugColNme, compTpe):
         return colOut
     except Exception as e:
         return "createColumnsCSVDef: " + str(e)
-
-
-def create_components_csv_def(colNme, slugColNme, compTpe, desc):
+    
+    
+    def create_components_csv_def(colNme, slugColNme, compTpe, desc):
     try:       
         #### Create column heading definition for the components.csv file
         colTitles = (
@@ -162,7 +164,6 @@ def create_components_csv_def(colNme, slugColNme, compTpe, desc):
         return comOut
     except Exception as e:
         return "createComponentsCSVDef: " + str(e)
-
 
 """
 #################### EXAMPLE CODE FOR CALLING THE ABOVE METHODS ####################
