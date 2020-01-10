@@ -144,7 +144,7 @@ def create_columns_csv_def(colNme, slugColNme, compTpe):
         return "createColumnsCSVDef: " + str(e)
     
     
-    def create_components_csv_def(colNme, slugColNme, compTpe, desc):
+def create_components_csv_def(colNme, slugColNme, compTpe, desc):
     try:       
         #### Create column heading definition for the components.csv file
         colTitles = (
