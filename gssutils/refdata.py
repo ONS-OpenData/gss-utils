@@ -1,6 +1,6 @@
 # ###### CODE TO CREATE A SET OF CODELISTS IN CSV FORMAT AS WELL AS COLUMN.CSV AND COMPONENTS.CSV FILES
 
-from gssutils.utils import pathify
+from gssutils.utils import *
 
 
 # +
