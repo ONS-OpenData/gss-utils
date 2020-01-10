@@ -1,10 +1,11 @@
 # ###### CODE TO CREATE A SET OF CODELISTS IN CSV FORMAT AS WELL AS COLUMN.CSV AND COMPONENTS.CSV FILES
 
+from gssutils.utils import pathify
 
 
-class generate_ref_data:
+class create_ref_data:
     
-    def create_ref_data(mainDat, paramDat, addPriority):
+    def __init__(self, mainDat, paramDat, addPriority):
         try:
             #################################################################################################
             #### Variable setup section
