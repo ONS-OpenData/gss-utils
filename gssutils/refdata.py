@@ -2,6 +2,7 @@
 
 from gssutils.utils import pathify
 from pathlib import Path
+import pandas as pd
 
 # +
 def create_ref_data(mainDat, paramDat, addPriority):
