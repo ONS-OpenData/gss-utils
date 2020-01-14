@@ -1,6 +1,6 @@
-# ###### CODE TO CREATE A SET OF REFERENCE DATA FOR A PASSED DATASET: CODELISTS IN CSV FORMAT AS WELL AS A                          ###### COLUMN.CSV AND COMPONENTS.CSV FILE
-
 """
+###### CODE TO CREATE A SET OF REFERENCE DATA FOR A PASSED DATASET: CODELISTS IN CSV FORMAT AS WELL AS                          ###### COLUMN.CSV AND COMPONENTS.CSV FILE
+###### COLUMNS.CSV and COMPONENTS.CSV FILES
 These methods take the data you have transformed and creates a set of reference files from it. 
 You will have had to create and defined a DataFrame that defines some parameters of the transformed data:
     1. Column heading names from transformed data
@@ -61,7 +61,7 @@ The components.csv file will also need similar amendments.
 Future versions of this code will hopefully reduce the amount of changes needed to the output files.
 Codelist files need to be checked for NAs, NANs or blanks
 
-The main methods returns the number of codelist files created
+The main methods returns a string saying how many codelist files where created
 """
 
 from gssutils.utils import pathify
