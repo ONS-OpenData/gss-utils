@@ -60,6 +60,8 @@ This would normally have to reference the statistical geography web site so some
 The components.csv file will also need similar amendments. 
 Future versions of this code will hopefully reduce the amount of changes needed to the output files.
 Codelist files need to be checked for NAs, NANs or blanks
+
+The main methods returns the number of codelist files created
 """
 
 from gssutils.utils import pathify
@@ -271,5 +273,5 @@ cols[colNmes[3]][6] = ''
 cols[colNmes[3]][7] = ''
 cols[colNmes[3]][8] = ''
 #### Pass the method the data, the column info and True if you want the Sort priority added to the codelists, else False
-cde = createReferenceData(tbl, cols, True)
+noFls = create_ref_data(tbl, cols, True)
 """
