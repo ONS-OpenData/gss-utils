@@ -1,4 +1,66 @@
-# ###### CODE TO CREATE A SET OF CODELISTS IN CSV FORMAT AS WELL AS COLUMN.CSV AND COMPONENTS.CSV FILES
+# ###### CODE TO CREATE A SET OF REFERENCE DATA FOR A PASSED DATASET: CODELISTS IN CSV FORMAT AS WELL AS A                          ###### COLUMN.CSV AND COMPONENTS.CSV FILE
+
+"""
+These methods take the data you have transformed and creates a set of reference files from it. 
+You will have had to create and defined a DataFrame that defines some parameters of the transformed data:
+    1. Column heading names from transformed data
+    2. For each one, if you want to create a codelist, Y/N
+    3. What type of column it is, D (Dimension), M (Measure), A (Attribute)
+    4. A description of the column heading for the components.csv file (OPTIONAL)
+An example of the parameter DataFrame needed is shown at the bottom of this file.
+
+To run the code you need call the create_ref_data() method and pass it:
+    1. The transformed dataset (mainDat)
+    2. The parameter dataset (paramDat)
+    3. If you want to add a priority numbering to each codelist file, True/False (addPriority)
+
+The create_ref_data method loops around each of the rows in the parameter dataset creating codelist, if needed 
+along with column.csv and components.csv files. create_ref_data calls the other 3 methods within the loop.
+
+    create_ref_data:
+        -> create_codelist
+        -> create_columns_csv_def
+        -> create_components_csv_def
+
+The create_ref_data method creates a folder called reference within your current folder path and adds the 
+columns.csv and components.csv file to it. within the reference folder it creates a dataset folder and places
+any codelist.csv files into it.
+    current folder path/
+        -> reference/
+            -> columns.csv
+            -> components.csv
+            -> codelists/
+                -> codelist1.csv 
+                -> codelist2.csv 
+                   Codelist file names will be the column heading passed within the parameters DataFrame
+                   with any spaces replaced with a - and all lowercase
+                   
+When the columns.csv and components.csv files are created it treats all columns as if they have had codelists created
+adding URIs where needed. It also treats the Value column this way. You will need to open the files and alter as needed.
+So if you have a Column that references Sex (M|F|T) then you will need to open the file and change the data to
+point to the relevent URIs. 
+For instance, if you have a column called ONS Geography then it will be defined as follows
+    title:                ONS Geography
+    name:                 ons_geography
+    component_attachment: qb:dimension
+    property_template:    http://gss-data.org.uk/def/dimension/ons-geography
+    value_template:       http://gss-data.org.uk/def/concept/ons-geography/{ons_geography}
+    datatype:             string
+    value_transformation: slugize
+    regex:                {Empty}
+    range:                http://gss-data.org.uk/def/classes/ons-geography/ons_geography
+
+This would normally have to reference the statistical geography web site so some values will need to be changed to:
+    property_template:    http://purl.org/linked-data/sdmx/2009/dimension#refArea
+    value_template:       http://statistics.data.gov.uk/id/statistical-geography/{ons_geography}
+    value_transformation: {Empty}
+    regex:                [A-Z][0-9]{8}
+    range:                {Empty}
+
+The components.csv file will also need similar amendments. 
+Future versions of this code will hopefully reduce the amount of changes needed to the output files.
+Codelist files need to be checked for NAs, NANs or blanks
+"""
 
 from gssutils.utils import pathify
 from pathlib import Path
@@ -78,7 +140,7 @@ def create_ref_data(mainDat, paramDat, addPriority):
 
         return f'{noCodeListsCreated} Codelists Created'
     except Exception as e:
-        return "createReferenceData Error: " + str(e)
+        return "create_ref_data Error: " + str(e)
         
         
 def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
@@ -97,7 +159,7 @@ def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
         
         #### Create the standard codelist and output
         cdeLst.columns = [titles[0]]
-        cdeLst[titles[1]] = cdeLst[titles[0]].apply(pathify)
+        cdeLst[titles[1]] = cdeLst[titles[0]].apply(pathify) # pathified version of the column name
         cdeLst[titles[1]] = cdeLst[titles[1]].str.replace('/', '-', regex=True)
         cdeLst[titles[2]] = ''
         if addPriority:
@@ -110,7 +172,7 @@ def create_codelist(colDat, colNme, slugColNme, addPriority, referencePath):
                         
         return 'Success'
     except Exception as e:
-        return "createCodeList Error: " + str(e)
+        return "create_codelist Error: " + str(e)
     
     
 def create_columns_csv_def(colNme, slugColNme, compTpe):
@@ -142,7 +204,7 @@ def create_columns_csv_def(colNme, slugColNme, compTpe):
         
         return colOut
     except Exception as e:
-        return "createColumnsCSVDef: " + str(e)
+        return "create_columns_csv_def: " + str(e)
     
     
 def create_components_csv_def(colNme, slugColNme, compTpe, desc):
@@ -164,7 +226,7 @@ def create_components_csv_def(colNme, slugColNme, compTpe, desc):
         
         return comOut
     except Exception as e:
-        return "createComponentsCSVDef: " + str(e)
+        return "create_components_csv_def: " + str(e)
 # -
 
 """
@@ -186,7 +248,7 @@ cols[colNmes[1]][5] = 'N'
 cols[colNmes[1]][6] = 'Y'
 cols[colNmes[1]][7] = 'N'
 cols[colNmes[1]][8] = 'N'
-#### Create a Column to define what type a Column it is, Dimension (D), Attribute (A), Measure (M) etc.
+#### Create a Column to define what type of Column it is, Dimension (D), Attribute (A), Measure (M) etc.
 cols[colNmes[2]] = ''
 cols[colNmes[2]][0] = 'D'
 cols[colNmes[2]][1] = 'D'
