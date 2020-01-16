@@ -54,16 +54,20 @@ Feature: distribution downloading
 
   Scenario: DfT statistics data set
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras51-reported-drinking-and-driving"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Drink-drive accidents and casualties"
     And select the distribution whose title starts with "Reported drink drive accidents and casualties in Great Britain since 1979"
-    Then fetch the 'RAS51001_Table_' tab as a pandas DataFrame
+    Then fetch the 'RAS51001' tab as a pandas DataFrame
 
   Scenario: DfT statistics data set including Excel
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras45-quarterly-statistics"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Latest rolling annual total"
     And select the distribution given by
-      | key       | value                                                                                             |
-      | mediaType | application/vnd.oasis.opendocument.spreadsheet                                                    |
-      | title     | Reported road casualties by severity (estimates): Great Britain, rolling annual totals, quarterly |
-    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/754497/ras45001.ods"
+      | key       | value                                                                                                      |
+      | mediaType | application/vnd.oasis.opendocument.spreadsheet                                                             |
+      | title     | Reported road accidents, by road type (estimates): Great Britain, rolling annual totals, updated quarterly |
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/588103/ras45009.ods"
     
   Scenario: NI DoJ Excel data as DataBaker
     Given I scrape the page "https://www.justice-ni.gov.uk/publications/research-and-statistical-bulletin-82017-views-alcohol-and-drug-related-issues-findings-october-2016"
