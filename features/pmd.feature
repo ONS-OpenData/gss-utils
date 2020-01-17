@@ -63,7 +63,7 @@ Feature: PMD metadata
 
     Scenario: modified or updated
       Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
-      Then the modified date should be quite recent
+      Then the modified date should be around "2018-03-21"
 
     Scenario: catalog scraped datasets
       Given the 'JOB_NAME' environment variable is 'GSS/Health/ISD-Drugs-and-Alcohol'
