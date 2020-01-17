@@ -98,3 +98,8 @@ def step_impl(context):
 @step('the comment should be "{comment}"')
 def step_impl(context, comment):
     eq_(context.scraper.dataset.comment, comment)
+
+
+@then('the modified date should be around "{date}"')
+def step_impl(context, date):
+    eq_(context.scraper.dataset.modified.date(), datetime.fromisoformat(date).date())

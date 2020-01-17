@@ -60,8 +60,13 @@ Feature: Scrape dataset info
 
   Scenario: Scrape gov.uk statistical-data-sets
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/ras51-reported-drinking-and-driving"
-    Then the title should be "Reported drinking and driving (RAS51)"
-    And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
+    And the catalog has more than one dataset
+    When I select the dataset "Drink-drive accidents and casualties"
+    And select the distribution given by
+      | key       | value                                                                     |
+      | mediaType | application/vnd.oasis.opendocument.spreadsheet                            |
+      | title     | Reported drink drive accidents and casualties in Great Britain since 1979 |
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/827490/ras51001.ods"
     And the comment should be "Data about the reported drink-drive accidents and casualties, produced by Department for Transport."
     And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
     And dct:publisher should be `gov:department-for-transport`
@@ -179,3 +184,11 @@ Feature: Scrape dataset info
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Measures"
     Then dct:title should match `"Measures from the Adult Social Care Outcomes Framework, England.*"@en`
+
+  @skip
+  Scenario: MCHLG from gov.uk
+    Given I scrape the page "https://www.gov.uk/government/collections/dwelling-stock-including-vacants"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Table 100:"
+    Then dct:title should be `"Table 100: number of dwellings by tenure and district, England"@en`
+    And the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/814669/LT_100.xls"
