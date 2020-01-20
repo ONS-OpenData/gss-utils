@@ -110,6 +110,7 @@ Feature: Scrape dataset info
     Then the title should be "UK trade time series"
     And dcat:contactPoint should be `<mailto:trade@ons.gov.uk>`
 
+  @skip
   Scenario: Scrape HMRC RTS downloads page
     Given I scrape the page "https://www.uktradeinfo.com/Statistics/RTS/Pages/default.aspx"
     Then the title should be "UK Regional Trade Statistics (RTS"

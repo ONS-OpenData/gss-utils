@@ -170,7 +170,7 @@ Feature: Manage CSVW metadata for transformation to RDF
               dcat:Dataset ;
           rdfs:label "Alcohol-specific deaths in the UK"@en ;
           dct:creator gov:office-for-national-statistics ;
-          dct:issued "2018-12-04"^^xsd:date ;
+          dct:issued "2019-12-03"^^xsd:date ;
           dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
           dct:modified "2019-03-13T13:17:12"^^xsd:dateTime ;
           dct:publisher gov:office-for-national-statistics ;
