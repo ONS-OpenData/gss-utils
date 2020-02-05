@@ -67,7 +67,7 @@ Feature: Scrape dataset info
       | mediaType | application/vnd.oasis.opendocument.spreadsheet                            |
       | title     | Reported drink drive accidents and casualties in Great Britain since 1979 |
     Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/827490/ras51001.ods"
-    And the comment should be "Data about the reported drink-drive accidents and casualties, produced by Department for Transport."
+    And dct:description should match `"Data about the reported drink-drive accidents and casualties.*`
     And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
     And dct:publisher should be `gov:department-for-transport`
 
@@ -133,8 +133,9 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.gov.uk/government/collections/alcohol-and-drug-misuse-and-treatment-statistics"
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
-    Then dct:title should match `"Substance misuse treatment for adults.*"@en`
+    Then dct:title should match `"Substance misuse treatment for adults: statistics.*"@en`
     And dct:publisher should be `gov:public-health-england`
+    And dct:description should match `.*Alcohol and drug misuse and treatment in adults from PHE.*`
 
   Scenario: Scrape NHS digital
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
@@ -193,3 +194,8 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Table 100:"
     Then dct:title should be `"Table 100: number of dwellings by tenure and district, England"@en`
     And the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/814669/LT_100.xls"
+
+  Scenario: MCHLG LA housing stats from gov.uk
+    Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/local-authority-housing-statistics-data-returns-for-2018-to-2019"
+    When I select the latest dataset whose title starts with "Local"
+    Then dct:title should be `"Local authority housing statistics data returns for 2018 to 2019"@en`

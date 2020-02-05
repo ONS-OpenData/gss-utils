@@ -142,7 +142,9 @@ class Scraper:
     def select_dataset(self, **kwargs):
         dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
-        self.dataset.modified = datetime.now()
+        if not hasattr(self.dataset, 'description') and hasattr(self.catalog, 'description'):
+            self.dataset.description = self.catalog.description
+        self.dataset.modified = datetime.now() # TODO: decision on modified date
         self.update_dataset_uris()
         self.distributions = dataset.distribution
 
