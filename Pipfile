@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+behave = "*"
+nose = "*"
+vcrpy = "*"
+docker = "*"
+pipenv-setup = "*"
+
+[packages]
+gssutils = {editable = true,path = "."}
+requests = {extras = ["security"],version = "*"}
+certifi = "*"
+
+[requires]
+python_version = "3.7"
