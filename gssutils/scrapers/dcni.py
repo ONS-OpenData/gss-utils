@@ -13,6 +13,15 @@ from gssutils.utils import pathify
 
 def scrape(scraper, tree):
 
+    # A quick safety in case people are using this scraper incorrectly
+    if "?search=" not in scraper.uri:
+        raise Exception("""Aborting. This scraper is intended to run off the DCNI seach page.
+        Please modify your url to use the site search.
+
+        If in doubt, work from this page, change the quoted search text and capture the url
+        https://www.communities-ni.gov.uk/publications/topic/8182?search=%22Northern+Ireland+Housing+Bulletin%22&Search-exposed-form=Go&sort_by=field_published_date
+        """)
+
     scraper.dataset.publisher = GOV['department-for-communities-northern-ireland']
     scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-" \
         "government-licence/version/3/'
@@ -32,6 +41,10 @@ def scrape(scraper, tree):
         distributions_urls.append(scraper.uri.split("/publications/topic")[0] + href)
 
     # Create the individual distributions from the distributions urls
+
+    # keep track of dates issued so we can find the latest
+    last_issued = None
+
     for url in distributions_urls:
 
         # Get the distribution page
@@ -65,8 +78,16 @@ def scrape(scraper, tree):
         this_distribution.mediaType = media_type
 
         # Published and modifed time
-        this_distribution.issued = distro_tree.xpath("//*[@property='article:published_time']/@content")[0]
-        this_distribution.modified = distro_tree.xpath("//*[@property='article:modified_time']/@content")[0]
+        this_distribution.issued = parse(distro_tree.xpath("//*[@property='article:published_time']/@content")[0]).date()
+        this_distribution.modified = parse(distro_tree.xpath("//*[@property='article:modified_time']/@content")[0]).date()
         this_distribution.description = distro_tree.xpath("//*[@class='field-summary']/p/text()")[0]
 
+        if last_issued is None:
+            last_issued = this_distribution.issued
+        elif this_distribution.issued > last_issued:
+            last_issued = this_distribution.issued
+
         scraper.distributions.append(this_distribution)
+
+    # Whatever date the latest distribution was issued, is the last issued date for this "dataset"
+    scraper.dataset.issued = last_issued

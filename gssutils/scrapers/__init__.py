@@ -17,5 +17,5 @@ scraper_list = [
     ('https://digital.nhs.uk/data-and-information/publications/statistical/', nhs_digital.scrape),
     ('https://statswales.gov.wales/Catalogue', statswales.scrape),
     ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape),
-    ('https://www.communities-ni.gov.uk/publications/topic/', dcni.scrape)
+    ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape)
 ]
