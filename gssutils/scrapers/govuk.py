@@ -109,7 +109,7 @@ def content_api_publication(scraper, metadata):
 
 
 def extract_distributions(distributions, link_tree, scraper):
-    div_attach = next(iter(link_tree.xpath("//div[@class='attachment-details']")), None)
+    div_attach = next(iter(link_tree.xpath("div[@class='attachment-details']")), None)
     if div_attach is not None:
         div_metadata = next(iter(div_attach.xpath("p[@class='metadata']")), None)
         if div_metadata is not None:
@@ -181,6 +181,7 @@ def content_api_sds(scraper, metadata):
             for link_tree in sections:
                 extract_distributions(ds.distribution, link_tree, scraper)
             scraper.catalog.dataset.append(ds)
+            scraper.select_dataset(latest=True)
         else:
             for heading in body_tree.xpath("//h2[following-sibling::p/descendant::span[@class='attachment-inline']]"):
                 id = heading.get('id')
