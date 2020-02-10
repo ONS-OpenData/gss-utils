@@ -188,12 +188,10 @@ Feature: Scrape dataset info
     Then dct:title should match `"Measures from the Adult Social Care Outcomes Framework, England.*"@en`
 
   @skip
-  Scenario: MCHLG from gov.uk
-    Given I scrape the page "https://www.gov.uk/government/collections/dwelling-stock-including-vacants"
-    And the catalog has more than one dataset
-    When I select the latest dataset whose title starts with "Table 100:"
-    Then dct:title should be `"Table 100: number of dwellings by tenure and district, England"@en`
-    And the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/814669/LT_100.xls"
+  Scenario: MCHLG live tables from gov.uk
+    Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants"
+    And select the distribution whose title starts with "Table 100:"
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/814669/LT_100.xls"
 
   Scenario: MCHLG LA housing stats from gov.uk
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/local-authority-housing-statistics-data-returns-for-2018-to-2019"
