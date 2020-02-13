@@ -1,5 +1,5 @@
 from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
-    govscot
+    govscot, dcni
 
 scraper_list = [
     ('https://api.beta.ons.gov.uk', onscmd.scrape),
@@ -16,5 +16,6 @@ scraper_list = [
     ('http://www.isdscotland.org/Health-Topics/', isd_scotland.scrape),
     ('https://digital.nhs.uk/data-and-information/publications/statistical/', nhs_digital.scrape),
     ('https://statswales.gov.wales/Catalogue', statswales.scrape),
-    ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape)
+    ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape),
+    ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape)
 ]
