@@ -26,10 +26,6 @@ def scrape(scraper, tree):
     scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-" \
         "government-licence/version/3/'
 
-    # Get the dataset title as the original uri params we used
-    scraper.dataset.title = scraper.uri.split("search=%22")[1].split("%22")[0] \
-        .replace("+", " ")
-
     # We're taking each search result as a distribution
     search_result_urls = []
     for linkObj in tree.xpath("//h3/a"):

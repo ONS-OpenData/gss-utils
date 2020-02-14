@@ -106,12 +106,11 @@ Feature: Scrape dataset info
     And dct:publisher should be `gov:department-for-work-pensions`
 
   Scenario: Scrape DCNI
-    Given I scrape the page "https://www.communities-ni.gov.uk/publications/topic/8182?search=%22Northern+Ireland+Housing+Bulletin%22&Search-exposed-form=Go&sort_by=field_published_date"
+    Given I scrape the page "https://www.communities-ni.gov.uk/publications/topic/8182?search=Northern+Ireland+Housing+Statistics+Owner+Occupier+Demand&sort_by=field_published_date"
     And select the distribution given by
       | key       | value                                       |
       | mediaType | application/vnd.ms-excel                    |
-    Then dct:title should be `"Northern Ireland Housing Bulletin"@en`
-    And dct:publisher should be `gov:department-for-communities-northern-ireland`
+    Then dct:publisher should be `gov:department-for-communities-northern-ireland`
     And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
     And the data download URL should match "^https://www.communities-ni.gov.uk/.*[xX][lL][sS][xX]$"
 
