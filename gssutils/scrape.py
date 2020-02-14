@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime
@@ -37,14 +38,46 @@ class FilterError(Exception):
         self.message = message
 
 
-class Scraper:
-    def __init__(self, uri, session=None):
+class MetadataError(Exception):
+    """ Raised when a provided metadata info.json cannot be used
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+
+def Scraper(uri_or_info, session=None):
+    """
+    Scraper wraps ScraperObj to allow us to depreciate the direct passing of uri's
+    without breaking existing pipelines
+    """
+    if uri_or_info.endswith("info.json") or uri_or_info.endswith("info.schema.json"):
+
+        try:
+            with open(uri_or_info, "r") as f:
+                info = json.load(f)
+            uri = info["dataURL"]
+        except Exception as e:
+            raise MetadataError("Unable to acquire dataURL from the provided "
+                                "info.json") from e
+
+        return ScraperObj(uri, session, info=info)
+    else:
+        # It's an old style one, throw a depreciation warning then proceed
+        logging.warning("The direct passing of uri's has been depreciated. Please "
+                    "use the info.json file and pass in your dataURL there.")
+        return ScraperObj(uri_or_info, session)
+
+
+class ScraperObj:
+    def __init__(self, uri, session, info=None):
 
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
         self.dataset.modified = datetime.now()
         self.distributions = []
+        self.info = info
 
         if session:
             self.session = session
@@ -99,7 +132,8 @@ class Scraper:
     def _run(self):
         page = self.session.get(self.uri)
 
-        # TODO - the below should go into a bucket, we should be logging out a nice clickable link to said bucket
+        # TODO - the below should go into a bucket, we should be logging out a
+        # nice clickable link to said bucket
 
         # Dump the scraped file locally if we're debugging
         if logging.getLogger().getEffectiveLevel() <= logging.DEBUG:
@@ -113,13 +147,35 @@ class Scraper:
         scraped = False
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
+
+                # Scrape
                 self.dataset.landingPage = self.uri
                 scrape(self, tree)
                 scraped = True
+
+                # Before finishing, where we have an info.json, use it to plug any metadata gaps
+                if self.info is not None:
+                    self._populate_missing_metadata()
                 break
+
         if not scraped:
             raise NotImplementedError(f'No scraper for {self.uri}')
         return self
+
+    def _populate_missing_metadata(self):
+        """
+        Use the info.json file to populate any missing metadata fields.
+        """
+
+        try:
+            # Dataset level metadata
+            if not hasattr(self.dataset, 'title'): self.dataset.title = self.info["title"]
+            if not hasattr(self.dataset, 'description'): self.dataset.description = self.info["description"]
+
+        except Exception as e:
+            raise MetadataError("Aborting. Issue encountered while attempting checking "
+                                "the info.json for supplementary metadata.") from e
+
 
     @staticmethod
     def _filter_one(things, **kwargs):
