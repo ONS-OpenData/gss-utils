@@ -17,6 +17,13 @@ def step_impl(context, uri):
         context.scraper = Scraper(uri, requests.Session())
 
 
+@given('I use the testing seed "{file_name}"')
+def step_impl(context, file_name):
+    this_path = os.path.dirname(os.path.abspath(__file__))
+    seed_path = os.path.join(this_path, "..", file_name)
+    context.scraper = Scraper(seed_path)
+
+
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
