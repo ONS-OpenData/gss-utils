@@ -208,7 +208,7 @@ class ScraperObj:
         """
 
         # Make sure we have the 100% required stuff
-        keys = ["title", "description", "dataURL", "publisher", "issued"]
+        keys = ["title", "description", "dataURL", "publisher", "published"]
         not_found = []
         for key in keys:
             if key not in self.info.keys():
@@ -222,7 +222,7 @@ class ScraperObj:
         # Populate the "unsafe" fields explicitly, then populate the missing
         # metadata from the seed
         dist = Distribution(self)
-        dist.issued = parse(self.info["issued"]).date()
+        dist.issued = parse(self.info["published"]).date()
         dist.downloadURL = self.info["dataURL"]
         self.distributions.append(dist)
         self.dataset.issued = dist.issued
