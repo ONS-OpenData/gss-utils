@@ -14,7 +14,6 @@ pipenv-setup = "*"
 gssutils = {editable = true,path = "."}
 requests = {extras = ["security"],version = "*"}
 certifi = "*"
-validators = "==0.14.2"
 
 [requires]
 python_version = "3.7"
