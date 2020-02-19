@@ -40,7 +40,6 @@ Feature: PMD metadata
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:issued "2019-12-03"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
-        dct:modified "2018-09-14T10:04:33.141484+01:00"^^xsd:dateTime ;
         dct:publisher <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:title "Foreign direct investment involving UK companies: inward"@en ;
         void:sparqlEndpoint <http://gss-data.org.uk/sparql> ;
@@ -63,7 +62,7 @@ Feature: PMD metadata
 
     Scenario: modified or updated
       Given I scrape the page "https://www.gov.uk/government/statistics/immigration-statistics-october-to-december-2017-data-tables"
-      Then the modified date should be around "2018-03-21"
+      Then the modified date should be quite recent
 
     Scenario: catalog scraped datasets
       Given the 'JOB_NAME' environment variable is 'GSS/Health/ISD-Drugs-and-Alcohol'

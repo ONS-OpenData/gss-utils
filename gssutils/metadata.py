@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from enum import Enum
 from io import BytesIO
 import xypath.loader
@@ -182,7 +183,7 @@ class PMDDataset(QBDataSet):
         'inGraph': (PMD.graph, Status.mandatory, lambda s: URIRef(s)),
         'contactEmail': (PMD.contactEmail, Status.recommended, lambda s: URIRef(s)),
         'license': (DCTERMS.license, Status.mandatory, lambda s: URIRef(s)),
-        'creator': (DCTERMS.creator, Status.recommended, lambda s: URIRef(s))
+        'creator': (DCTERMS.creator, Status.recommended, lambda s: URIRef(s)),
     })
 
     def __setattr__(self, key, value):
@@ -192,6 +193,10 @@ class PMDDataset(QBDataSet):
             self.contactEmail = value
         elif key == 'publisher':
             self.creator = value
+        elif key == 'modified':
+            # TODO: remove the following once we distinguish between the modification datetime of a dataset
+            #       in PMD and the last modification datetime of the dataset by the publisher.
+            value = datetime.now(timezone.utc).astimezone()
         super().__setattr__(key, value)
 
 

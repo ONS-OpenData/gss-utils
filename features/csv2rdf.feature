@@ -172,7 +172,6 @@ Feature: Manage CSVW metadata for transformation to RDF
           dct:creator gov:office-for-national-statistics ;
           dct:issued "2019-12-03"^^xsd:date ;
           dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
-          dct:modified "2019-03-13T13:17:12"^^xsd:dateTime ;
           dct:publisher gov:office-for-national-statistics ;
           dct:title "Alcohol-specific deaths in the UK"@en ;
           rdfs:comment "Annual data on age-standardised and age-specific alcohol-specific death rates in the UK, its constituent countries and regions of England."@en ;

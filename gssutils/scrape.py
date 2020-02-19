@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urljoin, urlparse
 
 import html2text
@@ -43,7 +43,7 @@ class Scraper:
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
-        self.dataset.modified = datetime.now()
+        self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
 
         if session:
