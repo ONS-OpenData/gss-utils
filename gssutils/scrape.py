@@ -229,7 +229,7 @@ class ScraperObj:
         self._populate_missing_metadata()
 
         # Sanity check - break if our download doesn't point to a specific instance of a file
-        allowed = ["xls", "xlsx", "ods", "zip"]
+        allowed = ["xls", "xlsx", "ods", "zip", ".csv"]
         if dist.downloadURL.lower().split(".")[-1] not in allowed:
             raise MetadataError("A temporary scraper must point to a specific data file resouce. "
                                 "Download url is {} but must end with one of: {}"
