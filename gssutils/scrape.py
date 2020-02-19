@@ -3,7 +3,6 @@ import logging
 import os
 from datetime import datetime
 from urllib.parse import urljoin, urlparse
-import validators
 
 import html2text
 import msgpack
@@ -27,6 +26,9 @@ class BiggerSerializer(serialize.Serializer):
             cached = msgpack.loads(
                 data, encoding='utf-8', max_bin_len=100*1000*1000) # 100MB
         except ValueError:
+            return
+        except TypeError:
+            # stop seed files breaking on caching
             return
 
         return self.prepare_response(request, cached)
@@ -53,7 +55,8 @@ def Scraper(uri_or_info, session=None):
     Scraper wraps ScraperObj to allow us to depreciate the direct passing of uri's
     without breaking existing pipelines
     """
-    if not validators.url(uri_or_info):
+
+    if not uri_or_info.startswith("http://") and not uri_or_info.startswith("https://"):
 
         try:
             with open(uri_or_info, "r") as f:
@@ -61,13 +64,13 @@ def Scraper(uri_or_info, session=None):
             uri = info["dataURL"]
         except Exception as e:
             raise MetadataError("Unable to acquire dataURL from the provided "
-                                "info.json") from e
+                                "seed") from e
 
         return ScraperObj(uri, session, info=info)
     else:
         # It's an old style one, throw a depreciation warning then proceed
         logging.warning("The direct passing of uri's has been depreciated. Please "
-                    "use the info.json file and pass in your dataURL there.")
+                    "use the seed file and pass in your dataURL there.")
         return ScraperObj(uri_or_info, session)
 
 
@@ -167,9 +170,12 @@ class ScraperObj:
 
         try:
             # Dataset level metadata
-            if not hasattr(self.dataset, 'title'): self.dataset.title = self.info["title"]
-            if not hasattr(self.dataset, 'description'): self.dataset.description = self.info["description"]
-            if not hasattr(self.dataset, 'publisher'): self.dataset.publisher = self.info["publisher"]
+            if not hasattr(self.dataset, 'title'):
+                self.dataset.title = self.info["title"]
+            if not hasattr(self.dataset, 'description'):
+                self.dataset.description = self.info["description"]
+            if not hasattr(self.dataset, 'publisher'):
+                self.dataset.publisher = self.info["publisher"]
 
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "
