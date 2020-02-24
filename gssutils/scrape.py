@@ -22,7 +22,7 @@ class BiggerSerializer(serialize.Serializer):
     def _loads_v4(self, request, data):
         try:
             cached = msgpack.loads(
-                data, encoding='utf-8', max_bin_len=100*1000*1000) # 100MB
+                data, raw=False, max_bin_len=100*1000*1000) # 100MB
         except ValueError:
             return
 
