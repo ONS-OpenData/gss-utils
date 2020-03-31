@@ -93,10 +93,43 @@ def scrape(scraper, tree):
     if page_type not in page_handlers.keys():
         raise ValueError("Aborting operation. Scraper cannot handle page of type '{}'.".format(page_type))
 
-    page_handlers[page_type](scraper, landing_page)
+    page_handlers[page_type](scraper, landing_page, tree)
 
+    
+def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
+    """
+    At time of writing there's an issue with the latest version of datasets 404'ing on the
+    versions page.
+    
+    this function will create what the latest version should be, using the information on the
+    base dataset landing page.
+    """
+    
+    logging.warning("Using fallback logic to scrape latest distribution from dataset landing page (rather "
+                   "than previous page). This scrape will only have a single distribution of xls.")
+    
+    this_distribution = Distribution(scraper)
 
-def handler_dataset_landing_page(scraper, landing_page):
+    release_date = this_dataset_page["description"]["releaseDate"]
+    this_distribution.issued = parse(release_date.strip()).date()
+    
+    # gonna have to go via html ...
+    download_url = tree.xpath("//a[text()='xls']/@href")
+    this_distribution.downloadURL = download_url
+
+    media_type = Excel
+    this_distribution.mediaType = media_type
+
+    this_distribution.title = scraper.dataset.title
+    this_distribution.description = scraper.dataset.description
+    this_distribution.contactPoint = scraper.dataset.contactPoint
+
+    logging.debug("Created distribution for download '{}'.".format(download_url))
+    scraper.distributions.append(this_distribution)
+    
+    
+
+def handler_dataset_landing_page(scraper, landing_page, tree):
 
     # A dataset landing page has uri's to one or more datasets via it's "datasets" field.
     # We need to look at each in turn, this is an example one as json:
@@ -125,14 +158,26 @@ def handler_dataset_landing_page(scraper, landing_page):
         except KeyError:
             logging.debug("No older versions found for {}.".format(dataset_page_url))
 
+        # NOTE - we've had an issue with the very latest dataset not being updated on the previous versions
+        # page (the page we're getting the distributions from) so we're taking the details for it from
+        # the landing page to use as a fallback in that scenario.
+        
+        
         # iterate through the lot, we're aiming to create at least one distribution object for each
-        for version_url in versions_list:
+        for i, version_url in enumerate(versions_list):
             logging.debug("Identified distribution url, building distribution object for: " + version_url)
 
             r = scraper.session.get(version_url)
             if r.status_code != 200:
-                raise ValueError("Aborting. Scraper unable to acquire the page: {} with http code {}." \
-                                 .format(version_url, r.status_code))
+                
+                # If we've got a 404 on the latest, fallback on using the details from the
+                # landing page instead
+                if r.status_code == 404 and i == len(versions_list)-1:
+                    handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree)
+                    continue
+                else:
+                    raise Exception("Scraper unable to acquire the page: {} with http code {}." \
+                                .format(version_url, r.status_code))
 
             # get the response json into a python dict
             this_page = r.json()
@@ -188,7 +233,7 @@ def handler_dataset_landing_page(scraper, landing_page):
                 scraper.distributions.append(this_distribution)
 
 
-def handler_static_adhoc(scraper, landing_page):
+def handler_static_adhoc(scraper, landing_page, tree):
 
     # A static adhoc is a one-off unscheduled release
     # These pages should be simpler and should lack the historical distributions
