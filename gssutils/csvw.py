@@ -85,17 +85,17 @@ class CSVWMetadata:
         return {row[key]: row for row in reader}
 
     def create(self, csv_filename, schema_filename, with_transform=False,
-               base_url=None, base_path=None, dataset_metadata=None):
+               base_url=None, base_path=None, dataset_metadata=None, with_external=True):
         with open(csv_filename) as csv_io:
             with open(schema_filename, 'w') as schema_io:
                 if with_transform:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)),
-                                   with_transform, base_url, base_path, dataset_metadata)
+                                   with_transform, base_url, base_path, dataset_metadata, with_external)
                 else:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
     def create_io(self, csv_io, schema_io, csv_url, with_transform=False,
-                  base_url=None, base_path=None, dataset_metadata=None):
+                  base_url=None, base_path=None, dataset_metadata=None, with_external=True):
         schema_columns = []
         schema_tables = []
         schema_references = []
@@ -136,18 +136,19 @@ class CSVWMetadata:
                                                   self._codelists[component_def['Codelist']]['url'])
                         table_schema_url = urljoin(self._ref_base,
                                                    self._codelists[component_def['Codelist']]['tableSchema'])
-                        schema_tables.append({
-                            'url': reference,
-                            'tableSchema': table_schema_url,
-                            'suppressOutput': True
-                        })
-                        schema_references.append({
-                            'columnReference': column_def['name'],
-                            'reference': {
-                                'resource': reference,
-                                'columnReference': 'notation'
-                            }
-                        })
+                        if with_external:
+                            schema_tables.append({
+                                'url': reference,
+                                'tableSchema': table_schema_url,
+                                'suppressOutput': True
+                            })
+                            schema_references.append({
+                                'columnReference': column_def['name'],
+                                'reference': {
+                                    'resource': reference,
+                                    'columnReference': 'notation'
+                                }
+                            })
                     elif codelist.startswith('http://gss-data.org.uk/def/concept-scheme'):
                         print(f"Potentially missing concept scheme <{codelist}>")
                 if (is_unit and not with_transform) or (column_def['component_attachment'] not in ['', 'qb:attribute']):
@@ -203,13 +204,15 @@ class CSVWMetadata:
                 'valueUrl': 'qb:Observation'
             })
 
+        table_schema =  {
+            "columns": schema_columns,
+            "primaryKey": schema_keys
+        }
+        if with_external:
+            table_schema["foreignKeys"] = schema_references
         schema_tables.append({
             "url": csv_url,
-            "tableSchema": {
-                "columns": schema_columns,
-                "foreignKeys": schema_references,
-                "primaryKey": schema_keys
-            }
+            "tableSchema": table_schema
         })
         if with_transform:
             about_path = PosixPath(base_path)

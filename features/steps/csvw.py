@@ -91,7 +91,8 @@ def step_impl(context, filename, base, path):
         str(context.csv_filename.relative_to(context.metadata_filename.parent)),
         with_transform=True,
         base_url=base,
-        base_path=path
+        base_path=path,
+        with_external=False
     )
 
 
