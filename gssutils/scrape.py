@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime, timezone
@@ -9,11 +10,12 @@ import requests
 from cachecontrol import CacheControl, serialize
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
+from dateutil.parser import parse
 from lxml import html
 from rdflib import BNode, URIRef
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML
+from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML, Distribution, ZIP
 from gssutils.utils import pathify
 
 
@@ -24,6 +26,9 @@ class BiggerSerializer(serialize.Serializer):
             cached = msgpack.loads(
                 data, raw=False, max_bin_len=100*1000*1000) # 100MB
         except ValueError:
+            return
+        except TypeError:
+            # stop seed files breaking on caching
             return
 
         return self.prepare_response(request, cached)
@@ -37,14 +42,47 @@ class FilterError(Exception):
         self.message = message
 
 
-class Scraper:
-    def __init__(self, uri, session=None):
+class MetadataError(Exception):
+    """ Raised when a provided metadata info.json cannot be used
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+
+def Scraper(uri_or_info, session=None):
+    """
+    Scraper wraps ScraperObj to allow us to depreciate the direct passing of uri's
+    without breaking existing pipelines
+    """
+
+    if not uri_or_info.startswith("http://") and not uri_or_info.startswith("https://"):
+
+        try:
+            with open(uri_or_info, "r") as f:
+                info = json.load(f)
+            uri = info["dataURL"]
+        except Exception as e:
+            raise MetadataError("Unable to acquire dataURL from the provided "
+                                "seed") from e
+
+        return ScraperObj(uri, session, info=info)
+    else:
+        # It's an old style one, throw a depreciation warning then proceed
+        logging.warning("The direct passing of uri's has been depreciated. Please "
+                    "use the seed file and pass in your dataURL there.")
+        return ScraperObj(uri_or_info, session)
+
+
+class ScraperObj:
+    def __init__(self, uri, session, info=None):
 
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
         self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
+        self.info = info
 
         if session:
             self.session = session
@@ -99,27 +137,104 @@ class Scraper:
     def _run(self):
         page = self.session.get(self.uri)
 
-        # TODO - the below should go into a bucket, we should be logging out a nice clickable link to said bucket
-
-        # Dump the scraped file locally if we're debugging
-        if logging.getLogger().getEffectiveLevel() <= logging.DEBUG:
-            out_path = '{}/debug_scrape.html'.format(os.getcwd())
-            logging.debug("Writing scrape as simple html to: " + out_path)
-            with open(out_path, "w") as f:
-                f.write(page.text)
-
         # TODO - not all scrapers will necessarily need the beautified HTML DOM
         tree = html.fromstring(page.text)
         scraped = False
+
+        # Look for a scraper based on the uri
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
+
+                # Scrape
                 self.dataset.landingPage = self.uri
                 scrape(self, tree)
                 scraped = True
+
+                # Before finishing, where we have a seed, use it to plug any metadata gaps
+                if self.info is not None:
+                    self._populate_missing_metadata()
                 break
+
+        if not scraped and self.info is not None:
+            scraped = self._attempt_scaper_from_seed()
+
         if not scraped:
-            raise NotImplementedError(f'No scraper for {self.uri}')
+            raise NotImplementedError(f'No scraper for {self.uri} and no seed metadata passed.')
+
         return self
+
+    def _populate_missing_metadata(self):
+        """
+        Use the seed file to populate any missing metadata fields.
+        """
+
+        try:
+            # Dataset level metadata
+            if not hasattr(self.dataset, 'title'):
+                self.dataset.title = self.info["title"]
+            if not hasattr(self.dataset, 'description'):
+                self.dataset.description = self.info["description"]
+            if not hasattr(self.dataset, 'publisher'):
+                self.dataset.publisher = self.info["publisher"]
+
+        except Exception as e:
+            raise MetadataError("Aborting. Issue encountered while attempting checking "
+                                "the info.json for supplementary metadata.") from e
+
+        # Populate missing distribution level Metadata
+        # Note, this is principally mediaType for where we are setting the downloadURL from the seed
+        for distribution in self.distributions:
+
+            # NOTE - Don't EVER add a fallback for downloadURL or issued here!! this is a specific safety
+            # to stop us "temporary scraping" and publishing new data with old metadata
+            if hasattr(distribution, 'downloadURL') and not hasattr(distribution, 'mediaType'):
+                logging.warning("Distribution is lacking a mediaType, attempting to identity")
+                if distribution.downloadURL.lower().endswith(".xls"):
+                    distribution.mediaType = Excel
+                elif distribution.downloadURL.lower().endswith(".xlsx"):
+                    distribution.mediaType = ExcelOpenXML
+                elif distribution.downloadURL.lower().endswith(".ods"):
+                    distribution.mediaType = ODS
+                elif distribution.downloadURL.lower().endswith(".csv"):
+                    distribution.mediaType = CSV
+                elif distribution.downloadURL.lower().endswith(".zip"):
+                    distribution.mediaType = ZIP
+                else:
+                    log.warning("Unable to find mediaType for distribution")
+
+    def _attempt_scaper_from_seed(self):
+        """
+        Validates then creates a simple scraper from the metadata in the seed.
+        """
+
+        # Make sure we have the 100% required stuff
+        keys = ["title", "description", "dataURL", "publisher", "published"]
+        not_found = []
+        for key in keys:
+            if key not in self.info.keys():
+                if self.info[key] is not None:
+                    not_found.append(key)
+
+        if len(not_found) > 0:
+            raise NotImplementedError(f'No scraper for {self.uri} and the following required '
+            'fields were missing from the seed metadata: {}. got: {}.'.format(",".join(not_found), ",".join(self.info.keys())))
+
+        # Populate the "unsafe" fields explicitly, then populate the missing
+        # metadata from the seed
+        dist = Distribution(self)
+        dist.issued = parse(self.info["published"]).date()
+        dist.downloadURL = self.info["dataURL"]
+        self.distributions.append(dist)
+        self.dataset.issued = dist.issued
+        self._populate_missing_metadata()
+
+        # Sanity check - break if our download doesn't point to a specific instance of a file
+        allowed = ["xls", "xlsx", "ods", "zip", ".csv"]
+        if dist.downloadURL.lower().split(".")[-1] not in allowed:
+            raise MetadataError("A temporary scraper must point to a specific data file resouce. "
+                                "Download url is {} but must end with one of: {}"
+                                .format(dist.download_url, ",".join(allowed)))
+        return True
 
     @staticmethod
     def _filter_one(things, **kwargs):
@@ -140,7 +255,7 @@ class Scraper:
             return matches[0]
 
     def select_dataset(self, **kwargs):
-        dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
+        dataset = self._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
         self.dataset.landingPage = self.uri
         if not hasattr(self.dataset, 'description') and hasattr(self.catalog, 'description'):
@@ -150,7 +265,7 @@ class Scraper:
         self.distributions = dataset.distribution
 
     def distribution(self, **kwargs):
-        return Scraper._filter_one(self.distributions, **kwargs)
+        return self._filter_one(self.distributions, **kwargs)
 
     def set_base_uri(self, uri):
         self._base_uri = uri
