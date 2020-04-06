@@ -27,9 +27,6 @@ class BiggerSerializer(serialize.Serializer):
                 data, raw=False, max_bin_len=100*1000*1000) # 100MB
         except ValueError:
             return
-        except TypeError:
-            # stop seed files breaking on caching
-            return
 
         return self.prepare_response(request, cached)
 
@@ -50,32 +47,15 @@ class MetadataError(Exception):
         self.message = message
 
 
-def Scraper(uri_or_info, session=None):
-    """
-    Scraper wraps ScraperObj to allow us to depreciate the direct passing of uri's
-    without breaking existing pipelines
-    """
+class Scraper:
 
-    if not uri_or_info.startswith("http://") and not uri_or_info.startswith("https://"):
-
-        try:
+    def __init__(url=None, session=None, seed=None)
+    
+        # Use seed if provided
+        if seed is not None:
             with open(uri_or_info, "r") as f:
                 info = json.load(f)
-            uri = info["dataURL"]
-        except Exception as e:
-            raise MetadataError("Unable to acquire dataURL from the provided "
-                                "seed") from e
-
-        return ScraperObj(uri, session, info=info)
-    else:
-        # It's an old style one, throw a depreciation warning then proceed
-        logging.warning("The direct passing of uri's has been depreciated. Please "
-                    "use the seed file and pass in your dataURL there.")
-        return ScraperObj(uri_or_info, session)
-
-
-class ScraperObj:
-    def __init__(self, uri, session, info=None):
+                uri = info["dataURL"]
 
         self.uri = uri
         self.dataset = PMDDataset()
@@ -91,6 +71,7 @@ class ScraperObj:
                                         cache=FileCache('.cache'),
                                         serializer=BiggerSerializer(),
                                         heuristic=LastModified())
+
         if 'JOB_NAME' in os.environ:
             self._base_uri = URIRef('http://gss-data.org.uk')
             if os.environ['JOB_NAME'].startswith('GSS/'):
@@ -104,6 +85,7 @@ class ScraperObj:
         self.update_dataset_uris()
         self._run()
 
+        
     def _repr_markdown_(self):
         md = ""
         if hasattr(self.catalog, 'dataset') and len(self.catalog.dataset) > 1 and len(self.distributions) == 0:
