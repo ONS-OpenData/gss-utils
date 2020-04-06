@@ -49,7 +49,7 @@ class MetadataError(Exception):
 
 class Scraper:
 
-    def __init__(url=None, session=None, seed=None)
+    def __init__(url=None, session=None, seed=None):
     
         # Use seed if provided
         if seed is not None:
