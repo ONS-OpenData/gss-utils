@@ -3,7 +3,7 @@ import csv
 import json
 import logging
 from codecs import iterdecode
-from pathlib import Path, PosixPath
+from pathlib import Path
 from urllib import request, parse
 from urllib.parse import urljoin
 
@@ -219,9 +219,7 @@ class CSVWMetadata:
             "tableSchema": table_schema
         })
         if with_transform:
-            about_path = PosixPath(base_path)
-            for key in schema_keys:
-                about_path = about_path / f'{{{key}}}'
+            about_path = base_path + '/' + '/'.join(f'{{{key}}}' for key in schema_keys)
             about_url = urljoin(base_url, str(about_path))
             schema_tables[-1]['tableSchema']['aboutUrl'] = about_url
 
