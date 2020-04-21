@@ -64,11 +64,6 @@ def content_api_collection(scraper, metadata):
                 ]
                 for doc in group_docs:
                     ds = content_api_publication(scraper, doc)
-#                    if 'title' in group:
-#                        ds.title = group['title']
-                    if 'body' in group:
-                        description = html.fromstring(group['body'])
-                        ds.description = scraper.to_markdown(description.xpath('//div/*'))
                     scraper.catalog.dataset.append(ds)
     elif 'links' in metadata and 'documents' in metadata['links']:
         for doc in metadata['links']['documents']:
@@ -91,6 +86,8 @@ def content_api_publication(scraper, metadata):
         ds.issued = datetime.fromisoformat(doc_info['first_published_at'])
     if 'public_updated_at' in doc_info:
         ds.modified = datetime.fromisoformat(doc_info['public_updated_at'])
+    if 'description' in doc_info:
+        ds.description = doc_info['description']
     if 'links' in doc_info and 'organisations' in doc_info['links']:
         orgs = doc_info['links']['organisations']
         if len(orgs) == 0:

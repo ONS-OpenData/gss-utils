@@ -206,3 +206,9 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/local-authority-housing-statistics-data-returns-for-2018-to-2019"
     When I select the latest dataset whose title starts with "Local"
     Then dct:title should be `"Local authority housing statistics data returns for 2018 to 2019"@en`
+
+  Scenario: gov.uk descriptions
+    Given I scrape the page "https://www.gov.uk/government/collections/uk-regional-trade-in-goods-statistics-disaggregated-by-smaller-geographical-areas"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Regional trade in goods statistics disaggregated by smaller geographical areas"
+    Then the description should start "International trade in goods data at summary product and country level, by UK areas smaller than NUTS1"
