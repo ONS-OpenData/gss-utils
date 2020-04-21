@@ -144,7 +144,7 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
     Then dct:title should match `"Substance misuse treatment for adults: statistics.*"@en`
     And dct:publisher should be `gov:public-health-england`
-    And dct:description should match `.*Alcohol and drug misuse and treatment in adults from PHE.*`
+    And dct:description should match `.*alcohol and drug misuse treatment for adults from PHE’s National Drug Treatment Monitoring System.*`
 
   Scenario: Scrape NHS digital
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
