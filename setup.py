@@ -27,7 +27,7 @@ setuptools.setup(
                       'pyexcel-ods3',
                       'xypath==1.1.1',
                       'html2text',
-                      'rdflib',
+                      'rdflib==4.2.2',
                       'rdflib-jsonld',
                       'messytables',
                       'lxml',
