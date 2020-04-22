@@ -144,7 +144,7 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
     Then dct:title should match `"Substance misuse treatment for adults: statistics.*"@en`
     And dct:publisher should be `gov:public-health-england`
-    And dct:description should match `.*Alcohol and drug misuse and treatment in adults from PHE.*`
+    And dct:description should match `.*alcohol and drug misuse treatment for adults from PHE’s National Drug Treatment Monitoring System.*`
 
   Scenario: Scrape NHS digital
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
@@ -222,3 +222,9 @@ Feature: Scrape dataset info
     And the data can be downloaded from "https://www.contextures.com/SampleData.zip"
     And dct:publisher should be `gov:cogs-data-testing`
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
+
+  Scenario: gov.uk descriptions
+    Given I scrape the page "https://www.gov.uk/government/collections/uk-regional-trade-in-goods-statistics-disaggregated-by-smaller-geographical-areas"
+    And the catalog has more than one dataset
+    When I select the latest dataset whose title starts with "Regional trade in goods statistics disaggregated by smaller geographical areas"
+    Then the description should start "International trade in goods data at summary product and country level, by UK areas smaller than NUTS1"

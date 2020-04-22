@@ -3,7 +3,7 @@ import csv
 import json
 import logging
 from codecs import iterdecode
-from pathlib import Path, PosixPath
+from pathlib import Path
 from urllib import request, parse
 from urllib.parse import urljoin
 
@@ -159,11 +159,16 @@ class CSVWMetadata:
                         '@type': {
                             'qb:dimension': 'qb:DimensionProperty',
                             'qb:attribute': 'qb:AttributeProperty'
-                        }.get(column_def['component_attachment']),
-                        'rdfs:label': column_def['title']
+                        }.get(column_def['component_attachment'])
                     }
                     if 'range' in column_def and column_def['range'] not in ['', None]:
                         comp_attach['rdfs:range'] = {'@id': column_def['range']}
+                    if column in self._comp_def:
+                        codelist = self._comp_def[column]['Codelist']
+                        if codelist is not None and codelist != '':
+                            comp_attach['qb:codelist'] = {'@id': codelist}
+                            if 'rdfs:range' not in comp_attach:
+                                comp_attach['rdfs:range'] = {'@id': 'http://www.w3.org/2004/02/skos/core#ConceptScheme'}
                     dsd_def = {
                         '@id': urljoin(base_url, base_path) + '/component/' + column_def['name'],
                         '@type': 'qb:ComponentSpecification',
@@ -176,16 +181,15 @@ class CSVWMetadata:
 
         if with_transform:
             for measure_type in measure_types:
-                measure_def = next(d for d in self._col_def.values() if d['name'] == measure_type)
+                measure_def = next(d for d in self._col_def.values() if pathify(d['title']) == measure_type)
                 comp_attach = {
                     '@id': measure_def['property_template'],
-                    '@type': 'qb:MeasureProperty',
-                    'rdfs:label': measure_def['title']
+                    '@type': 'qb:MeasureProperty'
                 }
                 if 'range' in measure_def and measure_def['range'] not in ['', None]:
                     comp_attach['rdfs:range'] = {'@id': measure_def['range']}
                 dsd_def = {
-                    '@id': urljoin(base_url, base_path) + '/component/' + measure_type,
+                    '@id': urljoin(base_url, base_path) + '/component/' + measure_def['name'],
                     '@type': 'qb:ComponentSpecification',
                     'qb:componentProperty': {'@id': measure_def['property_template']},
                     measure_def['component_attachment']: comp_attach
@@ -215,9 +219,7 @@ class CSVWMetadata:
             "tableSchema": table_schema
         })
         if with_transform:
-            about_path = PosixPath(base_path)
-            for key in schema_keys:
-                about_path = about_path / f'{{{key}}}'
+            about_path = base_path + '/' + '/'.join(f'{{{key}}}' for key in schema_keys)
             about_url = urljoin(base_url, str(about_path))
             schema_tables[-1]['tableSchema']['aboutUrl'] = about_url
 
