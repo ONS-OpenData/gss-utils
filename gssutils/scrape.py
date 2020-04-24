@@ -40,7 +40,7 @@ class FilterError(Exception):
 
 
 class MetadataError(Exception):
-    """ Raised when a provided metadata info.json cannot be used
+    """ Raised when there is an issue with a provided metadata seed
     """
 
     def __init__(self, message):
@@ -57,26 +57,25 @@ class Scraper:
         }
 
         # Use seed if provided
-        info = None
         if seed is not None:
             with open(seed, "r") as f:
-                info = json.load(f)
-                if "landingPage" not in info.keys() and "dataURL" in info.keys():
+                seed = json.load(f)
+                if "landingPage" not in seed.keys() and "dataURL" in seed.keys():
                     logging.warning("No landing page has been supplied. Proceeding with"
                     "scrape using the 'dataURL'.")
-                    uri = info["dataURL"]
-                if "landingPage" not in info.keys():
-                    logging.warning("Aborting. No landing page supplied via info.json and no dataURL"
-                        "to use as a fallback.")
+                    uri = seed["dataURL"]
+                elif "landingPage" not in seed.keys():
+                    raise MetadataError("Aborting, insufficiant seed data. No landing page supplied via "
+                                        "info.json and no dataURL to use as a fallback.")
                 else:
-                    uri = info["landingPage"]
+                    uri = seed["landingPage"]
 
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
         self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
-        self.info = info
+        self.seed = seed
 
         if session:
             self.session = session
@@ -147,46 +146,19 @@ class Scraper:
                 scraped = True
 
                 # If we have a seed..
-                if self.info is not None:
+                if self.seed is not None:
                     self._populate_missing_metadata()          # Plug any metadata gaps
                     self._override_metadata_where_specified()  # Apply overrides
 
                 break
 
-        if not scraped and self.info is not None:
+        if not scraped and self.seed is not None:
             scraped = self._attempt_scaper_from_seed()
 
         if not scraped:
-            raise NotImplementedError(f'No scraper for {self.uri} and no seed metadata passed.')
+            raise NotImplementedError(f'No scraper for {self.uri} and insufficiant seed metadata passed.')
 
         return self
-
-
-    def _override_metadata_where_specified(self):
-        """
-        Where metadata is supplied by both the seed and the scraper, override to the values
-        in the seed - ONLY where the field in question appears under the overrides key
-        """
-        if "overrides" not in self.info.keys():
-            return # moot point
-        else:
-            for field in self.info["overrides"]:
-
-                # Airtable and gssutils are using slightly different field names....
-                if field in self.meta_field_mapping:
-                    target_field = self.meta_field_mapping[field]
-                else:
-                    target_field = field
-
-                if not hasattr(self.dataset, target_field):
-                    raise MetadataError("Aborting. We've specified an override to the '{}' field"
-                                        "but the dataset does not have that attribute.".format(field))
-                self.dataset.__setattr__(target_field, self.info[field])
-
-                # Finally, propogate this change where appicable to distributions within the dataset
-                for distro in self.distributions:
-                    if hasattr(distro, target_field):
-                        distro.__setattr__(target_field, self.info[field])
 
 
     def _populate_missing_metadata(self):
@@ -196,12 +168,12 @@ class Scraper:
 
         try:
             # Dataset level metadata
-            if not hasattr(self.dataset, 'title'):
-                self.dataset.title = self.info["title"]
-            if not hasattr(self.dataset, 'description'):
-                self.dataset.description = self.info["description"]
-            if not hasattr(self.dataset, 'publisher'):
-                self.dataset.publisher = self.info["publisher"]
+            if not hasattr(self.dataset, 'title') and "title" in self.seed.keys():
+                self.dataset.title = self.seed["title"]
+            if not hasattr(self.dataset, 'description') and "description" in self.seed.keys():
+                self.dataset.description = self.seed["description"]
+            if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
+                self.dataset.publisher = self.seed["publisher"]
 
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "
@@ -228,6 +200,43 @@ class Scraper:
                 else:
                     log.warning("Unable to find mediaType for distribution")
 
+
+    def _override_metadata_where_specified(self):
+        """
+        Where metadata is supplied by both the seed and the scraper, override to the values
+        in the seed - ONLY where the field in question appears under the overrides key
+        """
+
+        # fields we should not be overriding
+        disallowed = [
+            "issued"
+            ]
+
+        if "overrides" not in self.seed.keys():
+            return # moot point
+        else:
+            for field in self.seed["overrides"]:
+
+                # Airtable and gssutils are using slightly different field names....
+                if field in self.meta_field_mapping:
+                    target_field = self.meta_field_mapping[field]
+                else:
+                    target_field = field
+
+                if target_field in disallowed:
+                    raise MetadataError("Aborting, you cannot override the '{}' field.".format(target_field))
+
+                if not hasattr(self.dataset, target_field):
+                    raise MetadataError("Aborting. We've specified an override to the '{}' field"
+                                        "but the dataset does not have that attribute.".format(field))
+                self.dataset.__setattr__(target_field, self.seed[field])
+
+                # Finally, propogate this change where applicable to distributions within the dataset
+                for distro in self.distributions:
+                    if hasattr(distro, target_field):
+                        distro.__setattr__(target_field, self.seed[field])
+
+
     def _attempt_scaper_from_seed(self):
         """
         Validates then creates a simple scraper from the metadata in the seed.
@@ -237,19 +246,19 @@ class Scraper:
         keys = ["title", "description", "dataURL", "publisher", "published"]
         not_found = []
         for key in keys:
-            if key not in self.info.keys():
-                if self.info[key] is not None:
+            if key not in self.seed.keys():
+                if self.seed[key] is not None:
                     not_found.append(key)
 
         if len(not_found) > 0:
-            raise NotImplementedError(f'No scraper for {self.uri} and the following required '
-            'fields were missing from the seed metadata: {}. got: {}.'.format(",".join(not_found), ",".join(self.info.keys())))
+            raise NotImplementedError(f'No scraper exists for {self.uri} and a "temporary scape" is not possible as the following required '
+            'fields were missing from the seed metadata: {}. got: {}.'.format(",".join(not_found), ",".join(self.seed.keys())))
 
         # Populate the "unsafe" fields explicitly, then populate the missing
         # metadata from the seed
         dist = Distribution(self)
-        dist.issued = parse(self.info["published"]).date()
-        dist.downloadURL = self.info["dataURL"]
+        dist.issued = parse(self.seed["published"]).date()
+        dist.downloadURL = self.seed["dataURL"]
         self.distributions.append(dist)
         self.dataset.issued = dist.issued
         self._populate_missing_metadata()
