@@ -208,12 +208,12 @@ Feature: Scrape dataset info
     Then dct:title should be `"Local authority housing statistics data returns for 2018 to 2019"@en`
 
   Scenario: Replace missing metadata using a seed
-    Given I use the testing seed "resources/seed-with-missing-metadata.json"
+    Given I use the testing seed "seed-with-missing-metadata.json"
     Then the title should be "I am the missing title of a thing"
     And the description should start "I am the missing description of a thing"
 
   Scenario: Create scrape using only a metadata seed
-    Given I use the testing seed "resources/seed-for-temporary-scraper.json"
+    Given I use the testing seed "seed-for-temporary-scraper.json"
     And select the distribution given by
       | key       | value              |
       | mediaType | application/zip    |
@@ -222,6 +222,10 @@ Feature: Scrape dataset info
     And the data can be downloaded from "https://www.contextures.com/SampleData.zip"
     And dct:publisher should be `gov:cogs-data-testing`
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
+
+  Scenario: Override scrape metadata using a metadata seed
+    Given I use the testing seed "seed-for-metadata-overrides.json"
+    Then dct:title should match `"I did override a thing"@en`
 
   Scenario: gov.uk descriptions
     Given I scrape the page "https://www.gov.uk/government/collections/uk-regional-trade-in-goods-statistics-disaggregated-by-smaller-geographical-areas"

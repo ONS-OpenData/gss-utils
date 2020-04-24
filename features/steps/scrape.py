@@ -19,9 +19,9 @@ def step_impl(context, uri):
 
 @given('I use the testing seed "{file_name}"')
 def step_impl(context, file_name):
-    this_path = os.path.dirname(os.path.abspath(__file__))
-    seed_path = os.path.join(this_path, "..", file_name)
-    context.scraper = Scraper(seed_path)
+    feature_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    seed_path = os.path.join(feature_path, "fixtures", file_name)
+    context.scraper = Scraper(seed=seed_path)
 
 
 @then('the data can be downloaded from "{uri}"')

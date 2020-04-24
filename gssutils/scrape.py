@@ -49,13 +49,27 @@ class MetadataError(Exception):
 
 class Scraper:
 
-    def __init__(url=None, session=None, seed=None):
-    
+    def __init__(self, uri=None, session=None, seed=None):
+
+        # Airtable and gssutils are using slightly different field names....
+        self.meta_field_mapping = {
+            "published": "issued"
+        }
+
         # Use seed if provided
+        info = None
         if seed is not None:
-            with open(uri_or_info, "r") as f:
+            with open(seed, "r") as f:
                 info = json.load(f)
-                uri = info["dataURL"]
+                if "landingPage" not in info.keys() and "dataURL" in info.keys():
+                    logging.warning("No landing page has been supplied. Proceeding with"
+                    "scrape using the 'dataURL'.")
+                    uri = info["dataURL"]
+                if "landingPage" not in info.keys():
+                    logging.warning("Aborting. No landing page supplied via info.json and no dataURL"
+                        "to use as a fallback.")
+                else:
+                    uri = info["landingPage"]
 
         self.uri = uri
         self.dataset = PMDDataset()
@@ -85,7 +99,7 @@ class Scraper:
         self.update_dataset_uris()
         self._run()
 
-        
+
     def _repr_markdown_(self):
         md = ""
         if hasattr(self.catalog, 'dataset') and len(self.catalog.dataset) > 1 and len(self.distributions) == 0:
@@ -132,9 +146,11 @@ class Scraper:
                 scrape(self, tree)
                 scraped = True
 
-                # Before finishing, where we have a seed, use it to plug any metadata gaps
+                # If we have a seed..
                 if self.info is not None:
-                    self._populate_missing_metadata()
+                    self._populate_missing_metadata()          # Plug any metadata gaps
+                    self._override_metadata_where_specified()  # Apply overrides
+
                 break
 
         if not scraped and self.info is not None:
@@ -144,6 +160,34 @@ class Scraper:
             raise NotImplementedError(f'No scraper for {self.uri} and no seed metadata passed.')
 
         return self
+
+
+    def _override_metadata_where_specified(self):
+        """
+        Where metadata is supplied by both the seed and the scraper, override to the values
+        in the seed - ONLY where the field in question appears under the overrides key
+        """
+        if "overrides" not in self.info.keys():
+            return # moot point
+        else:
+            for field in self.info["overrides"]:
+
+                # Airtable and gssutils are using slightly different field names....
+                if field in self.meta_field_mapping:
+                    target_field = self.meta_field_mapping[field]
+                else:
+                    target_field = field
+
+                if not hasattr(self.dataset, target_field):
+                    raise MetadataError("Aborting. We've specified an override to the '{}' field"
+                                        "but the dataset does not have that attribute.".format(field))
+                self.dataset.__setattr__(target_field, self.info[field])
+
+                # Finally, propogate this change where appicable to distributions within the dataset
+                for distro in self.distributions:
+                    if hasattr(distro, target_field):
+                        distro.__setattr__(target_field, self.info[field])
+
 
     def _populate_missing_metadata(self):
         """
@@ -216,6 +260,8 @@ class Scraper:
             raise MetadataError("A temporary scraper must point to a specific data file resouce. "
                                 "Download url is {} but must end with one of: {}"
                                 .format(dist.download_url, ",".join(allowed)))
+
+        logging.warning("This scraper is running in fallback mode, using static metadata rather than scraped metadata.")
         return True
 
     @staticmethod
