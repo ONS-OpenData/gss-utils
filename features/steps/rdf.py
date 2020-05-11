@@ -3,7 +3,7 @@ from nose.tools import *
 from rdflib.compare import to_isomorphic, graph_diff
 from rdflib import Graph
 from dateutil.parser import parse
-from datetime import datetime
+from datetime import datetime, timezone
 from gssutils.metadata import THEME
 
 
@@ -91,10 +91,15 @@ def step_impl(context, uri):
 
 @step("the modified date should be quite recent")
 def step_impl(context):
-    now = datetime.now()
+    now = datetime.now(timezone.utc).astimezone()
     ok_((abs(now - context.scraper.dataset.modified)).total_seconds() < 60)
 
 
 @step('the comment should be "{comment}"')
 def step_impl(context, comment):
     eq_(context.scraper.dataset.comment, comment)
+
+
+@then('the modified date should be around "{date}"')
+def step_impl(context, date):
+    eq_(context.scraper.dataset.modified.date(), datetime.fromisoformat(date).date())

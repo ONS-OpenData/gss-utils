@@ -1,0 +1,1693 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_alcohol/columns.csv
+  response:
+    body:
+      string: 'title,name,component_attachment,property_template,value_template,datatype,value_transformation,regex,range
+
+        Measure Type,measure_type,qb:dimension,http://purl.org/linked-data/cube#measureType,http://gss-data.org.uk/def/measure/{measure_type},string,slugize,,qb:MeasureProperty
+
+        Count,count,qb:measure,http://gss-data.org.uk/def/measure/count,,number,,,
+
+        Average Count,average_count,qb:measure,http://gss-data.org.uk/def/measure/average-count,,number,,,
+
+        Percentage,percentage,qb:measure,http://gss-data.org.uk/def/measure/percentage,,number,,,
+
+        Quantities Released for Consumption,quantities_released_for_consumption,qb:measure,http://gss-data.org.uk/def/measure/quantities-released-for-consumption,,number,,,
+
+        Revenue,revenue,qb:measure,http://gss-data.org.uk/def/measure/revenue,,number,,,
+
+        Production of Potable Spirits,production_of_potable_spirits,qb:measure,http://gss-data.org.uk/def/measure/production-of-potable-spirits,,number,,,
+
+        Net Quantities of Spirits Charged with Duty,net_quantities_of_spirit_charged_with_duty,qb:measure,http://gss-data.org.uk/def/measure/net-quantities-of-spirits-charged-with-duty,,number,,,
+
+        UK Beer Production,uk_beer,qb:measure,http://gss-data.org.uk/def/measure/uk-beer-production,,number,,,
+
+        Beer Clearances,beer_clearances,qb:measure,http://gss-data.org.uk/def/measure/beer-clearances,,number,,,
+
+        Alcohol Clearances,alcohol_clearances,qb:measure,http://gss-data.org.uk/def/measure/alcohol-clearances,,number,,,
+
+        Cider Clearances,cider_clearances,qb:measure,http://gss-data.org.uk/def/measure/cider-clearances,,number,,,
+
+        Rates of Duty,rates_of_duty,qb:measure,http://gss-data.org.uk/def/measure/rates-of-duty,,number,,,
+
+        "Rate per 1,000 accidents",rate_per_1000_accidents,qb:measure,http://gss-data.org.uk/def/measure/rate-per-1-000-accidents,,number,,,
+
+        "Rate per 100,000 persons",rate_per_100_000_persons,qb:measure,http://gss-data.org.uk/def/measure/rate-per-100-000-persons,,number,,,
+
+        Count of new presentations to treatment,count_of_new_presentations_to_treatment,qb:measure,http://gss-data.org.uk/def/measure/count-of-new-presentations-to-treatment,,number,,,
+
+        Count of children,count_of_children,qb:measure,http://gss-data.org.uk/def/measure/count-of-children,,number,,,
+
+        Count of clients in treatment,count_of_clients_in_treatment,qb:measure,http://gss-data.org.uk/def/measure/count-of-clients-in-treatment,,number,,,
+
+        Count of casualties,count_of_casualties,qb:measure,http://gss-data.org.uk/def/measure/count-of-casualties,,number,,,
+
+        Count of accidents,count_of_accidents,qb:measure,http://gss-data.org.uk/def/measure/count-of-accidents,,number,,,
+
+        Volume,volume,qb:measure,http://gss-data.org.uk/def/measure/volume,,number,,,
+
+        Ratio,ratio,qb:measure,http://gss-data.org.uk/def/measure/ratio,,number,,,
+
+        GBP Total,gbp_total,qb:measure,http://gss-data.org.uk/def/measure/gbp-total,,number,,,
+
+        Household expenditure,household_expenditure,qb:measure,http://gss-data.org.uk/def/measure/household-expenditure,,number,,,
+
+        Period,period,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/{+period},string,,^(year/[0-9]{4}|gregorian-interval/.*|month/[0-9]{4}-[0-9]{2}|day/[0-9]{4}-[0-9]{2}-[0-9]{2}|quarter/[0-9]{4}-Q[1-4]|government-year/[0-9]{4}-[0-9]{4})$,http://reference.data.gov.uk/def/intervals/Interval
+
+        Year,year,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/year/{year},string,,^[0-9]{4}$,http://reference.data.gov.uk/def/intervals/Year
+
+        Sex,sex,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#sex,http://purl.org/linked-data/sdmx/2009/code#sex-{sex},string,,^(M|F|T)$,http://purl.org/linked-data/sdmx/2009/code#Sex
+
+        Unit,unit,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure,http://gss-data.org.uk/def/concept/measurement-units/{unit},string,unitize,,
+
+        Value,value,,http://gss-data.org.uk/def/measure/{measure_type},,number,,,
+
+        Age,age,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#age,http://gss-data.org.uk/def/concept/ages/{age},string,slugize,,
+
+        CI Upper,ci_upper,qb:attribute,http://gss-data.org.uk/def/attribute/ci-upper,,number,,,
+
+        CI Lower,ci_lower,qb:attribute,http://gss-data.org.uk/def/attribute/ci-lower,,number,,,
+
+        Underlying Cause of Death,underlying_cause_of_death,qb:dimension,http://gss-data.org.uk/def/dimension/underlying-cause-of-death,http://gss-data.org.uk/def/concept/underlying-cause-of-death/{underlying_cause_of_death},string,slugize,,http://gss-data.org.uk/def/classes/underlying-cause-of-death/all-alcohol-related-deaths
+
+        Health and Social Care Trust,health_and_social_care_trust,qb:dimension,http://gss-data.org.uk/def/dimension/health-and-social-care-trust,http://gss-data.org.uk/def/concept/health-and-social-care-trust/{health_and_social_care_trust},string,slugize,,
+
+        Deprivation Quintile,deprivation_quintile,qb:dimension,http://gss-data.org.uk/def/dimension/deprivation-quintile,http://gss-data.org.uk/def/concept/deprivation-quintiles/{deprivation_quintile},string,,,
+
+        Cause of Death,cause_of_death,qb:dimension,http://gss-data.org.uk/def/dimension/cause-of-death,http://gss-data.org.uk/def/concept/cause-of-death/{cause_of_death},string,slugize,,
+
+        Alcohol Duty,alcohol_duty,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-duty,http://gss-data.org.uk/def/concept/alcohol-duty/{alcohol_duty},string,slugize,,
+
+        Alcohol Content,alcohol_content,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-content,http://gss-data.org.uk/def/concept/alcohol-content/{alcohol_content},string,slugize,,
+
+        Alcohol Category,alcohol_category,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-category,http://gss-data.org.uk/def/concept/alcohol-category/{alcohol_category},string,slugize,,
+
+        DFT Severity,dft_severity,qb:dimension,http://gss-data.org.uk/def/dimension/dft-severity,http://gss-data.org.uk/def/concept/dft-severity/{dft_severity},string,slugize,,
+
+        Demographic,demographic,qb:dimension,http://gss-data.org.uk/def/dimension/demographic,http://gss-data.org.uk/def/concept/demographic/{demographic},string,slugize,,
+
+        Alcohol related issue response,alcohol_related_issue_response,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-related-issue-response,http://gss-data.org.uk/def/concept/alcohol-related-issue-response/{alcohol_related_issue_response},string,slugize,,
+
+        Alcohol related issue,alcohol_related_issue,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-related-issue,http://gss-data.org.uk/def/concept/alcohol-related-issue/{alcohol_related_issue},string,slugize,,
+
+        Alcohol related issue importance,alcohol_related_issue_importance,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-related-issue-importance,http://gss-data.org.uk/def/concept/alcohol-related-issue-importance/{alcohol_related_issue_importance},string,slugize,,
+
+        Representatives,representatives,qb:dimension,http://gss-data.org.uk/def/dimension/representatives,http://gss-data.org.uk/def/concept/representatives/{representatives},string,slugize,,
+
+        Respondents affected,respondents_affected,qb:dimension,http://gss-data.org.uk/def/dimension/respondents-affected,http://gss-data.org.uk/def/concept/respondents-affected/{respondents_affected},string,slugize,,
+
+        Harm type,harm_type,qb:dimension,http://gss-data.org.uk/def/dimension/harm-type,http://gss-data.org.uk/def/concept/harm-type/{harm_type},string,slugize,,
+
+        Harm level,harm_level,qb:dimension,http://gss-data.org.uk/def/dimension/harm-level,http://gss-data.org.uk/def/concept/harm-level/{harm_level},string,slugize,,
+
+        Survey metric,survey_metric,qb:dimension,http://gss-data.org.uk/def/dimension/survey-metric,http://gss-data.org.uk/def/concept/survey-metric/{survey_metric},string,slugize,,
+
+        NI Treatment Type,ni_treatment_type,qb:dimension,http://gss-data.org.uk/def/dimension/ni-treatment-type,http://gss-data.org.uk/def/concept/ni-treatment-type/{ni_treatment_type},string,slugize,,
+
+        NI Service Type,ni_service_type,qb:dimension,http://gss-data.org.uk/def/dimension/ni-service-type,http://gss-data.org.uk/def/concept/ni-service-type/{ni_service_type},string,slugize,,
+
+        NI Residential Status,ni_residential_status,qb:dimension,http://gss-data.org.uk/def/dimension/ni-residential-status,http://gss-data.org.uk/def/concept/ni-residential-status/{ni_residential_status},string,slugize,,
+
+        Geography,geography,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refArea,http://statistics.data.gov.uk/id/statistical-geography/{geography},string,,,
+
+        Revision,revision,qb:dimension,http://gss-data.org.uk/def/dimension/revision,http://gss-data.org.uk/def/concept/revisions/{revision},string,slugize,,
+
+        Indicator,indicator,qb:dimension,http://gss-data.org.uk/def/dimension/indicator,http://gss-data.org.uk/def/concept/indicator/{indicator},string,,,
+
+        NIMDM Type,nimdm,qb:dimension,http://gss-data.org.uk/def/dimension/nimdm,http://gss-data.org.uk/def/concept/nimdm/{nimdm},string,,,
+
+        Basis of treatment,basis_of_treatment,qb:dimension,http://gss-data.org.uk/def/dimension/basis-of-treatment,http://gss-data.org.uk/def/concept/basis-of-treatment/{basis_of_treatment},string,,,
+
+        Substance type,substance_type,qb:dimension,http://gss-data.org.uk/def/dimension/substance-type,http://gss-data.org.uk/def/concept/substance-type/{substance_type},string,,,
+
+        Prescription item,prescription_item,qb:dimension,http://gss-data.org.uk/def/dimension/prescription-item,http://gss-data.org.uk/def/concept/prescription-item/{prescription_item},string,,,
+
+        Household expenditure type,household_expenditure_type,qb:dimension,http://gss-data.org.uk/def/dimension/household-expenditure-type,http://gss-data.org.uk/def/concept/household-expenditure-type/{household_expenditure_type},string,,,
+
+        Alcohol affordability,alcohol_affordability,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-affordability,http://gss-data.org.uk/def/concept/alcohol-affordability/{alcohol_affordability},string,,,
+
+        Prescription,prescription,qb:dimension,http://gss-data.org.uk/def/dimension/prescription,http://gss-data.org.uk/def/concept/prescription/{prescription},string,,,
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '10003'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:13:55 GMT
+      ETag:
+      - '"5e4ab1d4-2713"'
+      Expires:
+      - Mon, 11 May 2020 16:23:55 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 15:31:32 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 13ac238b7014c02ab79629493ea853204d1021c7
+      X-GitHub-Request-Id:
+      - 8322:4DE3:E62022:11CDF48:5EB979C0
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4143-MAN
+      X-Timer:
+      - S1589213635.967804,VS0,VE114
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_alcohol/components.csv
+  response:
+    body:
+      string: 'Label,Description,Component Type,Codelist
+
+        CI Lower,Lower 95% confidence interval,Attribute,
+
+        CI Upper,Upper 95% confidence interval,Attribute,
+
+        Underlying Cause of Death,Underlying cause of death (ICD-10 codes),Dimension,http://gss-data.org.uk/def/concept-scheme/underlying-cause-of-death
+
+        Health and Social Care Trust,Health and Social Care Trusts in Northern Ireland,Dimension,http://gss-data.org.uk/def/concept-scheme/health-and-social-care-trust
+
+        Deprivation Quintile,"Deprivation Quintile, where 1 is most deprived and 5
+        is least deprived",Dimension,
+
+        Cause of Death,Cause of death,Dimension,http://gss-data.org.uk/def/concept-scheme/cause-of-death
+
+        Alcohol Duty,Alcohol Duty,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-duty
+
+        Alcohol Content,Alcohol by volume (ABV),Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-content
+
+        Alcohol Category,Alcohol Category,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-category
+
+        DFT Severity,DFT Severity,Dimension,http://gss-data.org.uk/def/concept-scheme/dft-severity
+
+        Demographic,Demographic,Dimension,http://gss-data.org.uk/def/concept-scheme/demographic
+
+        Alcohol related issue response,Alcohol related issue response,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-related-issue-response
+
+        Alcohol related issue,Alcohol related issue,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-related-issue
+
+        Alcohol related issue importance,Alcohol related issue importance,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-related-issue-importance
+
+        Representatives,Representatives,Dimension,http://gss-data.org.uk/def/concept-scheme/representatives
+
+        Respondents affected,Respondents affected,Dimension,http://gss-data.org.uk/def/concept-scheme/respondents-affected
+
+        Harm type,Harm type,Dimension,http://gss-data.org.uk/def/concept-scheme/harm-type
+
+        Harm level,Harm level,Dimension,http://gss-data.org.uk/def/concept-scheme/harm-level
+
+        Survey metric,Survey metric that is used to measure responses to alcohol related
+        issues,Dimension,http://gss-data.org.uk/def/concept-scheme/survey-metric
+
+        NI Treatment Type,NI Treatment Type,Dimension,http://gss-data.org.uk/def/concept-scheme/ni-treatment-type
+
+        NI Service Type,NI Service Type,Dimension,http://gss-data.org.uk/def/concept-scheme/ni-service-type
+
+        NI Residential Status,NI Residential Status,Dimension,http://gss-data.org.uk/def/concept-scheme/ni-residential-status
+
+        Indicator,Local Alcohol Profiles for England indicator,Dimension,http://gss-data.org.uk/def/concept-scheme/indicator
+
+        NIMDM Type,Describes the type of the Northern Ireland Multiple Deprivation
+        Measure,Dimension,http://gss-data.org.uk/def/concept-scheme/nimdm
+
+        "Rate per 1,000 accidents","Rate per 1,000 accidents",Measure,
+
+        Volume,Volume,Measure,
+
+        "Rate per 100,000 persons","Rate per 100,000 persons",Measure,
+
+        Average Count,Average Count,Measure,
+
+        Quantities Released for Consumption,Quantities Released for Consumption,Measure,
+
+        Revenue,Revenue,Measure,
+
+        Production of Potable Spirits,Production of Potable Spirits,Measure,
+
+        Net Quantities of Spirits Charged with Duty,Net Quantities of Spirits Charged
+        with Duty,Measure,
+
+        UK Beer Production,UK Beer Production,Measure,
+
+        Beer Clearances,Beer Clearances,Measure,
+
+        Cider Clearances,Cider Clearances,Measure,
+
+        Rates of Duty,Rates of Duty,Measure,
+
+        Alcohol Clearances,Alcohol Clearances,Measure,
+
+        Basis of treatment,Basis of treatment,Dimension,http://gss-data.org.uk/def/concept-scheme/basis-of-treatment
+
+        Substance type,Substance type,Dimension,http://gss-data.org.uk/def/concept-scheme/substance-type
+
+        Count of new presentations to treatment,Count of new presentations to treatment,Measure,
+
+        Count of children,Count of children,Measure,
+
+        Count of clients in treatment,Count of clients in treatment,Measure,
+
+        Count of casualties,Count of casualties,Measure,
+
+        Count of accidents,Count of accidents,Measure,
+
+        Ratio,Ratio,Measure,
+
+        Household expenditure,Household expenditure,Measure,
+
+        Prescription item,Prescription item,Dimension,http://gss-data.org.uk/def/concept-scheme/prescription-item
+
+        Household expenditure type,Household expenditure type,Dimension,http://gss-data.org.uk/def/concept-scheme/household-expenditure-type
+
+        Alcohol affordability,Alcohol affordability,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-affordability
+
+        Prescription,Prescription,Dimension,http://gss-data.org.uk/def/concept-scheme/prescription
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '4362'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:13:55 GMT
+      ETag:
+      - '"5e4ab1d4-110a"'
+      Expires:
+      - Mon, 11 May 2020 16:23:55 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 15:31:32 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - aa5d5aaaaf383bbb698b51b09e56b08673f64e20
+      X-GitHub-Request-Id:
+      - 8B2C:2EA5:F06941:129A75B:5EB979C0
+      X-Origin-Cache:
+      - '1'
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4131-MAN
+      X-Timer:
+      - S1589213635.180962,VS0,VE113
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_alcohol/codelists-metadata.json
+  response:
+    body:
+      string: "{\n  \"@context\": [\"http://www.w3.org/ns/csvw\", {\"@language\":
+        \"en\"}],\n  \"tables\": [{\n    \"url\": \"codelists/alcohol-category.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol Category\"\n  }, {\n    \"url\": \"codelists/alcohol-content.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol Content\"\n  }, {\n    \"url\": \"codelists/alcohol-duty.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol Duty\"\n  }, {\n    \"url\": \"codelists/alcohol-related-issue.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol related issue\"\n  }, {\n    \"url\": \"codelists/alcohol-related-issue-importance.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol related issue importance\"\n  }, {\n    \"url\":
+        \"codelists/alcohol-related-issue-response.csv\",\n    \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol related issue response\"\n  }, {\n    \"url\":
+        \"codelists/demographic.csv\",\n    \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Demographic\"\n  }, {\n    \"url\": \"codelists/harm-level.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Harm level\"\n  }, {\n    \"url\": \"codelists/harm-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Harm type\"\n  }, {\n    \"url\": \"codelists/health-social-care-trusts.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Health and social care trust\"\n  }, {\n    \"url\":
+        \"codelists/representatives.csv\",\n    \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Representatives\"\n  }, {\n    \"url\": \"codelists/ni-residential-status.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"NI Residential status\"\n  }, {\n    \"url\": \"codelists/respondents-affected.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Respondents affected\"\n  }, {\n    \"url\": \"codelists/ni-service-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"NI Service type\"\n  }, {\n    \"url\": \"codelists/dft-severity.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"DFT Severity\"\n  }, {\n    \"url\": \"codelists/survey-metric.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Survey metric\"\n  }, {\n    \"url\": \"codelists/ni-treatment-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"NI Treatment type\"\n  }, {\n    \"url\": \"codelists/underlying-cause-of-death.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Underlying cause of death\"\n  }, {\n    \"url\": \"codelists/cause-of-death.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Cause of death\"\n  }, {\n    \"url\": \"codelists/indicator.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Indicator\"\n  }, {\n    \"url\": \"codelists/nimdm.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"NIMDM Type\"\n  }, {\n    \"url\": \"codelists/basis-of-treatment.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Basis of treatment\"\n  }, {\n    \"url\": \"codelists/substance-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Substance type\"\n  }, {\n    \"url\": \"codelists/prescription.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Prescription\"\n  }, {\n    \"url\": \"codelists/household-expenditure-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Household expenditure type\"\n  }, {\n    \"url\": \"codelists/alcohol-affordability.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Alcohol affordability\"\n  }, {\n    \"url\": \"codelists/prescription-item.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Prescription item\"\n  }]\n}\n"
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '4727'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:13:55 GMT
+      ETag:
+      - '"5e4ab1d4-1277"'
+      Expires:
+      - Mon, 11 May 2020 16:23:55 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 15:31:32 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 9ed70f365e2ab9649fc155d8922b7217078263c9
+      X-GitHub-Request-Id:
+      - F854:7440:790176:9701E5:5EB979C1
+      X-Origin-Cache:
+      - '1'
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4124-MAN
+      X-Timer:
+      - S1589213635.378101,VS0,VE107
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_migration/columns.csv
+  response:
+    body:
+      string: 'title,name,component_attachment,property_template,value_template,datatype,value_transformation,regex,range
+
+        Age,age,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#age,http://gss-data.org.uk/def/concept/ages/{age},string,slugize,,http://gss-data.org.uk/def/classes/age/Age
+
+        Area of Destination or Origin,area_of_destination_or_origin,qb:dimension,http://gss-data.org.uk/def/dimension/area-of-destination-or-origin,http://statistics.data.gov.uk/id/statistical-geography/{area_of_destination_or_origin},string,,,
+
+        CI,ci,qb:attribute,http://gss-data.org.uk/def/attribute/ci,,string,,,
+
+        Citizenship,citizenship,qb:dimension,http://gss-data.org.uk/def/dimension/citizenship,http://gss-data.org.uk/def/concept/citizenship/{citizenship},string,slugize,,http://gss-data.org.uk/def/classes/citizenship/Citizenship
+
+        Count,count,qb:measure,http://gss-data.org.uk/def/measure/count,,number,,,
+
+        Country of Residence,country_of_residence,qb:dimension,http://gss-data.org.uk/def/dimension/residence,http://gss-data.org.uk/def/concept/country-of-residence/{country_of_residence},string,slugize,,http://gss-data.org.uk/def/classes/country-of-residence/Country
+
+        Flow,migration,qb:dimension,http://gss-data.org.uk/def/dimension/migration,http://gss-data.org.uk/def/concept/migration-directions/{migration},string,slugize,,
+
+        Domestic geography,domestic_geography,qb:dimension,http://gss-data.org.uk/def/dimension/domestic-geography,http://statistics.data.gov.uk/id/statistical-geography/{domestic_geography},string,,,
+
+        Geography,geography,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refArea,http://statistics.data.gov.uk/id/statistical-geography/{geography},string,,,
+
+        Measure Type,measure_type,qb:dimension,http://purl.org/linked-data/cube#measureType,http://gss-data.org.uk/def/measure/{measure_type},string,slugize,,qb:MeasurePropery
+
+        Mid Year,mid_year,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/gregorian-interval/{+mid_year},string,,,http://reference.data.gov.uk/def/intervals/Interval
+
+        Migration,migration_type,qb:dimension,http://gss-data.org.uk/def/dimension/migration-type,http://gss-data.org.uk/def/concept/migration-types/{migration_type},string,slugize,,http://gss-data.org.uk/def/classes/migration-types/Type
+
+        Note,note,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#comment,,string,,,
+
+        Occupation,occupation,qb:dimension,http://gss-data.org.uk/def/dimension/occupation,http://gss-data.org.uk/def/concept/occupations/{occupation},string,slugize,,
+
+        Foreign geography,foreign_geography,qb:dimension,http://gss-data.org.uk/def/dimension/foreign-geography,http://gss-data.org.uk/def/concept/foreign-geography/{foreign_geography},string,slugize,,
+
+        Registration Geography,registration_geography,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refArea,http://gss-data.org.uk/def/concept/registration-geography/{registration_geography},string,slugize,,
+
+        Period,period,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/{+period},string,,,http://reference.data.gov.uk/def/intervals/Interval
+
+        Reason for migration,reason_for_migration,qb:dimension,http://gss-data.org.uk/def/dimension/reason-for-migration,http://gss-data.org.uk/def/concept/reasons-for-migration/{reason_for_migration},string,slugize,,
+
+        Revision,revision,qb:dimension,http://gss-data.org.uk/def/dimension/revision,http://gss-data.org.uk/def/concept/revisions/{revision},string,slugize,,
+
+        Sex,sex,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#sex,http://purl.org/linked-data/sdmx/2009/code#sex-{sex},string,,,http://purl.org/linked-data/sdmx/2009/code#Sex
+
+        Unit,unit,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure,http://gss-data.org.uk/def/concept/measurement-units/{unit},string,unitize,,
+
+        Value,value,,http://gss-data.org.uk/def/measure/{measure_type},,number,,,
+
+        Year,year,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/year/{year},string,,,http://reference.data.gov.uk/def/intervals/Year
+
+        Migration Flow,migration_flow,qb:dimension,http://gss-data.org.uk/def/dimension/migration,http://gss-data.org.uk/def/concept/migration-directions/{migration_flow},string,slugize,,http://gss-data.org.uk/def/classes/migration-directions/Flow
+
+        Population Change Component,population_change_component,qb:dimension,http://gss-data.org.uk/def/dimension/population-change-component,http://gss-data.org.uk/def/concept/population-change-component/{population_change_component},string,slugize,,
+
+        IPS Citizenship,ips_citizenship,qb:dimension,http://gss-data.org.uk/def/dimension/citizenship,http://gss-data.org.uk/def/concept/ips-citizenship/{ips_citizenship},string,,,http://gss-data.org.uk/def/classes/ips-citizenship/Citizenship
+
+        LTIM Citizenship,ltim_citizenship,qb:dimension,http://gss-data.org.uk/def/dimension/citizenship,http://gss-data.org.uk/def/concept/ltim-citizenship/{ltim_citizenship},string,slugize,,http://gss-data.org.uk/def/classes/ltim-citizenship/Citizenship
+
+        Applicant type,applicant_type,qb:dimension,http://gss-data.org.uk/def/dimension/applicant-type,http://gss-data.org.uk/def/concept/ho-applicant-types/{applicant_type},string,slugize,,
+
+        Application category,application_category,qb:dimension,http://gss-data.org.uk/def/dimension/application-category,http://gss-data.org.uk/def/concept/ho-application-category/{application_category},string,slugize,,
+
+        Application type,application_type,qb:dimension,http://gss-data.org.uk/def/dimension/application-type,http://gss-data.org.uk/def/concept/ho-application-types/{application_type},string,slugize,,
+
+        Resolution,resolution,qb:dimension,http://gss-data.org.uk/def/dimension/resolution,http://gss-data.org.uk/def/concept/ho-application-resolutions/{resolution},string,slugize,,
+
+        DWP Nationality,dwp_nationality,qb:dimension,http://gss-data.org.uk/def/dimension/dwp-nationality,http://gss-data.org.uk/def/concept/dwp-nationality/{dwp_nationality},string,slugize,,http://gss-data.org.uk/def/classes/dwp-nationality/dwp_nationality
+
+        HO Country of Nationality,ho_country_of_nationality,qb:dimension,http://gss-data.org.uk/def/dimension/nationality,http://gss-data.org.uk/def/concept/ho-country-of-nationality/{ho_country_of_nationality},string,,,
+
+        Asylum Application Status,asylum_application_status,qb:dimension,http://gss-data.org.uk/def/dimension/asylum-application-status,http://gss-data.org.uk/def/concept/asylum-application-status/{asylum_application_status},string,,,
+
+        Section 95 Support,section_support,qb:dimension,http://gss-data.org.uk/def/dimension/section-95-support,http://gss-data.org.uk/def/concept/section-95-support/{section_support},string,,,
+
+        Resettlement Scheme,resettlement_scheme,qb:dimension,http://gss-data.org.uk/def/dimension/resettlement-scheme,http://gss-data.org.uk/def/concept/resettlement-scheme/{resettlement_scheme},string,,,
+
+        Nature of Transfer,nature_of_transfer,qb:dimension,http://gss-data.org.uk/def/dimension/nature-of-transfer,http://gss-data.org.uk/def/concept/nature-of-transfer/{nature_of_transfer},string,,,
+
+        Dublin Regulation Article,dublin_regulation_article,qb:dimension,http://gss-data.org.uk/def/dimension/dublin-regulation-article,http://gss-data.org.uk/def/concept/dublin-regulation-article/{dublin_regulation_article},string,,,
+
+        IPS Marker,ips_marker,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#obsStatus,http://gss-data.org.uk/def/concept/ips-markers/{ips_marker},string,,,
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '7469'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:14:54 GMT
+      ETag:
+      - '"5e4a954d-1d2d"'
+      Expires:
+      - Mon, 11 May 2020 16:24:54 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 13:29:49 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 939766cffe1268960ef79850256c8dc065367e53
+      X-GitHub-Request-Id:
+      - 23C8:26FD:36390B:44DC28:5EB979FC
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4150-MAN
+      X-Timer:
+      - S1589213694.042325,VS0,VE117
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_migration/components.csv
+  response:
+    body:
+      string: 'Label,Description,Component Type,Codelist
+
+        Citizenship,Country for which a migrant is a passport holder,Dimension,http://gss-data.org.uk/def/concept-scheme/citizenship
+
+        Migration,Direction of migration,Dimension,http://gss-data.org.uk/def/concept-scheme/migration-directions
+
+        CI,95% confidence interval,Attribute,
+
+        Reason for migration,Reason for migration,Dimension,http://gss-data.org.uk/def/concept-scheme/reasons-for-migration
+
+        Occupation,Occupations,Dimension,http://gss-data.org.uk/def/concept-scheme/occupations
+
+        Country of residence,Country of last or next residence,Dimension,http://gss-data.org.uk/def/concept-scheme/country-of-residence
+
+        Area of Destination or Origin,Area of destination or origin of migration,Dimension,
+
+        Migration Type,Type of migration,Dimension,http://gss-data.org.uk/def/concept-scheme/migration-types
+
+        Population Change Component,Components of population change,Dimension,http://gss-data.org.uk/def/concept-scheme/population-change-component
+
+        Applicant type,Type of entry clearance visa applicant,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-applicant-types
+
+        Application category,Category of entry clearance visa application,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-application-category
+
+        Application type,Type of entry clearance visa application,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-application-types
+
+        Country of nationality,Country of nationality of entry clearance visa applicant,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-citizenship
+
+        Resolution,Resolution of entry clearance visa application,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-application-resolutions
+
+        DWP Nationality,DWP Nationality at point of NINo registration,Dimension,http://gss-data.org.uk/def/concept-scheme/dwp-nationality
+
+        Domestic geography,Domestic geography,Dimension,
+
+        Foreign geography,Foreign geography,Dimension,http://gss-data.org.uk/def/concept-scheme/foreign-geography
+
+        HO Country of Nationality,Country of nationality assigned by Home Office,Dimension,http://gss-data.org.uk/def/concept-scheme/ho-country-of-nationality
+
+        Asylum Application Status,Asylum Application Status,Dimension,http://gss-data.org.uk/def/concept-scheme/asylum-application-status
+
+        Section 95 Support,Section 95 Support,Dimension,http://gss-data.org.uk/def/concept-scheme/section-95-support
+
+        Resettlement Scheme,Resettlement Scheme,Dimension,http://gss-data.org.uk/def/concept-scheme/resettlement-scheme
+
+        Nature of Transfer,Nature of Transfer,Dimension,http://gss-data.org.uk/def/concept-scheme/nature-of-transfer
+
+        Dublin Regulation Article,Dublin Regulation Article,Dimension,http://gss-data.org.uk/def/concept-scheme/dublin-regulation-article
+
+        IPS Marker,Marker for special values,Attribute,http://gss-data.org.uk/def/concept-scheme/ips-markers
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '2776'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:14:54 GMT
+      ETag:
+      - '"5e4a954d-ad8"'
+      Expires:
+      - Mon, 11 May 2020 16:24:54 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 13:29:49 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 5b6642f888e5283f9dd359e5e4d8aac8fee408c9
+      X-GitHub-Request-Id:
+      - FE66:5B81:E247C9:1185188:5EB979FD
+      X-Origin-Cache:
+      - '1'
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4127-MAN
+      X-Timer:
+      - S1589213694.247231,VS0,VE103
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/ref_migration/codelists-metadata.json
+  response:
+    body:
+      string: "{\n  \"@context\": [\"http://www.w3.org/ns/csvw\", {\"@language\":
+        \"en\"}],\n  \"tables\": [{\n    \"url\": \"codelists/migration-directions.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Migration Directions\"\n  }, {\n    \"url\": \"codelists/reason.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Reasons for Migration\"\n  }, {\n    \"url\": \"codelists/occupation.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Occupations\"\n  }, {\n    \"url\": \"codelists/residence.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Country of Residence\"\n  }, {\n    \"url\": \"codelists/migration-type.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Migration types\"\n  }, {\n    \"url\": \"codelists/registration-geographies.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Registration Geographies\"\n  }, {\n    \"url\": \"codelists/citizenship.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Citizenship\"\n  }, {\n    \"url\": \"codelists/ips-citizenship.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"IPS Citizenship\"\n  }, {\n    \"url\": \"codelists/population-change-component.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Population Change Component\"\n  }, {\n    \"url\":
+        \"codelists/ltim-citizenship.csv\",\n    \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"LTIM Citizenship\"\n  }, {\n    \"url\": \"codelists/ho-applicant-types.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"HO Applicant Types\"\n  }, {\n    \"url\": \"codelists/ho-application-types.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"HO Application Types\"\n  }, {\n    \"url\": \"codelists/ho-application-categories.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"HO Application Category\"\n  }, {\n    \"url\": \"codelists/ho-application-resolution.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"HO Application Resolutions\"\n  }, {\n    \"url\": \"codelists/ho-country-of-nationality.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"HO Country of Nationality\"\n  }, {\n    \"url\": \"codelists/asylum-application-status.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Asylum Application Status\"\n  }, {\n    \"url\": \"codelists/foreign-geography.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Foreign geography\"\n  }, {\n    \"url\": \"codelists/section-95-support.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Section 95 Support\"\n  }, {\n    \"url\": \"codelists/resettlement-scheme.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Resettlement Scheme\"\n  }, {\n    \"url\": \"codelists/nature-of-transfer.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Nature of Transfer\"\n  }, {\n    \"url\": \"codelists/dublin-regulation-article.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"Dublin Regulation Article\"\n  }, {\n    \"url\": \"codelists/ips-markers.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_migration/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"IPS Markers\"\n  }, {\n    \"url\": \"codelists/dwp-nationalities.csv\",\n
+        \   \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \   \"rdfs:label\": \"DWP Nationality\"\n  }]\n}\n"
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '4115'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:14:54 GMT
+      ETag:
+      - '"5e4a954d-1013"'
+      Expires:
+      - Mon, 11 May 2020 16:24:54 GMT
+      Last-Modified:
+      - Mon, 17 Feb 2020 13:29:49 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 9f1c7e002ce07b7d9c61faf5b3c12a5c0958b12f
+      X-GitHub-Request-Id:
+      - 79D4:3CA5:39C747:4917B7:5EB979FC
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4121-MAN
+      X-Timer:
+      - S1589213694.479269,VS0,VE111
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/family-trade/reference/columns.csv
+  response:
+    body:
+      string: 'title,name,component_attachment,property_template,value_template,datatype,value_transformation,regex,range
+
+        Geography,geography,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refArea,http://statistics.data.gov.uk/id/statistical-geography/{geography},string,,,
+
+        Date,date,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/year/{date},string,,,
+
+        Measure Type,measure_type,qb:dimension,http://purl.org/linked-data/cube#measureType,http://gss-data.org.uk/def/measure/{measure_type},string,slugize,,http://purl.org/linked-data/cube#MeasureProperty
+
+        Unit,unit,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure,http://gss-data.org.uk/def/concept/measurement-units/{unit},string,unitize,,
+
+        SITC Section,sitc_section,qb:dimension,http://gss-data.org.uk/def/dimension/sitc-section,http://gss-data.org.uk/def/concept/sitc-sections/{sitc_section},string,slugize,,
+
+        Flow,flow,qb:dimension,http://gss-data.org.uk/def/dimension/flow-directions,http://gss-data.org.uk/def/concept/flow-directions/{flow},string,slugize,,
+
+        GBP Total,gbp_total,qb:measure,http://gss-data.org.uk/def/measure/gbp-total,,string,,,
+
+        Employee Count,employee_count,qb:measure,http://gss-data.org.uk/def/measure/employee-count,,string,,,
+
+        Business Count,business_count,qb:measure,http://gss-data.org.uk/def/measure/business-count,,string,,,
+
+        Net Mass,net_mass,qb:measure,http://gss-data.org.uk/def/measure/net-mass,,string,,,
+
+        Value,value,,http://gss-data.org.uk/def/measure/{measure_type},,number,,,
+
+        Year,year,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/year/{year},string,,,
+
+        Foreign Country,foreign_country,qb:dimension,http://gss-data.org.uk/def/dimension/foreign-country,http://gss-data.org.uk/def/concept/countries/{foreign_country},string,slugize,,
+
+        Trade Area,trade_area,qb:dimension,http://gss-data.org.uk/def/dimension/trade-area,http://gss-data.org.uk/def/concept/trade-area/{trade_area},string,slugize,,
+
+        Combined Nomenclature,combined_nomenclature,qb:dimension,http://gss-data.org.uk/def/dimension/product,https://trade.ec.europa.eu/def/{combined_nomenclature},string,,,
+
+        Period,period,qb:dimension,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod,http://reference.data.gov.uk/id/{+period},string,,,http://www.w3.org/2006/time#Interval
+
+        CDID,cdid,qb:attribute,http://gss-data.org.uk/def/attribute/cdid,,string,,,
+
+        BOP Services,bop_services,qb:dimension,http://gss-data.org.uk/def/dimension/bop-services,http://gss-data.org.uk/def/concept/bop-services/{bop_services},string,,,
+
+        ITIS Service,itis_service,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/itis-services/{itis_service},string,,,
+
+        ITIS Industry,itis_industry,qb:dimension,http://gss-data.org.uk/def/dimension/itis-industry,http://gss-data.org.uk/def/concept/itis-industry/{itis_industry},string,,,
+
+        Pink Book Services,pink_book_services,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/pink-book-services/{pink_book_services},string,,,
+
+        Seasonal Adjustment,seasonal_adjustment,qb:dimension,http://gss-data.org.uk/def/dimension/seasonal-adjustment,http://gss-data.org.uk/def/concept/seasonal-adjustments/{seasonal_adjustment},string,,,
+
+        Turnover(GBP Thousands),turnover_size_band,qb:dimension,http://gss-data.org.uk/def/dimension/turnover,http://gss-data.org.uk/def/concept/turnover-size-bands/{turnover_size_band},string,slugize,,
+
+        Employment,employment,qb:dimension,http://gss-data.org.uk/def/dimension/employment,http://gss-data.org.uk/def/concept/employment-size-bands/{employment},string,slugize,,
+
+        Age of Business(Years),age_of_business,qb:dimension,http://gss-data.org.uk/def/dimension/age-of-business,http://gss-data.org.uk/def/concept/age-of-business/{age_of_business},string,slugize,,
+
+        Country of Ownership,country_of_ownership,qb:dimension,http://gss-data.org.uk/def/dimension/country-of-ownership,http://gss-data.org.uk/def/concept/countries-of-ownership/{country_of_ownership},string,slugize,,
+
+        CPA 2008,cpa2008,qb:dimension,http://gss-data.org.uk/def/dimension/cpa,http://stamina-project.org/codes/cpav2008/{cpa2008},string,,,
+
+        Price Classification,price_classification,qb:dimension,http://gss-data.org.uk/def/dimension/price-classification,http://gss-data.org.uk/def/concept/price-classifications/{price_classification},string,,,
+
+        CORD SITC,cord_sitc,qb:dimension,http://gss-data.org.uk/def/dimension/cord-sitc,http://gss-data.org.uk/def/concept/cord-sitc/{cord_sitc},string,,,
+
+        HMRC Partner Geography,hmrc_partner_geography,qb:dimension,http://gss-data.org.uk/def/dimension/hmrc-partner-geography,http://gss-data.org.uk/def/concept/hmrc-geographies/{hmrc_partner_geography},string,,,
+
+        HMRC Reporter Region,hmrc_reporter_region,qb:dimension,http://gss-data.org.uk/def/dimension/hmrc-reporter-region,http://gss-data.org.uk/def/concept/hmrc-regions/{hmrc_reporter_region},string,,,
+
+        ONS Partner Geography,ons_partner_geography,qb:dimension,http://gss-data.org.uk/def/dimension/ons-partner-geography,http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{ons_partner_geography},string,,,
+
+        ONS Reporter Geography,ons_reporter_geography,qb:dimension,http://gss-data.org.uk/def/dimension/trade-reporter-geography,http://statistics.data.gov.uk/id/statistical-geography/{ons_reporter_geography},string,,,
+
+        ONS Trade Areas ITIS,ons_trade_geo_itis,qb:dimension,http://gss-data.org.uk/def/dimension/trade-partner-geography,http://gss-data.org.uk/def/concept/ons-trade-areas-itis/{ons_trade_geo_itis},string,,,
+
+        NUTS Geography,nuts_geography,qb:dimension,http://gss-data.org.uk/def/dimension/trade-reporter-geography,http://gss-data.org.uk/def/concept/nuts-geography/{nuts_geography},string,,,
+
+        International Trade Basis,international_trade_basis,qb:dimension,http://gss-data.org.uk/def/dimension/international-trade-basis,http://gss-data.org.uk/def/concept/international-trade-basis/{international_trade_basis},string,,,
+
+        Export and Import Activity,export_and_import_activity,qb:dimension,http://gss-data.org.uk/def/dimension/export-and-import-activity,http://gss-data.org.uk/def/concept/export-and-import-activity/{export_and_import_activity},string,slugize,,
+
+        Count of Businesses,count_of_businesses,qb:measure,http://gss-data.org.uk/def/measure/count-of-businesses,,string,,,
+
+        Count of Employees,count_of_employees,qb:measure,http://gss-data.org.uk/def/measure/count-of-employees,,string,,,
+
+        Count,count,qb:measure,http://gss-data.org.uk/def/measure/count,,string,,,
+
+        Proportion of all Business,proportion_of_all_business,qb:measure,http://gss-data.org.uk/def/measure/proportion-of-all-business,,string,,,
+
+        HMRC Industry,hmrc_industry,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/hmrc-industry-groups/{hmrc_industry},string,,,
+
+        Total Turnover,total_turnover,qb:measure,http://gss-data.org.uk/def/measure/total-turnover,,string,,,
+
+        SITC 4,sitc4,qb:dimension,http://gss-data.org.uk/def/dimension/sitc-4,http://gss-data.org.uk/def/concept/sitc-4/{sitc4},string,,,
+
+        ONS ABS Trade,ons_abs_trades,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/ons-abs-trades/{ons_abs_trades},string,slugize,,
+
+        Investment Direction,investment_direction,qb:dimension,http://gss-data.org.uk/def/dimension/investment-direction,http://gss-data.org.uk/def/concept/investment-direction/{investment_direction},string,,,
+
+        ONS FDI Area,ons_fdi_area,qb:dimension,http://gss-data.org.uk/def/dimension/ons-fdi-area,http://gss-data.org.uk/def/concept/ons-fdi-area/{ons_fdi_area},string,,,
+
+        FDI Component,fdi_component,qb:dimension,http://gss-data.org.uk/def/dimension/fdi-component,http://gss-data.org.uk/def/concept/fdi-component/{fdi_component},string,,,
+
+        FDI Industry,fdi_industry,qb:dimension,http://gss-data.org.uk/def/dimension/fdi-industry,http://gss-data.org.uk/def/concept/fdi-industry/{fdi_industry},string,,,
+
+        ONS Functional Category,ons_func_category,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/ons-functional-category/{ons_func_category},string,,,
+
+        SIC 2007,sic2007,qb:dimension,http://gss-data.org.uk/def/dimension/sic-industry,http://business.data.gov.uk/companies/def/sic-2007/{sic2007},string,,,
+
+        Marker,marker,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#obsStatus,http://gss-data.org.uk/def/concept/marker/{marker},string,,,http://purl.org/linked-data/sdmx/2009/code#ObsStatus
+
+        GBP Million,gbp_million,qb:measure,http://gss-data.org.uk/def/measure/gbp-million,,string,,,
+
+        Suppressed,suppressed,qb:measure,http://gss-data.org.uk/def/measure/suppressed,,string,,,
+
+        GBP,gbp,qb:measure,http://gss-data.org.uk/def/measure/gbp,,string,,,
+
+        Product Department,product_department,qb:dimension,http://gss-data.org.uk/def/dimension/product-department,http://gss-data.org.uk/def/concept/product-department/{product_department},string,,,
+
+        Product Category,product_category,qb:dimension,http://gss-data.org.uk/def/dimension/product-category,http://gss-data.org.uk/def/concept/product-category/{product_category},string,,,
+
+        Product,product,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/product/{product},string,,,
+
+        Flow Directions,flow_directions,qb:dimension,http://gss-data.org.uk/def/dimension/flow-directions,http://gss-data.org.uk/def/concept/flow-directions/{flow_directions},string,,,
+
+        Trades,trades,qb:dimension,http://gss-data.org.uk/def/dimension/trades,http://gss-data.org.uk/def/concept/trades/{trades},string,,,
+
+        Account Type,account_type,qb:dimension,http://gss-data.org.uk/def/dimension/account-type,http://gss-data.org.uk/def/concept/account-type/{account_type},string,,,
+
+        Income,income,qb:dimension,http://gss-data.org.uk/def/dimension/income,http://gss-data.org.uk/def/concept/income/{income},string,,,
+
+        Income Description,income_description,qb:dimension,http://gss-data.org.uk/def/dimension/income-description,http://gss-data.org.uk/def/concept/income-description/{income_description},string,,,
+
+        Earnings,earnings,qb:dimension,http://gss-data.org.uk/def/dimension/earnings,http://gss-data.org.uk/def/concept/earnings/{earnings},string,,,
+
+        Sector,sector,qb:dimension,http://gss-data.org.uk/def/dimension/sector,http://gss-data.org.uk/def/concept/sector/{sector},string,,,
+
+        Transaction Type,transaction_type,qb:dimension,http://gss-data.org.uk/def/dimension/transaction-type,http://gss-data.org.uk/def/concept/transaction-type/{transaction_type},string,,,
+
+        Inventory,inventory,qb:dimension,http://gss-data.org.uk/def/dimension/inventory,http://gss-data.org.uk/def/concept/inventory/{inventory},string,slugize,,
+
+        Income Category,income_category,qb:dimension,http://gss-data.org.uk/def/dimension/income-category,http://gss-data.org.uk/def/concept/income-category/{income_category},string,slugize,,
+
+        Expenditure Category,expenditure_category,qb:dimension,http://gss-data.org.uk/def/dimension/expenditure-category,http://gss-data.org.uk/def/concept/expenditure-category/{expenditure_category},string,slugize,,
+
+        2016 Weights,2016_weights,qb:attribute,http://gss-data.org.uk/def/attribute/2016-weights,,number,,,
+
+        Industry,industry,qb:dimension,http://gss-data.org.uk/def/dimension/industry,http://gss-data.org.uk/def/concept/industry/{industry},string,slugize,,
+
+        Capital Formation,capital_formation,qb:dimension,http://gss-data.org.uk/def/dimension/capital-formation,http://gss-data.org.uk/def/concept/capital-formation/{capital_formation},string,slugize,,
+
+        Expenditure Type,expenditure_type,qb:dimension,http://gss-data.org.uk/def/dimension/expenditure-type,http://gss-data.org.uk/def/concept/expenditure-type/{expenditure_type},string,slugize,,
+
+        Household Expenditure,household_expenditure,qb:dimension,http://gss-data.org.uk/def/dimension/household-expenditure,http://gss-data.org.uk/def/concept/household-expenditure/{household_expenditure},string,slugize,,
+
+        Industrial Sector,industrial_sector,qb:dimension,http://gss-data.org.uk/def/dimension/industrial-sector,http://gss-data.org.uk/def/concept/industrial-sector/{industrial_sector},string,slugize,,
+
+        Income Indicator,income_indicator,qb:dimension,http://gss-data.org.uk/def/dimension/income-indicator,http://gss-data.org.uk/def/concept/income-indicator/{income_indicator},string,slugize,,
+
+        Estimate Type,estimate_type,qb:dimension,http://gss-data.org.uk/def/dimension/estimate-type,http://gss-data.org.uk/def/concept/estimate-type/{estimate_type},string,slugize,,
+
+        Trade Type,trade_type,qb:dimension,http://gss-data.org.uk/def/dimension/trade-type,http://gss-data.org.uk/def/concept/trade-type/{trade_type},string,slugize,,
+
+        Aggregate,aggregate,qb:dimension,http://gss-data.org.uk/def/dimension/aggregate,http://gss-data.org.uk/def/concept/aggregate/{aggregate},string,slugize,,
+
+        Expenditure,expenditure,qb:dimension,http://gss-data.org.uk/def/dimension/expenditure,http://gss-data.org.uk/def/concept/expenditure/{expenditure},string,slugize,,
+
+        Analysis,analysis,qb:dimension,http://gss-data.org.uk/def/dimension/analysis,http://gss-data.org.uk/def/concept/analysis/{analysis},string,slugize,,s
+
+        Index deflator series,index_deflator_series,qb:measure,http://gss-data.org.uk/def/measure/index-deflator-series,,,,,
+
+        Index,index,qb:measure,http://gss-data.org.uk/def/measure/index,,,,,
+
+        Quarter on quarter a year ago,quarter_on_quarter_a_year_ago,qb:measure,http://gss-data.org.uk/def/measure/quarter-on-quarter-a-year-ago,,,,,
+
+        Quarter on quarter,quarter_on_quarter,qb:measure,http://gss-data.org.uk/def/measure/quarter-on-quarter,,,,,
+
+        Year on year,year_on_year,qb:measure,http://gss-data.org.uk/def/measure/year-on-year,,,,,
+
+        Implied Deflator,implied_deflator,qb:measure,http://gss-data.org.uk/def/measure/implied-deflator,,,,,
+
+        Chained volume measure,chained_volume_measure,qb:measure,http://gss-data.org.uk/def/measure/chained-volume-measure,,,,,
+
+        Current Price,current_price,qb:measure,http://gss-data.org.uk/def/measure/current-price,,,,,
+
+        Average value per ton,average_value_per_ton,qb:measure,http://gss-data.org.uk/def/measure/average-value-per-ton,,,,,
+
+        Index series,index_series,qb:measure,http://gss-data.org.uk/def/measure/index-series,,,,,
+
+        Services,services,qb:dimension,http://gss-data.org.uk/def/dimension/services,http://gss-data.org.uk/def/concept/services/{services},string,slugize,,
+
+        Country Transaction,country_transaction,qb:dimension,http://gss-data.org.uk/def/dimension/country-transaction,http://gss-data.org.uk/def/concept/country-transaction/{country_transaction},string,slugize,,
+
+        Members,members,qb:dimension,http://gss-data.org.uk/def/dimension/members,http://gss-data.org.uk/def/concept/members/{members},string,slugize,,
+
+        Service Origin Geography,service_origin_geography,qb:dimension,http://gss-data.org.uk/def/dimension/service-origin-geography,http://gss-data.org.uk/def/concept/service-origin-geography/{service_origin_geography},string,,,
+
+        Service Destination Geography,service_destination_geography,qb:dimension,http://gss-data.org.uk/def/dimension/service-destination-geography,http://gss-data.org.uk/def/concept/service-destination-geography/{service_destination_geography},string,,,
+
+        GDP Reference Period,gdp_reference_period,qb:dimension,http://gss-data.org.uk/def/dimension/gdp-reference-period,http://reference.data.gov.uk/id/{+gdp_reference_period},string,,,
+
+        Publication Date,publication_date,qb:dimension,http://gss-data.org.uk/def/dimension/publication-date,http://reference.data.gov.uk/id/{+publication_date},string,,,
+
+        GDP Estimate Type,gdp_estimate_type,qb:dimension,http://gss-data.org.uk/def/dimension/gdp-estimate-type,http://gss-data.org.uk/def/concept/gdp-estimate-type/{gdp_estimate_type},string,,,
+
+        MRETS Product,mrets_product,qb:dimension,http://gss-data.org.uk/def/dimension/mrets-product,http://gss-data.org.uk/def/concept/mrets-product/{mrets_product},string,,,
+
+        Decimals,decimals,qb:attribute,http://purl.org/linked-data/sdmx/2009/attribute#decimals,,number,,,
+
+        Pinkbook CDID,pinkbook_cdid,qb:dimension,http://gss-data.org.uk/def/dimension/pinkbook-cdid,http://gss-data.org.uk/def/concept/pinkbook-cdid/{pinkbook_cdid},string,slugize,,
+
+        Size of Business by no of Employees,size_of_business_by_no_of_employees,qb:dimension,http://gss-data.org.uk/def/dimension/size-of-business-by-no-of-employees,http://gss-data.org.uk/def/concept/employment-size-bands/{size_of_business_by_no_of_employees},string,slugize,,
+
+        HMRC Trade Statistic Type,hmrc_trade_statistic_type,qb:dimension,http://gss-data.org.uk/def/dimension/hmrc-trade-statistic-type,http://gss-data.org.uk/def/concept/hmrc-trade-statistic-type/{hmrc_trade_statistic_type},string,slugize,,
+
+        CORD Geography,cord_geography,qb:dimension,http://gss-data.org.uk/def/dimension/cord-geography,http://gss-data.org.uk/def/concept/cord-geography/{cord_geography},string,,,
+
+        Alcohol Duty,alcohol_duty,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-duty,http://gss-data.org.uk/def/concept/alcohol-duty/{alcohol_duty},string,slugize,,
+
+        Alcohol Category,alcohol_category,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-category,http://gss-data.org.uk/def/concept/alcohol-category/{alcohol_category},string,slugize,,
+
+        Alcohol Content,alcohol_content,qb:dimension,http://gss-data.org.uk/def/dimension/alcohol-content,http://gss-data.org.uk/def/concept/alcohol-content/{alcohol_content},string,slugize,,
+
+        Revision,revision,qb:dimension,http://gss-data.org.uk/def/dimension/revision,http://gss-data.org.uk/def/concept/revisions/{revision},string,slugize,,
+
+        GDP Measure,gdp_measure,qb:dimension,http://gss-data.org.uk/def/dimension/gdp-measure,http://gss-data.org.uk/def/concept/gdp-measure/{gdp_measure},string,slugize,,
+
+        Trade Services,trade_services,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/trade-services/{trade_services},string,,,
+
+        Revenue,revenue,qb:measure,http://gss-data.org.uk/def/measure/revenue,,string,,,
+
+        Quantities Released for Consumption,quantities_released_for_consumption,qb:measure,http://gss-data.org.uk/def/measure/quantities-released-for-consumption,,string,,,
+
+        Net Quantities of Spirits Charged with Duty,net_quantities_of_spirits_charged_with_duty,qb:measure,http://gss-data.org.uk/def/measure/net-quantities-of-spirits-charged-with-duty,,string,,,
+
+        Production of Potable Spirits,production_of_potable_spirits,qb:measure,http://gss-data.org.uk/def/measure/production-of-potable-spirits,,string,,,
+
+        UK Beer Production,uk_beer_production,qb:measure,http://gss-data.org.uk/def/measure/uk-beer-production,,string,,,
+
+        Beer Clearances,beer_clearances,qb:measure,http://gss-data.org.uk/def/measure/beer-clearances,,string,,,
+
+        Cider Clearances,cider_clearances,qb:measure,http://gss-data.org.uk/def/measure/cider-clearances,,string,,,
+
+        Rates of Duty,rates_of_duty,qb:measure,http://gss-data.org.uk/def/measure/rates-of-duty,,string,,,
+
+        Alcohol Clearances,alcohol_clearances,qb:measure,http://gss-data.org.uk/def/measure/alcohol-clearances,,string,,,
+
+        Trade Group,trade_group,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/trade-group/{trade_group},string,,,
+
+        Export Services,export_services,qb:dimension,http://gss-data.org.uk/def/dimension/product,http://gss-data.org.uk/def/concept/export-services/{export_services},string,,,
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '19170'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:15:18 GMT
+      ETag:
+      - '"5eb975d0-4ae2"'
+      Expires:
+      - Mon, 11 May 2020 16:25:18 GMT
+      Last-Modified:
+      - Mon, 11 May 2020 15:57:04 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 1a29b57e54fa9a4eb56acfe7d46e2fd1c82ccb01
+      X-GitHub-Request-Id:
+      - CA92:791F:E51089:11BB5FC:5EB97A14
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4132-MAN
+      X-Timer:
+      - S1589213718.229126,VS0,VE116
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/family-trade/reference/components.csv
+  response:
+    body:
+      string: 'Label,Description,Component Type,Codelist,Path,Range,Parent
+
+        BOP Services,,Dimension,http://gss-data.org.uk/def/concept-scheme/bop-services,dimension/bop-services,BopServices,
+
+        SITC Section,Standard International Trade Classification,Dimension,http://gss-data.org.uk/def/concept-scheme/sitc-sections,dimension/sitc-section,SitcSection,
+
+        GBP Total,Total in British Pounds Sterling,Measure,,measure/gbp-total,GbpTotal,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Net Mass,Net Mass explain me better,Measure,,measure/net-mass,NetMass,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Seasonal Adjustment,Whether the time-series has been adjusted to remove cyclical
+        components,Dimension,http://gss-data.org.uk/def/concept-scheme/seasonal-adjustments,dimension/seasonal-adjustment,SeasonalAdjustment,
+
+        CDID,Central Database Identifier,Attribute,,attribute/cdid,Cdid,
+
+        Turnover,Turnover generated by the business,Dimension,http://gss-data.org.uk/def/concept-scheme/turnover-size-bands,dimension/turnover,Turnover,
+
+        Employment,Number of employees in the business,Dimension,http://gss-data.org.uk/def/concept-scheme/employment-size-bands,dimension/employment,Employment,
+
+        Age of Business,How long the business has been trading,Dimension,http://gss-data.org.uk/def/concept-scheme/age-of-business,dimension/age-of-business,AgeOfBusiness,
+
+        Country of Ownership,Country of Ownership,Dimension,http://gss-data.org.uk/def/concept-scheme/countries-of-ownership,dimension/country-of-ownership,CountryOfOwnership,
+
+        Product,Good or service being traded,Dimension,http://gss-data.org.uk/def/concept-scheme/product,dimension/product,Product,
+
+        Price Classification,Methodology for handling prices,Dimension,http://gss-data.org.uk/def/concept-scheme/price-classifications,dimension/price-classification,PriceClassification,
+
+        Trade Partner Geography,Location of the trade partner. Typically a foreign
+        geography. The destination of exports or origin of imports.,Dimension,http://gss-data.org.uk/def/concept-scheme/ons-trade-areas-cord,dimension/trade-partner-geography,TradePartnerGeography,
+
+        Trade Reporter Geography,Location of the trade reporter. Typically a domestic
+        geography. The destination of imports or origin of exports.,Dimension,http://gss-data.org.uk/def/concept-scheme/nuts-geography,dimension/trade-reporter-geography,TradeReporterGeography,
+
+        International Trade Basis,The methodological basis on which the trade statistics
+        have been calculated,Dimension,http://gss-data.org.uk/def/concept-scheme/international-trade-basis,dimension/international-trade-basis,InternationalTradeBasis,
+
+        Investment Direction,Direction of foreign direct investment into the UK (inward)
+        or abroad (outward),Dimension,http://gss-data.org.uk/def/concept-scheme/investment-direction,dimension/investment-direction,InvestmentDirection,
+
+        Export and Import Activity,Whether and how the business is trading internationally,Dimension,http://gss-data.org.uk/def/concept-scheme/export-and-import-activity,dimension/export-and-import-activity,ExportAndImportActivity,
+
+        Count of Businesses,The total number of businesses,Measure,,measure/count-of-businesses,CountOfBusinesses,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Count of Employees,The total number of employees,Measure,,measure/count-of-employees,CountOfEmployees,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Count,The total number of items,Measure,,measure/count,Count,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Proportion of all Business,The proportion of all businesses that match the
+        specified criteria,Measure,,measure/proportion-of-all-business,ProportionOfAllBusiness,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Total Turnover,The total value of turnover,Measure,,measure/total-turnover,TotalTurnover,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        SITC 4,Standard International Trade Classification Revision 4,Dimension,http://gss-data.org.uk/def/concept-scheme/sitc-4,dimension/sitc-4,Sitc4,
+
+        ONS FDI Area,Area from which foreign direct investment (FDI) flows into/out
+        of the UK,Dimension,http://gss-data.org.uk/def/concept-scheme/ons-fdi-area,dimension/ons-fdi-area,OnsFdiArea,
+
+        FDI Component,Foreign direct investment (FDI) component being measured,Dimension,http://gss-data.org.uk/def/concept-scheme/fdi-component,dimension/fdi-component,FdiComponent,
+
+        FDI Industry,High level industry groupings based on SIC 2007,Dimension,http://gss-data.org.uk/def/concept-scheme/fdi-industry,dimension/fdi-industry,FdiIndustry,
+
+        HMRC Industry,HMRC Industry,Dimension,http://gss-data.org.uk/def/concept-scheme/hmrc-industry-groups,dimension/hmrc-industry,HmrcIndustry,
+
+        NUTS Geography,The Nomenclature of Territorial Units for Statistics (NUTS)
+        is a geocode standard by Eurostat for referencing the subdivisions of the
+        United Kingdom of Great Britain and Northern Ireland for statistical purposes.,Dimension,http://gss-data.org.uk/def/concept-scheme/nuts-geography,dimension/nuts-geography,NutsGeography,
+
+        ONS Functional Category,ONS high level industry groupings based on SIC 2007,Dimension,http://gss-data.org.uk/def/concept-scheme/ons-functional-category,dimension/ons-functional-category,OnsFunctionalCategory,
+
+        ONS Trade Areas ITIS,ONS Trade Areas ITIS,Dimension,http://gss-data.org.uk/def/concept-scheme/ons-trade-areas-itis,dimension/ons-trade-areas-itis,OnsTradeAreasItis,
+
+        ITIS Service,ITIS Service,Dimension,http://gss-data.org.uk/def/concept-scheme/itis-services,dimension/itis-service,ItisService,
+
+        ITIS Industry,ITIS Industry,Dimension,http://gss-data.org.uk/def/concept-scheme/itis-industry,dimension/itis-industry,ItisIndustry,
+
+        SIC Industry,The current Standard Industrial Classification (SIC) used in
+        classifying business establishments and other statistical units by the type
+        of economic activity in which they are engaged.,Dimension,http://business.data.gov.uk/companies/def/sic-2007/scheme,dimension/sic-industry,SicIndustry,
+
+        Marker,Marker for special values,Attribute,http://gss-data.org.uk/def/concept-scheme/marker,attribute/marker,Marker,
+
+        ONS Partner Geography,ONS Partner Geography,Dimension,http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area,dimension/ons-partner-geography,OnsPartnerGeography,
+
+        GBP Million,GBP Million,Measure,,measure/gbp-million,GbpMillion,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Suppressed,Data suppressed,Measure,,measure/suppressed,Suppressed,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Product Department,Product Department,Dimension,http://gss-data.org.uk/def/concept-scheme/product-department,dimension/product-department,ProductDepartment,
+
+        Product Category,Product Category,Dimension,http://gss-data.org.uk/def/concept-scheme/product-category,dimension/product-category,ProductCategory,
+
+        Trades,Trades,Dimension,http://gss-data.org.uk/def/concept-scheme/trades,dimension/trades,Trades,
+
+        Account Type,Account Type,Dimension,http://gss-data.org.uk/def/concept-scheme/account-type,dimension/account-type,AccountType,
+
+        Income,Income,Dimension,http://gss-data.org.uk/def/concept-scheme/income,dimension/income,Income,
+
+        Income Description,Income Description,Dimension,http://gss-data.org.uk/def/concept-scheme/income-description,dimension/income-description,IncomeDescription,
+
+        Earnings,Earnings,Dimension,http://gss-data.org.uk/def/concept-scheme/earnings,dimension/earnings,Earnings,
+
+        Sector,Sector,Dimension,http://gss-data.org.uk/def/concept-scheme/sector,dimension/sector,Sector,
+
+        Transaction Type,Transaction Type,Dimension,http://gss-data.org.uk/def/concept-scheme/transaction-type,dimension/transaction-type,TransactionType,
+
+        Index deflator series,,Measure,,measure/index-deflator-series,IndexDeflatorSeries,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Index,,Measure,,measure/index,Index,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Quarter on quarter a year ago,,Measure,,measure/quarter-on-quarter-a-year-ago,QuarterOnQuarterAYearAgo,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Quarter on quarter,,Measure,,measure/quarter-on-quarter,QuarterOnQuarter,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Year on year,,Measure,,measure/year-on-year,YearOnYear,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Index series,,Measure,,measure/index-series,IndexSeries,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Implied Deflator,,Measure,,measure/implied-deflator,ImpliedDeflator,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Chained volume measure,,Measure,,measure/chained-volume-measure,ChainedVolumeMeasure,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Current Price,,Measure,,measure/current-price,CurrentPrice,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Average value per ton,,Measure,,measure/average-value-per-ton,AverageValuePerTon,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Inventory,,Dimension,http://gss-data.org.uk/def/concept-scheme/inventory,dimension/inventory,Inventory,
+
+        Expenditure Category,,Dimension,http://gss-data.org.uk/def/concept-scheme/expenditure-category,dimension/expenditure-category,ExpenditureCategory,
+
+        Analysis,,Dimension,http://gss-data.org.uk/def/concept-scheme/analysis,dimension/analysis,Analysis,
+
+        Income Category,,Dimension,http://gss-data.org.uk/def/concept-scheme/income-category,dimension/income-category,IncomeCategory,
+
+        Industrial Sector,,Dimension,http://gss-data.org.uk/def/concept-scheme/industrial-sector,dimension/industrial-sector,IndustrialSector,
+
+        Estimate Type,,Dimension,http://gss-data.org.uk/def/concept-scheme/estimate-type,dimension/estimate-type,EstimateType,
+
+        Expenditure,,Dimension,http://gss-data.org.uk/def/concept-scheme/expenditure,dimension/expenditure,Expenditure,
+
+        Trade Type,,Dimension,http://gss-data.org.uk/def/concept-scheme/trade-type,dimension/trade-type,TradeType,
+
+        Income Indicator,,Dimension,http://gss-data.org.uk/def/concept-scheme/income-indicator,dimension/income-indicator,IncomeIndicator,
+
+        Expenditure Type,,Dimension,http://gss-data.org.uk/def/concept-scheme/expenditure-type,dimension/expenditure-type,ExpenditureType,
+
+        Industry,,Dimension,http://gss-data.org.uk/def/concept-scheme/industry,dimension/industry,Industry,
+
+        Aggregate,,Dimension,http://gss-data.org.uk/def/concept-scheme/aggregate,dimension/aggregate,Aggregate,
+
+        Household Expenditure,,Dimension,http://gss-data.org.uk/def/concept-scheme/household-expenditure,dimension/household-expenditure,HouseholdExpenditure,
+
+        Capital Formation,,Dimension,http://gss-data.org.uk/def/concept-scheme/capital-formation,dimension/capital-formation,CapitalFormation,
+
+        Services,Services,Dimension,http://gss-data.org.uk/def/concept-scheme/services,dimension/services,Services,
+
+        Country Transaction,Country Transaction,Dimension,http://gss-data.org.uk/def/concept-scheme/country-transaction,dimension/country-transaction,CountryTransaction,
+
+        Members,Members,Dimension,http://gss-data.org.uk/def/concept-scheme/members,dimension/members,Members,
+
+        Service Origin Geography,,Dimension,http://gss-data.org.uk/def/concept-scheme/service-origin-geography,dimension/service-origin-geography,ServiceOriginGeography,
+
+        Service Destination Geography,,Dimension,http://gss-data.org.uk/def/concept-scheme/service-destination-geography,dimension/service-destination-geography,ServiceDestinationGeography,
+
+        Publication Date,The revision to a given reference point for a time series
+        can be identified in a real-time database as the change in value from an earlier
+        vintage of estimates to a later vintage,Dimension,,dimension/publication-date,PublicationDate,
+
+        Trade Area,,Dimension,http://gss-data.org.uk/def/concept-scheme/trade-area,dimension/trade-area,TradeArea,
+
+        MRETS Product,,Dimension,http://gss-data.org.uk/def/concept-scheme/mrets-product,dimension/mrets-product,MretsProduct,
+
+        Size of Business by no of Employees,Size of a business based on the number
+        of employees,Dimension,http://gss-data.org.uk/def/concept-scheme/employment-size-bands,dimension/size-of-business-by-no-of-employees,SizeOfBusinessByNoOfEmployees,
+
+        HMRC Trade Statistic Type,,Dimension,http://gss-data.org.uk/def/concept-scheme/hmrc-trade-statistic-type,dimension/hmrc-trade-statistic-type,HmrcTradeStatisticType,
+
+        HMRC Reporter Region,Location of the trade reporter. Typically a domestic
+        geography. The destination of imports or origin of exports.,Dimension,http://gss-data.org.uk/def/concept-scheme/hmrc-regions,dimension/hmrc-reporter-region,HmrcReporterRegion,
+
+        HMRC Partner Geography,,Dimension,http://gss-data.org.uk/def/concept-scheme/hmrc-geographies,dimension/hmrc-partner-geography,HmrcPartnerGeography,
+
+        CORD SITC,,Dimension,http://gss-data.org.uk/def/concept-scheme/cord-sitc,dimension/cord-sitc,CordSitc,
+
+        2016 Weights,2016 Weights,Attribute,,attribute/2016-weights,2016Weights,
+
+        CORD Geography,,Dimension,http://gss-data.org.uk/def/concept-scheme/cord-geography,dimension/cord-geography,CordGeography,
+
+        Flow,Direction in which trade is measured,Dimension,http://gss-data.org.uk/def/concept-scheme/flow-directions,dimension/flow-directions,FlowDirections,
+
+        Product,Classification of Products by Activity,Dimension,http://stamina-project.org/codes/cpav2008/cpa,dimension/cpa,Cpa,
+
+        Reference Period,Available reference point,Dimension,,dimension/gdp-reference-period,GdpReferencePeriod,http://purl.org/linked-data/sdmx/2009/dimension#refPeriod
+
+        GDP Estimate Type,,Dimension,http://gss-data.org.uk/def/concept-scheme/gdp-estimate-type,dimension/gdp-estimate-type,GdpEstimateType,
+
+        Alcohol Duty,Alcohol Duty,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-duty,dimension/alcohol-duty,AlcoholDuty,
+
+        Alcohol Content,Alcohol by volume (ABV),Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-content,dimension/alcohol-content,AlcoholContent,
+
+        Alcohol Category,Alcohol Category,Dimension,http://gss-data.org.uk/def/concept-scheme/alcohol-category,dimension/alcohol-category,AlcoholCategory,
+
+        GDP Measure,,Dimension,http://gss-data.org.uk/def/concept-scheme/gdp-measure,dimension/gdp-measure,GDPMeasure,
+
+        Quantities Released for Consumption,Quantities Released for Consumption,Measure,,measure/quantities-released-for-consumption,QuantitiesReleasedforConsumption,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Revenue,Revenue,Measure,,measure/revenue,Revenue,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Net Quantities of Spirits Charged with Duty,Net Quantities of Spirits Charged
+        with Duty,Measure,,measure/net-quantities-of-spirits-charged-with-duty,NetQuantitiesOfSpiritsChargedwithDuty,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        UK Beer Production,UK Beer Production,Measure,,measure/uk-beer-production,UKBeerProduction,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Beer Clearances,Beer Clearances,Measure,,measure/beer-clearances,BeerClearances,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Cider Clearances,Cider Clearances,Measure,,measure/cider-cearances,CiderClearances,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Rates of Duty,Rates of Duty,Measure,,measure/rates-of-duty,RatesOfDuty,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Alcohol Clearances,Alcohol Clearances,Measure,,measure/alcohol-clearances,AlcoholClearances,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        Production of Potable Spirits,,Measure,,measure/production-of-potable-spirits,ProductionOfPotableSpirits,http://purl.org/linked-data/sdmx/2009/measure#obsValue
+
+        '
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '15322'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:15:18 GMT
+      ETag:
+      - '"5eb975d0-3bda"'
+      Expires:
+      - Mon, 11 May 2020 16:25:18 GMT
+      Last-Modified:
+      - Mon, 11 May 2020 15:57:04 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 81914a184d55888c67fddd6f250ef9c5c8be69ea
+      X-GitHub-Request-Id:
+      - 960C:2AB8:199035:212C32:5EB97A15
+      X-Origin-Cache:
+      - '1'
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4140-MAN
+      X-Timer:
+      - S1589213718.445981,VS0,VE107
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - gss-cogs.github.io
+      User-Agent:
+      - Python-urllib/3.7
+    method: GET
+    uri: https://gss-cogs.github.io/family-trade/reference/codelists-metadata.json
+  response:
+    body:
+      string: "{\n    \"@context\": [\n        \"http://www.w3.org/ns/csvw\",\n        {\n
+        \           \"@language\": \"en\"\n        }\n    ],\n    \"tables\": [\n
+        \       {\n            \"url\": \"codelists/seasonal-adjustments.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Seasonal Adjustments\"\n        },\n        {\n
+        \           \"url\": \"codelists/price-classifications.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Price Classifications\",\n            \"rdfs:comment\": \"Taken from https://collaborate2.ons.gov.uk/jira/secure/attachment/12495/Prices%20classification.xlsx.
+        See GDP-237 for more.\"\n        },\n        {\n            \"url\": \"codelists/hmrc-geographies.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"HMRC Geographies\",\n            \"rdfs:comment\":
+        \"This codelist will have 2 labels for 13 of the codes. We might want to revise
+        the pipeline to allow distinguish skos:prefLabel and skos:altLabel. It also
+        doesn't include Geographical Region which may be useful (if we have data published
+        on this basis).\"\n        },\n        {\n            \"url\": \"codelists/employment-size-bands.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Employment Size Bands\",\n            \"rdfs:comment\":
+        \"We could introduce 2 levels to the hierarchy but I don\\u2019t think this
+        is necessary at this point.\"\n        },\n        {\n            \"url\":
+        \"codelists/countries-of-ownership.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Countries of Ownership\",\n            \"rdfs:comment\":
+        \"Not sure that this is country really, but that seems ok for now.\"\n        },\n
+        \       {\n            \"url\": \"codelists/turnover-size-bands.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Turnover Size Bands\",\n            \"rdfs:comment\": \"I\\u2019ve taken
+        the opportunity to simplify the notation here as our blunt slugify transformation
+        would convert commas to dashes \\u2013 we\\u2019ll need to either submit this
+        notation or add a custom transformation.\"\n        },\n        {\n            \"url\":
+        \"codelists/age-of-business.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Age of Business\"\n        },\n        {\n            \"url\":
+        \"codelists/flow-directions.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Flow Directions\"\n        },\n        {\n            \"url\":
+        \"codelists/international-trade-basis.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"International Trade Basis\",\n            \"rdfs:comment\": \"GDP-183, accounting
+        basis\"\n        },\n        {\n            \"url\": \"codelists/mrets-trade-area.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Trade Area\"\n        },\n        {\n            \"url\":
+        \"codelists/bpm6-services.csv\",\n            \"tableSchema\": \"schemas/bpm6-schema.json\",\n
+        \           \"rdfs:label\": \"BPM6 Services\",\n            \"rdfs:comment\":
+        \"GDP-183, BPM6 services\"\n        },\n        {\n            \"url\": \"codelists/cord-sitc.csv\",\n
+        \           \"tableSchema\": \"schemas/cord-sitc-schema.json\",\n            \"rdfs:label\":
+        \"CORD SITC\",\n            \"rdfs:comment\": \"GDP-248\"\n        },\n        {\n
+        \           \"url\": \"codelists/eu-rw-ww.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"ONS Trade Areas Legacy\",\n            \"rdfs:comment\": \"GDP-184\"\n        },{\n
+        \           \"url\": \"codelists/cord-geographies.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"CORD Geography\"\n        },\n        {\n            \"url\": \"codelists/bop-services.csv\",\n
+        \           \"tableSchema\": \"schemas/bop-schema.json\",\n            \"rdfs:label\":
+        \"BOP Services\",\n            \"rdfs:comment\": \"Need correspondence links
+        to BPM6\"\n        },\n        {\n            \"url\": \"codelists/pink-book-services.csv\",\n
+        \           \"tableSchema\": \"schemas/pink-book-schema.json\",\n            \"rdfs:label\":
+        \"Pink Book Services\",\n            \"rdfs:comment\": \"GDP-279. Need correspondence
+        links to BPM6\"\n        },\n        {\n            \"url\": \"codelists/exporter-and-importer-activity.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Export and Import Activity\"\n        },\n        {\n
+        \           \"url\": \"codelists/hmrc-industry-groups.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"HMRC Industry Groups\",\n            \"rdfs:comment\": \"Based upon SIC
+        codes\"\n        },\n        {\n            \"url\": \"codelists/hmrc-regions.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"HMRC Regions\",\n            \"rdfs:comment\":
+        \"Based upon NUTS1 regions\"\n        },\n        {\n            \"url\":
+        \"codelists/hmrc-trade-statistic-type.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"HMRC Trade Statistic Type\",\n            \"rdfs:comment\": \"The type of
+        statistic begin reported\"\n        },\n        {\n            \"url\": \"codelists/sitc4.csv\",\n
+        \           \"tableSchema\": \"schemas/sitc4-schema.json\",\n            \"rdfs:label\":
+        \"SITC 4\",\n            \"rdfs:comment\": \"GDP-287\"\n        },\n        {\n
+        \           \"url\": \"codelists/ons-abs-trades.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"ONS ABS Trades\"\n        },\n        {\n            \"url\": \"codelists/investment-direction.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Investment Direction\"\n        },\n        {\n
+        \           \"url\": \"codelists/fdi-component.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"FDI Component\"\n        },\n        {\n            \"url\": \"codelists/ons-fdi-area.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"ONS FDI Area\"\n        },\n        {\n            \"url\":
+        \"codelists/fdi-industry.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"FDI Industry\"\n        },\n        {\n            \"url\":
+        \"codelists/nuts-geographies.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"NUTS Geography\"\n        },\n        {\n            \"url\":
+        \"codelists/ons-functional-categories.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"ONS Functional Category\"\n        },\n        {\n            \"url\": \"codelists/itis-geographies.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"ONS Trade Areas ITIS\"\n        },\n        {\n
+        \           \"url\": \"codelists/itis-services.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"ITIS Services\"\n        },\n        {\n            \"url\": \"codelists/itis-industry.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"ITIS Industry\"\n        },\n        {\n            \"url\":
+        \"codelists/marker.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Marker\"\n        },\n        {\n            \"url\":
+        \"codelists/ons-partner-geography.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"ONS Partner Geography\"\n        },\n        {\n
+        \           \"url\": \"codelists/product-department.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n            \"rdfs:label\":
+        \"Product Department\"\n        },\n        {\n            \"url\": \"codelists/product-category.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Product Category\"\n        },\n        {\n
+        \           \"url\": \"codelists/product.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n            \"rdfs:label\":
+        \"Product\"\n        },\n        {\n            \"url\": \"codelists/trades.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Trades\"\n        },\n        {\n            \"url\":
+        \"codelists/account-type.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Account Type\"\n        },\n        {\n            \"url\":
+        \"codelists/income.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Income\"\n        },\n        {\n            \"url\":
+        \"codelists/income-description.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Income Description\"\n        },\n        {\n
+        \           \"url\": \"codelists/earnings.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n            \"rdfs:label\":
+        \"Earnings\"\n        },\n        {\n            \"url\": \"codelists/sector.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Sector\"\n        },\n        {\n            \"url\":
+        \"codelists/transaction-type.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-loose-schema.json\",\n
+        \           \"rdfs:label\": \"Transaction Type\"\n        },\n        {\n
+        \           \"url\": \"codelists/national-accounts-inventory.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Inventory\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-income-category.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Income Category\"\n        },\n        {\n            \"url\":
+        \"codelists/national-accounts-expenditure-category.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Expenditure Category\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-industry.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Industry\"\n        },\n        {\n            \"url\":
+        \"codelists/national-accounts-capital-formation.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Capital Formation\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-expenditure-type.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Expenditure Type\"\n        },\n        {\n
+        \           \"url\": \"codelists/national-accounts-household-expenditure.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Household Expenditure\"\n        },\n        {\n
+        \           \"url\": \"codelists/national-accounts-industrial-sector.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Industrial Sector\"\n        },\n        {\n
+        \           \"url\": \"codelists/national-accounts-income-indicator.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Income Indicator\"\n        },\n        {\n
+        \           \"url\": \"codelists/national-accounts-estimate-type.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Estimate Type\"\n        },\n        {\n            \"url\":
+        \"codelists/national-accounts-trade-type.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Trade Type\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-aggregate.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Aggregate\"\n        },\n        {\n            \"url\":
+        \"codelists/national-accounts-expenditure.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Expenditure\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-analysis.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Analysis\"\n        },\n        {\n            \"url\":
+        \"codelists/services.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Services\"\n        },\n        {\n            \"url\":
+        \"codelists/country-transaction.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Country Transaction\"\n        },\n        {\n
+        \           \"url\": \"codelists/members.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Members\"\n        },\n        {\n            \"url\": \"codelists/service-destination-geography.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Service Destination Geography\"\n        },\n
+        \       {\n            \"url\": \"codelists/service-origin-geography.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Service Origin Geography\"\n        },\n        {\n
+        \           \"url\": \"codelists/gdp-estimate-type.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"GDP Estimate Type\"\n        },\n        {\n            \"url\": \"codelists/national-accounts-gdp-measure.csv\",\n
+        \           \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"GDP Measure\"\n        },\n        {\n            \"url\":
+        \"codelists/pinkbook-cdid.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Pinkbook CDID\"\n        },\n        {\n            \"url\":
+        \"codelists/mrets-product.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"MRETS Product\"\n        },\n        {\n            \"url\":
+        \"codelists/trade-services.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Trade Services\"\n        },\n        {\n            \"url\":
+        \"codelists/trade-group.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Trade Group\"\n        },\n        {\n            \"url\":
+        \"codelists/alcohol-duty.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Alcohol Duty\"\n        },\n        {\n            \"url\":
+        \"codelists/alcohol-content.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Alcohol Content\"\n        },\n        {\n            \"url\":
+        \"codelists/alcohol-category.csv\",\n            \"tableSchema\": \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n
+        \           \"rdfs:label\": \"Alcohol Category\"\n        },\n        {\n
+        \           \"url\": \"codelists/export-services.csv\",\n            \"tableSchema\":
+        \"https://gss-cogs.github.io/ref_common/codelist-schema.json\",\n            \"rdfs:label\":
+        \"Export Services\"\n        }\n    ]\n}\n"
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - close
+      Content-Length:
+      - '16573'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 11 May 2020 16:15:18 GMT
+      ETag:
+      - '"5eb975d0-40bd"'
+      Expires:
+      - Mon, 11 May 2020 16:25:18 GMT
+      Last-Modified:
+      - Mon, 11 May 2020 15:57:04 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - 8a1a995bb5a22dea2b79bf74129327dc962f2690
+      X-GitHub-Request-Id:
+      - 9A30:1C39:D98F36:10E640B:5EB97A15
+      X-Origin-Cache:
+      - '1'
+      X-Proxy-Cache:
+      - MISS
+      X-Served-By:
+      - cache-man4138-MAN
+      X-Timer:
+      - S1589213719.648940,VS0,VE107
+    status:
+      code: 200
+      message: OK
+version: 1

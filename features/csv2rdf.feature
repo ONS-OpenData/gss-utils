@@ -4,7 +4,7 @@ Feature: Manage CSVW metadata for transformation to RDF
   I want to include dataset definitions and dataset metadata in the CSVW metadata.
 
   Scenario: Create CSVW metadata for CSV2RDF to generate qb:Observations
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
       | Sex | Value | Period    | Underlying Cause of Death  | Measure Type | Unit   |
       | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
@@ -14,7 +14,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | F   | 0.0     | year/2017 | g62-1                      | count        | deaths |
     When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
@@ -82,7 +82,7 @@ Feature: Manage CSVW metadata for transformation to RDF
     """
 
   Scenario: Create CSVW metadata for CSV2RDF with DSD
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'alohol-specific-deaths.csv'
       | Sex | Value   | Period    | Underlying Cause of Death  | Measure Type | Unit   |
       | F   | 1990.0  | year/2017 | all-alcohol-related-deaths | count        | deaths |
@@ -92,7 +92,7 @@ Feature: Manage CSVW metadata for transformation to RDF
       | F   | 0.0     | year/2017 | g62-1                      | count        | deaths |
     When I create a CSVW metadata file 'alcohol-specific-deaths.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/nhs-statistics-on-alcohol-england/alcohol-specific-deaths'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix qb: <http://purl.org/linked-data/cube#> .
@@ -145,14 +145,14 @@ Feature: Manage CSVW metadata for transformation to RDF
     And set the family to 'health'
     And set the theme to <http://gss-data.org.uk/def/concept/statistics-authority-themes/health-social-care>
     And set the modified time to '2019-03-13T13:17:12'
-    And table2qb configuration at 'https://ons-opendata.github.io/ref_alcohol/'
+    And table2qb configuration at 'https://gss-cogs.github.io/ref_alcohol/'
     And a CSV file 'observations.csv'
       | Age | Geography | CI Lower | Measure Type             | Sex | Unit   | CI Upper | Value | Year |
       | all | K02000001 | 0        | count                    | T   | deaths | 0        | 5701  | 2001 |
-      | all | K02000001 | 10       | rate_per_100_000_persons | T   | deaths | 10       | 10    | 2001 |
+      | all | K02000001 | 10       | rate-per-100-000-persons | T   | deaths | 10       | 10    | 2001 |
     When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/health/ons_alcohol_deaths_uk' with dataset metadata
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -170,9 +170,8 @@ Feature: Manage CSVW metadata for transformation to RDF
               dcat:Dataset ;
           rdfs:label "Alcohol-specific deaths in the UK"@en ;
           dct:creator gov:office-for-national-statistics ;
-          dct:issued "2018-12-04"^^xsd:date ;
+          dct:issued "2019-12-03"^^xsd:date ;
           dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
-          dct:modified "2019-03-13T13:17:12"^^xsd:dateTime ;
           dct:publisher gov:office-for-national-statistics ;
           dct:title "Alcohol-specific deaths in the UK"@en ;
           rdfs:comment "Annual data on age-standardised and age-specific alcohol-specific death rates in the UK, its constituent countries and regions of England."@en ;
@@ -182,14 +181,14 @@ Feature: Manage CSVW metadata for transformation to RDF
 
   @skip
   Scenario: CSVW transformation with data markers
-    Given table2qb configuration at 'https://ons-opendata.github.io/ref_migration/'
+    Given table2qb configuration at 'https://gss-cogs.github.io/ref_migration/'
     And a CSV file 'observations.csv'
       | Year | Country of Residence | Migration Flow | IPS Citizenship | Sex | Age     | Measure Type | Value | IPS Marker     | CI  | Unit             |
       | 2017 | south-asia           | inflow         | all             | T   | agq/0-4 | count        | 1.7   |                | 1.5 | people-thousands |
       | 2017 | south-east-asia      | inflow         | all             | T   | agq/0-4 | count        |       | not-applicable | .   | people-thousands |
     When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/migration/ons-ltim-passenger-survey-4-01'
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix sdmxa: <http://purl.org/linked-data/sdmx/2009/attribute#> .
@@ -278,5 +277,134 @@ Feature: Manage CSVW metadata for transformation to RDF
 
       <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01> a qb:DataSet ;
           qb:structure <http://gss-data.org.uk/data/gss_data/migration/ons-ltim-passenger-survey-4-01/structure> .
+    """
+    And the RDF should pass the Data Cube integrity constraints
+
+  Scenario: CSVW Transformation measure type URIs
+    Given table2qb configuration at 'https://gss-cogs.github.io/family-trade/reference/'
+    And a CSV file 'observations.csv'
+      | Period          | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          |
+      | quarter/2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  |
+      | quarter/2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  |
+      | quarter/2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | gbp-total    | gbp-thousands |
+      | quarter/2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | gbp-total    | gbp-thousands |
+    When I create a CSVW metadata file 'observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/trade/hmrc_rts'
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should contain
+    """
+      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+      @prefix owl: <http://www.w3.org/2002/07/owl#> .
+      @prefix void: <http://rdfs.org/ns/void#> .
+      @prefix dcterms: <http://purl.org/dc/terms/> .
+      @prefix dcat: <http://www.w3.org/ns/dcat#> .
+      @prefix sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      @prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+      @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+      @prefix sdmx-concept: <http://purl.org/linked-data/sdmx/2009/concept#> .
+      @prefix gss-d: <http://gss-data.org.uk/def/dimension/> .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts>
+          qb:structure <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/structure> ;
+          a qb:DataSet .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/flow>
+          qb:dimension gss-d:flow-directions ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/gbp_total>
+          qb:measure <http://gss-data.org.uk/def/measure/gbp-total> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/hmrc_partner_geography>
+          qb:dimension gss-d:hmrc-partner-geography ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/hmrc_reporter_region>
+          qb:dimension gss-d:hmrc-reporter-region ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/measure_type>
+          qb:dimension qb:measureType ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/net_mass>
+          qb:measure <http://gss-data.org.uk/def/measure/net-mass> ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/period>
+          qb:dimension sdmx-dimension:refPeriod ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/sitc4>
+          qb:dimension gss-d:sitc-4 ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/unit>
+          qb:attribute sdmx-attribute:unitMeasure ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/01/net-mass>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/01> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
+          <http://gss-data.org.uk/def/measure/net-mass> 2.43E3 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/net-mass> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/kg-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/02/net-mass>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/02> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
+          <http://gss-data.org.uk/def/measure/net-mass> 2.0E0 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/net-mass> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/kg-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/88/gbp-total>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/88> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
+          <http://gss-data.org.uk/def/measure/gbp-total> 1.0E1 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/89/gbp-total>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/89> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
+          <http://gss-data.org.uk/def/measure/gbp-total> 3.52E2 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/structure>
+          qb:component <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/flow>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/gbp_total>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/hmrc_partner_geography>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/hmrc_reporter_region>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/measure_type>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/net_mass>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/period>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/sitc4>,
+                       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/unit> ;
+          a qb:DataStructureDefinition .
     """
     And the RDF should pass the Data Cube integrity constraints

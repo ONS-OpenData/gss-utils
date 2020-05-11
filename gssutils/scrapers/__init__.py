@@ -1,11 +1,10 @@
-from gssutils.scrapers import ons, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
-    govscot
+from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
+    govscot, dcni
 
 scraper_list = [
+    ('https://api.beta.ons.gov.uk', onscmd.scrape),
     ('https://www.ons.gov.uk/', ons.scrape),
-    ('https://www.gov.uk/government/statistics/', govuk.scrape_stats),
-    ('https://www.gov.uk/government/statistical-data-sets/', govuk.scrape_sds),
-    ('https://www.gov.uk/government/collections/', govuk.scrape_collection),
+    ('https://www.gov.uk/government/', govuk.content_api),
     ('https://www.nrscotland.gov.uk/statistics-and-data/statistics/', nrscotland.scrape),
     ('https://www.nisra.gov.uk/publications/', nisra.scrape),
     ('https://www.uktradeinfo.com/Statistics/Pages/', hmrc.scrape_pages),
@@ -17,5 +16,6 @@ scraper_list = [
     ('http://www.isdscotland.org/Health-Topics/', isd_scotland.scrape),
     ('https://digital.nhs.uk/data-and-information/publications/statistical/', nhs_digital.scrape),
     ('https://statswales.gov.wales/Catalogue', statswales.scrape),
-    ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape)
+    ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape),
+    ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape)
 ]

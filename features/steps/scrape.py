@@ -3,23 +3,32 @@ from gssutils import Scraper
 from nose.tools import *
 import vcr
 import requests
-from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
+from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
 
-RECORD = 'new_episodes'
+DEFAULT_RECORD_MODE = 'new_episodes'
 
 
 @given('I scrape the page "{uri}"')
 def step_impl(context, uri):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.scraper = Scraper(uri, requests.Session())
 
 
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution()
+        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
     assert_equal(context.distribution.downloadURL, uri)
+
+
+@then('the data download URL should match "{uri}"')
+def step_impl(context, uri):
+    if not hasattr(context, 'distribution'):
+        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+    assert_regexp_matches(context.distribution.downloadURL, uri)
 
 
 @step('the title should be "{title}"')
@@ -27,14 +36,19 @@ def step_impl(context, title):
     assert_equal(context.scraper.title, title)
 
 
-@step('the publication date should be "{date}"')
-def step_impl(context, date):
-    assert_equal(context.scraper.publication_date, date)
+@step('the title should match "{title}"')
+def step_impl(context, title):
+    assert_regexp_matches(context.scraper.title, title)
 
 
-@step('the next release date should be "{date}"')
+@step('the publication date should match "{date}"')
 def step_impl(context, date):
-    assert_equal(context.scraper.next_release, date)
+    assert_regexp_matches(context.scraper.publication_date, date)
+
+
+@step('the next release date should match "{date}"')
+def step_impl(context, date):
+    assert_regexp_matches(context.scraper.next_release, date)
 
 
 @step('the description should start "{description}"')
@@ -53,12 +67,20 @@ def step_impl(context, prefix, property, object):
     assert_equal(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
 
 
+@then("{prefix}:{property} should match `{object}`")
+def step_impl(context, prefix, property, object):
+    ns = {'dct': DCTERMS, 'dcat': DCAT, 'rdfs': RDFS}.get(prefix)
+    assert_regexp_matches(context.scraper.dataset.get_property(ns[property]).n3(namespaces), object)
+
+
 @step("fetch the distribution as a databaker object")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         if not hasattr(context, 'distribution'):
-            context.distribution = context.scraper.distribution()
-        context.databaker = context.distribution.as_databaker()
+            context.distribution = context.scraper.distribution(latest=True)
+        context.databaker = context.distribution.as_databaker(latest=True)
 
 
 @then("the sheet names contain [{namelist}]")
@@ -81,7 +103,7 @@ def step_impl(context, env, value):
 
 @step("select the distribution given by")
 def step_impl(context):
-    args = {}
+    args = {"latest":True}
     for row in context.table:
         args[row[0]] = row[1]
     context.distribution = context.scraper.distribution(**args)
@@ -89,7 +111,9 @@ def step_impl(context):
 
 @step("fetch the '{tabname}' tab as a pandas DataFrame")
 def step_impl(context, tabname):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
@@ -101,13 +125,15 @@ def step_impl(context, rows):
 
 @step('select the distribution whose title starts with "{title_start}"')
 def step_impl(context, title_start):
-    context.distribution = context.scraper.distribution(title=lambda x: x.startswith(title_start))
+    context.distribution = context.scraper.distribution(latest=True, title=lambda x: x.startswith(title_start))
     assert_is_not_none(context.distribution)
 
 
 @then("fetch the tabs as a dict of pandas DataFrames")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.distribution.as_pandas()
         eq_(type(context.pandas), dict)
 
@@ -141,5 +167,15 @@ def step_impl(context, title):
 
 @step("fetch the distribution as a pandas dataframe")
 def step_impl(context):
-    with vcr.use_cassette('features/fixtures/scrape.yml', record_mode=RECORD):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
         context.pandas = context.pandas = context.distribution.as_pandas()
+
+
+@step('fetch the distribution as a pandas dataframe with encoding "{encoding}"')
+def step_impl(context, encoding):
+    with vcr.use_cassette('features/fixtures/scrape.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
+        context.pandas = context.pandas = context.distribution.as_pandas(encoding=encoding)

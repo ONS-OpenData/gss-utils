@@ -28,9 +28,10 @@ def scrape_pages(scraper, tree):
                 dataset = PMDDataset()
                 dataset.publisher = scraper.catalog.publisher
                 dataset.license = scraper.catalog.license
+                dataset.distribution = []
                 bulletin_date = None
                 for k, v in zip(columns, row.xpath("td")):
-                    if k == 'Bulletin Title' or k == 'Title':
+                    if k == 'Bulletin Title' or k == 'Title' or k == 'Factsheet Title':
                         dataset.title = v.text
                     elif k == 'Publication Source' or k == 'Source':
                         pass
@@ -40,12 +41,28 @@ def scrape_pages(scraper, tree):
                         bulletin_date = v.text
                     elif k == 'View' or k == 'View Archive':
                         href = v.xpath("a/@href")[0]
-                        dist = Distribution(scraper)
-                        dist.downloadURL = urljoin(scraper.uri, href)
-                        if dist.downloadURL.endswith('.xls') or dist.downloadURL.endswith('.xlsx'):
-                            dist.mediaType = Excel
-                        dist.title = dataset.title + (' ' + bulletin_date) if bulletin_date else ''
-                        dataset.distribution = [dist]
+                        view_url = urljoin(scraper.uri, href)
+                        if '?viewname' in view_url:
+                            # this is a link off to a separate "archive" page with links to the
+                            # actual dataset releases
+                            archive_page = scraper.session.get(view_url)
+                            archive_tree = html.fromstring(archive_page.text)
+                            for release_row in archive_tree.xpath("//table[@class='hmrc']//tr")[1:]:
+                                dist = Distribution(scraper)
+                                cols = release_row.xpath("td")
+                                dist.downloadURL = urljoin(view_url, cols[1].xpath("a/@href")[0].replace(' ', '%20'))
+                                archive_date = cols[0].text
+                                dist.issued = parse(archive_date.strip())
+                                dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
+                                dist.title = dataset.title + ' ' + archive_date
+                                dataset.distribution.append(dist)
+                        else:
+                            dist = Distribution(scraper)
+                            dist.downloadURL = urljoin(scraper.uri, href)
+                            if dist.downloadURL.endswith('.xls') or dist.downloadURL.endswith('.xlsx'):
+                                dist.mediaType = Excel
+                            dist.title = dataset.title + (' ' + bulletin_date) if bulletin_date else ''
+                            dataset.distribution.append(dist)
                 scraper.catalog.dataset.append(dataset)
 
 

@@ -8,17 +8,22 @@ from tarfile import TarFile, TarInfo
 from urllib.parse import urljoin
 
 import docker as docker
+import vcr
 from behave import *
 from nose.tools import *
 from rdflib import Graph
 
 from gssutils import CSVWMetadata
-from features.environment import BytesIOWrapper
+
+DEFAULT_RECORD_MODE = 'new_episodes'
 
 
 @given("table2qb configuration at '{url}'")
 def step_impl(context, url):
-    context.schema = CSVWMetadata(url)
+    with vcr.use_cassette('features/fixtures/csvw.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
+        context.schema = CSVWMetadata(url)
 
 
 @step("a CSV file '{filename}'")
@@ -49,11 +54,11 @@ def step_impl(context):
     json.load(context.schema_io)
 
 
-@step("cloudfluff/csvlint validates ok")
+@step("gsscogs/csvlint validates ok")
 def step_impl(context):
     client = docker.from_env()
     csvlint = client.containers.create(
-        'cloudfluff/csvlint',
+        'gsscogs/csvlint',
         command=f'csvlint -s /tmp/{context.schema_filename}'
     )
     archive = BytesIO()
@@ -93,7 +98,8 @@ def step_impl(context, filename, base, path):
             str(context.csv_filename.relative_to(context.metadata_filename.parent)),
             mapping=context.json_io,
             base_url=base,
-            base_path=path
+            base_path=path,
+            with_external=False
         )
     else:
         context.schema.create_io(
@@ -102,7 +108,8 @@ def step_impl(context, filename, base, path):
             str(context.csv_filename.relative_to(context.metadata_filename.parent)),
             with_transform=True,
             base_url=base,
-            base_path=path
+            base_path=path,
+            with_external=False
         )
 
 
@@ -113,11 +120,11 @@ def step_impl(context):
     g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
-@step("cloudfluff/csv2rdf generates RDF")
+@step("gsscogs/csv2rdf generates RDF")
 def step_impl(context):
     client = docker.from_env()
     csv2rdf = client.containers.create(
-        'cloudfluff/csv2rdf',
+        'gsscogs/csv2rdf',
         command=f'csv2rdf -m annotated -o /tmp/output.ttl -t /tmp/{context.csv_filename} -u /tmp/{context.metadata_filename}'
     )
     archive = BytesIO()
@@ -175,7 +182,7 @@ def step_impl(context, filename, base, path):
 def step_impl(context):
     client = docker.from_env()
     cube_tests = client.containers.create(
-        'cloudfluff/gdp-sparql-tests',
+        'gsscogs/gdp-sparql-tests',
         command=f'sparql-test-runner -t /usr/local/tests/qb -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
     )
     archive = BytesIO()

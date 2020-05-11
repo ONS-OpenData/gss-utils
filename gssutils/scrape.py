@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urljoin, urlparse
 
 import html2text
@@ -13,7 +13,7 @@ from lxml import html
 from rdflib import BNode, URIRef
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Excel, ODS, Catalog
+from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML
 from gssutils.utils import pathify
 
 
@@ -22,7 +22,7 @@ class BiggerSerializer(serialize.Serializer):
     def _loads_v4(self, request, data):
         try:
             cached = msgpack.loads(
-                data, encoding='utf-8', max_bin_len=100*1000*1000) # 100MB
+                data, raw=False, max_bin_len=100*1000*1000) # 100MB
         except ValueError:
             return
 
@@ -39,11 +39,11 @@ class FilterError(Exception):
 
 class Scraper:
     def __init__(self, uri, session=None):
-        logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
+
         self.uri = uri
         self.dataset = PMDDataset()
         self.catalog = Catalog()
-        self.dataset.modified = datetime.now()
+        self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
 
         if session:
@@ -82,7 +82,11 @@ class Scraper:
                 md = md + "### Distributions\n\n"
                 for d in self.distributions:
                     t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
-                    md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+                    if hasattr(d, 'issued'):
+                        md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL})) - {d.issued}\n"
+                    else:
+                        md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL}))\n"
+
         return md
 
     @staticmethod
@@ -94,6 +98,17 @@ class Scraper:
 
     def _run(self):
         page = self.session.get(self.uri)
+
+        # TODO - the below should go into a bucket, we should be logging out a nice clickable link to said bucket
+
+        # Dump the scraped file locally if we're debugging
+        if logging.getLogger().getEffectiveLevel() <= logging.DEBUG:
+            out_path = '{}/debug_scrape.html'.format(os.getcwd())
+            logging.debug("Writing scrape as simple html to: " + out_path)
+            with open(out_path, "w") as f:
+                f.write(page.text)
+
+        # TODO - not all scrapers will necessarily need the beautified HTML DOM
         tree = html.fromstring(page.text)
         scraped = False
         for start_uri, scrape in gssutils.scrapers.scraper_list:
@@ -127,7 +142,10 @@ class Scraper:
     def select_dataset(self, **kwargs):
         dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
-        self.dataset.modified = datetime.now()
+        self.dataset.landingPage = self.uri
+        if not hasattr(self.dataset, 'description') and hasattr(self.catalog, 'description'):
+            self.dataset.description = self.catalog.description
+        self.dataset.modified = datetime.now() # TODO: decision on modified date
         self.update_dataset_uris()
         self.distributions = dataset.distribution
 

@@ -1,9 +1,10 @@
 import argparse
 import csv
 import json
+import logging
 from codecs import iterdecode
-from pathlib import Path, PosixPath
 from typing import Dict, Any
+from pathlib import Path
 from urllib import request, parse
 from urllib.parse import urljoin
 
@@ -60,14 +61,21 @@ csvw_namespaces = {
 
 class CSVWMetadata:
 
-    def __init__(self, ref_base: str):
-        self._ref_base = ref_base
+    def __init__(self, ref_base):
+        # Reference data has moved, but rather than change every notebook,
+        # we redirect and log a deprecation.
+        if ref_base.startswith('https://ons-opendata'):
+            self._ref_base = f"https://gss-cogs{ref_base[len('https://ons-opendata'):]}"
+            logging.warning(f"{ref_base} has been re-written to {self._ref_base}, please update usage.")
+        else:
+            self._ref_base = ref_base
         self._col_def = CSVWMetadata._csv_lookup(
-            parse.urljoin(ref_base, 'columns.csv'), 'title')
+            parse.urljoin(self._ref_base, 'columns.csv'), 'title')
         self._comp_def = CSVWMetadata._csv_lookup(
-            parse.urljoin(ref_base, 'components.csv'), 'Label')
+
+            parse.urljoin(self._ref_base, 'components.csv'), 'Label')
         self._codelists: Dict[str, Any] = {}
-        for table in json.load(request.urlopen(parse.urljoin(ref_base, 'codelists-metadata.json')))['tables']:
+        for table in json.load(request.urlopen(parse.urljoin(self._ref_base, 'codelists-metadata.json')))['tables']:
             codelist_url = f'http://gss-data.org.uk/def/concept-scheme/{pathify(table["rdfs:label"])}'
             self._codelists[codelist_url] = table
         # need to resolve ref_common against relative URIs
@@ -79,17 +87,17 @@ class CSVWMetadata:
         return {row[key]: row for row in reader}
 
     def create(self, csv_filename, schema_filename, with_transform=False,
-               base_url=None, base_path=None, dataset_metadata=None):
+               base_url=None, base_path=None, dataset_metadata=None, with_external=True):
         with open(csv_filename) as csv_io:
             with open(schema_filename, 'w') as schema_io:
                 if with_transform:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)),
-                                   with_transform, base_url, base_path, dataset_metadata)
+                                   with_transform, base_url, base_path, dataset_metadata, with_external)
                 else:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
     def create_io(self, csv_io, schema_io, csv_url, with_transform=False, mapping=None,
-                  base_url=None, base_path=None, dataset_metadata=None):
+                  base_url=None, base_path=None, dataset_metadata=None, with_external=True):
         schema_columns = []
         schema_tables = []
         schema_references = []
@@ -133,18 +141,21 @@ class CSVWMetadata:
                     if codelist in self._codelists:
                         reference = parse.urljoin(self._ref_base,
                                                   self._codelists[component_def['Codelist']]['url'])
-                        schema_tables.append({
-                            'url': reference,
-                            'tableSchema': self._codelists[component_def['Codelist']]['tableSchema'],
-                            'suppressOutput': True
-                        })
-                        schema_references.append({
-                            'columnReference': column_def['name'],
-                            'reference': {
-                                'resource': reference,
-                                'columnReference': 'notation'
-                            }
-                        })
+                        table_schema_url = urljoin(self._ref_base,
+                                                   self._codelists[component_def['Codelist']]['tableSchema'])
+                        if with_external:
+                            schema_tables.append({
+                                'url': reference,
+                                'tableSchema': table_schema_url,
+                                'suppressOutput': True
+                            })
+                            schema_references.append({
+                                'columnReference': column_def['name'],
+                                'reference': {
+                                    'resource': reference,
+                                    'columnReference': 'notation'
+                                }
+                            })
                     elif codelist.startswith('http://gss-data.org.uk/def/concept-scheme'):
                         print(f"Potentially missing concept scheme <{codelist}>")
                 if (is_unit and not with_transform) or (column_def['component_attachment'] not in ['', 'qb:attribute']):
@@ -155,11 +166,16 @@ class CSVWMetadata:
                         '@type': {
                             'qb:dimension': 'qb:DimensionProperty',
                             'qb:attribute': 'qb:AttributeProperty'
-                        }.get(column_def['component_attachment']),
-                        'rdfs:label': column_def['title']
+                        }.get(column_def['component_attachment'])
                     }
                     if 'range' in column_def and column_def['range'] not in ['', None]:
                         comp_attach['rdfs:range'] = {'@id': column_def['range']}
+                    if column in self._comp_def:
+                        codelist = self._comp_def[column]['Codelist']
+                        if codelist is not None and codelist != '':
+                            comp_attach['qb:codelist'] = {'@id': codelist}
+                            if 'rdfs:range' not in comp_attach:
+                                comp_attach['rdfs:range'] = {'@id': 'http://www.w3.org/2004/02/skos/core#ConceptScheme'}
                     dsd_def = {
                         '@id': urljoin(base_url, base_path) + '/component/' + column_def['name'],
                         '@type': 'qb:ComponentSpecification',
@@ -172,16 +188,15 @@ class CSVWMetadata:
 
         if with_transform:
             for measure_type in measure_types:
-                measure_def = next(d for d in self._col_def.values() if d['name'] == measure_type)
+                measure_def = next(d for d in self._col_def.values() if pathify(d['title']) == measure_type)
                 comp_attach = {
                     '@id': measure_def['property_template'],
-                    '@type': 'qb:MeasureProperty',
-                    'rdfs:label': measure_def['title']
+                    '@type': 'qb:MeasureProperty'
                 }
                 if 'range' in measure_def and measure_def['range'] not in ['', None]:
                     comp_attach['rdfs:range'] = {'@id': measure_def['range']}
                 dsd_def = {
-                    '@id': urljoin(base_url, base_path) + '/component/' + measure_type,
+                    '@id': urljoin(base_url, base_path) + '/component/' + measure_def['name'],
                     '@type': 'qb:ComponentSpecification',
                     'qb:componentProperty': {'@id': measure_def['property_template']},
                     measure_def['component_attachment']: comp_attach
@@ -200,18 +215,18 @@ class CSVWMetadata:
                 'valueUrl': 'qb:Observation'
             })
 
+        table_schema =  {
+            "columns": schema_columns,
+            "primaryKey": schema_keys
+        }
+        if with_external:
+            table_schema["foreignKeys"] = schema_references
         schema_tables.append({
             "url": csv_url,
-            "tableSchema": {
-                "columns": schema_columns,
-                "foreignKeys": schema_references,
-                "primaryKey": schema_keys
-            }
+            "tableSchema": table_schema
         })
         if with_transform:
-            about_path = PosixPath(base_path)
-            for key in schema_keys:
-                about_path = about_path / f'{{{key}}}'
+            about_path = base_path + '/' + '/'.join(f'{{{key}}}' for key in schema_keys)
             about_url = urljoin(base_url, str(about_path))
             schema_tables[-1]['tableSchema']['aboutUrl'] = about_url
 
