@@ -312,7 +312,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           a qb:DataSet .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/flow>
-          qb:dimension gss-d:flow ;
+          qb:dimension gss-d:flow-directions ;
           a qb:ComponentSpecification .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/component/gbp_total>
@@ -348,7 +348,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           a qb:ComponentSpecification .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/01/net-mass>
-          gss-d:flow <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/01> ;
           gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
           gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
@@ -360,7 +360,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/02/net-mass>
-          gss-d:flow <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/02> ;
           gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
           gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
@@ -372,7 +372,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/88/gbp-total>
-          gss-d:flow <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/88> ;
           gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
           gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
@@ -384,7 +384,7 @@ Feature: Manage CSVW metadata for transformation to RDF
           a qb:Observation .
 
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/89/gbp-total>
-          gss-d:flow <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/89> ;
           gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
           gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
