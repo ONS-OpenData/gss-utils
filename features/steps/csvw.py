@@ -8,17 +8,22 @@ from tarfile import TarFile, TarInfo
 from urllib.parse import urljoin
 
 import docker as docker
+import vcr
 from behave import *
 from nose.tools import *
 from rdflib import Graph
 
 from gssutils import CSVWMetadata
-from features.environment import BytesIOWrapper
+
+DEFAULT_RECORD_MODE = 'new_episodes'
 
 
 @given("table2qb configuration at '{url}'")
 def step_impl(context, url):
-    context.schema = CSVWMetadata(url)
+    with vcr.use_cassette('features/fixtures/csvw.yml',
+                          record_mode=context.config.userdata.get('record_mode',
+                                                                  DEFAULT_RECORD_MODE)):
+        context.schema = CSVWMetadata(url)
 
 
 @step("a CSV file '{filename}'")
