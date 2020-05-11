@@ -13,7 +13,7 @@ from gssutils.metadata import DCAT, Distribution, GOV
 def scrape(scraper, tree):
     pageGraph = rdflib.Graph()
     page = StringIO(scraper.session.get(scraper.uri).text)
-    pageGraph.parse(page, format="html")
+    pageGraph.parse(page, format="rdfa1.1")
     dataset = pageGraph.value(predicate=RDF.type, object=DCAT.Dataset, any=False)
     scraper.dataset.title = pageGraph.value(dataset, DCTERMS.title).value.strip()
     scraper.dataset.comment = pageGraph.value(dataset, DCTERMS.description).value.strip()
