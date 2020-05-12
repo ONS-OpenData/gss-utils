@@ -88,10 +88,7 @@ class Scraper:
 
         if 'JOB_NAME' in os.environ:
             self._base_uri = URIRef('http://gss-data.org.uk')
-            if os.environ['JOB_NAME'].startswith('GSS/'):
-                self._dataset_id = pathify(os.environ['JOB_NAME'][len('GSS/'):])
-            else:
-                self._dataset_id = pathify(os.environ['JOB_NAME'])
+            self._dataset_id = pathify(os.environ['JOB_NAME'])
         else:
             self._base_uri = BNode()
             parsed_scrape_uri = urlparse(self.uri)
