@@ -212,3 +212,6 @@ Feature: Scrape dataset info
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Regional trade in goods statistics disaggregated by smaller geographical areas"
     Then the description should start "International trade in goods data at summary product and country level, by UK areas smaller than NUTS1"
+
+  Scenario: latest distribution but no issued date
+    Given I scrape the page "

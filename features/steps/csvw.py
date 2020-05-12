@@ -203,7 +203,7 @@ def step_impl(context):
 def step_impl(context, map_file):
     context.json_filename = Path(map_file)
     context.json_io = StringIO()
-    mapping = json.loads(context.text)
+    mapping = json.load(open(Path('features') / 'fixtures' / map_file))
     json.dump(mapping, context.json_io)
 
 
