@@ -49,11 +49,11 @@ Feature: PMD metadata
       """
 
     Scenario: convention over configuration
-      Given the 'JOB_NAME' environment variable is 'GSS/Trade/ONS-FDI-inward'
+      Given the 'JOB_NAME' environment variable is 'GSS_data/Trade/ONS-FDI-inward'
       And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
-      Then the dataset URI should be <http://gss-data.org.uk/data/trade/ons-fdi-inward>
-      And the metadata graph should be <http://gss-data.org.uk/graph/trade/ons-fdi-inward/metadata>
+      Then the dataset URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward>
+      And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward/metadata>
       And the modified date should be quite recent
 
     Scenario: licensed dataset
@@ -65,7 +65,7 @@ Feature: PMD metadata
       Then the modified date should be quite recent
 
     Scenario: catalog scraped datasets
-      Given the 'JOB_NAME' environment variable is 'GSS/Health/ISD-Drugs-and-Alcohol'
+      Given the 'JOB_NAME' environment variable is 'GSS_data/Health/ISD-Drugs-and-Alcohol'
       Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
       And I select the dataset "National Drug and Alcohol Treatment Waiting Times"
       Then generate TriG
