@@ -1,2 +1,7 @@
 __pycache__
 debug_scrape*
+.cache
+.eggs
+.idea
+gss-utils.iml
+gssutils.egg*
