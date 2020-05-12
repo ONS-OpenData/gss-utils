@@ -131,7 +131,10 @@ class Scraper:
             )]
         if len(matches) > 1:
             if latest:
-                return max(matches, key=lambda d: d.issued)
+                if len([d for d in matches if not hasattr(d, 'issued')]) > 0:
+                    return matches[0]  # assume the publisher lists distributions in order of most to least recent.
+                else:
+                    return max(matches, key=lambda d: d.issued)
             else:
                 raise FilterError('more than one match for given filter(s)')
         elif len(matches) == 0:
