@@ -254,7 +254,7 @@ class Distribution(Metadata):
         raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
 
     def as_pandas(self, **kwargs):
-        if self.mediaType == Excel:
+        if self.mediaType in ExcelTypes:
             with self.open() as fobj:
                 # pandas 0.25 now tries to seek(0), so we need to read and buffer the stream
                 buffered_fobj = BytesIO(fobj.read())
