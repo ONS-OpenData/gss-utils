@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from datetime import datetime, timezone
@@ -9,11 +10,12 @@ import requests
 from cachecontrol import CacheControl, serialize
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
+from dateutil.parser import parse
 from lxml import html
 from rdflib import BNode, URIRef
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML
+from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML, Distribution, ZIP, CSV
 from gssutils.utils import pathify
 
 
@@ -22,7 +24,7 @@ class BiggerSerializer(serialize.Serializer):
     def _loads_v4(self, request, data):
         try:
             cached = msgpack.loads(
-                data, raw=False, max_bin_len=100*1000*1000) # 100MB
+                data, raw=False, max_bin_len=100 * 1000 * 1000)  # 100MB
         except ValueError:
             return
 
@@ -37,8 +39,38 @@ class FilterError(Exception):
         self.message = message
 
 
+class MetadataError(Exception):
+    """ Raised when there is an issue with a provided metadata seed
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+
 class Scraper:
-    def __init__(self, uri, session=None):
+
+    def __init__(self, uri: str = None, session: requests.Session = None, seed: str = None):
+
+        # Airtable and gssutils are using slightly different field names....
+        self.meta_field_mapping = {
+            "published": "issued"
+        }
+
+        # Use seed if provided
+        if seed is not None:
+            with open(seed, "r") as f:
+                self.seed = json.load(f)
+                if "landingPage" not in self.seed and "dataURL" in self.seed:
+                    logging.warning("No landing page has been supplied. Proceeding with"
+                                    "scrape using the 'dataURL'.")
+                    uri = self.seed["dataURL"]
+                elif "landingPage" not in self.seed:
+                    raise MetadataError("Aborting, insufficiant seed data. No landing page supplied via "
+                                        "info.json and no dataURL to use as a fallback.")
+                else:
+                    uri = self.seed["landingPage"]
+        else:
+            self.seed = None
 
         self.uri = uri
         self.dataset = PMDDataset()
@@ -53,6 +85,7 @@ class Scraper:
                                         cache=FileCache('.cache'),
                                         serializer=BiggerSerializer(),
                                         heuristic=LastModified())
+
         if 'JOB_NAME' in os.environ:
             self._base_uri = URIRef('http://gss-data.org.uk')
             if os.environ['JOB_NAME'].startswith('GSS/'):
@@ -99,27 +132,164 @@ class Scraper:
     def _run(self):
         page = self.session.get(self.uri)
 
-        # TODO - the below should go into a bucket, we should be logging out a nice clickable link to said bucket
-
-        # Dump the scraped file locally if we're debugging
-        if logging.getLogger().getEffectiveLevel() <= logging.DEBUG:
-            out_path = '{}/debug_scrape.html'.format(os.getcwd())
-            logging.debug("Writing scrape as simple html to: " + out_path)
-            with open(out_path, "w") as f:
-                f.write(page.text)
-
         # TODO - not all scrapers will necessarily need the beautified HTML DOM
         tree = html.fromstring(page.text)
         scraped = False
+
+        # Look for a scraper based on the uri
         for start_uri, scrape in gssutils.scrapers.scraper_list:
             if self.uri.startswith(start_uri):
+
+                # Scrape
                 self.dataset.landingPage = self.uri
                 scrape(self, tree)
                 scraped = True
+
+                # If we have a seed..
+                if self.seed is not None:
+                    self._populate_missing_metadata()  # Plug any metadata gaps
+                    self._override_metadata_where_specified()  # Apply overrides
+
                 break
+
+        if not scraped and self.seed is not None:
+            scraped = self._attempt_scraper_from_seed()
+
         if not scraped:
-            raise NotImplementedError(f'No scraper for {self.uri}')
+            raise NotImplementedError(f'No scraper for {self.uri} and insufficiant seed metadata passed.')
+
         return self
+
+    def _populate_missing_metadata(self):
+        """
+        Use the seed file to populate any missing metadata fields.
+        """
+
+        try:
+            # Dataset level metadata
+            if not hasattr(self.dataset, 'title') and "title" in self.seed.keys():
+                self.dataset.title = self.seed["title"]
+            if not hasattr(self.dataset, 'description') and "description" in self.seed.keys():
+                self.dataset.description = self.seed["description"]
+            if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
+                self.dataset.publisher = self.seed["publisher"]
+
+        except Exception as e:
+            raise MetadataError("Aborting. Issue encountered while attempting checking "
+                                "the info.json for supplementary metadata.") from e
+
+        # Populate missing distribution level Metadata
+        for distribution in self.distributions:
+
+            # NOTE - Don't EVER add a fallback for downloadURL or issued here!! this is a specific safety
+            # to stop us "temporary scraping" and publishing new data with old metadata
+            if hasattr(distribution, 'downloadURL') and not hasattr(distribution, 'mediaType'):
+                logging.warning("Distribution is lacking a mediaType, attempting to identity")
+                if distribution.downloadURL.lower().endswith(".xls"):
+                    distribution.mediaType = Excel
+                elif distribution.downloadURL.lower().endswith(".xlsx"):
+                    distribution.mediaType = ExcelOpenXML
+                elif distribution.downloadURL.lower().endswith(".ods"):
+                    distribution.mediaType = ODS
+                elif distribution.downloadURL.lower().endswith(".csv"):
+                    distribution.mediaType = CSV
+                elif distribution.downloadURL.lower().endswith(".zip"):
+                    distribution.mediaType = ZIP
+                else:
+                    logging.warning("Unable to find mediaType for distribution")
+
+    def _override_metadata_where_specified(self):
+        """
+        Where metadata is supplied by both the seed and the scraper, override to the values
+        in the seed - ONLY where the field in question appears under the overrides key
+        """
+
+        # fields we should not be overridingm because it can lead to new data with old metadata
+        disallowed = [
+            "issued",
+            "downloadURL"
+        ]
+
+        if "overrides" not in self.seed.keys():
+            return  # moot point
+        else:
+            for field in self.seed["overrides"]:
+
+                # Airtable and gssutils are using slightly different field names....
+                if field in self.meta_field_mapping:
+                    target_field = self.meta_field_mapping[field]
+                else:
+                    target_field = field
+
+                if target_field in disallowed:
+                    raise MetadataError("Aborting, you cannot override the '{}' field.".format(target_field))
+
+                if not hasattr(self.dataset, target_field):
+                    raise MetadataError("Aborting. We've specified an override to the '{}' field"
+                                        "but the dataset does not have that attribute.".format(field))
+                self.dataset.__setattr__(target_field, self.seed[field])
+                self._propagate_metadata_to_distributions(target_field, self.seed[field])
+
+    def _propagate_metadata_to_distributions(self, target_field, value):
+        """
+        As it says, if we're updating a metadata field update it for all distributions
+        """
+
+        # If it's a catalogue we'll need to account for one more level
+        if isinstance(self, Catalog):
+            try:
+                for distro in self.dataset.distributions:
+                    if hasattr(distro, target_field):
+                        distro.__setattr__(target_field, value)
+            except Exception as e:
+                raise MetadataError("Aborting. Encountered issue propagating overritten metadata to"
+                                    " distributions within then dataset within the catalogue.") from e
+        else:
+            try:
+                for distro in self.distributions:
+                    if hasattr(distro, target_field):
+                        distro.__setattr__(target_field, value)
+            except Exception as e:
+                raise MetadataError("Aborting. Encountered issue propagating overritten metadata to"
+                                    " distributions within the dataset.") from e
+
+    def _attempt_scraper_from_seed(self):
+        """
+        Validates then creates a simple scraper from the metadata in the seed.
+        """
+
+        # Make sure we have the 100% required stuff
+        keys = ["title", "description", "dataURL", "publisher", "published"]
+        not_found = []
+        for key in keys:
+            if key not in self.seed.keys():
+                if self.seed[key] is not None:
+                    not_found.append(key)
+
+        if len(not_found) > 0:
+            raise NotImplementedError(
+                f'No scraper exists for {self.uri} and a "temporary scape" is not possible as the following required '
+                f'fields were missing from the seed metadata: {",".join(not_found)}. got: {",".join(self.seed.keys())}.'
+            )
+
+        # Populate the "unsafe" fields explicitly, then populate the missing
+        # metadata from the seed
+        dist = Distribution(self)
+        dist.issued = parse(self.seed["published"]).date()
+        dist.downloadURL = self.seed["dataURL"]
+        self.distributions.append(dist)
+        self.dataset.issued = dist.issued
+        self._populate_missing_metadata()
+
+        # Sanity check - break if our download doesn't point to a specific instance of a file
+        allowed = ["xls", "xlsx", "ods", "zip", "csv"]
+        if dist.downloadURL.lower().split(".")[-1] not in allowed:
+            raise MetadataError("A temporary scraper must point to a specific data file resouce. "
+                                "Download url is {} but must end with one of: {}"
+                                .format(dist.download_url, ",".join(allowed)))
+
+        logging.warning("This scraper is running in fallback mode, using static metadata rather than scraped metadata.")
+        return True
 
     @staticmethod
     def _filter_one(things, **kwargs):
@@ -140,17 +310,17 @@ class Scraper:
             return matches[0]
 
     def select_dataset(self, **kwargs):
-        dataset = Scraper._filter_one(self.catalog.dataset, **kwargs)
+        dataset = self._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
         self.dataset.landingPage = self.uri
         if not hasattr(self.dataset, 'description') and hasattr(self.catalog, 'description'):
             self.dataset.description = self.catalog.description
-        self.dataset.modified = datetime.now() # TODO: decision on modified date
+        self.dataset.modified = datetime.now()  # TODO: decision on modified date
         self.update_dataset_uris()
         self.distributions = dataset.distribution
 
     def distribution(self, **kwargs):
-        return Scraper._filter_one(self.distributions, **kwargs)
+        return self._filter_one(self.distributions, **kwargs)
 
     def set_base_uri(self, uri):
         self._base_uri = uri

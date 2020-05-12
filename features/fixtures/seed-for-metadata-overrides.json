@@ -1,0 +1,5 @@
+{
+  "title": "I did override a thing",
+  "landingPage": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
+  "overrides": ["title"]
+}
