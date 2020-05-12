@@ -180,7 +180,6 @@ class Scraper:
                                 "the info.json for supplementary metadata.") from e
 
         # Populate missing distribution level Metadata
-        # Note, this is principally mediaType for where we are setting the downloadURL from the seed
         for distribution in self.distributions:
 
             # NOTE - Don't EVER add a fallback for downloadURL or issued here!! this is a specific safety
@@ -207,9 +206,10 @@ class Scraper:
         in the seed - ONLY where the field in question appears under the overrides key
         """
 
-        # fields we should not be overriding
+        # fields we should not be overridingm because it can lead to new data with old metadata
         disallowed = [
-            "issued"
+            "issued",
+            "downloadURL"
             ]
 
         if "overrides" not in self.seed.keys():
@@ -230,11 +230,31 @@ class Scraper:
                     raise MetadataError("Aborting. We've specified an override to the '{}' field"
                                         "but the dataset does not have that attribute.".format(field))
                 self.dataset.__setattr__(target_field, self.seed[field])
+                self._propogate_metadata_to_distributions(target_field, self.seed[field])
 
-                # Finally, propogate this change where applicable to distributions within the dataset
+
+    def _propogate_metadata_to_distributions(self, target_field, value):
+        """
+        As it says, if we're updating a metadata field update it for all distributions
+        """
+
+        # If it's a catalogue we'll need to account for one more level
+        if isinstance(self, Catalog):
+            try:
+                for distro in self.dataset.distributions:
+                    if hasattr(distro, target_field):
+                        distro.__setattr__(target_field, value)
+            except Exception as e:
+                raise MetadataError("Aborting. Encountered issue propagating overritten metadata to"
+                    " distributions within then dataset within the catalogue.") from e
+        else:
+            try:
                 for distro in self.distributions:
                     if hasattr(distro, target_field):
-                        distro.__setattr__(target_field, self.seed[field])
+                        distro.__setattr__(target_field, value)
+            except Exception as e:
+                raise MetadataError("Aborting. Encountered issue propagating overritten metadata to"
+                    " distributions within the dataset.") from e
 
 
     def _attempt_scaper_from_seed(self):
