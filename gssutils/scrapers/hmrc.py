@@ -167,3 +167,11 @@ def scrape_rts(scraper, metadata_tree):
         dist.downloadURL = urljoin(scraper.uri, anchor.get('href'))
         dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
         scraper.distributions.append(dist)
+        
+    for anchor in distributions_tree.xpath("//div[h1[text()='Open periods']]/ul/li/a"):
+        dist2 = Distribution(scraper)
+        dist2.title = anchor.text.strip()
+        dist2.downloadURL = urljoin(scraper.uri, anchor.get('href'))
+        dist2.mediaType, encoding = mimetypes.guess_type(dist2.downloadURL)
+        scraper.distributions.append(dist2)
+
