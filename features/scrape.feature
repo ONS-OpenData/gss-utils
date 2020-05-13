@@ -232,3 +232,7 @@ Feature: Scrape dataset info
     And the catalog has more than one dataset
     When I select the latest dataset whose title starts with "Regional trade in goods statistics disaggregated by smaller geographical areas"
     Then the description should start "International trade in goods data at summary product and country level, by UK areas smaller than NUTS1"
+
+  Scenario: gov.uk landing page
+    Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
+    Then the dataset landing page should be "https://www.gov.uk/government/statistics/alcohol-bulletin"

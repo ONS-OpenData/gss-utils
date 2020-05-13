@@ -186,6 +186,10 @@ class PMDDataset(QBDataSet):
         'creator': (DCTERMS.creator, Status.recommended, lambda s: URIRef(s)),
     })
 
+    def __init__(self, landingPage):
+        super().__init__()
+        self.landingPage = landingPage
+
     def __setattr__(self, key, value):
         if key == 'title':
             self.label = value

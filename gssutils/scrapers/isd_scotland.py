@@ -27,7 +27,7 @@ def scrape(scraper, tree):
     for record in tree.xpath("//div[contains(concat(' ', @class, ' '), ' pubtitlel ')]"):
         dataset_title = record.text.strip()
         if dataset_title not in title2dataset:
-            dataset = PMDDataset()
+            dataset = PMDDataset(scraper.uri)
             dataset.title = dataset_title
             dataset.publisher = scraper.catalog.publisher
             dataset.rights = scraper.catalog.rights

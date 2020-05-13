@@ -186,3 +186,8 @@ def step_impl(context, encoding):
                           record_mode=context.config.userdata.get('record_mode',
                                                                   DEFAULT_RECORD_MODE)):
         context.pandas = context.pandas = context.distribution.as_pandas(encoding=encoding)
+
+
+@then('the dataset landing page should be "{url}"')
+def step_impl(context, url):
+    eq_(context.scraper.dataset.landingPage, url)

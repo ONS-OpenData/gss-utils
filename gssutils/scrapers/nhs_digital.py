@@ -19,7 +19,7 @@ def scrape(scraper, tree):
         scraper.catalog.dataset = []
         articles = tree.xpath("//article[@class='cta']")
         for article in articles:
-            dataset = PMDDataset()
+            dataset = PMDDataset(scraper.uri)
             dataset.distribution = []
             dataset.publisher = scraper.catalog.publisher
             dataset.license = scraper.catalog.license

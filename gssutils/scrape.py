@@ -73,7 +73,7 @@ class Scraper:
             self.seed = None
 
         self.uri = uri
-        self.dataset = PMDDataset()
+        self.dataset = PMDDataset(uri)
         self.catalog = Catalog()
         self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
@@ -138,7 +138,6 @@ class Scraper:
             if self.uri.startswith(start_uri):
 
                 # Scrape
-                self.dataset.landingPage = self.uri
                 scrape(self, tree)
                 scraped = True
 
