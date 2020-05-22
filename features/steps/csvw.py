@@ -14,6 +14,7 @@ from nose.tools import *
 from rdflib import Graph
 
 from gssutils import CSVWMetadata
+from gssutils.csvw.mapping import CSVWMapping
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
@@ -210,3 +211,15 @@ def step_impl(context, map_file):
 @step("component registry at '{url}'")
 def step_impl(context, url):
     context.schema = CSVWMetadata(url)
+
+
+@when("I create a CSVW file from the mapping and CSV")
+def step_impl(context):
+    context.csvw = CSVWMapping()
+    context.csv_io.seek(0)
+    context.csvw.set_input(context.csv_filename, context.csv_io)
+    context.json_io.seek(0)
+    context.csvw.set_mapping(json.load(context.json_io))
+    context.metadata_io = StringIO()
+    context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
+    context.csvw.write(context.metadata_io)

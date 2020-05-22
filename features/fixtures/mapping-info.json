@@ -22,22 +22,18 @@
     "main_issue": 3,
     "columns": {
       "Year": {
-        "variable": "year",
         "property": "sdmx:refPeriod",
         "value": "http://reference.data.gov.uk/id/year/{year}"
       },
       "Country": {
-        "variable": "area",
         "property": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
         "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{area}"
       },
       "Direction": {
-        "variable": "flow",
         "property": "http://gss-data.org.uk/def/dimension/flow",
-        "value": "http://gss-data.org.uk/def/concept/flow-directions/{flow}"
+        "value": "http://gss-data.org.uk/def/concept/flow-directions/{direction}"
       },
       "Marker": {
-        "variable": "marker",
         "property": "http://purl.org/linked-data/sdmx/2009/attribute#obsStatus",
         "value": "http://gss-data.org.uk/def/concept/marker/{marker}"
       },

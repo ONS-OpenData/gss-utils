@@ -5,14 +5,15 @@ Feature: Create CWVW metadata
 
   Scenario: Create CSVW metadata from mapping
     Given a CSV file 'product-observations.csv'
-      | period    | country | product | direction | basis | unit | adjustment | value |
-      | year/1998 | estonia | T       | exports   | bop   | cp   | sa         | 39    |
-      | year/1999 | estonia | T       | exports   | bop   | cp   | sa         | 24    |
-      | year/2000 | estonia | T       | exports   | bop   | cp   | sa         | 35    |
+      | Value | Marker | Year | Country | Industry | Direction | Commodity |
+      | 0.0   |        | 2008 | AD      | 12       | IM        | T         |
+      | 0.0   |        | 2009 | AD      | 12       | IM        | T         |
+      | 0.0   |        | 2010 | AD      | 12       | IM        | T         |
+      | 0.0   |        | 2011 | AD      | 12       | IM        | T         |
     And a JSON map file 'mapping-info.json'
-    When I create a CSVW metadata file 'product-observations.csv-metadata.json' for base 'http://gss-data.org.uk/data/' and path 'gss_data/trade/ons-mrets-products'
+    When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
-    And cloudfluff/csv2rdf generates RDF
+    And gsscogs/csv2rdf generates RDF
     And the RDF should contain
     """
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
