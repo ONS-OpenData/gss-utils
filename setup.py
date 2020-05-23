@@ -33,7 +33,8 @@ setuptools.setup(
                       'lxml',
                       'unidecode',
                       'argparse',
-                      'wheel'],
+                      'wheel',
+                      'uritemplate'],
     tests_require=['behave', 'parse', 'nose', 'vcrpy', 'docker'],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -14,6 +14,7 @@ Feature: Create CWVW metadata
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
     And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
     And the RDF should contain
     """
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
