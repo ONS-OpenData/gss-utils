@@ -1,4 +1,8 @@
-prefix_map = {
+from typing import NewType, Dict
+
+URI = NewType('URI', str)
+
+prefix_map: Dict[str, URI] = {
     "as": "https://www.w3.org/ns/activitystreams#",
     "cc": "http://creativecommons.org/ns#",
     "csvw": "http://www.w3.org/ns/csvw#",

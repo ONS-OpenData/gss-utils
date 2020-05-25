@@ -220,6 +220,13 @@ def step_impl(context):
     context.csvw.set_input(context.csv_filename, context.csv_io)
     context.json_io.seek(0)
     context.csvw.set_mapping(json.load(context.json_io))
+    if hasattr(context, 'registry'):
+        context.csvw.set_registry(context.registry)
     context.metadata_io = StringIO()
     context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
     context.csvw.write(context.metadata_io)
+
+
+@step("a registry at '{endpoint}'")
+def step_impl(context, endpoint):
+    context.registry = endpoint

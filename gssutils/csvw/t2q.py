@@ -128,7 +128,7 @@ class CSVWMetadata:
                     if column in self._comp_def:
                         codelist = self._comp_def[column]['Codelist']
                         if codelist is not None and codelist != '':
-                            comp_attach['qb:codelist'] = {'@id': codelist}
+                            comp_attach['qb:codeList'] = {'@id': codelist}
                             if 'rdfs:range' not in comp_attach:
                                 comp_attach['rdfs:range'] = {'@id': 'http://www.w3.org/2004/02/skos/core#ConceptScheme'}
                     dsd_def = {
@@ -210,7 +210,7 @@ class CSVWMetadata:
                 for s, p, o, g in dataset_metadata.quads((URIRef(dataset_uri), None, None, None)):
                     if p == RDF.type:
                         t = csvw_prefix(str(o))
-                        if t is not None:
+                        if t is not None and t not in ds_meta['@type']:
                             ds_meta['@type'].append(t)
                     else:
                         prefixed_p = csvw_prefix(str(p))

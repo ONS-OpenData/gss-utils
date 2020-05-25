@@ -2,12 +2,16 @@ import csv
 import json
 import logging
 from pathlib import Path
-from typing import NamedTuple, List, Optional, Union, Mapping, Dict, TextIO, Any, Set
+from typing import List, Optional, Dict, TextIO, Any, Set, Union
 from urllib.parse import urljoin
 
 from uritemplate import variables
 
 from gssutils import pathify
+from gssutils.csvw.dsd import DataSet, DimensionComponent, MeasureComponent, AttributeComponent, Component, \
+    DimensionProperty, DSD, Resource, MeasureProperty
+from gssutils.csvw.namespaces import prefix_map, URI
+from gssutils.csvw.table import Column, TableSchema, Table
 
 default_map = {
     "Value": {
@@ -18,85 +22,27 @@ default_map = {
 }
 
 
-class Datatype(NamedTuple):
-    base: Optional[str] = None
-    format: Optional[str] = None
-
-
-class Column(NamedTuple):
-    name: str
-    titles: Union[str, List[str], None] = None
-    datatype: Union[str, Datatype, None] = None
-    suppressOutput: Optional[bool] = None
-    virtual: Optional[bool] = None
-    required: Optional[bool] = None
-    propertyUrl: Optional[str] = None
-    valueUrl: Optional[str] = None
-
-
-class ColumnReference(NamedTuple):
-    resource: str
-    columnReference: str
-
-
-class ForeignKey(NamedTuple):
-    columnReference: str
-    reference: ColumnReference
-
-
-class TableSchema(NamedTuple):
-    columns: List[Column]
-    primaryKey: Optional[list] = None
-    foreignKeys: Optional[List[ForeignKey]] = None
-
-
-class Table(NamedTuple):
-    url: str
-    tableSchema: Union[str, TableSchema]
-    suppressOutput: Optional[bool] = None
-
-
-class Resource(NamedTuple):
-    at_id: str
-    at_type: Union[str, List[str]]
-
-
-class Component(NamedTuple):
-    at_type: Union[str, List[str]] = "qb:ComponentSpecification"
-    qb_componentProperty: Optional[Resource] = None
-
-
-class DSD(NamedTuple):
-    at_id: str = '#structure'
-    at_type: Union[str, List[str]] = "qb:DataStructureDefinition"
-    qb_component: List[Component] = []
-
-
-class DataSet(NamedTuple):
-    at_id: str = '#dataset'
-    at_type: Union[str, List[str]] = ["qb:DataSet", "dcat:Dataset"]
-    qb_structure: DSD = DSD()
-
-
 class CSVWMapping:
     def __init__(self):
-        self._csv_filename: Optional[str] = None
+        self._csv_filename: Optional[str: URI] = None
         self._csv_stream: Optional[TextIO] = None
         self._mapping: Dict[str, Any] = {}
         self._columns: Dict[str, Column] = {}
         self._external_tables: List[Table] = []
-        self._dataset_uri: str = ''
+        self._dataset_uri: URI = URI('')
         self._dataset = DataSet()
+        self._components: List[Component] = []
+        self._registry: Optional[URI] = None
 
     @staticmethod
     def namify(column_header: str):
         return pathify(column_header).replace('-', '_')
 
-    def set_csv(self, csv_filename: str):
+    def set_csv(self, csv_filename: URI):
         with open(csv_filename, newline='', encoding='utf-8') as f:
             self.set_input(csv_filename, f)
 
-    def set_input(self, filename: str, stream: TextIO):
+    def set_input(self, filename: URI, stream: TextIO):
         self._csv_stream = stream
         self._csv_filename = filename
         reader = csv.DictReader(stream)
@@ -112,6 +58,9 @@ class CSVWMapping:
     def set_dataset_uri(self, uri):
         self._dataset_uri = uri
 
+    def set_registry(self, uri: URI):
+        self._registry = uri
+
     def _validate(self):
         # check variable names are consistent
         declared_names = set([col.name for col in self._columns.values()])
@@ -125,6 +74,15 @@ class CSVWMapping:
             used_names.update(name_set)
         if not declared_names.issuperset(used_names):
             logging.error(f"Unmatched variable names: {used_names.difference(declared_names)}")
+        # check used prefixes
+        used_prefixes = set(
+            t.split(':')[0]
+            for col in self._columns.values()
+            for t in [col.propertyUrl, col.valueUrl]
+            if t is not None and not t.startswith('http') and ':' in t
+        )
+        if not set(prefix_map.keys()).issuperset(used_prefixes):
+            logging.error(f"Unknown prefixes used: {used_prefixes.difference(prefix_map.keys())}")
 
     def _as_csvw_object(self):
         if self._mapping is not None:
@@ -132,33 +90,62 @@ class CSVWMapping:
                 if name in self._columns:
                     if "property" in obj and "value" in obj:
                         self._columns[name] = self._columns[name]._replace(
-                            propertyUrl=obj["property"],
-                            valueUrl=obj["value"]
+                            propertyUrl=URI(obj["property"]),
+                            valueUrl=URI(obj["value"])
                         )
+                        self._components.append(DimensionComponent(
+                            at_id=URI(f"#component/{self._columns[name].name}"),
+                            qb_componentProperty=Resource(at_id=URI(obj["property"])),
+                            qb_dimension=DimensionProperty(
+                                at_id=URI(obj["property"]),
+                                rdfs_range=Resource(
+                                    at_id=URI(f"#class/{self._columns[name].name}")
+                                )
+                            )
+                        ))
                     if "unit" in obj and "measure" in obj:
                         self._columns[name] = self._columns[name]._replace(propertyUrl=obj["measure"])
                         if "datatype" in obj:
                             self._columns[name] = self._columns[name]._replace(datatype=obj["datatype"])
                         else:
                             self._columns[name] = self._columns[name]._replace(datatype="number")
+                        self._components.extend([
+                            DimensionComponent(
+                                at_id=URI("#component/measure_type"),
+                                qb_componentProperty=Resource(at_id=URI("http://purl.org/linked-data/cube#measureType")),
+                                qb_dimension=DimensionProperty(
+                                    at_id=URI("http://purl.org/linked-data/cube#measureType"),
+                                    rdfs_range=Resource(at_id=URI("http://purl.org/linked-data/cube#MeasureProperty"))
+                                )
+                            ),
+                            MeasureComponent(
+                                at_id=URI(f"#component/{self._columns[name].name}"),
+                                qb_componentProperty=Resource(at_id=obj["measure"]),
+                                qb_measure=MeasureProperty(at_id=obj["measure"])
+                            )
+                        ])
                         self._columns["virt_unit"] = Column(
                             name="virt_unit",
                             virtual=True,
-                            propertyUrl="http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
-                            valueUrl=obj["unit"]
+                            propertyUrl=URI("http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure"),
+                            valueUrl=URI(obj["unit"])
                         )
                         self._columns["virt_measure"] = Column(
                             name="virt_measure",
                             virtual=True,
-                            propertyUrl="http://purl.org/linked-data/cube#measureType",
-                            valueUrl=obj["measure"]
+                            propertyUrl=URI("http://purl.org/linked-data/cube#measureType"),
+                            valueUrl=URI(obj["measure"])
                         )
         self._validate()
         return {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),
             "@id": urljoin(self._dataset_uri, "#tables", allow_fragments=True),
-            "prov:hadDerivation": self._dataset
+            "prov:hadDerivation": DataSet(
+                qb_structure=DSD(
+                    qb_component=self._components
+                )
+            )
         }
 
     def _as_tables(self):
@@ -173,7 +160,7 @@ class CSVWMapping:
     @staticmethod
     def _as_plain_obj(o):
         def fix_prefix(key: str):
-            for prefix, replace in {'at_': '@', 'qb_': 'qb:'}.items():
+            for prefix, replace in {'at_': '@', 'qb_': 'qb:', 'rdfs_': 'rdfs:'}.items():
                 if key.startswith(prefix):
                     return replace + key[len(prefix):]
             return key

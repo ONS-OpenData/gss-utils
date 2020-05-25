@@ -11,6 +11,7 @@ Feature: Create CWVW metadata
       | 0.0   |        | 2010 | AD      | 12       | IM        | T         |
       | 0.0   |        | 2011 | AD      | 12       | IM        | T         |
     And a JSON map file 'mapping-info.json'
+    And a registry at 'http://gss-data.org.uk/sparql'
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
     And gsscogs/csv2rdf generates RDF

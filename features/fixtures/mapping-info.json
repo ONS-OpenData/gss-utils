@@ -22,7 +22,7 @@
     "main_issue": 3,
     "columns": {
       "Year": {
-        "property": "sdmx:refPeriod",
+        "property": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
         "value": "http://reference.data.gov.uk/id/year/{year}"
       },
       "Country": {
@@ -38,8 +38,8 @@
         "value": "http://gss-data.org.uk/def/concept/marker/{marker}"
       },
       "Value": {
-        "unit": "gbp-million",
-        "measure": "GBP Total",
+        "unit": "http://gss-data.org.uk/def/concept/measurement-units/gbp",
+        "measure": "http://gss-data.org.uk/def/measure/gbp-total",
         "datatype": "integer"
       }
     }
