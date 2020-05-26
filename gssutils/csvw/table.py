@@ -33,6 +33,7 @@ class TableSchema(NamedTuple):
     columns: List[Column]
     primaryKey: Optional[list] = None
     foreignKeys: Optional[List[ForeignKey]] = None
+    aboutUrl: Optional[URI] = None
 
 
 class Table(NamedTuple):

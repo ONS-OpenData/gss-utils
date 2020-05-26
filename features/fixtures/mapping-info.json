@@ -22,25 +22,25 @@
     "main_issue": 3,
     "columns": {
       "Year": {
-        "property": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
+        "dimension": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
         "value": "http://reference.data.gov.uk/id/year/{year}"
       },
       "Country": {
-        "property": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
+        "dimension": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
         "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{area}"
       },
       "Direction": {
-        "property": "http://gss-data.org.uk/def/dimension/flow",
+        "dimension": "http://gss-data.org.uk/def/dimension/flow",
         "value": "http://gss-data.org.uk/def/concept/flow-directions/{direction}"
       },
       "Marker": {
-        "property": "http://purl.org/linked-data/sdmx/2009/attribute#obsStatus",
+        "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#obsStatus",
         "value": "http://gss-data.org.uk/def/concept/marker/{marker}"
       },
       "Value": {
         "unit": "http://gss-data.org.uk/def/concept/measurement-units/gbp",
         "measure": "http://gss-data.org.uk/def/measure/gbp-total",
-        "datatype": "integer"
+        "datatype": "number"
       }
     }
   },
