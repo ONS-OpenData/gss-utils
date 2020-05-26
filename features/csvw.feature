@@ -18,6 +18,7 @@ Feature: Create CWVW metadata
     And the RDF should pass the Data Cube integrity constraints
     And the RDF should contain
     """
+      @base <file:/tmp/product-observations.csv-metadata.json> .
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
       @prefix qb:    <http://purl.org/linked-data/cube#> .
       @prefix sdmx-a: <http://purl.org/linked-data/sdmx/2009/attribute#> .
@@ -26,7 +27,9 @@ Feature: Create CWVW metadata
       @prefix gss-dim: <http://gss-data.org.uk/def/dimension/> .
       @prefix gss-meas: <http://gss-data.org.uk/def/measure/> .
 
-      <http://gss-data.org.uk/data/gss_data/trade/ons-mrets-products>
-              a             qb:DataSet ;
-              qb:structure  <http://gss-data.org.uk/data/gss_data/trade/ons-mrets-products/structure> .
+      <#dataset> a qb:DataSet ;
+              qb:structure <#structure> .
+
+      <#structure> a qb:DataStructureDefinition ;
+                qb:component <#component/commodity>, <#component/country> .
     """
