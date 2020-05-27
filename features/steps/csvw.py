@@ -92,15 +92,27 @@ def step_impl(context, filename, base, path):
     context.metadata_filename = Path(filename)
     context.metadata_io = StringIO()
     context.csv_io.seek(0)
-    context.schema.create_io(
-        context.csv_io,
-        context.metadata_io,
-        str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-        with_transform=True,
-        base_url=base,
-        base_path=path,
-        with_external=False
-    )
+    if hasattr(context, 'json_io'):
+        context.json_io.seek(0)
+        context.schema.create_io(
+            context.csv_io,
+            context.metadata_io,
+            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
+            mapping=context.json_io,
+            base_url=base,
+            base_path=path,
+            with_external=False
+        )
+    else:
+        context.schema.create_io(
+            context.csv_io,
+            context.metadata_io,
+            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
+            with_transform=True,
+            base_url=base,
+            base_path=path,
+            with_external=False
+        )
 
 
 @then("the metadata is valid JSON-LD")
@@ -189,3 +201,35 @@ def step_impl(context):
     # assert_equal(response['StatusCode'], 0)
     if response['StatusCode'] != 0:
         logging.warning("Some ICs failed.")
+
+
+@step("a JSON map file '{map_file}'")
+def step_impl(context, map_file):
+    context.json_filename = Path(map_file)
+    context.json_io = StringIO()
+    mapping = json.load(open(Path('features') / 'fixtures' / map_file))
+    json.dump(mapping, context.json_io)
+
+
+@step("component registry at '{url}'")
+def step_impl(context, url):
+    context.schema = CSVWMetadata(url)
+
+
+@when("I create a CSVW file from the mapping and CSV")
+def step_impl(context):
+    context.csvw = CSVWMapping()
+    context.csv_io.seek(0)
+    context.csvw.set_input(context.csv_filename, context.csv_io)
+    context.json_io.seek(0)
+    context.csvw.set_mapping(json.load(context.json_io))
+    if hasattr(context, 'registry'):
+        context.csvw.set_registry(context.registry)
+    context.metadata_io = StringIO()
+    context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
+    context.csvw.write(context.metadata_io)
+
+
+@step("a registry at '{endpoint}'")
+def step_impl(context, endpoint):
+    context.registry = endpoint
