@@ -7,6 +7,7 @@ from gssutils.scrape import Scraper
 from gssutils.utils import pathify, is_interactive
 from gssutils.refdata import *
 from gssutils.csvw.t2q import CSVWMetadata
+from gssutils.csvw.mapping import CSVWMapping
 from databaker.framework import *
 import pandas as pd
 from gssutils.metadata import Excel, ODS, THEME

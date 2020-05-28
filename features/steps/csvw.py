@@ -15,7 +15,7 @@ from behave import *
 from nose.tools import *
 from rdflib import Graph
 
-from gssutils import CSVWMetadata
+from gssutils import CSVWMetadata, CSVWMapping
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
