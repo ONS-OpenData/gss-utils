@@ -37,6 +37,6 @@ class TableSchema(NamedTuple):
 
 
 class Table(NamedTuple):
-    url: str
+    url: URI
     tableSchema: Union[str, TableSchema]
     suppressOutput: Optional[bool] = None

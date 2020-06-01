@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+from io import TextIOBase
 from pathlib import Path
 from typing import List, Optional, Dict, TextIO, Any, Set, Union
 from urllib.parse import urljoin
@@ -35,6 +36,7 @@ class CSVWMapping:
         self._components: List[Component] = []
         self._registry: Optional[URI] = None
         self._keys: List[str] = []
+        self._metadata_filename: Optional[str: URI] = None
 
     @staticmethod
     def namify(column_header: str):
@@ -185,8 +187,11 @@ class CSVWMapping:
         }
 
     def _as_tables(self):
+        table_uri = URI(self._csv_filename.name)  # default is that metadata is filename + '-metadata.json'
+        if self._metadata_filename is not None:
+            table_uri = URI(self._csv_filename.relative_to(self._metadata_filename.parent))
         return self._external_tables + [Table(
-            url=self._csv_filename,
+            url=table_uri,
             tableSchema=TableSchema(
                 columns=list(self._columns.values()),
                 primaryKey=self._keys,
@@ -215,7 +220,12 @@ class CSVWMapping:
         else:
             return o
 
-    def write(self, stream: TextIO):
+    def write(self, out: Union[URI, TextIO]):
+        if not isinstance(out, TextIOBase):
+            self._metadata_filename = out
+            stream = open(out, "w", encoding="utf-8")
+        else:
+            stream = out
         plain_obj = CSVWMapping._as_plain_obj(self._as_csvw_object())
         logging.debug(json.dumps(plain_obj, indent=2))
-        json.dump(plain_obj, stream)
+        json.dump(plain_obj, stream, indent=2)
