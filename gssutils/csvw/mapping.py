@@ -25,22 +25,33 @@ default_map = {
 
 class CSVWMapping:
     def __init__(self):
-        self._csv_filename: Optional[str: URI] = None
+        self._csv_filename: Optional[URI] = None
         self._csv_stream: Optional[TextIO] = None
         self._mapping: Dict[str, Any] = {}
         self._column_names = List[str]
         self._columns: Dict[str, Column] = {}
         self._external_tables: List[Table] = []
-        self._dataset_uri: URI = URI('')
+        self._dataset_uri: Optional[URI] = None
         self._dataset = DataSet()
         self._components: List[Component] = []
         self._registry: Optional[URI] = None
         self._keys: List[str] = []
-        self._metadata_filename: Optional[str: URI] = None
+        self._metadata_filename: Optional[URI] = None
+        self._dataset_uri: Optional[URI] = None
 
     @staticmethod
     def namify(column_header: str):
         return pathify(column_header).replace('-', '_')
+
+    @staticmethod
+    def classify(column_header: str):
+        return ''.join(part.capitalize() for part in pathify(column_header).split('-'))
+
+    def join_dataset_uri(self, relative: str):
+        if self._dataset_uri is None:
+            return URI(relative)
+        else:
+            return URI(urljoin(self._dataset_uri, relative, allow_fragments=True))
 
     def set_csv(self, csv_filename: URI):
         with open(csv_filename, newline='', encoding='utf-8') as f:
@@ -60,7 +71,7 @@ class CSVWMapping:
         else:
             logging.error(f'No column mapping found.')
 
-    def set_dataset_uri(self, uri):
+    def set_dataset_uri(self, uri: URI):
         self._dataset_uri = uri
 
     def set_registry(self, uri: URI):
@@ -100,12 +111,12 @@ class CSVWMapping:
                         valueUrl=URI(obj["value"])
                     )
                     self._components.append(DimensionComponent(
-                        at_id=URI(f"#component/{self._columns[name].name}"),
+                        at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                         qb_componentProperty=Resource(at_id=URI(obj["dimension"])),
                         qb_dimension=DimensionProperty(
                             at_id=URI(obj["dimension"]),
                             rdfs_range=Resource(
-                                at_id=URI(f"#class/{self._columns[name].name}")
+                                at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             )
                         )
                     ))
@@ -115,12 +126,12 @@ class CSVWMapping:
                         valueUrl=URI(obj["value"])
                     )
                     self._components.append(AttributeComponent(
-                        at_id=URI(f"#component/{self._columns[name].name}"),
+                        at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                         qb_componentProperty=Resource(at_id=URI(obj["attribute"])),
                         qb_attribute=AttributeProperty(
                             at_id=URI(obj["attribute"]),
                             rdfs_range=Resource(
-                                at_id=URI(f"#class/{self._columns[name].name}")
+                                at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             )
                         )
                     ))
@@ -132,7 +143,7 @@ class CSVWMapping:
                         self._columns[name] = self._columns[name]._replace(datatype="number")
                     self._components.extend([
                         DimensionComponent(
-                            at_id=URI("#component/measure_type"),
+                            at_id=self.join_dataset_uri("#component/measure_type"),
                             qb_componentProperty=Resource(at_id=URI("http://purl.org/linked-data/cube#measureType")),
                             qb_dimension=DimensionProperty(
                                 at_id=URI("http://purl.org/linked-data/cube#measureType"),
@@ -140,7 +151,7 @@ class CSVWMapping:
                             )
                         ),
                         MeasureComponent(
-                            at_id=URI(f"#component/{self._columns[name].name}"),
+                            at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                             qb_componentProperty=Resource(at_id=obj["measure"]),
                             qb_measure=MeasureProperty(at_id=obj["measure"])
                         )
@@ -161,33 +172,36 @@ class CSVWMapping:
                 # assume local dimension
                 self._keys.append(self._columns[name].name)
                 self._columns[name] = self._columns[name]._replace(
-                    propertyUrl=URI(f"#dimension/{self._columns[name].name}"),
-                    valueUrl=URI(f"#concept/{{{self._columns[name].name}}}")
+                    propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
+                    valueUrl=self.join_dataset_uri(f"#concept/{pathify(name)}/{{{self._columns[name].name}}}")
                 )
                 self._components.append(DimensionComponent(
-                    at_id=URI(f"#component/{self._columns[name].name}"),
-                    qb_componentProperty=Resource(at_id=URI(f"#dimension/{self._columns[name].name}")),
+                    at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
+                    qb_componentProperty=Resource(at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}")),
                     qb_dimension=DimensionProperty(
-                        at_id=URI(URI(f"#dimension/{self._columns[name].name}")),
+                        at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
                         rdfs_range=Resource(
-                            at_id=URI(f"#class/{self._columns[name].name}")
-                        )
+                            at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
+                        ),
+                        rdfs_label=name
                     )
                 ))
         self._validate()
         return {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),
-            "@id": URI(urljoin(self._dataset_uri, "#tables", allow_fragments=True)),
+            "@id": self.join_dataset_uri("#tables"),
             "prov:hadDerivation": DataSet(
+                at_id=self.join_dataset_uri('#dataset'),
                 qb_structure=DSD(
+                    at_id=self.join_dataset_uri('#structure'),
                     qb_component=self._components
                 )
             )
         }
 
     def _as_tables(self):
-        table_uri = URI(self._csv_filename.name)  # default is that metadata is filename + '-metadata.json'
+        table_uri = URI(Path(self._csv_filename).name)  # default is that metadata is filename + '-metadata.json'
         if self._metadata_filename is not None:
             table_uri = URI(self._csv_filename.relative_to(self._metadata_filename.parent))
         return self._external_tables + [Table(
@@ -195,7 +209,7 @@ class CSVWMapping:
             tableSchema=TableSchema(
                 columns=list(self._columns.values()),
                 primaryKey=self._keys,
-                aboutUrl=URI(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
+                aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
             )
         )]
 

@@ -13,6 +13,7 @@ class DimensionProperty(NamedTuple):
     at_type: Union[URI, List[URI]] = "qb:DimensionProperty"
     qb_codeList: Optional[Resource] = None
     rdfs_range: Optional[Resource] = None
+    rdfs_label: Optional[str] = None
 
 
 class MeasureProperty(NamedTuple):

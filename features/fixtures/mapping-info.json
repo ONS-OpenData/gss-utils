@@ -27,10 +27,10 @@
       },
       "Country": {
         "dimension": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
-        "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{area}"
+        "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{country}"
       },
       "Direction": {
-        "dimension": "http://gss-data.org.uk/def/dimension/flow",
+        "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
         "value": "http://gss-data.org.uk/def/concept/flow-directions/{direction}"
       },
       "Marker": {

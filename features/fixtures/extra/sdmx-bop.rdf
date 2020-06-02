@@ -1,0 +1,4553 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:dct="http://purl.org/dc/terms/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xkos="http://rdf-vocabulary.ddialliance.org/xkos#" xmlns:cl_area="http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/" xmlns:str="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:mes="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:com="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xml:base="http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area">
+  <skos:ConceptScheme rdf:about="">
+    <rdfs:label xml:lang="en">Area code list</rdfs:label>
+  </skos:ConceptScheme>
+  <skos:Concept rdf:about="cl_area/_X">
+    <rdfs:label xml:lang="en">Not allocated/ unspecified</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>_X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/_Z">
+    <rdfs:label xml:lang="en">Not applicable</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>_Z</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1A">
+    <rdfs:label xml:lang="en">International organisations</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1B">
+    <rdfs:label xml:lang="en">UN organisations</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1C">
+    <rdfs:label xml:lang="en">IMF (International Monetary Fund)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1D">
+    <rdfs:label xml:lang="en">WTO (World Trade Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1D</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1E">
+    <rdfs:label xml:lang="en">IBRD (International Bank for Reconstruction and Development)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1F">
+    <rdfs:label xml:lang="en">IDA (International Development Association)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1G">
+    <rdfs:label xml:lang="en">ICSID (International Centre for Settlement of Investment Disputes)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1G</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1H">
+    <rdfs:label xml:lang="en">UNESCO (United Nations Educational, Scientific and Cultural Organisation)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1H</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1J">
+    <rdfs:label xml:lang="en">FAO (Food and Agriculture Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1J</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1K">
+    <rdfs:label xml:lang="en">WHO (World Health Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1K</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1L">
+    <rdfs:label xml:lang="en">IFAD (International Fund for Agricultural Development)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1L</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1M">
+    <rdfs:label xml:lang="en">IFC (International Finance Corporation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1N">
+    <rdfs:label xml:lang="en">MIGA (Multilateral Investment Guarantee Agency)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1N</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1O">
+    <rdfs:label xml:lang="en">UNICEF (United Nations Children Fund)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1O</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1P">
+    <rdfs:label xml:lang="en">UNHCR (United Nations High Commissioner for Refugees)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1P</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1Q">
+    <rdfs:label xml:lang="en">UNRWA (United Nations Relief and Works Agency for Palestine)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1Q</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1R">
+    <rdfs:label xml:lang="en">IAEA (International Atomic Energy Agency)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1R</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1S">
+    <rdfs:label xml:lang="en">ILO (International Labour Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1S</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1T">
+    <rdfs:label xml:lang="en">ITU (International Telecommunication Union)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1T</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1U">
+    <rdfs:label xml:lang="en">Rest of UN Organisations n.i.e.</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1U</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1U1">
+    <rdfs:label xml:lang="en">UNECE (United Nations Economic Commission for Europe)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1U1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/1W">
+    <rdfs:label xml:lang="en">World Bank Group</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>1W</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4A">
+    <rdfs:label xml:lang="en">All the European Union Institutions excluding the institutions of the euro
+                        area (changing composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4AA">
+    <rdfs:label xml:lang="en">All the European Union Institutions excluding the ECB</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4AA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4B">
+    <rdfs:label xml:lang="en">EMS (European Monetary System)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4C">
+    <rdfs:label xml:lang="en">EIB (European Investment Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4D">
+    <rdfs:label xml:lang="en">European Commission</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4D</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4DJ">
+    <rdfs:label xml:lang="en">All the European Union Institutions financed via the EU Budget</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4DJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4E">
+    <rdfs:label xml:lang="en">EDF (European Development Fund)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4F">
+    <rdfs:label xml:lang="en">ECB (European Central Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4G">
+    <rdfs:label xml:lang="en">EIF (European Investment Fund)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4G</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4H">
+    <rdfs:label xml:lang="en">European Coal and Steel Community</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4H</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4I">
+    <rdfs:label xml:lang="en">Neighbourhood Investment Facility</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4I</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J">
+    <rdfs:label xml:lang="en">Other European Union Institutions, Organs and Organisms covered by General
+                        budget
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J1">
+    <rdfs:label xml:lang="en">European Parliament</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J2">
+    <rdfs:label xml:lang="en">Council of the European Union</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J3">
+    <rdfs:label xml:lang="en">Court of Justice</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J4">
+    <rdfs:label xml:lang="en">Court of Auditors</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J5">
+    <rdfs:label xml:lang="en">European Council</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J6">
+    <rdfs:label xml:lang="en">Economic and Social Committee</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J7">
+    <rdfs:label xml:lang="en">Committee of Regions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4J8">
+    <rdfs:label xml:lang="en">Other small European Union Institutions (Ombudsman, Data Protection
+                        Supervisor etc.)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4J8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4M">
+    <rdfs:label xml:lang="en">SRB (Single Resolution Board)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4R">
+    <rdfs:label xml:lang="en">EU-Africa Infrastructure Trust Fund</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4R</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4S">
+    <rdfs:label xml:lang="en">ESM (European Stability Mechanism)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4S</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4T">
+    <rdfs:label xml:lang="en">Joint Committee of the European Supervisory Authorities (ESAs)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4T</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4T1">
+    <rdfs:label xml:lang="en">EBA (European Banking Authority)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4T1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4T2">
+    <rdfs:label xml:lang="en">ESMA (European Securities and Markets Authority)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4T2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4T3">
+    <rdfs:label xml:lang="en">EIOPA (European Insurance and Occupational Pensions Authority)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4T3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4U">
+    <rdfs:label xml:lang="en">EURATOM</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4U</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4V">
+    <rdfs:label xml:lang="en">FEMIP (Facility for Euro-Mediterranean Investment and Partnership)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4V</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4X">
+    <rdfs:label xml:lang="en">All the European Union Institutions not financed via the EU Budget
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/4Y">
+    <rdfs:label xml:lang="en">All European Community Institutions, Organs and Organisms, including ECB and
+                        ESM
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>4Y</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5A">
+    <rdfs:label xml:lang="en">Other International Organisations (financial institutions)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5AA">
+    <rdfs:label xml:lang="en">Multilateral Lending Agencies</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5AA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5B">
+    <rdfs:label xml:lang="en">BIS (Bank for International Settlements)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5C">
+    <rdfs:label xml:lang="en">IADB (Inter-American Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5D">
+    <rdfs:label xml:lang="en">AfDB (African Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5D</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5E">
+    <rdfs:label xml:lang="en">AsDB (Asian Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5F">
+    <rdfs:label xml:lang="en">EBRD (European Bank for Reconstruction and Development)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5G">
+    <rdfs:label xml:lang="en">IIC (Inter-American Investment Corporation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5G</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5H">
+    <rdfs:label xml:lang="en">NIB (Nordic Investment Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5H</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5I">
+    <rdfs:label xml:lang="en">ECCB (Eastern Caribbean Central Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5I</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5J">
+    <rdfs:label xml:lang="en">IBEC (International Bank for Economic Co-operation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5J</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5K">
+    <rdfs:label xml:lang="en">IIB (International Investment Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5K</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5L">
+    <rdfs:label xml:lang="en">CDB (Caribbean Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5L</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5M">
+    <rdfs:label xml:lang="en">AMF (Arab Monetary Fund)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5N">
+    <rdfs:label xml:lang="en">BADEA (Banque arabe pour le développement économique en Afrique)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5N</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5O">
+    <rdfs:label xml:lang="en">BCEAO (Banque Centrale des Etats de l`Afrique de l`Ouest)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5O</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5P">
+    <rdfs:label xml:lang="en">CASDB (Central African States Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5P</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5Q">
+    <rdfs:label xml:lang="en">African Development Fund</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5Q</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5R">
+    <rdfs:label xml:lang="en">Asian Development Fund</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5R</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5S">
+    <rdfs:label xml:lang="en">Fonds spécial unifié de développement</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5S</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5T">
+    <rdfs:label xml:lang="en">CABEI (Central American Bank for Economic Integration)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5T</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5U">
+    <rdfs:label xml:lang="en">ADC (Andean Development Corporation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5U</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5W">
+    <rdfs:label xml:lang="en">BEAC (Banque des Etats de l`Afrique Centrale)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5W</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/5Z">
+    <rdfs:label xml:lang="en">Other International Financial Organisations n.i.e.</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>5Z</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6A">
+    <rdfs:label xml:lang="en">Other International Organisations (non-financial institutions)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6B">
+    <rdfs:label xml:lang="en">NATO (North Atlantic Treaty Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6C">
+    <rdfs:label xml:lang="en">Council of Europe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6D">
+    <rdfs:label xml:lang="en">ICRC (International Committee of the Red Cross)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6D</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6E">
+    <rdfs:label xml:lang="en">ESA (European Space Agency)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6F">
+    <rdfs:label xml:lang="en">EPO (European Patent Office)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6G">
+    <rdfs:label xml:lang="en">EUROCONTROL (European Organisation for the Safety of Air Navigation)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6G</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6H">
+    <rdfs:label xml:lang="en">EUTELSAT (European Telecommunications Satellite Organisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6H</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6I">
+    <rdfs:label xml:lang="en">EMBL (European Molecular Biology Laboratory)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6I</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6J">
+    <rdfs:label xml:lang="en">INTELSAT (International Telecommunications Satellite Organisation)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6J</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6K">
+    <rdfs:label xml:lang="en">EBU/UER (European Broadcasting Union/Union européenne de radio-télévision)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6K</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6L">
+    <rdfs:label xml:lang="en">EUMETSAT (European Organisation for the Exploitation of Meteorological
+                        Satellites)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6L</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6M">
+    <rdfs:label xml:lang="en">ESO (European Southern Observatory)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6N">
+    <rdfs:label xml:lang="en">ECMWF (European Centre for Medium-Range Weather Forecasts)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6N</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6O">
+    <rdfs:label xml:lang="en">OECD (Organisation for Economic Co-operation and Development)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6O</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6P">
+    <rdfs:label xml:lang="en">CERN (European Organisation for Nuclear Research)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6P</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6Q">
+    <rdfs:label xml:lang="en">IOM (International Organisation for Migration)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6Q</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/6Z">
+    <rdfs:label xml:lang="en">Other International Non-Financial Organisations n.i.e.</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>6Z</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7A">
+    <rdfs:label xml:lang="en">WAEMU (West African Economic and Monetary Union)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7B">
+    <rdfs:label xml:lang="en">IDB (Islamic Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7C">
+    <rdfs:label xml:lang="en">EDB (Eurasian Development Bank )</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7D">
+    <rdfs:label xml:lang="en">Paris Club Creditor Institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7D</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7E">
+    <rdfs:label xml:lang="en">CEB (Council of Europe Development Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7F">
+    <rdfs:label xml:lang="en">International Union of Credit and Investment Insurers</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7G">
+    <rdfs:label xml:lang="en">Black Sea Trade and Development Banks</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7G</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7H">
+    <rdfs:label xml:lang="en">AFREXIMBANK (African Export-Import Bank)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7H</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7I">
+    <rdfs:label xml:lang="en">BLADEX (Banco Latino Americano De Comercio Exterior)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7I</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7J">
+    <rdfs:label xml:lang="en">FLAR (Fondo Latino Americano de Reservas)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7J</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7K">
+    <rdfs:label xml:lang="en">Fonds Belgo-Congolais d'Amortissement et de Gestion</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7K</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7L">
+    <rdfs:label xml:lang="en">IFFIm (International finance Facility for Immunisation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7L</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/7M">
+    <rdfs:label xml:lang="en">EUROFIMA (European Company for the Financing of Railroad Rolling Stock)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>7M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/9A">
+    <rdfs:label xml:lang="en">International Organisations excluding European Union Institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>9A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/9B">
+    <rdfs:label xml:lang="en">International organization excluding the BIS and the IMF</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>9B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A1">
+    <rdfs:label xml:lang="en">America</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A10">
+    <rdfs:label xml:lang="en">Western Hemisphere</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A10</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A109">
+    <rdfs:label xml:lang="en">Western Hemisphere not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A109</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A19">
+    <rdfs:label xml:lang="en">America not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A1X">
+    <rdfs:label xml:lang="en">America Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A1X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A1X0">
+    <rdfs:label xml:lang="en">America Excluding OECD countries (Fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A1X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A2">
+    <rdfs:label xml:lang="en">North American countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A29">
+    <rdfs:label xml:lang="en">North America not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A2A3">
+    <rdfs:label xml:lang="en">North and Central American countries (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A2A3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A2A39">
+    <rdfs:label xml:lang="en">North and Central American countries Not Allocated (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A2A39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A2X">
+    <rdfs:label xml:lang="en">North America Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A2X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A3">
+    <rdfs:label xml:lang="en">Central America (UN composition, namely Belize, Costa Rica, El Salvador,
+                        Guatemala, Honduras, Mexico, Nicaragua and Panama) deprecated
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A39">
+    <rdfs:label xml:lang="en">Central America not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A3X">
+    <rdfs:label xml:lang="en">Central America Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A3X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A4">
+    <rdfs:label xml:lang="en">Caribbean deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A41">
+    <rdfs:label xml:lang="en">Windward Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A41</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A42">
+    <rdfs:label xml:lang="en">Leeward Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A42</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A49">
+    <rdfs:label xml:lang="en">Caribbean not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A5">
+    <rdfs:label xml:lang="en">Central America and Carribean countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A5X">
+    <rdfs:label xml:lang="en">Central America and Caribbean countries excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A5X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A6">
+    <rdfs:label xml:lang="en">North Atlantic &amp; Caribbean</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A69">
+    <rdfs:label xml:lang="en">North Atlantic &amp; Caribbean not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A7">
+    <rdfs:label xml:lang="en">South American countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A79">
+    <rdfs:label xml:lang="en">South America not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A7E">
+    <rdfs:label xml:lang="en">South American Economies (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A7E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A7E9">
+    <rdfs:label xml:lang="en">South American Economies Not Allocated (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A7E9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A7X">
+    <rdfs:label xml:lang="en">South America Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A7X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A7X0">
+    <rdfs:label xml:lang="en">South America Excluding OECD countries (Fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A7X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A8">
+    <rdfs:label xml:lang="en">Latin America</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A84">
+    <rdfs:label xml:lang="en">Latin American NICs of the second wave of industrialization</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A84</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A9">
+    <rdfs:label xml:lang="en">Latin America &amp; Carribean</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/A99">
+    <rdfs:label xml:lang="en">Latin America &amp; Carribean not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>A99</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AD">
+    <rdfs:label xml:lang="en">Andorra</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AE">
+    <rdfs:label xml:lang="en">United Arab Emirates</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AE1">
+    <rdfs:label xml:lang="en">Abu Dhabi</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AE1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AE2">
+    <rdfs:label xml:lang="en">Dubai</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AE2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AF">
+    <rdfs:label xml:lang="en">Afghanistan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AG">
+    <rdfs:label xml:lang="en">Antigua and Barbuda</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AI">
+    <rdfs:label xml:lang="en">Anguilla</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AL">
+    <rdfs:label xml:lang="en">Albania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AM">
+    <rdfs:label xml:lang="en">Armenia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AN">
+    <rdfs:label xml:lang="en">Netherlands Antilles</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AO">
+    <rdfs:label xml:lang="en">Angola</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AQ">
+    <rdfs:label xml:lang="en">Antarctica</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AQ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AR">
+    <rdfs:label xml:lang="en">Argentina</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AS">
+    <rdfs:label xml:lang="en">American Samoa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AT">
+    <rdfs:label xml:lang="en">Austria</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AU">
+    <rdfs:label xml:lang="en">Australia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AW">
+    <rdfs:label xml:lang="en">Aruba</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AX">
+    <rdfs:label xml:lang="en">Aland Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AX</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/AZ">
+    <rdfs:label xml:lang="en">Azerbaijan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>AZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B0">
+    <rdfs:label xml:lang="en">EU (Member States and Institutions of the European Union) changing
+                        composition
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B00">
+    <rdfs:label xml:lang="en">EU (Member States of the European Union) changing composition, excluding EU
+                        Institutions
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B00</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B09">
+    <rdfs:label xml:lang="en">EU (Member States and Institutions of the European Union) changing
+                        composition, not allocated
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B09</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B1">
+    <rdfs:label xml:lang="en">EU12 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B10">
+    <rdfs:label xml:lang="en">EU12 excluding EU institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B10</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B2">
+    <rdfs:label xml:lang="en">EU15 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B20">
+    <rdfs:label xml:lang="en">EU15 excluding EU institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B20</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B3">
+    <rdfs:label xml:lang="en">EU25 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B30">
+    <rdfs:label xml:lang="en">EU25 excluding EU institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B30</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B4">
+    <rdfs:label xml:lang="en">EU 27 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B40">
+    <rdfs:label xml:lang="en">EU27 excluding EU institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B40</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B5">
+    <rdfs:label xml:lang="en">EU28 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/B50">
+    <rdfs:label xml:lang="en">EU28 excluding EU institutions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>B50</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BA">
+    <rdfs:label xml:lang="en">Bosnia and Herzegovina</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BB">
+    <rdfs:label xml:lang="en">Barbados</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BB</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BD">
+    <rdfs:label xml:lang="en">Bangladesh</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BE">
+    <rdfs:label xml:lang="en">Belgium</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BF">
+    <rdfs:label xml:lang="en">Burkina Faso</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BG">
+    <rdfs:label xml:lang="en">Bulgaria</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BH">
+    <rdfs:label xml:lang="en">Bahrain</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BI">
+    <rdfs:label xml:lang="en">Burundi</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BJ">
+    <rdfs:label xml:lang="en">Benin</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BL">
+    <rdfs:label xml:lang="en">Saint Barthelemy</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BM">
+    <rdfs:label xml:lang="en">Bermuda</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BN">
+    <rdfs:label xml:lang="en">Brunei Darussalam</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BO">
+    <rdfs:label xml:lang="en">Bolivia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BQ">
+    <rdfs:label xml:lang="en">Bonaire, Saint Eustatius and Saba</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BQ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BR">
+    <rdfs:label xml:lang="en">Brazil</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BS">
+    <rdfs:label xml:lang="en">Bahamas</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BT">
+    <rdfs:label xml:lang="en">Bhutan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BV">
+    <rdfs:label xml:lang="en">Bouvet Island</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BW">
+    <rdfs:label xml:lang="en">Botswana</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BY">
+    <rdfs:label xml:lang="en">Belarus</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/BZ">
+    <rdfs:label xml:lang="en">Belize</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>BZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C0">
+    <rdfs:label xml:lang="en">Candidate Countries (Changing composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C1">
+    <rdfs:label xml:lang="en">Candidate countries (HR, MK, TR)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C2">
+    <rdfs:label xml:lang="en">Candidate countries (HR,IS,MK,TR)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C3">
+    <rdfs:label xml:lang="en">Candidate countries (HR,IS,ME,MK,TR)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C4">
+    <rdfs:label xml:lang="en">Candidate countries (IS,ME,MK,RS,TR)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C5">
+    <rdfs:label xml:lang="en">Candidate countries (AL,ME,MK,RS,TR)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C98">
+    <rdfs:label xml:lang="en">New EU member states joining in 2004 and 2007
+                        (BG,CY,CZ,EE,HU,LV,LT,MT,PL,RO,SK,SI)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C98</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/C99">
+    <rdfs:label xml:lang="en">New EU member states 2004 (CY,CZ,EE,HU,LV,LT,MT,PL,SK,SI)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>C99</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CA">
+    <rdfs:label xml:lang="en">Canada</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CC">
+    <rdfs:label xml:lang="en">Cocos (Keeling) Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CD">
+    <rdfs:label xml:lang="en">Congo, the Democratic Republic of the</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CF">
+    <rdfs:label xml:lang="en">Central African Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CG">
+    <rdfs:label xml:lang="en">Congo</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CH">
+    <rdfs:label xml:lang="en">Switzerland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CI">
+    <rdfs:label xml:lang="en">Cote d`Ivoire</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CK">
+    <rdfs:label xml:lang="en">Cook Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CL">
+    <rdfs:label xml:lang="en">Chile</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CM">
+    <rdfs:label xml:lang="en">Cameroon</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CN">
+    <rdfs:label xml:lang="en">China</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CO">
+    <rdfs:label xml:lang="en">Colombia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CR">
+    <rdfs:label xml:lang="en">Costa Rica</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CS">
+    <rdfs:label xml:lang="en">Serbia and Montenegro</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CS9">
+    <rdfs:label xml:lang="en">Serbia and Montenegro not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CS9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CSH">
+    <rdfs:label xml:lang="en">Former Czechoslovakia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CSH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CSH9">
+    <rdfs:label xml:lang="en">Former Czechoslovakia not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CSH9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CU">
+    <rdfs:label xml:lang="en">Cuba</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CV">
+    <rdfs:label xml:lang="en">Cape Verde</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CW">
+    <rdfs:label xml:lang="en">Curacao</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CX">
+    <rdfs:label xml:lang="en">Christmas Island</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CX</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CY">
+    <rdfs:label xml:lang="en">Cyprus</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/CZ">
+    <rdfs:label xml:lang="en">Czech Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>CZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D0">
+    <rdfs:label xml:lang="en">Extra-EU (changing composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D09">
+    <rdfs:label xml:lang="en">Extra-EU (changing composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D09</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D1">
+    <rdfs:label xml:lang="en">Extra EU 12</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D2">
+    <rdfs:label xml:lang="en">Extra-EU 15 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D3">
+    <rdfs:label xml:lang="en">Extra-EU 25 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D4">
+    <rdfs:label xml:lang="en">Extra-EU 27 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D5">
+    <rdfs:label xml:lang="en">Extra-EU 28 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D5A">
+    <rdfs:label xml:lang="en">Extra-EU 28 (fixed composition) excluding BR, CA, CN, IN, JP, RU, CH, US
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D5A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D5B">
+    <rdfs:label xml:lang="en">Extra-EU 28 (fixed composition) excluding CA, CN, HK, JP, CH, US, R12, 9A
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D5B</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/D5C">
+    <rdfs:label xml:lang="en">Extra-EU 28 (fixed composition) excluding CA, RU, CH, TR, US, F2, E4, B2
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>D5C</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DE">
+    <rdfs:label xml:lang="en">Germany</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DE1">
+    <rdfs:label xml:lang="en">West Germany</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DE1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DE2">
+    <rdfs:label xml:lang="en">East Germany</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DE2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DJ">
+    <rdfs:label xml:lang="en">Djibouti</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DK">
+    <rdfs:label xml:lang="en">Denmark</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DM">
+    <rdfs:label xml:lang="en">Dominica</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DO">
+    <rdfs:label xml:lang="en">Dominican Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/DZ">
+    <rdfs:label xml:lang="en">Algeria</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>DZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E1">
+    <rdfs:label xml:lang="en">Europe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E16O">
+    <rdfs:label xml:lang="en">OECD-EU deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E16O</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E19">
+    <rdfs:label xml:lang="en">Europe not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E1E">
+    <rdfs:label xml:lang="en">European Economies (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E1E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E1E9">
+    <rdfs:label xml:lang="en">European Economies Not Allocated (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E1E9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E1X">
+    <rdfs:label xml:lang="en">Europe Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E1X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E1X0">
+    <rdfs:label xml:lang="en">Europe Excluding OECD countries (Fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E1X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E2">
+    <rdfs:label xml:lang="en">Eastern Europe deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E29">
+    <rdfs:label xml:lang="en">Eastern Europe not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E2X">
+    <rdfs:label xml:lang="en">Eastern Europe Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E2X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E3">
+    <rdfs:label xml:lang="en">Northern Europe deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E31">
+    <rdfs:label xml:lang="en">Baltic countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E31</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E39">
+    <rdfs:label xml:lang="en">Northern Europe not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E3X">
+    <rdfs:label xml:lang="en">Northern Europe Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E3X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E4">
+    <rdfs:label xml:lang="en">Southern Europe deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E49">
+    <rdfs:label xml:lang="en">Southern Europe not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E4X">
+    <rdfs:label xml:lang="en">Southern Europe Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E4X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E5">
+    <rdfs:label xml:lang="en">Western Europe deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E59">
+    <rdfs:label xml:lang="en">Western Europe not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E59</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E5X">
+    <rdfs:label xml:lang="en">Western Europe Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E5X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/E7">
+    <rdfs:label xml:lang="en">Central and Eastern Europe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>E7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/EC">
+    <rdfs:label xml:lang="en">Ecuador</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>EC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/EE">
+    <rdfs:label xml:lang="en">Estonia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>EE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/EG">
+    <rdfs:label xml:lang="en">Egypt</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>EG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/EH">
+    <rdfs:label xml:lang="en">Western Sahara</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>EH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ER">
+    <rdfs:label xml:lang="en">Eritrea</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ER</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ES">
+    <rdfs:label xml:lang="en">Spain</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ES</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ES1">
+    <rdfs:label xml:lang="en">Ceuta and Melilla</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ES1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ES11">
+    <rdfs:label xml:lang="en">Ceuta</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ES11</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ES12">
+    <rdfs:label xml:lang="en">Melilla</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ES12</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ES2">
+    <rdfs:label xml:lang="en">Canary Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ES2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ET">
+    <rdfs:label xml:lang="en">Ethiopia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ET</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F1">
+    <rdfs:label xml:lang="en">Africa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F19">
+    <rdfs:label xml:lang="en">Africa not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F1XM">
+    <rdfs:label xml:lang="en">African Countries excluding Maghreb</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F1XM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F2">
+    <rdfs:label xml:lang="en">Central and South Africa countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F3">
+    <rdfs:label xml:lang="en">Eastern Africa deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F39">
+    <rdfs:label xml:lang="en">Eastern Africa not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F4">
+    <rdfs:label xml:lang="en">North Africa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F41">
+    <rdfs:label xml:lang="en">Maghreb countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F41</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F42">
+    <rdfs:label xml:lang="en">Mashrek Countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F42</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F49">
+    <rdfs:label xml:lang="en">North Africa not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F5">
+    <rdfs:label xml:lang="en">Middle Africa deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F59">
+    <rdfs:label xml:lang="en">Middle Africa not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F59</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F6">
+    <rdfs:label xml:lang="en">Sub-Saharan Africa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F69">
+    <rdfs:label xml:lang="en">Sub-Saharan Africa not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F7">
+    <rdfs:label xml:lang="en">Southern Africa deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F79">
+    <rdfs:label xml:lang="en">Southern Africa not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F8">
+    <rdfs:label xml:lang="en">Western Africa deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F89">
+    <rdfs:label xml:lang="en">Western Africa not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F89</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F97">
+    <rdfs:label xml:lang="en">Middle East</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F97</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F979">
+    <rdfs:label xml:lang="en">Middle East not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F979</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F98">
+    <rdfs:label xml:lang="en">Middle East and North Africa (MENA)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F98</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/F99">
+    <rdfs:label xml:lang="en">Africa and Middle East countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>F99</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FI">
+    <rdfs:label xml:lang="en">Finland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FJ">
+    <rdfs:label xml:lang="en">Fiji</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FK">
+    <rdfs:label xml:lang="en">Falkland Islands (Malvinas)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FM">
+    <rdfs:label xml:lang="en">Micronesia, Federated States of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FO">
+    <rdfs:label xml:lang="en">Faroe Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FR">
+    <rdfs:label xml:lang="en">France</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FR1">
+    <rdfs:label xml:lang="en">French West Indies</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FR1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FR19">
+    <rdfs:label xml:lang="en">French West Indies not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FR19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/FR2">
+    <rdfs:label xml:lang="en">Wallis</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>FR2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G0">
+    <rdfs:label xml:lang="en">European Economic Area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G1">
+    <rdfs:label xml:lang="en">Extra EEA</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G2">
+    <rdfs:label xml:lang="en">EEA except the euro area and reference area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G3">
+    <rdfs:label xml:lang="en">Other EEA countries (all countries excluding the reference area)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G4">
+    <rdfs:label xml:lang="en">Other European countries (not EU )</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/G9">
+    <rdfs:label xml:lang="en">Other European countries (not EU nor EFTA)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>G9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GA">
+    <rdfs:label xml:lang="en">Gabon</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GB">
+    <rdfs:label xml:lang="en">United Kingdom</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GB</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GB1">
+    <rdfs:label xml:lang="en">UK including Guernsey, Isle of Man, Jersey</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GB1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GB2">
+    <rdfs:label xml:lang="en">West Indies UK</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GB2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GB3">
+    <rdfs:label xml:lang="en">British Overseas Territories</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GB3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GD">
+    <rdfs:label xml:lang="en">Grenada</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GE">
+    <rdfs:label xml:lang="en">Georgia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GF">
+    <rdfs:label xml:lang="en">French Guiana</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GG">
+    <rdfs:label xml:lang="en">Guernsey</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GH">
+    <rdfs:label xml:lang="en">Ghana</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GI">
+    <rdfs:label xml:lang="en">Gibraltar</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GL">
+    <rdfs:label xml:lang="en">Greenland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GM">
+    <rdfs:label xml:lang="en">Gambia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GN">
+    <rdfs:label xml:lang="en">Guinea</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GP">
+    <rdfs:label xml:lang="en">Guadeloupe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GP</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GQ">
+    <rdfs:label xml:lang="en">Equatorial Guinea</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GQ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GR">
+    <rdfs:label xml:lang="en">Greece</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GS">
+    <rdfs:label xml:lang="en">South Georgia and the South Sandwich Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GT">
+    <rdfs:label xml:lang="en">Guatemala</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GU">
+    <rdfs:label xml:lang="en">Guam</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GW">
+    <rdfs:label xml:lang="en">Guinea-Bissau</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/GY">
+    <rdfs:label xml:lang="en">Guyana</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>GY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HK">
+    <rdfs:label xml:lang="en">Hong Kong, China</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HM">
+    <rdfs:label xml:lang="en">Heard Island and McDonald Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HN">
+    <rdfs:label xml:lang="en">Honduras</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HR">
+    <rdfs:label xml:lang="en">Croatia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HT">
+    <rdfs:label xml:lang="en">Haiti</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/HU">
+    <rdfs:label xml:lang="en">Hungary</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>HU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I1">
+    <rdfs:label xml:lang="en">Euro area 11 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I19">
+    <rdfs:label xml:lang="en">Euro area 11 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I2">
+    <rdfs:label xml:lang="en">Euro area 12 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I29">
+    <rdfs:label xml:lang="en">Euro area 12 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I3">
+    <rdfs:label xml:lang="en">Euro area 13 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I39">
+    <rdfs:label xml:lang="en">Euro area 13 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I4">
+    <rdfs:label xml:lang="en">Euro area 15 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I49">
+    <rdfs:label xml:lang="en">Euro area 15 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I5">
+    <rdfs:label xml:lang="en">Euro area 16 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I59">
+    <rdfs:label xml:lang="en">Euro area 16 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I59</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I6">
+    <rdfs:label xml:lang="en">Euro area 17 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I69">
+    <rdfs:label xml:lang="en">Euro area 17 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I7">
+    <rdfs:label xml:lang="en">Euro area 18 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I79">
+    <rdfs:label xml:lang="en">Euro area 18 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I8">
+    <rdfs:label xml:lang="en">Euro area 19 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/I89">
+    <rdfs:label xml:lang="en">Euro area 19 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>I89</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ID">
+    <rdfs:label xml:lang="en">Indonesia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ID</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IE">
+    <rdfs:label xml:lang="en">Ireland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IL">
+    <rdfs:label xml:lang="en">Israel</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IM">
+    <rdfs:label xml:lang="en">Isle of Man</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IN">
+    <rdfs:label xml:lang="en">India</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IO">
+    <rdfs:label xml:lang="en">British Indian Ocean territory</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IQ">
+    <rdfs:label xml:lang="en">Iraq</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IQ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IR">
+    <rdfs:label xml:lang="en">Iran, Islamic Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IS">
+    <rdfs:label xml:lang="en">Iceland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/IT">
+    <rdfs:label xml:lang="en">Italy</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>IT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J1">
+    <rdfs:label xml:lang="en">Extra-Euro area 11 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J19">
+    <rdfs:label xml:lang="en">Extra-Euro area 11 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J2">
+    <rdfs:label xml:lang="en">Extra-Euro area 12 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J29">
+    <rdfs:label xml:lang="en">Extra-Euro area 12 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J3">
+    <rdfs:label xml:lang="en">Extra-Euro area 13 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J39">
+    <rdfs:label xml:lang="en">Extra-Euro area 13 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J4">
+    <rdfs:label xml:lang="en">Extra-Euro area 15 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J49">
+    <rdfs:label xml:lang="en">Extra-Euro area 15 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J5">
+    <rdfs:label xml:lang="en">Extra-Euro area 16 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J59">
+    <rdfs:label xml:lang="en">Extra-Euro area 16 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J59</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J6">
+    <rdfs:label xml:lang="en">Extra-Euro area 17 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J69">
+    <rdfs:label xml:lang="en">Extra-Euro area 17 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J7">
+    <rdfs:label xml:lang="en">Extra-Euro area 18 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J79">
+    <rdfs:label xml:lang="en">Extra-Euro area 18 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J8">
+    <rdfs:label xml:lang="en">Extra-Euro area 19 (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/J89">
+    <rdfs:label xml:lang="en">Extra-Euro area 19 (fixed composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>J89</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/JE">
+    <rdfs:label xml:lang="en">Jersey</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>JE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/JM">
+    <rdfs:label xml:lang="en">Jamaica</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>JM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/JO">
+    <rdfs:label xml:lang="en">Jordan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>JO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/JP">
+    <rdfs:label xml:lang="en">Japan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>JP</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K1">
+    <rdfs:label xml:lang="en">EU member states not belonging to Euro area 11 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K2">
+    <rdfs:label xml:lang="en">EU member states not belonging to Euro area 12 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K3">
+    <rdfs:label xml:lang="en">EU member states not belonging to Euro area 13 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K4">
+    <rdfs:label xml:lang="en">EU member states not belonging to Euro area 15 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K5">
+    <rdfs:label xml:lang="en">EU member states not belonging to Euro area 16 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K6">
+    <rdfs:label xml:lang="en">EU27 member states not belonging to Euro area 17 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K7">
+    <rdfs:label xml:lang="en">EU28 member states not belonging to Euro area 17 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K8">
+    <rdfs:label xml:lang="en">EU28 member states not belonging to Euro area 18 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K8A">
+    <rdfs:label xml:lang="en">Other EU countries: EU28 member states not belonging to Euro area 18 (fixed
+                        composition) - United Kingdom - EU institutions
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K8A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K9">
+    <rdfs:label xml:lang="en">EU28 member states not belonging to Euro area 19 (fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/K9A">
+    <rdfs:label xml:lang="en">EU28 member states not belonging to Euro area 19 (fixed composition) -
+                        United Kingdom - EU institutions
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>K9A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KE">
+    <rdfs:label xml:lang="en">Kenya</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KG">
+    <rdfs:label xml:lang="en">Kyrgyzstan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KH">
+    <rdfs:label xml:lang="en">Cambodia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KI">
+    <rdfs:label xml:lang="en">Kiribati</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KM">
+    <rdfs:label xml:lang="en">Comoros</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KN">
+    <rdfs:label xml:lang="en">Saint Kitts and Nevis</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KP">
+    <rdfs:label xml:lang="en">Korea, Democratic People`s Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KP</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KR">
+    <rdfs:label xml:lang="en">Korea, Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KW">
+    <rdfs:label xml:lang="en">Kuwait</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KY">
+    <rdfs:label xml:lang="en">Cayman Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/KZ">
+    <rdfs:label xml:lang="en">Kazakhstan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>KZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L1">
+    <rdfs:label xml:lang="en">Other Euro area 11 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L2">
+    <rdfs:label xml:lang="en">Other Euro area 12 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L3">
+    <rdfs:label xml:lang="en">Other Euro area 13 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L4">
+    <rdfs:label xml:lang="en">Other Euro area 15 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L5">
+    <rdfs:label xml:lang="en">Other Euro area 16 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L6">
+    <rdfs:label xml:lang="en">Other Euro area 17 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L7">
+    <rdfs:label xml:lang="en">Other Euro area 18 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/L8">
+    <rdfs:label xml:lang="en">Other Euro area 19 member states (fixed composition - all countries except
+                        the reference area)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>L8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LA">
+    <rdfs:label xml:lang="en">Lao People`s Democratic Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LB">
+    <rdfs:label xml:lang="en">Lebanon</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LB</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LC">
+    <rdfs:label xml:lang="en">Saint Lucia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LI">
+    <rdfs:label xml:lang="en">Liechtenstein</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LK">
+    <rdfs:label xml:lang="en">Sri Lanka</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LR">
+    <rdfs:label xml:lang="en">Liberia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LS">
+    <rdfs:label xml:lang="en">Lesotho</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LT">
+    <rdfs:label xml:lang="en">Lithuania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LU">
+    <rdfs:label xml:lang="en">Luxembourg</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LV">
+    <rdfs:label xml:lang="en">Latvia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/LY">
+    <rdfs:label xml:lang="en">Libya</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>LY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M1">
+    <rdfs:label xml:lang="en">All areas other than Euro area 11 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M2">
+    <rdfs:label xml:lang="en">All areas other than Euro area 12 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M3">
+    <rdfs:label xml:lang="en">All areas other than Euro area 13 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M4">
+    <rdfs:label xml:lang="en">All areas other than Euro area 15 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M5">
+    <rdfs:label xml:lang="en">All areas other than Euro area 16 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M6">
+    <rdfs:label xml:lang="en">All areas other than Euro area 17 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M7">
+    <rdfs:label xml:lang="en">All areas other than Euro area 18 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/M8">
+    <rdfs:label xml:lang="en">All areas other than Euro area 19 (fixed composition) and reference/home
+                        area
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>M8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MA">
+    <rdfs:label xml:lang="en">Morocco</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MC">
+    <rdfs:label xml:lang="en">Monaco</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MD">
+    <rdfs:label xml:lang="en">Moldova, Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ME">
+    <rdfs:label xml:lang="en">Montenegro</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ME</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MF">
+    <rdfs:label xml:lang="en">Saint Martin (French part)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MG">
+    <rdfs:label xml:lang="en">Madagascar</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MH">
+    <rdfs:label xml:lang="en">Marshall islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MK">
+    <rdfs:label xml:lang="en">Macedonia, The Former Yugoslav Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ML">
+    <rdfs:label xml:lang="en">Mali</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ML</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MM">
+    <rdfs:label xml:lang="en">Myanmar</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MN">
+    <rdfs:label xml:lang="en">Mongolia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MO">
+    <rdfs:label xml:lang="en">Macao</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MP">
+    <rdfs:label xml:lang="en">Northern Mariana Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MP</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MQ">
+    <rdfs:label xml:lang="en">Martinique</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MQ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MR">
+    <rdfs:label xml:lang="en">Mauritania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MS">
+    <rdfs:label xml:lang="en">Montserrat</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MT">
+    <rdfs:label xml:lang="en">Malta</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MU">
+    <rdfs:label xml:lang="en">Mauritius</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MV">
+    <rdfs:label xml:lang="en">Maldives</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MW">
+    <rdfs:label xml:lang="en">Malawi</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MX">
+    <rdfs:label xml:lang="en">Mexico</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MX</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MY">
+    <rdfs:label xml:lang="en">Malaysia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MY1">
+    <rdfs:label xml:lang="en">Sabah</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MY1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MY2">
+    <rdfs:label xml:lang="en">Sarawak</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MY2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/MZ">
+    <rdfs:label xml:lang="en">Mozambique</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>MZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/N1">
+    <rdfs:label xml:lang="en">CEMAC (Communauté Économique et Monétaire de l’Afrique Centrale)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>N1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/N2">
+    <rdfs:label xml:lang="en">ECCU (Eastern Caribbean Currency Union)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>N2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NA">
+    <rdfs:label xml:lang="en">Namibia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NC">
+    <rdfs:label xml:lang="en">New Caledonia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NE">
+    <rdfs:label xml:lang="en">Niger</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NF">
+    <rdfs:label xml:lang="en">Norfolk Island</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NG">
+    <rdfs:label xml:lang="en">Nigeria</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NI">
+    <rdfs:label xml:lang="en">Nicaragua</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NL">
+    <rdfs:label xml:lang="en">Netherlands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NO">
+    <rdfs:label xml:lang="en">Norway</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NP">
+    <rdfs:label xml:lang="en">Nepal</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NP</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NR">
+    <rdfs:label xml:lang="en">Nauru</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NU">
+    <rdfs:label xml:lang="en">Niue</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/NZ">
+    <rdfs:label xml:lang="en">New Zealand</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>NZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O1">
+    <rdfs:label xml:lang="en">Australia, Oceania and polar regions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O19">
+    <rdfs:label xml:lang="en">Australia, Oceania and polar regions not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O1P">
+    <rdfs:label xml:lang="en">Polar regions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O1P</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O1X0">
+    <rdfs:label xml:lang="en">Australia, Oceania and Polar regions Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O1X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O2">
+    <rdfs:label xml:lang="en">Oceania and Polar Regions</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O29">
+    <rdfs:label xml:lang="en">Oceania and Polar Regions not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O3">
+    <rdfs:label xml:lang="en">Oceania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O39">
+    <rdfs:label xml:lang="en">Oceania not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O3A">
+    <rdfs:label xml:lang="en">Australian Oceania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O3A</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O3M">
+    <rdfs:label xml:lang="en">American Oceania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O3M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O3Z">
+    <rdfs:label xml:lang="en">New Zealand Oceania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O3Z</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O5">
+    <rdfs:label xml:lang="en">Other Oceania &amp; Polar regions countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O6">
+    <rdfs:label xml:lang="en">Australia and New Zealand deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O69">
+    <rdfs:label xml:lang="en">Australia and New Zealand not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O6X0">
+    <rdfs:label xml:lang="en">Australia and New Zealand Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O6X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O7">
+    <rdfs:label xml:lang="en">Melanesia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O79">
+    <rdfs:label xml:lang="en">Melanesia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O8">
+    <rdfs:label xml:lang="en">Micronesia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O89">
+    <rdfs:label xml:lang="en">Micronesia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O89</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O9">
+    <rdfs:label xml:lang="en">Polynesia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/O99">
+    <rdfs:label xml:lang="en">Polynesia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>O99</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/OM">
+    <rdfs:label xml:lang="en">Oman</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>OM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P0">
+    <rdfs:label xml:lang="en">OECD countries (evolving composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P09">
+    <rdfs:label xml:lang="en">OECD not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P09</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P1">
+    <rdfs:label xml:lang="en">OECD countries (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P2">
+    <rdfs:label xml:lang="en">OECD Key partners</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P3">
+    <rdfs:label xml:lang="en">DAC Reporting Countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P8">
+    <rdfs:label xml:lang="en">World Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/P9">
+    <rdfs:label xml:lang="en">World Excluding OECD countries (fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>P9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PA">
+    <rdfs:label xml:lang="en">Panama</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PE">
+    <rdfs:label xml:lang="en">Peru</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PF">
+    <rdfs:label xml:lang="en">French Polynesia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PG">
+    <rdfs:label xml:lang="en">Papua New Guinea</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PH">
+    <rdfs:label xml:lang="en">Philippines</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PK">
+    <rdfs:label xml:lang="en">Pakistan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PL">
+    <rdfs:label xml:lang="en">Poland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PM">
+    <rdfs:label xml:lang="en">Saint Pierre and Miquelon</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PN">
+    <rdfs:label xml:lang="en">Pitcairn</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PR">
+    <rdfs:label xml:lang="en">Puerto Rico</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PS">
+    <rdfs:label xml:lang="en">Palestine, State of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PT">
+    <rdfs:label xml:lang="en">Portugal</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PW">
+    <rdfs:label xml:lang="en">Palau</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/PY">
+    <rdfs:label xml:lang="en">Paraguay</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>PY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q1">
+    <rdfs:label xml:lang="en">EU 27 member states, outside the euro area 13, excluding DK, SE, GB
+                        (CY,CZ,EE,HU,LV,LT,MT,PL,SK,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q2">
+    <rdfs:label xml:lang="en">EU 27 member states, outside the euro area 15, excluding DK, SE, GB
+                        (CZ,EE,HU,LV,LT,PL,SK,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q3">
+    <rdfs:label xml:lang="en">EU 27 member states, outside the euro area 16, excluding DK, SE, GB
+                        (CZ,EE,HU,LV,LT,PL,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q4">
+    <rdfs:label xml:lang="en">EU 27 member states, outside the euro area 17, excluding DK, SE, GB
+                        (CZ,HU,LV,LT,PL,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q5">
+    <rdfs:label xml:lang="en">EU 28 member states, outside the euro area 17, excluding DK, SE, GB
+                        (CZ,HR,HU,LV,LT,PL,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q6">
+    <rdfs:label xml:lang="en">EU 28 member states, outside the euro area 18, excluding DK, SE, GB
+                        (CZ,HR,HU,LT,PL,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Q7">
+    <rdfs:label xml:lang="en">EU 28 member states, outside the euro area 19, excluding DK, SE, GB
+                        (CZ,HR,HU,PL,RO,BG)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Q7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/QA">
+    <rdfs:label xml:lang="en">Qatar</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>QA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R1">
+    <rdfs:label xml:lang="en">Belgo-Luxembourg Economic Union</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R109">
+    <rdfs:label xml:lang="en">Belgium-Luxembourg not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R109</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R11">
+    <rdfs:label xml:lang="en">Mediterranean Basin countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R11</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R12">
+    <rdfs:label xml:lang="en">Offshore financial centers</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R12</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R13">
+    <rdfs:label xml:lang="en">French Franc zone</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R13</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R14">
+    <rdfs:label xml:lang="en">Community of Independent States (CIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R14</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R14M">
+    <rdfs:label xml:lang="en">CIS &amp; Mongolia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R14M</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R15">
+    <rdfs:label xml:lang="en">Mercado comun de los paises del cono sur</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R15</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R16">
+    <rdfs:label xml:lang="en">APEC (Asia-Pacific Economic Co-operation)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R16</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R17">
+    <rdfs:label xml:lang="en">Mediterranean countries in the European Unionro-Mediterranean Partnership
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R17</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R18">
+    <rdfs:label xml:lang="en">SADC (South African Development Community)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R18</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R19">
+    <rdfs:label xml:lang="en">EAC (East African Community) deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R2">
+    <rdfs:label xml:lang="en">EFTA (European Free Trade Association)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R22">
+    <rdfs:label xml:lang="en">G20 (Argentina, Australia, Brazil, Canada, China, European Union, France,
+                        Germany, India,Indonesia, Italy, Japan, Mexico, Russia, Saudi Arabia, South Africa, South Korea,
+                        Turkey, United Kingdom, United States)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R22</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R220">
+    <rdfs:label xml:lang="en">G20 excluding European Union</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R220</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R221">
+    <rdfs:label xml:lang="en">G20 OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R221</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R222">
+    <rdfs:label xml:lang="en">G20 Non-OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R222</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R23">
+    <rdfs:label xml:lang="en">Major Advanced Economies - G7</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R23</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R24">
+    <rdfs:label xml:lang="en">G8: G7 + Russia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R24</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R25">
+    <rdfs:label xml:lang="en">Total Official Development Assistance (ODA) recipients</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R25</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R251">
+    <rdfs:label xml:lang="en">ODA recipients-Europe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R251</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R252">
+    <rdfs:label xml:lang="en">ODA recipients-Africa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R252</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R253">
+    <rdfs:label xml:lang="en">ODA recipients-America</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R253</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R254">
+    <rdfs:label xml:lang="en">ODA recipients-Asia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R254</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R255">
+    <rdfs:label xml:lang="en">ODA recipients-Oceania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R255</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R3">
+    <rdfs:label xml:lang="en">NAFTA (North American Free Trade Association)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R4">
+    <rdfs:label xml:lang="en">ASEAN (Countries for the Association of South-East Asian Nations)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R45">
+    <rdfs:label xml:lang="en">ASEAN-5</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R45</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R5">
+    <rdfs:label xml:lang="en">OPEC (Organization of Petroleum Exporting Countries)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R6">
+    <rdfs:label xml:lang="en">ACP (African, Caribbean and Pacific countries, Lomé convention)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R61">
+    <rdfs:label xml:lang="en">African ACP countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R61</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R62">
+    <rdfs:label xml:lang="en">Caribbean ACP countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R62</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R63">
+    <rdfs:label xml:lang="en">Pacific ACP countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R63</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R7">
+    <rdfs:label xml:lang="en">BRIC</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R8">
+    <rdfs:label xml:lang="en">BRICS deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/R9">
+    <rdfs:label xml:lang="en">Core Newly Industrializing Countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>R9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/RE">
+    <rdfs:label xml:lang="en">Reunion</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>RE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/RO">
+    <rdfs:label xml:lang="en">Romania</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>RO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/RS">
+    <rdfs:label xml:lang="en">Serbia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>RS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/RU">
+    <rdfs:label xml:lang="en">Russian Federation</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>RU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/RW">
+    <rdfs:label xml:lang="en">Rwanda</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>RW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S1">
+    <rdfs:label xml:lang="en">Asia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S19">
+    <rdfs:label xml:lang="en">Asia not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S198">
+    <rdfs:label xml:lang="en">Asian NICs of the second wave of industrialization</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S198</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S1X">
+    <rdfs:label xml:lang="en">Asia Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S1X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S1X0">
+    <rdfs:label xml:lang="en">Asia Excluding OECD countries (Fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S1X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S1X2">
+    <rdfs:label xml:lang="en">Asia excl. Japan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S1X2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S1X3">
+    <rdfs:label xml:lang="en">Asia excl. Japan &amp; China</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S1X3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S2">
+    <rdfs:label xml:lang="en">Eastern Asia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S29">
+    <rdfs:label xml:lang="en">Eastern Asia not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S2X">
+    <rdfs:label xml:lang="en">Eastern Asia Excluding OECD countries deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S2X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S3">
+    <rdfs:label xml:lang="en">Near and Middle East countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S35">
+    <rdfs:label xml:lang="en">Gulf Arabian Countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S35</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S359">
+    <rdfs:label xml:lang="en">Gulf Arabian Countries not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S359</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S35E">
+    <rdfs:label xml:lang="en">Persian Gulf Economies (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S35E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S35E9">
+    <rdfs:label xml:lang="en">Persian Gulf Economies Not Allocated (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S35E9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S37">
+    <rdfs:label xml:lang="en">Other Near and Middle East countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S37</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S379">
+    <rdfs:label xml:lang="en">Other Near and Middle East not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S379</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S37E">
+    <rdfs:label xml:lang="en">Other Near and Middle East Economies (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S37E</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S37E9">
+    <rdfs:label xml:lang="en">Other Near and Middle East Economies Not Allocated (CDIS)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S37E9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S37X">
+    <rdfs:label xml:lang="en">Other Near and Middle East Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S37X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S37Z">
+    <rdfs:label xml:lang="en">Other Near and Middle East Excluding OECD countries (Fixed composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S37Z</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S39">
+    <rdfs:label xml:lang="en">Near and Middle East not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S3X">
+    <rdfs:label xml:lang="en">Near and Middle East Excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S3X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S3X0">
+    <rdfs:label xml:lang="en">Near and Middle East Excluding OECD countries (Fixed composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S3X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S4">
+    <rdfs:label xml:lang="en">Central Asia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S49">
+    <rdfs:label xml:lang="en">Central Asia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S5">
+    <rdfs:label xml:lang="en">Central &amp; South Asia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S59">
+    <rdfs:label xml:lang="en">Central &amp; South Asia not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S59</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S6">
+    <rdfs:label xml:lang="en">Other Asian countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S6X">
+    <rdfs:label xml:lang="en">Other Asian countries excluding OECD countries</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S6X</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S7">
+    <rdfs:label xml:lang="en">Southern Asia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S79">
+    <rdfs:label xml:lang="en">Southern Asia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S8">
+    <rdfs:label xml:lang="en">South-Eastern Asia deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/S89">
+    <rdfs:label xml:lang="en">South-Eastern Asia not allocated deprecated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>S89</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SA">
+    <rdfs:label xml:lang="en">Saudi Arabia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SB">
+    <rdfs:label xml:lang="en">Solomon Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SB</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SC">
+    <rdfs:label xml:lang="en">Seychelles</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SD">
+    <rdfs:label xml:lang="en">Sudan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SE">
+    <rdfs:label xml:lang="en">Sweden</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SG">
+    <rdfs:label xml:lang="en">Singapore</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SH">
+    <rdfs:label xml:lang="en">Saint Helena</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SI">
+    <rdfs:label xml:lang="en">Slovenia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SJ">
+    <rdfs:label xml:lang="en">Svalbard and Jan Mayen</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SK">
+    <rdfs:label xml:lang="en">Slovakia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SL">
+    <rdfs:label xml:lang="en">Sierra Leone</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SM">
+    <rdfs:label xml:lang="en">San Marino</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SN">
+    <rdfs:label xml:lang="en">Senegal</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SO">
+    <rdfs:label xml:lang="en">Somalia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SR">
+    <rdfs:label xml:lang="en">Suriname</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SS">
+    <rdfs:label xml:lang="en">South Sudan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ST">
+    <rdfs:label xml:lang="en">Sao Tome and Principe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ST</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SUH">
+    <rdfs:label xml:lang="en">Former U.S.S.R.</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SUH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SUH9">
+    <rdfs:label xml:lang="en">Former U.S.S.R. not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SUH9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SV">
+    <rdfs:label xml:lang="en">El Salvador</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SX">
+    <rdfs:label xml:lang="en">Sint Maarten (Dutch part)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SX</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SY">
+    <rdfs:label xml:lang="en">Syrian Arab Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/SZ">
+    <rdfs:label xml:lang="en">Swaziland</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>SZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TC">
+    <rdfs:label xml:lang="en">Turks and Caicos Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TD">
+    <rdfs:label xml:lang="en">Chad</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TD</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TF">
+    <rdfs:label xml:lang="en">French Southern Territories</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TG">
+    <rdfs:label xml:lang="en">Togo</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TH">
+    <rdfs:label xml:lang="en">Thailand</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TH</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TJ">
+    <rdfs:label xml:lang="en">Tajikistan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TJ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TK">
+    <rdfs:label xml:lang="en">Tokelau</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TL">
+    <rdfs:label xml:lang="en">Timor-Leste</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TL</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TM">
+    <rdfs:label xml:lang="en">Turkmenistan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TN">
+    <rdfs:label xml:lang="en">Tunisia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TO">
+    <rdfs:label xml:lang="en">Tonga</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TO</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TR">
+    <rdfs:label xml:lang="en">Turkey</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TR</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TT">
+    <rdfs:label xml:lang="en">Trinidad and Tobago</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TV">
+    <rdfs:label xml:lang="en">Tuvalu</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TV</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TW">
+    <rdfs:label xml:lang="en">Taiwan, Province of China</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TZ">
+    <rdfs:label xml:lang="en">Tanzania, United Republic of</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TZXZ">
+    <rdfs:label xml:lang="en">Tanzania, United Republic of (excluding Zanzibar)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TZXZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/TZZN">
+    <rdfs:label xml:lang="en">Zanzibar</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>TZZN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U0">
+    <rdfs:label xml:lang="en">EU excluding the Euro area and reference area (changing composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U2">
+    <rdfs:label xml:lang="en">Euro area (Member States and Institutions of the Euro Area) changing
+                        composition
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U20">
+    <rdfs:label xml:lang="en">Euro area (Member States of the Euro Area) excluding ECB and ESM</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U20</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U29">
+    <rdfs:label xml:lang="en">Euro area (changing composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U3">
+    <rdfs:label xml:lang="en">Intra EU Extra Euro Area (EU member states and institutions not belonging to
+                        the Euro area) changing composition
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U30">
+    <rdfs:label xml:lang="en">Intra EU Extra Euro Area (changing composition) excluding EU institutions
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U30</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U39">
+    <rdfs:label xml:lang="en">Intra EU Extra Euro Area (changing composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U4">
+    <rdfs:label xml:lang="en">Extra Euro area (changing composition)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U49">
+    <rdfs:label xml:lang="en">Extra-Euro area (changing composition) not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U49</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U5">
+    <rdfs:label xml:lang="en">Other Euro area member states (all countries except the reference area)
+                        (changing composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U7">
+    <rdfs:label xml:lang="en">Euro area and the reference area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U8">
+    <rdfs:label xml:lang="en">All areas other than Euro area and ref./home area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/U9">
+    <rdfs:label xml:lang="en">All areas other than EU and ref./home area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>U9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/UA">
+    <rdfs:label xml:lang="en">Ukraine</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>UA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/UG">
+    <rdfs:label xml:lang="en">Uganda</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>UG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/UM">
+    <rdfs:label xml:lang="en">United States Minor outlying islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>UM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/US">
+    <rdfs:label xml:lang="en">United States</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>US</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/US1">
+    <rdfs:label xml:lang="en">Alaska</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>US1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/US2">
+    <rdfs:label xml:lang="en">Hawaii</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>US2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/UY">
+    <rdfs:label xml:lang="en">Uruguay</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>UY</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/UZ">
+    <rdfs:label xml:lang="en">Uzbekistan</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>UZ</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VA">
+    <rdfs:label xml:lang="en">Holy See (Vatican City State)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VC">
+    <rdfs:label xml:lang="en">Saint Vincent and the Grenadines</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VE">
+    <rdfs:label xml:lang="en">Venezuela, Bolivarian Republic</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VG">
+    <rdfs:label xml:lang="en">Virgin Islands, British</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VI">
+    <rdfs:label xml:lang="en">Virgin Islands, U.S.</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VI</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VN">
+    <rdfs:label xml:lang="en">Viet Nam</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VN</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/VU">
+    <rdfs:label xml:lang="en">Vanuatu</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>VU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W0">
+    <rdfs:label xml:lang="en">World (all areas, including reference area, including IO)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W00">
+    <rdfs:label xml:lang="en">All Countries, excluding the IO</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W00</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W08">
+    <rdfs:label xml:lang="en">Domestic vis-à-vis world plus rest of the world vis-à-vis domestic
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W08</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W09">
+    <rdfs:label xml:lang="en">World (all area, including reference area, including IO) not allocated
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W09</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W1">
+    <rdfs:label xml:lang="en">Rest of the World</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W10">
+    <rdfs:label xml:lang="en">Rest of the world excluding International Organisations</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W10</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W12">
+    <rdfs:label xml:lang="en">Rest of the World excluding IO and not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W12</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W19">
+    <rdfs:label xml:lang="en">Rest of the World (non allocated geographically)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W19</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W190">
+    <rdfs:label xml:lang="en">Rest of the World (non allocated geographically) plus IO</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W190</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W1X1">
+    <rdfs:label xml:lang="en">Rest of the World excluding IMF</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W1X1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W1X2">
+    <rdfs:label xml:lang="en">Rest of World excluding 25 countries (AT, BE, BR, CA, HK, CN, FR, DE, IN,
+                        IE, IT, JP, KR, LU, MX, NL, RU, SG, ES, SE, CH, TR, GB, US)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W1X2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W2">
+    <rdfs:label xml:lang="en">Domestic (home or reference area)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W24">
+    <rdfs:label xml:lang="en">General governments and institutions of the EU</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W24</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/W29">
+    <rdfs:label xml:lang="en">Non-resident in the economic territory</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>W29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/WF">
+    <rdfs:label xml:lang="en">Wallis and Futuna</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>WF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/WKU">
+    <rdfs:label xml:lang="en">Wake Islands</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>WKU</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/WS">
+    <rdfs:label xml:lang="en">Samoa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>WS</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/X0">
+    <rdfs:label xml:lang="en">IMF Member Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>X0</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/X1F">
+    <rdfs:label xml:lang="en">Export Earnings: Fuel (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>X1F</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/X1NF">
+    <rdfs:label xml:lang="en">Export Earnings: Nonfuel (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>X1NF</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/X88">
+    <rdfs:label xml:lang="en">Other Countries n.i.e. (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>X88</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/X999">
+    <rdfs:label xml:lang="en">Total reporting countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>X999</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XA6">
+    <rdfs:label xml:lang="en">Other Central America (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XA6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XA69">
+    <rdfs:label xml:lang="en">Other Central America not allocated (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XA69</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XA7">
+    <rdfs:label xml:lang="en">Other South America (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XA7</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XA79">
+    <rdfs:label xml:lang="en">Other South America not allocated (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XA79</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XE2">
+    <rdfs:label xml:lang="en">Advanced Europe (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XE2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XE3">
+    <rdfs:label xml:lang="en">Other European Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XE3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XE39">
+    <rdfs:label xml:lang="en">Other European Countries not allocated (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XE39</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XG">
+    <rdfs:label xml:lang="en">Gaza and Jericho</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XG</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XK">
+    <rdfs:label xml:lang="en">Kosovo</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XK</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR21">
+    <rdfs:label xml:lang="en">Oil-exporting Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR21</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR23">
+    <rdfs:label xml:lang="en">Advanced Economies G-20 (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR23</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR24">
+    <rdfs:label xml:lang="en">Emerging Economies G-20 (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR24</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR25">
+    <rdfs:label xml:lang="en">Non G-20 Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR25</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR29">
+    <rdfs:label xml:lang="en">Advanced Economies (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR29</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR30">
+    <rdfs:label xml:lang="en">Oil-Importing Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR30</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR32">
+    <rdfs:label xml:lang="en">Other Advanced Economies (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR32</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR40">
+    <rdfs:label xml:lang="en">Heavily Indebted Poor Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR40</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR41">
+    <rdfs:label xml:lang="en">Countries in Transition (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR41</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR42">
+    <rdfs:label xml:lang="en">MDRI Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR42</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR43">
+    <rdfs:label xml:lang="en">Emerging and developing economies (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR43</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR44">
+    <rdfs:label xml:lang="en">Non-oil Developing Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR44</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR55">
+    <rdfs:label xml:lang="en">Resource Intensive Countries (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR55</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XR99">
+    <rdfs:label xml:lang="en">Special Categories and Economic Zones</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XR99</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XRC1">
+    <rdfs:label xml:lang="en">Other CPIS Holding Countries Excluding Key Partners (Mandatory FSAP
+                        countries - changing composition)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XRC1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XS2">
+    <rdfs:label xml:lang="en">Emerging Asia (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XS2</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XS25">
+    <rdfs:label xml:lang="en">Developing Asia (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XS25</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XS3">
+    <rdfs:label xml:lang="en">Developing Asia Excl. China &amp; India (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XS3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/XS4">
+    <rdfs:label xml:lang="en">Newly Industrialized Asian Economies (IMF)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>XS4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/YE">
+    <rdfs:label xml:lang="en">Yemen</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>YE</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/YT">
+    <rdfs:label xml:lang="en">Mayotte</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>YT</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/YUC">
+    <rdfs:label xml:lang="en">Former Yugoslavia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>YUC</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/YUC9">
+    <rdfs:label xml:lang="en">Former Yugoslavia not allocated</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>YUC9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z1">
+    <rdfs:label xml:lang="en">Euro area (moving concept in the Real Time database context)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z1</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z10">
+    <rdfs:label xml:lang="en">EU 12 (fixed composition) including West Germany</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z10</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z11">
+    <rdfs:label xml:lang="en">Euro area countries: LU, LT, LV, SI, CY, MT, EE, SK</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z11</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z12">
+    <rdfs:label xml:lang="en">Equally-shared control of UCIs (ultimate controlling institutional units of
+                        a foreign affiliate) of more than one EU member state
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z12</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z3">
+    <rdfs:label xml:lang="en">Euro area 11 (fixed composition) excluding LU</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z3</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z4">
+    <rdfs:label xml:lang="en">Euro area countries except Germany, France, Italy and Spain</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z4</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z5">
+    <rdfs:label xml:lang="en">Residual for BOP &amp; IIP step 3 ECB needs
+                        (J2-DK-GB-SE-4A-D8-CH-CA-US-JP-C4-7Z)
+                    </rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z5</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z6">
+    <rdfs:label xml:lang="en">All areas other than EU 15 and reference/home area</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z6</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z8">
+    <rdfs:label xml:lang="en">Other EU member states (all countries except the reference area)</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z8</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/Z9">
+    <rdfs:label xml:lang="en">EU 15 (fixed composition) excluding LU</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>Z9</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ZA">
+    <rdfs:label xml:lang="en">South Africa</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ZA</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ZM">
+    <rdfs:label xml:lang="en">Zambia</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ZM</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+  <skos:Concept rdf:about="cl_area/ZW">
+    <rdfs:label xml:lang="en">Zimbabwe</rdfs:label>
+    <skos:inScheme rdf:resource=""/>
+    <skos:notation>ZW</skos:notation>
+    <skos:topConceptOf rdf:resource=""/>
+  </skos:Concept>
+</rdf:RDF>

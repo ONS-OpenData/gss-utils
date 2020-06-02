@@ -1,24 +1,19 @@
-Feature: Create CWVW metadata
+Feature: Create CSVW metadata
   I want to create CSVW metadata from a simple mapping file.
   I want the CSVW metadata to declare the transformation from CSV to RDF using the Data Cube Vocabulary.
   I want to include dataset definitions and dataset metadata in the CSVW metadata.
 
   Scenario: Create CSVW metadata from mapping
     Given a CSV file 'product-observations.csv'
-      | Value | Marker | Year | Country | Industry | Direction | Commodity |
-      | 0.0   |        | 2008 | AD      | 12       | IM        | T         |
-      | 0.0   |        | 2009 | AD      | 12       | IM        | T         |
-      | 0.0   |        | 2010 | AD      | 12       | IM        | T         |
-      | 0.0   |        | 2011 | AD      | 12       | IM        | T         |
     And a JSON map file 'mapping-info.json'
-    And a registry at 'http://gss-data.org.uk/sparql'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
     And gsscogs/csv2rdf generates RDF
     And the RDF should pass the Data Cube integrity constraints
     And the RDF should contain
     """
-      @base <file:/tmp/product-observations.csv-metadata.json> .
+      @base <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity> .
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
       @prefix qb:    <http://purl.org/linked-data/cube#> .
       @prefix sdmx-a: <http://purl.org/linked-data/sdmx/2009/attribute#> .
@@ -33,3 +28,12 @@ Feature: Create CWVW metadata
       <#structure> a qb:DataStructureDefinition ;
                 qb:component <#component/commodity>, <#component/country> .
     """
+
+  Scenario: Data Cube, metadata and reference data for PMD4
+    Given a CSV file 'product-observations.csv'
+    And a JSON map file 'mapping-info.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    When I create a CSVW file from the mapping and CSV
+    And gsscogs/csv2rdf generates RDF
+    And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf"
+    Then the RDF should pass the PMD4 constraints
