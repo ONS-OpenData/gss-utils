@@ -25,16 +25,16 @@ class CubeSegment(object):
         self.columns = {}
         self.preview = None
         self.obs = None
-    
+
     def add_column(self, column):
         column = column.replace(" ", "_")
         self.columns[column] = Column(column)
         setattr(TransformTrace, column, self.columns[column])
 
-        
+
 class Column(object):
     """
-    An object representing the documentation of changes made to a column (or pre-column) 
+    An object representing the documentation of changes made to a column (or pre-column)
     of data within a dataset
     """
 
@@ -61,17 +61,15 @@ class TransformTrace(object):
         self.composite_key = None
         self.df_store = {}
         self.all_composite_keys = []
-        
+
         # Remove any lingering documentation from the last run
-        try:
+        if os.path.exists("documentation"):
             shutil.rmtree("documentation")
-        except FileNotFoundError:
-            pass # 1st run
-    
+
     def _set_composite_key(self, cube_name, tab_name, source):
         if isinstance(source, list):
             source = "".join(source)
-            
+
         self.composite_key = cube_name+"||"+tab_name+"||"+source
         self.all_composite_keys.append(self.composite_key)
 
@@ -79,26 +77,26 @@ class TransformTrace(object):
         """
         Create and set a cube/conversion segment to the currently tracked object
         """
-        
+
         # Allow populate tab_name as explicit string (for combined cubes)
         self.tab_name = tab if isinstance(tab, str) else tab.name
-            
+
         # Unset the old column attributes before we change the active cube
         if self.composite_key is not None:
             for column in self.cubes[self.composite_key].columns.keys():
-                delattr(TransformTrace, column)           
-            
-        self._set_composite_key(cube_name, self.tab_name, source)   
+                delattr(TransformTrace, column)
+
+        self._set_composite_key(cube_name, self.tab_name, source)
         self.cubes[self.composite_key] = CubeSegment(cube_name, self.tab_name, source)
         for column in columns:
             self.add_column(column)
 
     def OBS(self, comment):
         self.cubes[self.composite_key].obs = comment
-        
-    def add_column(self, column):        
+
+    def add_column(self, column):
         self.cubes[self.composite_key].add_column(column)
-        
+
     def multi(self, columns, comment):
         """
         An action that applies to ach column listed in columns
@@ -117,28 +115,28 @@ class TransformTrace(object):
         if identifier not in self.df_store.keys():
             self.df_store.update({identifier: []})
         self.ALL("Stored under the identifier '{}'".format(identifier))
-        
+
         tab  = self.cubes[self.composite_key].tab
-        
+
         # Listify multiple sources with the tab name
         source = self.cubes[self.composite_key].source
         if isinstance(source, list):
             source = [x+" : "+tab for x in source]
-            
+
         self.df_store[identifier].append({
                     "composite_key": self.composite_key,
                     "tab": self.cubes[self.composite_key].tab,
                     "source": source,
                     "df": df})
-    
+
     def combine_and_trace(self, cube_name, identifier):
         if identifier not in self.df_store.keys():
             raise Exception("{} does not identify a list of dataframes.".format(identifier))
-            
+
         if cube_name in self.cubes.keys():
             raise Exception("Each datacube must have a unique identifier, you have already "
                            "used the identifier '{}'.".format(cube_name))
-            
+
         # Add an action against all columns of all cubes that are being joined
         composite_keys = []
         dfs = []
@@ -147,18 +145,18 @@ class TransformTrace(object):
                 composite_keys.append(stored_item["composite_key"])
                 dfs.append(stored_item["df"])
                 source.append(stored_item["source"] + " : " + stored_item["tab"])
-                
+
         for composite_key in composite_keys:
             for columnObj in self.cubes[composite_key].columns.values():
                 columnObj("Added to dataframe '{}'".format(identifier))
-                
+
         # Create a new combined-cube trace
         columns = self.cubes[self.composite_key].columns.keys()
-        
+
         self.start(cube_name, identifier, columns, source)
-        
+
         return pd.concat(dfs, sort=False)
-            
+
     def with_preview(self, cs):
         path_to_preview = 'documentation/previews'
         destinationFolder = Path(path_to_preview)
@@ -167,12 +165,12 @@ class TransformTrace(object):
         path_to_preview_file = "{}/{}.html".format(path_to_preview, str(uuid.uuid4()))
         savepreviewhtml(cs, fname=path_to_preview_file)
         self.cubes[self.composite_key].preview = path_to_preview_file
-                      
+
         self.ALL(PREVIEW_NOTE)
 
     def _create_output_dict(self):
         outputs = {}
-        
+
         # Group by unique cube names
         cube_names = list(set([x.cube_name for x in self.cubes.values()]))
         for cube_name in cube_names:
@@ -191,7 +189,7 @@ class TransformTrace(object):
 
                 sid = cubeObj.tab if isinstance(cubeObj.source, list) else \
                             "{} : {}".format(cubeObj.source, cubeObj.tab)
-                
+
                 output = {
                     "sourced_from": cubeObj.source,
                     "id": sid,
@@ -202,22 +200,22 @@ class TransformTrace(object):
                     output.update({"preview": cubeObj.preview})
                 if cubeObj.obs is not None:
                     output.update({"observations": cubeObj.obs})
-                    
+
                 if cube_name not in outputs.keys():
                     outputs.update({cube_name: []})
                 outputs[cube_name].append(output)
         return {cube_name: outputs}
-            
+
     def _write_output_dict(self, output_dict):
         destinationFolder = Path('documentation')
         destinationFolder.mkdir(exist_ok=True, parents=True)
-        
+
         for cube_name, details in output_dict.items():
             with open("documentation/{}.json".format(pathify(cube_name)), "w") as f:
                 json.dump(details, f)
-        
+
     def _create_html_output(self, output_dict):
-        
+
         colour_pick = 0
         def next_colour():
             # Vary table colour for readibility
@@ -232,7 +230,7 @@ class TransformTrace(object):
             else:
                 colour_pick +=1
             return pallette[colour_pick]
-        
+
         for title, data in output_dict.items():
             html_lines = []
             html_lines.append("<h3>{}</h3>".format(title))
@@ -242,22 +240,22 @@ class TransformTrace(object):
                     html_lines.append("<br>")
                     table_colour = next_colour()
                     html_lines.append("<strong>identifier</strong>    : {}<br>".format(detail["id"]))
-                    
+
                     if "tab" in detail.keys():
                         html_lines.append("<strong>tab</strong>    : {}<br>".format(detail["tab"]))
-                    
+
                     if isinstance(detail["sourced_from"], list):
                         html_lines.append("<strong>sourced from</strong>:<br>")
                         for source in detail["sourced_from"]:
                             html_lines.append(source + "<br>")
                     else:
                         html_lines.append("<strong>sourced_from</strong>   : {}<br>".format(detail["sourced_from"]))
-                        
+
                     if "preview" in detail.keys():
                         html_lines.append("<strong>preview</strong>       : <a href={}>{}</a><br>".format(detail["preview"][14:], detail["preview"][14:]))
                     if "observations" in detail.keys():
                         html_lines.append("<strong>observation selection</strong>   : {}<br>".format(detail["observations"]))
-                        
+
                     html_lines.append("<br>")
                     if "column_actions" in detail.keys():
                         if len(detail["column_actions"]) > 0:
@@ -297,8 +295,8 @@ class TransformTrace(object):
                     f.write("""
                             </body>
                             </html>
-                            """)          
-            
+                            """)
+
     def output(self, with_html=True):
         output_dict = self._create_output_dict()
         self._write_output_dict(output_dict)
