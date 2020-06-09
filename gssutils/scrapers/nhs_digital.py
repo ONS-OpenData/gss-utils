@@ -1,10 +1,12 @@
 import re
 from urllib.parse import urljoin
-from dateutil.parser import parse
 
+from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import PMDDataset, GOV, Distribution
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.pmdcat import PMDDataset
 
 
 def scrape(scraper, tree):

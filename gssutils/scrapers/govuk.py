@@ -1,14 +1,13 @@
-import mimetypes
-import re
-from datetime import datetime
-
-from dateutil.parser import parse
 import logging
+import mimetypes
+from datetime import datetime
+from urllib.parse import urljoin, urlparse
 
 from lxml import html
 
-from gssutils.metadata import Distribution, ODS, ZIP, Excel, PDF, PMDDataset
-from urllib.parse import urljoin, urlparse
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import ODS, PDF
+from gssutils.metadata.pmdcat import PMDDataset
 
 
 def content_api(scraper, tree):

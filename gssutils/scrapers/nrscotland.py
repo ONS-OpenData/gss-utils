@@ -1,7 +1,8 @@
 import mimetypes
-
-from gssutils.metadata import Distribution, GOV
 from urllib.parse import urljoin
+
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
 
 
 def scrape(scraper, tree):

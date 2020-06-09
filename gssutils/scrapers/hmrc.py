@@ -1,10 +1,14 @@
 import logging
 import mimetypes
-import string
 from urllib.parse import urljoin
-from gssutils.metadata import Dataset, Excel, Distribution, PMDDataset, GOV, THEME
+
 from dateutil.parser import parse
 from lxml import html
+
+from gssutils.metadata import GOV, THEME
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
+from gssutils.metadata.pmdcat import PMDDataset
 
 
 def scrape_pages(scraper, tree):

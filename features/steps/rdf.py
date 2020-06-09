@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from behave import *
 from nose.tools import *
 from rdflib.compare import to_isomorphic, graph_diff
@@ -103,3 +105,20 @@ def step_impl(context, comment):
 @then('the modified date should be around "{date}"')
 def step_impl(context, date):
     eq_(context.scraper.dataset.modified.date(), datetime.fromisoformat(date).date())
+
+
+@then('the TriG should contain triples given by "{turtle_file}"')
+def step_impl(context, turtle_file):
+    with open(Path('features') / 'fixtures' / turtle_file) as f:
+        g1 = Graph().parse(format='trig', data=context.trig)
+        g2 = Graph().parse(format='turtle', file=f)
+        in_both, only_in_first, only_in_second = graph_diff(to_isomorphic(g1), to_isomorphic(g2))
+        only_in_first.namespace_manager = g1.namespace_manager
+        only_in_second.namespace_manager = g2.namespace_manager
+        ok_(len(only_in_second) == 0, f"""
+<<<
+{only_in_first.serialize(format='n3').decode('utf-8')}
+===
+{only_in_second.serialize(format='n3').decode('utf-8')}
+>>>
+""")

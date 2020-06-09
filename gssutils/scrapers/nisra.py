@@ -1,8 +1,11 @@
 import mimetypes
-from urllib.parse import urljoin
-from dateutil.parser import parse
-from gssutils.metadata import Distribution, Excel, ODS, GOV
 import re
+
+from dateutil.parser import parse
+
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
 
 
 def scrape(scraper, tree):

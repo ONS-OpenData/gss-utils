@@ -1,10 +1,13 @@
-from behave import *
-from gssutils import Scraper
-from nose.tools import *
-import vcr
-import requests
-from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
+
+import requests
+import vcr
+from behave import *
+from nose.tools import *
+
+from gssutils import Scraper
+from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
+from gssutils.metadata.mimetype import Excel
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 

@@ -15,7 +15,9 @@ from lxml import html
 from rdflib import BNode, URIRef
 
 import gssutils.scrapers
-from gssutils.metadata import PMDDataset, Excel, ODS, Catalog, ExcelOpenXML, Distribution, ZIP, CSV
+from gssutils.metadata.dcat import Distribution, Catalog
+from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, ZIP
+from gssutils.metadata.pmdcat import PMDDataset
 from gssutils.utils import pathify
 
 

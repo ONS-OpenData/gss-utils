@@ -69,3 +69,10 @@ Feature: PMD metadata
       Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
       And I select the dataset "National Drug and Alcohol Treatment Waiting Times"
       Then generate TriG
+
+    Scenario: generate catalogue metadata for PMD4
+      Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompaniesoutwardtables"
+      And set the base URI to <http://gss-data.org.uk>
+      And set the dataset ID to <gss_data/trade/ons-fdi-catalog-entry>
+      And generate TriG
+      Then the TriG should contain triples given by "pmd4-metadata.ttl"

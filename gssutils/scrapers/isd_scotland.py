@@ -7,8 +7,10 @@ from urllib.parse import urldefrag, urljoin, urlparse
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import Distribution, PDF, Excel, Dataset, PMDDataset, GOV
-from gssutils.utils import pathify
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
+from gssutils.metadata.pmdcat import PMDDataset
 
 
 def scrape(scraper, tree):

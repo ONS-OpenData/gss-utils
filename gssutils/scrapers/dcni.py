@@ -1,14 +1,9 @@
-import logging
-import mimetypes
-import re
-from functools import lru_cache
-from urllib.parse import urldefrag, urljoin, urlparse
-
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import Distribution, ODS, Excel, Dataset, PMDDataset, GOV
-from gssutils.utils import pathify
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import ODS, Excel
 
 
 def scrape(scraper, tree):
