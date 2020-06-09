@@ -116,6 +116,7 @@ def step_impl(context, turtle_file):
         only_in_first.namespace_manager = g1.namespace_manager
         only_in_second.namespace_manager = g2.namespace_manager
         ok_(len(only_in_second) == 0, f"""
+{context.trig.decode('utf-8')}
 <<<
 {only_in_first.serialize(format='n3').decode('utf-8')}
 ===

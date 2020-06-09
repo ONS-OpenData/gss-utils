@@ -7,7 +7,7 @@ from lxml import html
 
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import ODS, PDF
-from gssutils.metadata.pmdcat import PMDDataset
+from gssutils.metadata.pmdcat import Dataset
 
 
 def content_api(scraper, tree):
@@ -72,7 +72,7 @@ def content_api_collection(scraper, metadata):
 
 
 def content_api_publication(scraper, metadata):
-    ds = PMDDataset(scraper.uri)
+    ds = Dataset(scraper.uri)
     if 'title' in metadata:
         ds.title = metadata['title']
     if 'description' in metadata:
@@ -164,7 +164,7 @@ def content_api_sds(scraper, metadata):
         # joined into one blob
         sections = body_tree.xpath("//section[contains(concat(' ', @class, ' '), ' attachment ')]")
         if len(sections) > 0:
-            ds = PMDDataset(scraper.uri)
+            ds = Dataset(scraper.uri)
             ds.title = scraper.catalog.title
             ds.description = scraper.catalog.description
             ds.publisher = scraper.catalog.publisher
@@ -181,7 +181,7 @@ def content_api_sds(scraper, metadata):
         else:
             for heading in body_tree.xpath("//h2[following-sibling::p/descendant::span[@class='attachment-inline']]"):
                 id = heading.get('id')
-                ds = PMDDataset(scraper.uri)
+                ds = Dataset(scraper.uri)
                 ds.title = heading.text
                 ds.description = scraper.catalog.description
                 ds.publisher = scraper.catalog.publisher

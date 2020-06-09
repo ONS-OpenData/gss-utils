@@ -3,7 +3,7 @@ import html
 from enum import Enum
 from inspect import getmro
 
-from rdflib import RDFS, Literal, BNode, URIRef, Dataset as Quads, RDF, Graph
+from rdflib import RDFS, Literal, BNode, URIRef, Dataset as Quads, RDF, Graph, Dataset
 
 from gssutils.metadata import namespaces
 
@@ -33,12 +33,10 @@ class Metadata:
     def uri(self, uri):
         self._uri = URIRef(uri)
 
-    @property
-    def graph(self):
+    def get_graph(self):
         return str(self._graph)
 
-    @graph.setter
-    def graph(self, uri):
+    def set_graph(self, uri):
         self._graph = URIRef(uri)
 
     def __setattr__(self, name, value):
@@ -66,10 +64,8 @@ class Metadata:
         else:
             return obs
 
-    def as_quads(self):
-        quads = Quads()
-        quads.namespace_manager = namespaces
-        graph = quads.graph(self._graph)
+    def add_to_dataset(self, dataset):
+        graph = dataset.graph(self._graph)
         for c in getmro(type(self)):
             if hasattr(c, '_type'):
                 if type(c._type) == tuple:
@@ -81,16 +77,10 @@ class Metadata:
             if local_name in self.__dict__:
                 prop, status, f = profile
                 v = self.__dict__[local_name]
-                if type(v) == list:
-                    for obj in v:
-                        graph.add((self._uri, prop, f(obj)))
-                        if isinstance(obj, Metadata):
-                            graph.addN(obj.as_quads())
-                else:
-                    graph.add((self._uri, prop, f(v)))
-                    if isinstance(v, Metadata):
-                        graph.addN(v.as_quads())
-        return quads
+                for obj in (v if type(v) == list else [v]):
+                    graph.add((self._uri, prop, f(obj)))
+                    if isinstance(obj, Metadata):
+                        obj.add_to_dataset(dataset)
 
     def _repr_html_(self):
         s = f'<h3>{type(self).__name__}</h3>\n<dl>'

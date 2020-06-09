@@ -14,7 +14,7 @@ import docker as docker
 import vcr
 from behave import *
 from nose.tools import *
-from rdflib import Graph
+from rdflib import Graph, Dataset
 
 from gssutils import CSVWMetadata, CSVWMapping
 from gssutils.csvw.namespaces import URI
@@ -173,7 +173,8 @@ def step_impl(context, filename, base, path):
     context.csv_io.seek(0)
     context.scraper.set_base_uri(urljoin(base, '/'))
     context.scraper.set_dataset_id(path)
-    quads = context.scraper.dataset.as_quads()
+    quads = Dataset()
+    context.scraper.dataset.add_to_dataset(quads)
     context.schema.create_io(
         context.csv_io,
         context.metadata_io,

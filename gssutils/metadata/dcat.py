@@ -31,7 +31,7 @@ class Resource(Metadata):
         'type': (DCTERMS.type, Status.recommended, URIRef),  # skos:Concept
         'relation': (DCTERMS.relation, Status.recommended, URIRef),
         'qualifiedRelation': (DCAT.qualifiedRelation, Status.recommended, URIRef),
-        'keyword': (DCAT.keyword, Status.recommended, Literal),
+        'keyword': (DCAT.keyword, Status.recommended, lambda l: Literal(l, 'en')),
         'landingPage': (DCAT.landingPage, Status.mandatory, URIRef),  # foaf:Document
         'qualifiedAttribution': (PROV.qualifiedAttribution, Status.recommended, URIRef),
         'license': (DCTERMS.license, Status.recommended, URIRef),
@@ -77,7 +77,7 @@ class CatalogRecord(Metadata):
         'description': (DCTERMS.description, Status.mandatory, lambda s: Literal(s, 'en')),
         'issued': (DCTERMS.issued, Status.mandatory, lambda d: Literal(d)),
         'modified': (DCTERMS.modified, Status.recommended, lambda d: Literal(d)),
-        'primaryTopic': (FOAF.primaryTopic, Status.mandatory, lambda s: URIRef(s)),
+        'primaryTopic': (FOAF.primaryTopic, Status.mandatory, lambda s: URIRef(s.uri)),
         'conformsTo': (DCTERMS.conformsTo, Status.recommended, lambda s: URIRef(s))
     })
 

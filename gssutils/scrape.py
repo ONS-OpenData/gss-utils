@@ -13,11 +13,13 @@ from cachecontrol.heuristics import LastModified
 from dateutil.parser import parse
 from lxml import html
 from rdflib import BNode, URIRef
+from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
-from gssutils.metadata.dcat import Distribution, Catalog
+from gssutils.metadata import namespaces
+from gssutils.metadata.dcat import Distribution, Catalog, CatalogRecord
 from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, ZIP
-from gssutils.metadata.pmdcat import PMDDataset
+from gssutils.metadata.pmdcat import Dataset
 from gssutils.utils import pathify
 
 
@@ -75,7 +77,7 @@ class Scraper:
             self.seed = None
 
         self.uri = uri
-        self.dataset = PMDDataset(uri)
+        self.dataset = Dataset(uri)
         self.catalog = Catalog()
         self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
@@ -329,10 +331,8 @@ class Scraper:
         self.update_dataset_uris()
 
     def update_dataset_uris(self):
-        self.dataset.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
-        self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}/metadata')
-        self.dataset.inGraph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
-        self.dataset.sparqlEndpoint = urljoin(self._base_uri, '/sparql')
+        self.dataset.uri = urljoin(self._base_uri, f'data/{self._dataset_id}-catalog-entry')
+        self.dataset.set_graph(urljoin(self._base_uri, f'graph/{self._dataset_id}-metadata'))
 
     def set_family(self, family):
         self.dataset.family = family
@@ -343,8 +343,26 @@ class Scraper:
     def set_description(self, description):
         self.dataset.description = description
 
-    def generate_trig(self):
-        return self.dataset.as_quads().serialize(format='trig')
+    def generate_trig(self, catalog_id=None):
+        catalog = Catalog()
+        if catalog_id is not None:
+            catalog.uri = urljoin(self._base_uri, catalog_id)
+        else:
+            catalog.uri = urljoin(self._base_uri, 'catalog/datasets')
+        metadata_graph = urljoin(self._base_uri, f'graph/{self._dataset_id}-metadata')
+        catalog.set_graph(metadata_graph)
+        catalog.record = CatalogRecord()
+        catalog.record.uri = urljoin(self._base_uri, f'data/{self._dataset_id}-catalog-record')
+        catalog.record.set_graph(metadata_graph)
+        catalog.record.label = self.dataset.label + " Catalog Record"
+        catalog.record.metadataGraph = metadata_graph
+        catalog.record.issued = self.dataset.issued
+        catalog.record.modified = self.dataset.modified
+        catalog.record.primaryTopic = self.dataset
+        quads = RDFDataset()
+        quads.namespace_manager = namespaces
+        catalog.add_to_dataset(quads)
+        return quads.serialize(format='trig')
 
     @property
     def title(self):

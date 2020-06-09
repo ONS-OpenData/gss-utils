@@ -5,13 +5,13 @@ from rdflib.namespace import VOID, DCTERMS
 
 from gssutils.metadata import PMDCAT, DCAT, MARKDOWN, PMD, GDP
 from gssutils.metadata.base import Status
-from gssutils.metadata.dcat import Dataset
+from gssutils.metadata.dcat import Dataset as DCATDataset
 
 
-class PMDDataset(Dataset):
+class Dataset(DCATDataset):
 
     _type = (PMDCAT.Dataset, DCAT.Dataset)
-    _properties_metadata = dict(Dataset._properties_metadata)
+    _properties_metadata = dict(DCATDataset._properties_metadata)
     _properties_metadata.update({
         'metadataGraph': (PMDCAT.metadataGraph, Status.mandatory, lambda s: URIRef(s)),
         'graph': (PMDCAT.graph, Status.mandatory, lambda s: URIRef(s)),
