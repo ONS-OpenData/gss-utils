@@ -147,13 +147,13 @@ class TransformTrace(object):
                 dfs.append(stored_item["df"])
                 source.append(stored_item["source"] + " : " + stored_item["tab"])
 
+        columns = []
         for composite_key in composite_keys:
             for columnObj in self.cubes[composite_key].columns.values():
+                if columnObj.label not in columns:
+                    columns.append(columnObj.label)
                 columnObj("Added to dataframe '{}'".format(identifier))
-
-        # Create a new combined-cube trace
-        columns = self.cubes[self.composite_key].columns.keys()
-
+                
         self.start(cube_name, identifier, columns, source)
 
         return pd.concat(dfs, sort=False)
@@ -211,9 +211,11 @@ class TransformTrace(object):
         destinationFolder = Path('documentation')
         destinationFolder.mkdir(exist_ok=True, parents=True)
 
-        for cube_name, details in output_dict.items():
-            with open("documentation/{}.json".format(pathify(cube_name)), "w") as f:
-                json.dump(details, f)
+        for dataset, dataset_details in output_dict.items():
+            for cube_name, details in dataset_details.items():
+                output = {cube_name: details}
+                with open("documentation/{}.json".format(pathify(cube_name)), "w") as f:
+                    json.dump(output, f)
 
     def _create_html_output(self, output_dict):
 
@@ -232,71 +234,71 @@ class TransformTrace(object):
                 colour_pick +=1
             return pallette[colour_pick]
 
-        for title, data in output_dict.items():
-            html_lines = []
-            html_lines.append("<h3>{}</h3>".format(title))
-            for cube_name, details in data.items():
+        for dataset, dataset_details in output_dict.items():
+            for title, details in dataset_details.items():
+                html_lines = []
+                html_lines.append("<h3>{}</h3>".format(title))
                 for detail in details:
-                    html_lines.append("<hr>")
-                    html_lines.append("<br>")
-                    table_colour = next_colour()
-                    html_lines.append("<strong>identifier</strong>    : {}<br>".format(detail["id"]))
+                        html_lines.append("<hr>")
+                        html_lines.append("<br>")
+                        table_colour = next_colour()
+                        html_lines.append("<strong>identifier</strong>    : {}<br>".format(detail["id"]))
 
-                    if "tab" in detail.keys():
-                        html_lines.append("<strong>tab</strong>    : {}<br>".format(detail["tab"]))
+                        if "tab" in detail.keys():
+                            html_lines.append("<strong>tab</strong>    : {}<br>".format(detail["tab"]))
 
-                    if isinstance(detail["sourced_from"], list):
-                        html_lines.append("<strong>sourced from</strong>:<br>")
-                        for source in detail["sourced_from"]:
-                            html_lines.append(source + "<br>")
-                    else:
-                        html_lines.append("<strong>sourced_from</strong>   : {}<br>".format(detail["sourced_from"]))
+                        if isinstance(detail["sourced_from"], list):
+                            html_lines.append("<strong>sourced from</strong>:<br>")
+                            for source in detail["sourced_from"]:
+                                html_lines.append(source + "<br>")
+                        else:
+                            html_lines.append("<strong>sourced_from</strong>   : {}<br>".format(detail["sourced_from"]))
 
-                    if "preview" in detail.keys():
-                        html_lines.append("<strong>preview</strong>       : <a href={}>{}</a><br>".format(detail["preview"][14:], detail["preview"][14:]))
-                    if "observations" in detail.keys():
-                        html_lines.append("<strong>observation selection</strong>   : {}<br>".format(detail["observations"]))
+                        if "preview" in detail.keys():
+                            html_lines.append("<strong>preview</strong>       : <a href={}>{}</a><br>".format(detail["preview"][14:], detail["preview"][14:]))
+                        if "observations" in detail.keys():
+                            html_lines.append("<strong>observation selection</strong>   : {}<br>".format(detail["observations"]))
 
-                    html_lines.append("<br>")
-                    if "column_actions" in detail.keys():
-                        if len(detail["column_actions"]) > 0:
-                            for column_data in detail["column_actions"]:
-                                html_lines.append('<table class="fixed">')
-                                html_lines.append("""<col width="200px" /><col width="1000px" />""")
-                                html_lines.append('<th style="background-color:{}" colspan="2">{}</th>'.format(table_colour, column_data["column_label"]))
-                                for action in column_data["actions"]:
-                                    for time_stamp, comment in action.items():
-                                        html_lines.append("""<tr>
-                                            <td>{}</td>
-                                            <td>{}</td>
-                                            </tr>""".format(time_stamp, comment))
-                                html_lines.append("</table>")
+                        html_lines.append("<br>")
+                        if "column_actions" in detail.keys():
+                            if len(detail["column_actions"]) > 0:
+                                for column_data in detail["column_actions"]:
+                                    html_lines.append('<table class="fixed">')
+                                    html_lines.append("""<col width="200px" /><col width="1000px" />""")
+                                    html_lines.append('<th style="background-color:{}" colspan="2">{}</th>'.format(table_colour, column_data["column_label"]))
+                                    for action in column_data["actions"]:
+                                        for time_stamp, comment in action.items():
+                                            html_lines.append("""<tr>
+                                                <td>{}</td>
+                                                <td>{}</td>
+                                                </tr>""".format(time_stamp, comment))
+                                    html_lines.append("</table>")
+                                    html_lines.append("<br>")
                                 html_lines.append("<br>")
-                            html_lines.append("<br>")
 
-            with open(Path('documentation') / "{}.html".format(pathify(title)), "w") as f:
-                f.write("""
-                <!DOCTYPE html>
-                <html>
-                <head>
-                <style>
-                fixed, th, td {
-                    border: 1px solid black;
-                }
-                tr {
-                    background-color: white;
-                    color: black;
-                }
-                table-layout:fixed
-                </style>
-                </head>
-                <body>""")
-                for line in html_lines:
-                    f.write(line + "\n")
+                with open(Path('documentation') / "{}.html".format(pathify(title)), "w") as f:
                     f.write("""
-                            </body>
-                            </html>
-                            """)
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                    <style>
+                    fixed, th, td {
+                        border: 1px solid black;
+                    }
+                    tr {
+                        background-color: white;
+                        color: black;
+                    }
+                    table-layout:fixed
+                    </style>
+                    </head>
+                    <body>""")
+                    for line in html_lines:
+                        f.write(line + "\n")
+                        f.write("""
+                                </body>
+                                </html>
+                                """)
 
     def output(self, with_html=True):
         output_dict = self._create_output_dict()
