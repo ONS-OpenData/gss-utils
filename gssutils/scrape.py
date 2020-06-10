@@ -16,10 +16,7 @@ from rdflib import BNode, URIRef
 from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
-from gssutils.metadata import namespaces
-from gssutils.metadata.dcat import Distribution, Catalog, CatalogRecord
-from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, ZIP
-from gssutils.metadata.pmdcat import Dataset
+from gssutils.metadata import namespaces, dcat, pmdcat, mimetype
 from gssutils.utils import pathify
 
 
@@ -77,8 +74,8 @@ class Scraper:
             self.seed = None
 
         self.uri = uri
-        self.dataset = Dataset(uri)
-        self.catalog = Catalog()
+        self.dataset = pmdcat.Dataset(uri)
+        self.catalog = dcat.Catalog()
         self.dataset.modified = datetime.now(timezone.utc).astimezone()
         self.distributions = []
 
@@ -115,7 +112,7 @@ class Scraper:
             if len(self.distributions) > 0:
                 md = md + "### Distributions\n\n"
                 for d in self.distributions:
-                    t = {Excel: 'MS Excel Spreadsheet', ODS: 'ODF Spreadsheet'}
+                    t = {mimetype.Excel: 'MS Excel Spreadsheet', mimetype.ODS: 'ODF Spreadsheet'}
                     if hasattr(d, 'issued'):
                         md = md + f"1. {d.title} ([{t.get(d.mediaType, d.mediaType)}]({d.downloadURL})) - {d.issued}\n"
                     else:
@@ -186,15 +183,15 @@ class Scraper:
             if hasattr(distribution, 'downloadURL') and not hasattr(distribution, 'mediaType'):
                 logging.warning("Distribution is lacking a mediaType, attempting to identity")
                 if distribution.downloadURL.lower().endswith(".xls"):
-                    distribution.mediaType = Excel
+                    distribution.mediaType = mimetype.Excel
                 elif distribution.downloadURL.lower().endswith(".xlsx"):
-                    distribution.mediaType = ExcelOpenXML
+                    distribution.mediaType = mimetype.ExcelOpenXML
                 elif distribution.downloadURL.lower().endswith(".ods"):
-                    distribution.mediaType = ODS
+                    distribution.mediaType = mimetype.ODS
                 elif distribution.downloadURL.lower().endswith(".csv"):
-                    distribution.mediaType = CSV
+                    distribution.mediaType = mimetype.CSV
                 elif distribution.downloadURL.lower().endswith(".zip"):
-                    distribution.mediaType = ZIP
+                    distribution.mediaType = mimetype.ZIP
                 else:
                     logging.warning("Unable to find mediaType for distribution")
 
@@ -236,7 +233,7 @@ class Scraper:
         """
 
         # If it's a catalogue we'll need to account for one more level
-        if isinstance(self, Catalog):
+        if isinstance(self, dcat.Catalog):
             try:
                 for distro in self.dataset.distributions:
                     if hasattr(distro, target_field):
@@ -274,7 +271,7 @@ class Scraper:
 
         # Populate the "unsafe" fields explicitly, then populate the missing
         # metadata from the seed
-        dist = Distribution(self)
+        dist = dcat.Distribution(self)
         dist.issued = parse(self.seed["published"]).date()
         dist.downloadURL = self.seed["dataURL"]
         self.distributions.append(dist)
@@ -344,14 +341,14 @@ class Scraper:
         self.dataset.description = description
 
     def generate_trig(self, catalog_id=None):
-        catalog = Catalog()
+        catalog = dcat.Catalog()
         if catalog_id is not None:
             catalog.uri = urljoin(self._base_uri, catalog_id)
         else:
             catalog.uri = urljoin(self._base_uri, 'catalog/datasets')
         metadata_graph = urljoin(self._base_uri, f'graph/{self._dataset_id}-metadata')
         catalog.set_graph(metadata_graph)
-        catalog.record = CatalogRecord()
+        catalog.record = pmdcat.CatalogRecord()
         catalog.record.uri = urljoin(self._base_uri, f'data/{self._dataset_id}-catalog-record')
         catalog.record.set_graph(metadata_graph)
         catalog.record.label = self.dataset.label + " Catalog Record"
@@ -359,6 +356,10 @@ class Scraper:
         catalog.record.issued = self.dataset.issued
         catalog.record.modified = self.dataset.modified
         catalog.record.primaryTopic = self.dataset
+        self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
+        self.dataset.datasetContents = pmdcat.DataCube()
+        self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
+        self.dataset.sparqlEndpoint = urljoin(self._base_uri, '/sparql')
         quads = RDFDataset()
         quads.namespace_manager = namespaces
         catalog.add_to_dataset(quads)

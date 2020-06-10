@@ -228,7 +228,6 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 # inherit metadata from the dataset where it hasn't explicitly been changed
                 this_distribution.title = scraper.dataset.title
                 this_distribution.description = scraper.dataset.description
-                this_distribution.contactPoint = scraper.dataset.contactPoint
 
                 logging.debug("Created distribution for download '{}'.".format(download_url))
                 scraper.distributions.append(this_distribution)

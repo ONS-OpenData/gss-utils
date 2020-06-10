@@ -16,6 +16,7 @@ class Status(Enum):
 
 class Metadata:
 
+    _core_properties = ['uri', '_uri', '_graph']
     _properties_metadata = {
         'label': (RDFS.label, Status.mandatory, lambda s: Literal(s, 'en')),
         'comment': (RDFS.comment, Status.mandatory, lambda s: Literal(s, 'en'))
@@ -42,8 +43,10 @@ class Metadata:
     def __setattr__(self, name, value):
         if name in self._properties_metadata:
             self.__dict__[name] = value
-        else:
+        elif name in self._core_properties:
             super().__setattr__(name, value)
+        else:
+            raise AttributeError(f'Unkown attribute {name}')
 
     def get_unset(self):
         for local_name, profile in self._properties_metadata.items():

@@ -74,5 +74,7 @@ Feature: PMD metadata
       Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompaniesoutwardtables"
       And set the base URI to <http://gss-data.org.uk>
       And set the dataset ID to <gss_data/trade/ons-fdi>
+      And set the family to 'trade'
+      And set the theme to <business-industry-trade-energy>
       And generate TriG
       Then the TriG should contain triples given by "pmd4-metadata.ttl"

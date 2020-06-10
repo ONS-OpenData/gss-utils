@@ -76,7 +76,7 @@ def scrape(scraper, tree):
                 break
             distribution.title = title_node.text
             if dist_issued is not None:
-                distribution.issues = dist_issued
+                distribution.issued = dist_issued
             distribution.downloadURL = download_node[0].get('href')
             type_image = type_node[0].get('src').lower()
             if 'excel' in type_image:

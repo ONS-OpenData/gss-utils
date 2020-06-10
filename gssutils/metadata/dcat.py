@@ -92,6 +92,7 @@ class FormatError(Exception):
 
 class Distribution(Metadata):
 
+    _core_properties = Metadata._core_properties + ['_session']
     _type = DCAT.Distribution
     _properties_metadata = dict(Metadata._properties_metadata)
     _properties_metadata.update({
@@ -118,10 +119,10 @@ class Distribution(Metadata):
 
     def __init__(self, scraper):
         super().__init__()
-        self.session = scraper.session
+        self._session = scraper.session
 
     def open(self):
-        stream = self.session.get(self.downloadURL, stream=True).raw
+        stream = self._session.get(self.downloadURL, stream=True).raw
         stream.decode_content = True
         return stream
 
