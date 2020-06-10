@@ -43,9 +43,10 @@ class Cubes(object):
                             "has already run. You need to add all your datacubes before doing so.")
                 
         is_multiCube = False if len(self.cubes) < 2 else True
-        for cube in self.cubes:
+        for process_order, cube in enumerate(self.cubes):
             try:
-                cube._output(self.ref_path, self.destination_folder, is_multiCube, with_transform)
+                cube._output(process_order, self.ref_path, self.destination_folder, is_multiCube, 
+                            with_transform)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube {}" \
                                .format(cube.title)) from e
@@ -60,6 +61,10 @@ class Cube(object):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
+
+        # We need to track the sequence the cubes are processsed in, this allows 
+        # us to confirm correct namespacing
+        self.process_order = None
         
         # Make sure we have the required metadata, fill in where missing
         for attr_name in ["family", "theme"]:
@@ -85,20 +90,18 @@ class Cube(object):
             
     def _check_add_attribute(self, attr_name, meta_dict):
         if not hasattr(self.scraper.dataset, attr_name):
-            err = MetadataError(f"A '{attr_name}' attribute is required and is not present in the seed.")
-            if self.scraper.seed is None:
-                if attr_name not in meta_dict.keys():
-                    raise err
-                self.scraper.dataset.__setattr__(attr_name, meta_dict[attr_name])
-            elif attr_name in self.scraper.seed.keys():
+            if attr_name in self.scraper.seed.keys():
                 self.scraper.dataset.__setattr__(attr_name, self.scraper.seed[attr_name])
+            elif attr_name in meta_dict.keys():
+                self.scraper.dataset.__setattr__(attr_name, meta_dict[attr_name])
             else:
-                raise err
+                raise MetadataError(f"A '{attr_name}' attribute is required and is not present " 
+                                "in the seed and has not been passed in at run time")
         
+
+    def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform):
         
-    def _output(self, ref_path, destination_folder, is_multiCube, with_transform):
-        
-        # TODO refctor for RDF mapping
+        self.process_order = process_order
         
         pathified_title = None
         trig_to_use = None 
