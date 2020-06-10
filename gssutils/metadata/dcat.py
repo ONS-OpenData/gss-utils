@@ -168,7 +168,7 @@ class Distribution(Metadata):
             to_fetch = self.downloadURL
             tables = []
             while to_fetch is not None:
-                data = self.session.get(to_fetch).json()
+                data = self._session.get(to_fetch).json()
                 tables.append(pd.read_json(json.dumps(data['value']), orient='records'))
                 if 'odata.nextLink' in data and data['odata.nextLink'] != '':
                     to_fetch = data['odata.nextLink']

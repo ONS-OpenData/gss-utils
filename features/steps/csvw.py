@@ -173,8 +173,7 @@ def step_impl(context, filename, base, path):
     context.csv_io.seek(0)
     context.scraper.set_base_uri(urljoin(base, '/'))
     context.scraper.set_dataset_id(path)
-    quads = Dataset()
-    context.scraper.dataset.add_to_dataset(quads)
+    quads = context.scraper.as_quads()
     context.schema.create_io(
         context.csv_io,
         context.metadata_io,

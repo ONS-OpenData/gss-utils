@@ -340,7 +340,7 @@ class Scraper:
     def set_description(self, description):
         self.dataset.description = description
 
-    def generate_trig(self, catalog_id=None):
+    def as_quads(self, catalog_id=None):
         catalog = dcat.Catalog()
         if catalog_id is not None:
             catalog.uri = urljoin(self._base_uri, catalog_id)
@@ -363,7 +363,10 @@ class Scraper:
         quads = RDFDataset()
         quads.namespace_manager = namespaces
         catalog.add_to_dataset(quads)
-        return quads.serialize(format='trig')
+        return quads
+
+    def generate_trig(self, catalog_id=None):
+        return self.as_quads(catalog_id).serialize(format='trig')
 
     @property
     def title(self):

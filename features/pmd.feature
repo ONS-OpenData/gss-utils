@@ -52,8 +52,8 @@ Feature: PMD metadata
       Given the 'JOB_NAME' environment variable is 'GSS_data/Trade/ONS-FDI-inward'
       And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
-      Then the dataset URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward>
-      And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward/metadata>
+      Then the dataset contents URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward>
+      And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward>
       And the modified date should be quite recent
 
     Scenario: licensed dataset

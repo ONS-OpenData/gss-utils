@@ -49,7 +49,8 @@ class Dataset(dcat.Dataset):
         'datasetContents': (PMDCAT.datasetContents, Status.mandatory, lambda d: URIRef(d.uri)),
         'markdownDescription': (PMDCAT.markdownDescription, Status.recommended, lambda l: Literal(l, MARKDOWN)),
         'sparqlEndpoint': (VOID.sparqlEndpoint, Status.mandatory, URIRef),
-        'family': (GDP.family, Status.mandatory, GDP.term)
+        'family': (GDP.family, Status.mandatory, GDP.term),
+        'updateDueOn': (GDP.updateDueOn, Status.recommended, Literal)
     })
 
     def __init__(self, landingPage):
