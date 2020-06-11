@@ -90,9 +90,14 @@ class Cube(object):
             
     def _check_add_attribute(self, attr_name, meta_dict):
         if not hasattr(self.scraper.dataset, attr_name):
-            if attr_name in self.scraper.seed.keys():
-                self.scraper.dataset.__setattr__(attr_name, self.scraper.seed[attr_name])
-            elif attr_name in meta_dict.keys():
+            
+            try_dict = True
+            if self.scraper.seed is not None:
+                if attr_name in self.scraper.seed.keys():
+                    self.scraper.dataset.__setattr__(attr_name, self.scraper.seed[attr_name])
+                    try_dict = False
+                    
+            if try_dict and attr_name in meta_dict.keys():
                 self.scraper.dataset.__setattr__(attr_name, meta_dict[attr_name])
             else:
                 raise MetadataError(f"A '{attr_name}' attribute is required and is not present " 
