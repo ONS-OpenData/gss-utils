@@ -14,13 +14,12 @@ Feature: PMD metadata
     And set the description to 'Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)'
     And generate TriG
     Then the TriG should contain
-
       """
       @prefix dct: <http://purl.org/dc/terms/> .
       @prefix dcat: <http://www.w3.org/ns/dcat#> .
       @prefix gdp: <http://gss-data.org.uk/def/gdp#> .
       @prefix ns1: <http://gss-data.org.uk/graph/foreign-direct-investment-inward/> .
-      @prefix pmd: <http://publishmydata.com/def/dataset#> .
+      @prefix pmdcat: <http://publishmydata.com/pmdcat#> .
       @prefix qb: <http://purl.org/linked-data/cube#> .
       @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -29,14 +28,13 @@ Feature: PMD metadata
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
       <http://gss-data.org.uk/graph/foreign-direct-investment-inward/metadata> {
-        <http://gss-data.org.uk/data/foreign-direct-investment-inward> a pmd:Dataset,
-          pmd:LinkedDataset,
-          qb:DataSet ;
+        <http://gss-data.org.uk/data/foreign-direct-investment-inward-catalog-entry> a pmdcat:Dataset ;
         rdfs:label "Foreign direct investment involving UK companies: inward"@en ;
         dcat:theme <http://gss-data.org.uk/def/concept/statistics-authority-themes/business-industry-trade-energy>;
         gdp:family gdp:trade ;
-        pmd:contactEmail <mailto:fdi@ons.gov.uk> ;
-        pmd:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
+        dcat:contactPoint <mailto:fdi@ons.gov.uk> ;
+        pmdcat:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
+        pmdcat:datasetContents <http://gss-data.org.uk/data/foreign-direct-investment-inward> ;
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:issued "2019-12-03"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
@@ -44,7 +42,7 @@ Feature: PMD metadata
         dct:title "Foreign direct investment involving UK companies: inward"@en ;
         void:sparqlEndpoint <http://gss-data.org.uk/sparql> ;
         rdfs:comment "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."@en ;
-        dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"^^<https://www.w3.org/ns/iana/media-types/text/markdown#Resource> .
+        dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"@en .
       }
       """
 
