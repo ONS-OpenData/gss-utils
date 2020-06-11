@@ -1,0 +1,130 @@
+@prefix ui:    <http://www.w3.org/ns/ui#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://gss-data.org.uk/def/concept/flow-directions/imports>
+        a                  skos:Concept ;
+        rdfs:label         "Imports" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "imports" ;
+        skos:prefLabel     "Imports" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    2 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/arrivals>
+        a                skos:Concept ;
+        rdfs:comment     "Imports from the EU made on an HMRC basis" ;
+        rdfs:label       "Arrivals" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "arrivals" ;
+        skos:prefLabel   "Arrivals" ;
+        ui:sortPriority  5 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/eu-exports>
+        a                skos:Concept ;
+        rdfs:label       "EU Exports" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "eu-exports" ;
+        skos:prefLabel   "EU Exports" ;
+        ui:sortPriority  4 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/dispatches>
+        a                skos:Concept ;
+        rdfs:comment     "Exports to the EU made on an HMRC basis" ;
+        rdfs:label       "Dispatches" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "dispatches" ;
+        skos:prefLabel   "Dispatches" ;
+        ui:sortPriority  4 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/exports>
+        a                  skos:Concept ;
+        rdfs:label         "Exports" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "exports" ;
+        skos:prefLabel     "Exports" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    1 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/non-eu-imports>
+        a                skos:Concept ;
+        rdfs:label       "Non-EU Imports" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "non-eu-imports" ;
+        skos:prefLabel   "Non-EU Imports" ;
+        ui:sortPriority  7 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/debits>
+        a                  skos:Concept ;
+        rdfs:label         "Debits" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "debits" ;
+        skos:prefLabel     "Debits" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    9 .
+
+<http://gss-data.org.uk/def/concept-scheme/flow-directions>
+        a                   skos:ConceptScheme ;
+        rdfs:label          "Flow Directions"@en ;
+        <http://purl.org/dc/terms/title>
+                "Flow Directions"@en ;
+        skos:hasTopConcept  <http://gss-data.org.uk/def/concept/flow-directions/debits> , <http://gss-data.org.uk/def/concept/flow-directions/balance> , <http://gss-data.org.uk/def/concept/flow-directions/credits> , <http://gss-data.org.uk/def/concept/flow-directions/imports> , <http://gss-data.org.uk/def/concept/flow-directions/exports> , <http://gss-data.org.uk/def/concept/flow-directions/terms-of-trade> , <http://gss-data.org.uk/def/concept/flow-directions/balances> .
+
+<http://gss-data.org.uk/def/concept/flow-directions/credits>
+        a                  skos:Concept ;
+        rdfs:label         "Credits" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "credits" ;
+        skos:prefLabel     "Credits" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    8 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/balances>
+        a                  skos:Concept ;
+        rdfs:label         "Balances" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "balances" ;
+        skos:prefLabel     "Balances" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    10 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/eu-imports>
+        a                skos:Concept ;
+        rdfs:label       "EU Imports" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "eu-imports" ;
+        skos:prefLabel   "EU Imports" ;
+        ui:sortPriority  5 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/balance>
+        a                  skos:Concept ;
+        rdfs:comment       "Net Exports (Exports minus Imports)" ;
+        rdfs:label         "Balance" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "balance" ;
+        skos:prefLabel     "Balance" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    3 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/non-eu-exports>
+        a                skos:Concept ;
+        rdfs:label       "Non-EU Exports" ;
+        skos:broader     <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+        skos:inScheme    <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation    "non-eu-exports" ;
+        skos:prefLabel   "Non-EU Exports" ;
+        ui:sortPriority  6 .
+
+<http://gss-data.org.uk/def/concept/flow-directions/terms-of-trade>
+        a                  skos:Concept ;
+        rdfs:label         "Terms of Trade" ;
+        skos:inScheme      <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        skos:notation      "terms-of-trade" ;
+        skos:prefLabel     "Terms of Trade" ;
+        skos:topConceptOf  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        ui:sortPriority    11 .

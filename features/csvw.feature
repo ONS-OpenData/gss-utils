@@ -35,5 +35,5 @@ Feature: Create CSVW metadata
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
     When I create a CSVW file from the mapping and CSV
     And gsscogs/csv2rdf generates RDF
-    And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf"
+    And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf, sdmx-bop-catalog.ttl, flow-directions.ttl, flow-directions-catalog.ttl"
     Then the RDF should pass the PMD4 constraints
