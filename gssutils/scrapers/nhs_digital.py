@@ -1,10 +1,12 @@
 import re
 from urllib.parse import urljoin
-from dateutil.parser import parse
 
+from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import PMDDataset, GOV, Distribution
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.pmdcat import Dataset
 
 
 def scrape(scraper, tree):
@@ -19,7 +21,7 @@ def scrape(scraper, tree):
         scraper.catalog.dataset = []
         articles = tree.xpath("//article[@class='cta']")
         for article in articles:
-            dataset = PMDDataset(scraper.uri)
+            dataset = Dataset(scraper.uri)
             dataset.distribution = []
             dataset.publisher = scraper.catalog.publisher
             dataset.license = scraper.catalog.license

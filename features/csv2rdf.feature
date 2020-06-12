@@ -140,6 +140,7 @@ Feature: Manage CSVW metadata for transformation to RDF
     """
     And the RDF should pass the Data Cube integrity constraints
 
+  @skip
   Scenario: Create CSVW metadata for CSV2RDF with dataset metadata
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/causesofdeath/datasets/alcoholspecificdeathsintheukmaindataset"
     And set the family to 'health'

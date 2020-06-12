@@ -1,4 +1,5 @@
 import logging
+from typing import Optional, List
 
 import sys
 import csv
@@ -13,9 +14,10 @@ import docker as docker
 import vcr
 from behave import *
 from nose.tools import *
-from rdflib import Graph
+from rdflib import Graph, Dataset
 
 from gssutils import CSVWMetadata, CSVWMapping
+from gssutils.csvw.namespaces import URI
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
@@ -31,11 +33,14 @@ def step_impl(context, url):
 @step("a CSV file '{filename}'")
 def step_impl(context, filename):
     context.csv_filename = Path(filename)
-    context.csv_io = StringIO()
-    writer = csv.writer(context.csv_io)
-    writer.writerow(context.table.headings)
-    for row in context.table:
-        writer.writerow(row)
+    if hasattr(context, 'table') and context.table is not None and hasattr(context.table, 'rows') and len(context.table.rows) > 0:
+        context.csv_io = StringIO()
+        writer = csv.writer(context.csv_io)
+        writer.writerow(context.table.headings)
+        for row in context.table:
+            writer.writerow(row)
+    else:
+        context.csv_io = open(Path('features') / 'fixtures' / filename, 'r', encoding='utf-8')
 
 
 @when("I create a CSVW schema '{filename}'")
@@ -140,11 +145,11 @@ def step_impl(context):
         tis = TarInfo(str(context.metadata_filename))
         tis.size = metadata_size
         tis.mtime = time.time()
-        t.addfile(tis, BytesIO(context.metadata_io.getvalue().encode('utf-8')))
+        t.addfile(tis, BytesIO(context.metadata_io.read().encode('utf-8')))
         tic = TarInfo(str(context.csv_filename))
         tic.size = csv_size
         tic.mtime = time.time()
-        t.addfile(tic, BytesIO(context.csv_io.getvalue().encode('utf-8')))
+        t.addfile(tic, BytesIO(context.csv_io.read().encode('utf-8')))
     archive.seek(0)
     csv2rdf.put_archive('/tmp/', archive)
     csv2rdf.start()
@@ -168,7 +173,7 @@ def step_impl(context, filename, base, path):
     context.csv_io.seek(0)
     context.scraper.set_base_uri(urljoin(base, '/'))
     context.scraper.set_dataset_id(path)
-    quads = context.scraper.dataset.as_quads()
+    quads = context.scraper.as_quads()
     context.schema.create_io(
         context.csv_io,
         context.metadata_io,
@@ -180,26 +185,39 @@ def step_impl(context, filename, base, path):
     )
 
 
-@step("the RDF should pass the Data Cube integrity constraints")
-def step_impl(context):
+def run_ics(group: str, turtle: str, extra_data: List[str] = ()):
     client = docker.from_env()
-    cube_tests = client.containers.create(
+    files = ['data.ttl']
+    if len(extra_data) > 0:
+        files.extend(extra_data)
+    tests = client.containers.create(
         'gsscogs/gdp-sparql-tests',
-        command=f'sparql-test-runner -t /usr/local/tests/qb -p dsgraph=\'<urn:x-arq:DefaultGraph>\' /tmp/cube.ttl'
+        command=f'''sparql-test-runner -t /usr/local/tests/{group} -p dsgraph='<urn:x-arq:DefaultGraph>' '''
+                f'''{" ".join('/tmp/' + f for f in files)}'''
     )
     archive = BytesIO()
     with TarFile(fileobj=archive, mode='w') as t:
-        ttl = TarInfo('cube.ttl')
-        ttl.size = len(context.turtle)
+        ttl = TarInfo('data.ttl')
+        ttl.size = len(turtle)
         ttl.mtime = time.time()
-        t.addfile(ttl, BytesIO(context.turtle))
+        t.addfile(ttl, BytesIO(turtle))
+        for filename in extra_data:
+            actual_path = Path('features') / 'fixtures' / 'extra' / filename
+            with actual_path.open('rb') as actual_file:
+                extra_file = t.gettarinfo(arcname=filename, fileobj=actual_file)
+                t.addfile(extra_file, actual_file)
     archive.seek(0)
-    cube_tests.put_archive('/tmp/', archive)
-    cube_tests.start()
-    response = cube_tests.wait()
-    sys.stdout.write(cube_tests.logs().decode('utf-8'))
-    # assert_equal(response['StatusCode'], 0)
-    if response['StatusCode'] != 0:
+    tests.put_archive('/tmp/', archive)
+    tests.start()
+    response = tests.wait()
+    sys.stdout.write(tests.logs().decode('utf-8'))
+    return response['StatusCode']
+
+
+@step("the RDF should pass the Data Cube integrity constraints")
+def step_impl(context):
+    result = run_ics('qb', context.turtle)
+    if result != 0:
         logging.warning("Some ICs failed.")
 
 
@@ -224,7 +242,9 @@ def step_impl(context):
     context.json_io.seek(0)
     context.csvw.set_mapping(json.load(context.json_io))
     if hasattr(context, 'registry'):
-        context.csvw.set_registry(context.registry)
+        context.csvw.set_registry(URI(context.registry))
+    if hasattr(context, 'dataset_uri'):
+        context.csvw.set_dataset_uri(context.dataset_uri)
     context.metadata_io = StringIO()
     context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
     context.csvw.write(context.metadata_io)
@@ -233,3 +253,22 @@ def step_impl(context):
 @step("a registry at '{endpoint}'")
 def step_impl(context, endpoint):
     context.registry = endpoint
+
+
+@step("a dataset URI '{uri}'")
+def step_impl(context, uri):
+    context.dataset_uri = uri
+
+
+@step("the RDF should pass the PMD4 constraints")
+def step_impl(context):
+    if hasattr(context, 'extra_files') and len(context.extra_files) > 0:
+        result = run_ics('pmd/pmd4', context.turtle, context.extra_files)
+    else:
+        result = run_ics('pmd/pmd4', context.turtle)
+    assert_equal(result, 0)
+
+
+@step('I add extra RDF files "{files}"')
+def step_impl(context, files):
+    context.extra_files = [f.strip() for f in files.split(',')]

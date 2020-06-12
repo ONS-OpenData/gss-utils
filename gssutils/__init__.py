@@ -11,7 +11,8 @@ from gssutils.csvw.t2q import CSVWMetadata
 from gssutils.csvw.mapping import CSVWMapping
 from databaker.framework import *
 import pandas as pd
-from gssutils.metadata import Excel, ODS, THEME
+from gssutils.metadata.mimetype import Excel, ODS
+from gssutils.metadata import THEME
 from pathlib import Path
 
 

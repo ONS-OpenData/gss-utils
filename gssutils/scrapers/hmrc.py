@@ -1,10 +1,14 @@
 import logging
 import mimetypes
-import string
 from urllib.parse import urljoin
-from gssutils.metadata import Dataset, Excel, Distribution, PMDDataset, GOV, THEME
+
 from dateutil.parser import parse
 from lxml import html
+
+from gssutils.metadata import GOV, THEME
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
+from gssutils.metadata.pmdcat import Dataset
 
 
 def scrape_pages(scraper, tree):
@@ -25,7 +29,7 @@ def scrape_pages(scraper, tree):
                 columns = [t.strip() for t in row.xpath("th/text()")]
                 header = False
             else:
-                dataset = PMDDataset(scraper.uri)
+                dataset = Dataset(scraper.uri)
                 dataset.publisher = scraper.catalog.publisher
                 dataset.license = scraper.catalog.license
                 dataset.distribution = []
@@ -99,7 +103,7 @@ def scrape_ots_reports(scraper, tree):
                             continue
                         title = links[0].text.strip().strip(u'\u200B\ufeff')
                         if title not in dataset_titles:
-                            dataset = PMDDataset(scraper.uri)
+                            dataset = Dataset(scraper.uri)
                             if publication_date is not None:
                                 dataset.issued = publication_date
                             dataset.publisher = scraper.catalog.publisher

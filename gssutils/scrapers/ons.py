@@ -2,7 +2,8 @@ import logging
 
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, Excel, ODS, CSV, ExcelOpenXML, CSDB
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, CSDB
 
 import mimetypes
 
@@ -29,7 +30,7 @@ def scrape(scraper, tree):
     r = scraper.session.get(scraper.uri + "/data")
     if r.status_code != 200:
         raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
-                         " returned was '{}.".format(uri+"/data", r.status_code))
+                         " returned was '{}.".format(scraper.Øuri+"/data", r.status_code))
     try:
         landing_page = r.json()
     except Exception as e:
@@ -70,7 +71,7 @@ def scrape(scraper, tree):
 
     # not all page types have contact field so we need another catch
     # if the page does, get the email address as contact info.
-    # stick "mailto:" on the start because metadata.py expects it.
+    # stick "mailto:" on the start because metadata expects it.
     try:
         contact_dict = landing_page["description"]["contact"]
         scraper.dataset.contactPoint = "mailto:"+contact_dict["email"].strip()
@@ -227,7 +228,6 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 # inherit metadata from the dataset where it hasn't explicitly been changed
                 this_distribution.title = scraper.dataset.title
                 this_distribution.description = scraper.dataset.description
-                this_distribution.contactPoint = scraper.dataset.contactPoint
 
                 logging.debug("Created distribution for download '{}'.".format(download_url))
                 scraper.distributions.append(this_distribution)

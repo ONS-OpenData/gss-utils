@@ -1,0 +1,30 @@
+@prefix pmdcat: <http://publishmydata.com/pmdcat#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://gss-data.org.uk/def/concept-scheme/flow-directions>
+        a       pmdcat:ConceptScheme .
+
+<http://gss-data.org.uk/vocabs/flow-directions-catalog-record>
+        a                     dcat:CatalogRecord ;
+        rdfs:label            "Flow Directions Catalog Record" ;
+        pmdcat:metadataGraph  <http://gss-data.org.uk/graph/vocab/flow-directions-metadata> ;
+        dct:issued            "2020-05-05T11:27:48.900+01:00"^^xsd:dateTime ;
+        dct:modified          "2020-05-05T11:31:58.858+01:00"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <http://gss-data.org.uk/vocabs/flow-directions> .
+
+<http://gss-data.org.uk/vocabs/flow-directions>
+        a                       pmdcat:Dataset ;
+        rdfs:label              "Flow Directions"@en ;
+        pmdcat:datasetContents  <http://gss-data.org.uk/def/concept-scheme/flow-directions> ;
+        pmdcat:graph            <http://gss-data.org.uk/graph/vocab/flow-directions> ;
+        dct:created             "2020-05-04T09:38:40.913Z"^^xsd:dateTime , "2020-05-04T09:35:56.868Z"^^xsd:dateTime , "2020-05-04T09:04:26.996Z"^^xsd:dateTime , "2020-05-04T10:11:52.929Z"^^xsd:dateTime , "2020-05-04T08:50:05.834Z"^^xsd:dateTime , "2020-05-04T08:44:58.224Z"^^xsd:dateTime , "2020-05-04T09:32:17.998Z"^^xsd:dateTime , "2020-05-04T09:43:56.682Z"^^xsd:dateTime , "2020-05-04T09:51:45.989Z"^^xsd:dateTime , "2020-05-04T08:48:05.441Z"^^xsd:dateTime , "2020-05-04T09:47:35.276Z"^^xsd:dateTime , "2020-05-04T08:25:17.765Z"^^xsd:dateTime , "2020-05-04T08:39:01.385Z"^^xsd:dateTime , "2020-05-04T08:30:11.628Z"^^xsd:dateTime , "2020-05-04T09:34:18.617Z"^^xsd:dateTime , "2020-05-04T08:37:00.104Z"^^xsd:dateTime , "2020-05-04T09:42:17.458Z"^^xsd:dateTime , "2020-05-04T09:02:27.362Z"^^xsd:dateTime , "2020-05-04T09:24:52.521Z"^^xsd:dateTime , "2020-05-04T08:46:05.507Z"^^xsd:dateTime , "2020-05-04T09:49:56.543Z"^^xsd:dateTime ;
+        dct:issued              "2020-05-05T11:50:59.625+01:00"^^xsd:dateTime ;
+        dct:modified            "2020-05-05T11:47:10.709+01:00"^^xsd:dateTime ;
+        dct:title               "Flow Directions"@en .
+
+<http://gss-data.org.uk/catalog/vocabularies>
+        dcat:record  <http://gss-data.org.uk/vocabs/flow-directions-catalog-record> .

@@ -4,7 +4,8 @@ from urllib.parse import urljoin
 
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, GOV
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
 
 
 def scrape(scraper, tree):

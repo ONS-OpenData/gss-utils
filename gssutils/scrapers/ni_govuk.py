@@ -1,8 +1,11 @@
 import mimetypes
+import re
 
 from dateutil.parser import parse
-from gssutils.metadata import Distribution, PDF, Excel, GOV
-import re
+
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel, PDF
 
 type_size_re = re.compile(r"([^\s]*)\s+\(([0-9\.]+)\s+([KMG]B)")
 

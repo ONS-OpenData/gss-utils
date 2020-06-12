@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from behave import *
 from nose.tools import *
 from rdflib.compare import to_isomorphic, graph_diff
@@ -27,11 +29,10 @@ def step_impl(context):
     context.trig = context.scraper.generate_trig()
 
 
-@then("the TriG should contain")
-def step_impl(context):
-    g1 = to_isomorphic(Graph().parse(format='trig', data=context.trig))
-    g2 = to_isomorphic(Graph().parse(format='trig', data=context.text))
-    in_both, only_in_first, only_in_second = graph_diff(g1, g2)
+def test_graph_diff(g1, g2):
+    in_both, only_in_first, only_in_second = graph_diff(to_isomorphic(g1), to_isomorphic(g2))
+    only_in_first.namespace_manager = g1.namespace_manager
+    only_in_second.namespace_manager = g2.namespace_manager
     ok_(len(only_in_second) == 0, f"""
 <<<
 {only_in_first.serialize(format='n3').decode('utf-8')}
@@ -39,20 +40,22 @@ def step_impl(context):
 {only_in_second.serialize(format='n3').decode('utf-8')}
 >>>
 """)
+
+
+@then("the TriG should contain")
+def step_impl(context):
+    test_graph_diff(
+        Graph().parse(format='trig', data=context.trig),
+        Graph().parse(format='trig', data=context.text)
+    )
 
 
 @step("the RDF should contain")
 def step_impl(context):
-    g1 = to_isomorphic(Graph().parse(format='turtle', data=context.turtle))
-    g2 = to_isomorphic(Graph().parse(format='turtle', data=context.text))
-    in_both, only_in_first, only_in_second = graph_diff(g1, g2)
-    ok_(len(only_in_second) == 0, f"""
-<<<
-{only_in_first.serialize(format='n3').decode('utf-8')}
-===
-{only_in_second.serialize(format='n3').decode('utf-8')}
->>>
-""")
+    test_graph_diff(
+        Graph().parse(format='turtle', data=context.turtle),
+        Graph().parse(format='turtle', data=context.text)
+    )
 
 
 @step("set the family to '{family}'")
@@ -79,9 +82,9 @@ def step_impl(context, license):
     context.scraper.dataset.license = license_url
 
 
-@then("the dataset URI should be <{uri}>")
+@then("the dataset contents URI should be <{uri}>")
 def step_impl(context, uri):
-    eq_(str(context.scraper.dataset.uri), uri)
+    eq_(str(context.scraper.dataset.datasetContents.uri), uri)
 
 
 @step("the metadata graph should be <{uri}>")
@@ -103,3 +106,12 @@ def step_impl(context, comment):
 @then('the modified date should be around "{date}"')
 def step_impl(context, date):
     eq_(context.scraper.dataset.modified.date(), datetime.fromisoformat(date).date())
+
+
+@then('the TriG should contain triples given by "{turtle_file}"')
+def step_impl(context, turtle_file):
+    with open(Path('features') / 'fixtures' / turtle_file) as f:
+        test_graph_diff(
+            Graph().parse(format='trig', data=context.trig),
+            Graph().parse(format='turtle', file=f)
+        )

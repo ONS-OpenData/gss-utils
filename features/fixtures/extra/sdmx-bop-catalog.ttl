@@ -1,0 +1,29 @@
+@prefix pmdcat: <http://publishmydata.com/pmdcat#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area>
+        a       pmdcat:ConceptScheme .
+
+<http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area#record>
+        a                     dcat:CatalogRecord ;
+        rdfs:label            "Balance of Payments Vademacum Areas Catalog Record" ;
+        pmdcat:metadataGraph  <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area#metadata> ;
+        dct:issued            "2020-05-05T11:27:48.900+01:00"^^xsd:dateTime ;
+        dct:modified          "2020-05-05T11:31:58.858+01:00"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area#dataset> .
+
+<http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area#dataset>
+        a                       pmdcat:Dataset ;
+        rdfs:label              "Balance of Payments Vademacum Areas"@en ;
+        pmdcat:datasetContents  <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area> ;
+        pmdcat:graph            <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area> ;
+        dct:issued              "2020-05-05T11:50:59.625+01:00"^^xsd:dateTime ;
+        dct:modified            "2020-05-05T11:47:10.709+01:00"^^xsd:dateTime ;
+        dct:title               "Balance of Payments Vademacum Areas"@en .
+
+<http://gss-data.org.uk/catalog/vocabularies>
+        dcat:record  <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area#record> .

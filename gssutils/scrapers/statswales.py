@@ -1,4 +1,3 @@
-import urllib
 from io import StringIO
 from urllib.parse import urlparse
 
@@ -7,7 +6,9 @@ from dateutil.parser import parse
 from rdflib import RDF, URIRef
 from rdflib.namespace import DCTERMS
 
-from gssutils.metadata import DCAT, Distribution, GOV
+import gssutils.metadata.dcat
+from gssutils.metadata import DCAT, GOV
+from gssutils.metadata.dcat import Distribution
 
 
 def scrape(scraper, tree):
