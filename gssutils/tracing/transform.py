@@ -28,9 +28,16 @@ class CubeSegment(object):
         self.obs = None
 
     def add_column(self, column):
-        column = column.replace(" ", "_")
-        self.columns[column] = Column(column)
-        setattr(TransformTrace, column, self.columns[column])
+        
+        alias = None
+        if isinstance(column, dict):
+            column, alias = next(iter(column.items()))
+            
+        if alias is None:
+            alias = column.replace("-", "_").replace(" ", "_")
+            
+        self.columns[alias] = Column(column)
+        setattr(TransformTrace, alias, self.columns[alias])
 
 
 class Column(object):
@@ -40,7 +47,8 @@ class Column(object):
     """
 
     def __init__(self, column):
-        self.label = column.replace("_", " ")
+        
+        self.label = column
         self.comments = []
         self.var = None
 
