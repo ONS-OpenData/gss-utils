@@ -66,4 +66,6 @@ class Dataset(dcat.Dataset):
             # TODO: remove the following once we distinguish between the modification datetime of a dataset
             #       in PMD and the last modification datetime of the dataset by the publisher.
             value = datetime.now(timezone.utc).astimezone()
+        elif key == 'datasetContents':
+            value._graph = self._graph
         super().__setattr__(key, value)

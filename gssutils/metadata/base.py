@@ -3,7 +3,8 @@ import html
 from enum import Enum
 from inspect import getmro
 
-from rdflib import RDFS, Literal, BNode, URIRef, Dataset as Quads, RDF, Graph, Dataset
+from rdflib import RDFS, Literal, BNode, URIRef, RDF
+from rdflib.term import Identifier
 
 from gssutils.metadata import namespaces
 
@@ -23,8 +24,8 @@ class Metadata:
     }
 
     def __init__(self):
-        self._uri = BNode()
-        self._graph = BNode()
+        self._uri: Identifier = BNode()
+        self._graph: Identifier = BNode()
 
     @property
     def uri(self):

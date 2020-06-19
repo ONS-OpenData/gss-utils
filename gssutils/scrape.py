@@ -17,7 +17,7 @@ from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
 from gssutils.metadata import namespaces, dcat, pmdcat, mimetype
-from gssutils.utils import pathify
+from gssutils.utils import pathify, ensure_list
 
 
 class BiggerSerializer(serialize.Serializer):
@@ -356,6 +356,9 @@ class Scraper:
         catalog.record.issued = self.dataset.issued
         catalog.record.modified = self.dataset.modified
         catalog.record.primaryTopic = self.dataset
+        # need to ensure that all the pointed to things are in the same graph
+        for dist in ensure_list(catalog.record.primaryTopic.distribution):
+            dist.set_graph(metadata_graph)
         self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
         self.dataset.datasetContents = pmdcat.DataCube()
         self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
