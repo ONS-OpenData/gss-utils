@@ -357,8 +357,9 @@ class Scraper:
         catalog.record.modified = self.dataset.modified
         catalog.record.primaryTopic = self.dataset
         # need to ensure that all the pointed to things are in the same graph
-        for dist in ensure_list(catalog.record.primaryTopic.distribution):
-            dist.set_graph(metadata_graph)
+        if hasattr(catalog.record.primaryTopic, 'distribution'):
+            for dist in ensure_list(catalog.record.primaryTopic.distribution):
+                dist.set_graph(metadata_graph)
         self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
         self.dataset.datasetContents = pmdcat.DataCube()
         self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
