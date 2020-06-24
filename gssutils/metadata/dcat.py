@@ -54,6 +54,15 @@ class Dataset(Resource):
         'wasGeneratedBy': (PROV.wasGeneratedBy, Status.optional, URIRef)
     })
 
+    def __setattr__(self, key, value):
+        if key == 'distribution':
+            if type(value) == list:
+                for d in value:
+                    d._graph = self._graph
+            else:
+                value._graph = self._graph
+        super().__setattr__(key, value)
+
 
 class Catalog(Dataset):
     _type = DCAT.Catalog
@@ -120,6 +129,11 @@ class Distribution(Metadata):
     def __init__(self, scraper):
         super().__init__()
         self._session = scraper.session
+
+    def __setattr__(self, key, value):
+        if key == 'downloadURL':
+            self._uri = URIRef(value)
+        super().__setattr__(key, value)
 
     def open(self):
         stream = self._session.get(self.downloadURL, stream=True).raw

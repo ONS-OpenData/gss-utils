@@ -10,6 +10,7 @@ from gssutils.refdata import *
 from gssutils.cube import *
 from gssutils.csvw.t2q import CSVWMetadata
 from gssutils.csvw.mapping import CSVWMapping
+from gssutils.csvw.codelists import CSVCodelists
 from databaker.framework import *
 import pandas as pd
 from gssutils.metadata.mimetype import Excel, ODS
