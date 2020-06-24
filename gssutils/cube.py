@@ -32,7 +32,8 @@ class Cubes(object):
         is_multiCube = False if len(self.cubes) < 2 else True
         self.cubes.append(Cube(distribution, dataframe, title, self.meta_dict, is_multiCube))
             
-    def output_all(self, with_transform=True):
+    def output_all(self, with_transform=False, mapping=None, base_url=None, base_path=None, 
+                                dataset_metadata=None, with_external=None):
         
         if len(self.cubes) == 0:
             raise Exception("Please add at least one datacube with '.add_cube' before "
@@ -46,9 +47,9 @@ class Cubes(object):
         for process_order, cube in enumerate(self.cubes):
             try:
                 cube._output(process_order, self.ref_path, self.destination_folder, is_multiCube, 
-                            with_transform)
+                            with_transform, mapping, base_url, base_path, dataset_metadata, with_external)
             except Exception as e:
-                raise Exception("Exception encountered while processing datacube {}" \
+                raise Exception("Exception encountered while processing datacube '{}'." \
                                .format(cube.title)) from e
         self.has_ran = True
                           
@@ -73,11 +74,7 @@ class Cube(object):
         # ---- Trig files ----:
         # We need to generate the trig now in case the selected distribution changes,
         # but we don't know yet if it's a single datacube or a part of a list of datacubes
-        # so for the very first run we'll generate a singleton trig as well.
-        
-        # TODO - when mapping comes in we'll be storing the data that -would- populate a
-        # trig (for padding the csvw) rather than generating a .trig() directly.
-        
+        # so for the very first one we'll generate a singleton trig as well.
         if not is_multiCube:
             # The trig should this script generate a single output
             self.singleton_trig = scraper.generate_trig()
@@ -89,22 +86,23 @@ class Cube(object):
         
             
     def _check_add_attribute(self, attr_name, meta_dict):
-        if not hasattr(self.scraper.dataset, attr_name):
+        if not hasattr(self.scraper, attr_name):
             
             try_dict = True
             if self.scraper.seed is not None:
                 if attr_name in self.scraper.seed.keys():
-                    self.scraper.dataset.__setattr__(attr_name, self.scraper.seed[attr_name])
+                    self.scraper.__setattr__(attr_name, self.scraper.seed[attr_name])
                     try_dict = False
                     
             if try_dict and attr_name in meta_dict.keys():
-                self.scraper.dataset.__setattr__(attr_name, meta_dict[attr_name])
+                self.scraper.__setattr__(attr_name, meta_dict[attr_name])
             else:
                 raise MetadataError(f"A '{attr_name}' attribute is required and is not present " 
                                 "in the seed and has not been passed in at run time")
         
 
-    def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform):
+    def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform,
+                                mapping, base_url, base_path, dataset_metadata, with_external):
         
         self.process_order = process_order
         
@@ -122,13 +120,8 @@ class Cube(object):
         with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
             metadata.write(trig_to_use)
 
-        # Using table2cube
-        if not with_transform:
-            schema = CSVWMetadata(ref_path)
-            schema.create(destination_folder / f'{pathified_title}.csv', destination_folder / \
-                          f'{pathified_title}.csv-schema.json')
+        schema = CSVWMetadata(ref_path)
+        schema.create(destination_folder / f'{pathified_title}.csv', destination_folder / \
+                          f'{pathified_title}.csv-schema.json', with_transform, mapping,
+                          base_url, base_path, dataset_metadata, with_external)
         
-        # Using csv2rdf
-        else:
-            raise NotImplementedError("Awaiting pending change of of approach RE mapping files for RDF.")
-            
