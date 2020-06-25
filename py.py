@@ -164,9 +164,7 @@ cubes = Cubes("https://gss-cogs.github.io/family-trade/reference/",
 cubes.add_cube(scraper, df, "The title of this dataset")
 
 # end of script
-cubes.output_all(with_transform=True,
-                base_url="http://gss-data.org.uk", 
-                base_path="HERELLY")
+cubes.output_all(with_transform=True)
 
 
 
