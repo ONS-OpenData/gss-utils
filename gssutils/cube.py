@@ -6,17 +6,19 @@ from os import environ
 from gssutils.scrape import MetadataError
 from gssutils.utils import pathify
 from gssutils.csvw.t2q import CSVWMetadata
+from gssutils.csvw.codelists import generate_codelist_rdf
 
 
 class Cubes(object):
     """
     A class representating multiple datacubes
     """
-    def __init__(self, ref_path, out_path="out", meta_dict={}):
+    def __init__(self, ref_path=None, out_path="out", meta_dict={}, not_a_codelist=[]):
     
         self.ref_path = ref_path
         self.destination_folder = Path(out_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
+        self.not_a_codelist = not_a_codelist
         
         self.cubes = []
         self.has_ran = False
@@ -53,15 +55,48 @@ class Cubes(object):
                                .format(cube.title)) from e
         self.has_ran = True
                           
-                          
+
+class Codelist(object):
+    """
+    A class representing the codelist represnting the codes within a single column of our
+    csv dataset. 
+    """
+
+    def __init__(self, column_label, destination_folder):
+        self.column_label = column_label
+        self.destination_folder = destination_folder
+
+    def _build_default_codelist(self, unique_values):
+        
+        # just in case
+        if len(set(unique_value)) != len(unique_values):
+            raise ValueError("Aborting. You")
+
+        cl = {
+            "Label" [x for x in unique_values],
+            "Notation": [pathify(x) for x in unique_values],
+            "Parent Notation": [""*len(unique_values)],
+            "Sort Priority": [""*len(unique_values)],
+            "Description": [""*len(unique_values)]
+        }
+        self.df = pd.DataFrame().from_dict(cl)
+
+    def output_codelist(self, df):
+        if self.df is None:
+            self.df = self._build_default_codelist(df[self.columns_label])
+        self.df.to_csv(self.destination_folder / 
+                        "{}.csv".format(pathify(self.column_label)))
+
+
 class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
-    def __init__(self, scraper, dataframe, title, meta_dict, is_multiCube):
+    def __init__(self, scraper, dataframe, title, meta_dict, is_multiCube, codelists={}):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
+        self.codelists = codelists
 
         # We need to track the sequence the cubes are processsed in, this allows 
         # us to confirm correct namespacing
@@ -117,6 +152,14 @@ class Cube(object):
         
         self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
 
+        # drop anything that doesnt need codelistifying
+        for col in ["Value"]:
+            self.df = self.df.drop(col, axis=1)
+        for col in df.columns.values:
+            if col 
+        generate_codelist_rdf(pathify(self.scraper.dataset.title), self.df, base_url, 
+                                destination_folder)
+
         with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
             metadata.write(trig_to_use)
 
@@ -124,4 +167,4 @@ class Cube(object):
         schema.create(destination_folder / f'{pathified_title}.csv', destination_folder / \
                           f'{pathified_title}.csv-schema.json', with_transform, mapping,
                           base_url, base_path, dataset_metadata, with_external)
-        
+
