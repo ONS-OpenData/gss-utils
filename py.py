@@ -159,7 +159,8 @@ for letter in "ABCDEFGHIJK":
 # note - need to set family and theme where we don't have an info.json with yht info
 cubes = Cubes("https://gss-cogs.github.io/family-trade/reference/",
               meta_dict={"family": "cheese", "theme":"bleh"})
-    
+    # TODO - make it so that ref argument isn't needed
+
 # add cubes as you make them (whereever you'd usually do .to_csv() etc)
 cubes.add_cube(scraper, df, "The title of this dataset")
 
