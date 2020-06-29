@@ -186,6 +186,18 @@ class CSVWMapping:
                         rdfs_label=name
                     )
                 ))
+        self._columns["virt_dataset"] = Column(
+            name="virt_dataset",
+            virtual=True,
+            propertyUrl=URI("qb:dataSet"),
+            valueUrl=URI(self.join_dataset_uri("#dataset"))
+        )
+        self._columns["virt_type"] = Column(
+            name="virt_type",
+            virtual=True,
+            propertyUrl=URI("rdf:type"),
+            valueUrl=URI("qb:Observation")
+        )
         self._validate()
         return {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
