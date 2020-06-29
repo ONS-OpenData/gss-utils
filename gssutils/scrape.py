@@ -362,7 +362,7 @@ class Scraper:
                 dist.set_graph(metadata_graph)
         self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
         self.dataset.datasetContents = pmdcat.DataCube()
-        self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}')
+        self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}#dataset')
         self.dataset.sparqlEndpoint = urljoin(self._base_uri, '/sparql')
         quads = RDFDataset()
         quads.namespace_manager = namespaces

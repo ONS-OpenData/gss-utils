@@ -34,7 +34,7 @@ Feature: PMD metadata
         gdp:family gdp:trade ;
         dcat:contactPoint <mailto:fdi@ons.gov.uk> ;
         pmdcat:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
-        pmdcat:datasetContents <http://gss-data.org.uk/data/foreign-direct-investment-inward> ;
+        pmdcat:datasetContents <http://gss-data.org.uk/data/foreign-direct-investment-inward#dataset> ;
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:issued "2019-12-03"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
@@ -50,7 +50,7 @@ Feature: PMD metadata
       Given the 'JOB_NAME' environment variable is 'GSS_data/Trade/ONS-FDI-inward'
       And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
-      Then the dataset contents URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward>
+      Then the dataset contents URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward#dataset>
       And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward>
       And the modified date should be quite recent
 
