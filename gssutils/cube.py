@@ -7,7 +7,8 @@ import pandas as pd
 from gssutils.scrape import MetadataError
 from gssutils.utils import pathify
 from gssutils.csvw.t2q import CSVWMetadata
-from gssutils.csvw.codelists import generate_codelist_rdf
+from gssutils.csvw.table import Table, TableSchema, Column, Datatype
+
 
 
 class Cubes(object):
@@ -137,7 +138,26 @@ class Cube(object):
         """
         if df is None:
             df = self._build_default_codelist(self.df[column_label])
-        df.to_csv(destination / "{}.csv".format(pathify(column_label)), index=False)
+        df.to_csv(destination / "codelist-{}.csv".format(pathify(column_label)), index=False)
+        self._generate_codelist_schema(destination, df)
+
+
+    def _generate_codelist_schema(self, destination, df):
+        """
+        Given a codelist in the form of a dataframe, generate a codelist schema
+        """
+        columns = []
+        for column in df.columns.values:
+            this_column = Column()
+            Column.required = True
+
+        table_schema = TableSchema(columns=columns)
+
+        schema_path = Path(destination / "codelist-{}.schema-json".format(pathify(column_label)"
+        table = Table(uri=schema_path, tableSchema=table_schema)
+        with open(schema_path, "w") as f:
+            f.write(table)
+
 
     def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform,
                                 mapping, base_url, base_path, dataset_metadata, with_external):
@@ -161,13 +181,12 @@ class Cube(object):
         # output the tody data
         self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
 
-        # generate codelist csvs
+        # generate codelist csvs and schemas
         for col in [x for x in self.df.columns.values if x not in self.ignore_codelists]:
             codelist_df = self.codelists.get(col, None)
             self._output_codelist(col, destination_folder, df=codelist_df)
-            
-        # generate the rdf from codelists
-        #generate_codelist_rdf(pathify(self.scraper.dataset.title), self.df, base_url, 
+
+        generate_codelist_rdf(pathify(self.scraper.dataset.title), self.df, base_url, 
                                 #destination_folder)
 
         with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
