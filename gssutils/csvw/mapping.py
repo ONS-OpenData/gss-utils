@@ -48,10 +48,15 @@ class CSVWMapping:
         return ''.join(part.capitalize() for part in pathify(column_header).split('-'))
 
     def join_dataset_uri(self, relative: str):
+        # treat the dataset URI as an entity that when joined with a fragment, just adds
+        # the fragment, but when joined with a relative path, turns the dataset URI into a container
+        # by adding a / to the end before adding the relative path
         if self._dataset_uri is None:
             return URI(relative)
-        else:
+        elif relative.startswith('#'):
             return URI(urljoin(self._dataset_uri, relative, allow_fragments=True))
+        else:
+            return URI(urljoin(self._dataset_uri + '/', relative, allow_fragments=True))
 
     def set_csv(self, csv_filename: URI):
         with open(csv_filename, newline='', encoding='utf-8') as f:
@@ -221,7 +226,7 @@ class CSVWMapping:
             tableSchema=TableSchema(
                 columns=list(self._columns.values()),
                 primaryKey=self._keys,
-                aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
+                aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys))
             )
         )]
 
