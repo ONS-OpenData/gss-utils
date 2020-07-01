@@ -17,12 +17,12 @@ class Cubes(object):
     """
     A class representating multiple datacubes
     """
-    def __init__(self, info_json, out_path="out", not_a_codelist=[]):
+    def __init__(self, info_json, out_path="out", not_a_codelist=[], base_url="http://gss-data.org.uk"):
     
         with open(info_json, "r") as f:
             self.info = json.load(f)
 
-        # vaidate all the things
+        # TODO - validate all the things
 
         # TODO - add a blank columns to airtable sync
         # for now, add it where missing
@@ -32,13 +32,13 @@ class Cubes(object):
         self.destination_folder = Path(out_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
         self.not_a_codelist = not_a_codelist
-        
+        self.base_url = base_url
         self.cubes = []
         self.has_ran = False
     
     def add_cube(self, distribution, dataframe, title, ignore_codelists=["Value"]):
         is_multiCube = False if len(self.cubes) < 2 else True
-        self.cubes.append(Cube(distribution, dataframe, title, is_multiCube,
+        self.cubes.append(Cube(self.base_url, distribution, dataframe, title, is_multiCube,
                             ignore_codelists))
             
     def output_all(self):
@@ -65,23 +65,28 @@ class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
-    def __init__(self, scraper, dataframe, title, is_multiCube, ignore_codelists, codelists={}):
+    def __init__(self, base_url, scraper, dataframe, title, is_multiCube, ignore_codelists, codelists={}):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
         self.codelists = codelists
         self.ignore_codelists = ignore_codelists
+        self.base_url = base_url
 
         # We need to track the sequence the cubes are processsed in, this allows 
-        # us to confirm correct namespacing
+        # us to confirm correct namespacing via the scraper.generate_trig() method 
         self.process_order = None
             
-        # ---- Trig files ----:
-        # We need to generate the trig now in case the selected distribution changes,
-        # but we don't know yet if it's a single datacube or a part of a list of datacubes
-        # so for the very first one we'll generate a singleton trig as well.
+        """
+        ---- Trig files ----: 
+        TODO - just stick all the metadata in the schema
+
+        Until we get to the above, we need to generate the trig now in case the selected distribution,
+        changes - but - we don't know yet if it's a single datacube or a part of a list of datacubes
+        so for the very first one we'll generate a singleton trig as well.
+        """ 
         if not is_multiCube:
-            # The trig should this script generate a single output
+            # The trig should this transform generate a single output
             self.singleton_trig = scraper.generate_trig()
         
         # The trig for this cube in a multicube:
@@ -96,7 +101,7 @@ class Cube(object):
         mapObj = CSVWMapping()
         mapObj.set_mapping(info_json)
         mapObj.set_csv(destination_folder / f'{pathified_title}.csv')
-        mapObj.set_dataset_uri(pathified_title)
+        mapObj.set_dataset_uri("{}/{}".format(self.base_url, pathified_title))
 
         return mapObj
 
@@ -109,6 +114,7 @@ class Cube(object):
         if len(set(unique_values)) != len(unique_values):
             unique_values = set(unique_values)
 
+        # TODO - ugly
         cl = {
             "Label": [x for x in unique_values],
             "Notation": [pathify(x) for x in unique_values],
@@ -134,24 +140,24 @@ class Cube(object):
             tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
             )
 
-
     def _generate_codelist_schema(self, destination, column_label, df):
         """
         Given a codelist in the form of a dataframe, generate a codelist schema
         """
         columns = []
         for column in df.columns.values:
+            # TODO - somehow
             pass
 
-        # TODO - fugly
+        # TODO - ugly
         table_schema = {
             "url": "codelist-{}-schema.json".format(pathify(column)),
             "columns": columns,
             "rdfs:label": "Code list for {} codelist scheme".format(column),
             "rdf:type": "skos:ConceptScheme",
             "skos:prefLabel": "Code list for {} codelist scheme".format(column),
-            "qb:codelist": "http://gss-data.org.uk/def/concept-scheme/{}/{}" \
-                            .format(pathify(self.title), pathify(column))
+            "qb:codelist": "{}}/def/concept-scheme/{}/{}" \
+                            .format(self.base_url, pathify(self.title), pathify(column))
         }
 
         schema_path = Path(destination / "codelist-{}.schema-json".format(pathify(column_label)))
@@ -177,6 +183,10 @@ class Cube(object):
         # output the tidy data
         self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
 
+        # Output the trig 
+        with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
+            metadata.write(trig_to_use)
+
         # generate codelist csvs, schemas and foreign keys
         additional_tables = []
         foreign_keys = []
@@ -193,9 +203,7 @@ class Cube(object):
                     )
                 )
 
-        with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
-            metadata.write(trig_to_use)
-
+        # Use map class to output schema
         mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
         for additional_table in additional_tables:
             mapObj._external_tables.append(additional_table)
