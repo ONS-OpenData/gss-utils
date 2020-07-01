@@ -6,6 +6,8 @@ import logging
 from os import environ
 import pandas as pd
 
+from rdflib.namespace import SKOS, DCTERMS, RDFS, RDF
+
 from gssutils.scrape import MetadataError
 from gssutils.utils import pathify
 from gssutils.csvw.t2q import CSVWMetadata
@@ -134,35 +136,95 @@ class Cube(object):
         if df is None:
             df = self._build_default_codelist(self.df[column_label])
 
+        # output codelist csv
         df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
+
+        # putput codelist schema
+        self._generate_codelist_schema(column_label, destination_folder, df)
+
+        # return tableschema
         return Table(
             url="codelist-{}.csv".format(pathify(column_label)), 
             tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
             )
 
-    def _generate_codelist_schema(self, destination, column_label, df):
+    def _generate_codelist_schema(self, column_label, destination, df):
         """
         Given a codelist in the form of a dataframe, generate a codelist schema
         """
-        columns = []
-        for column in df.columns.values:
-            # TODO - somehow
-            pass
+
+        # TODO - use a class not random hacky json
+
+        plain_text_name = "{" + "name" + "}"  # because python string interpolation is stupid
+        columns = [
+            {
+                "titles": "Label",
+                "name": "label",
+                "datatype": "string",
+                "required": True,
+                "propertyUrl": RDFS.label
+            },
+            {
+                "titles": "Notation",
+                "name": "notation",
+                "datatype": {
+                    "base": "string",
+                    "format": "^-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*$"
+                    },
+                "required": True,
+                "propertyUrl": SKOS.notation
+            },
+            {
+                "titles": "Parent Notation",
+                "name": "parent_notation",
+                "datatype": {
+                    "base": "string",
+                    "format": "^(-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*|)$"
+                    },
+                "required": False
+            },
+            {
+                "titles": "Sort Priority",
+                "name": "sort",
+                "datatype": "number",
+                "required": False
+            },
+            {
+                "titles": "Description",
+                "name": "description",
+                "datatype": "string",
+                "required": False
+            }
+        ],
 
         # TODO - ugly
         table_schema = {
-            "url": "codelist-{}-schema.json".format(pathify(column)),
+            "url": "codelist-{}-schema.json".format(pathify(column_label)),
             "columns": columns,
-            "rdfs:label": "Code list for {} codelist scheme".format(column),
+            "primaryKey": ["notation","parent_notation"],
+            "rdfs:label": "Code list for {} codelist schema".format(column_label),
             "rdf:type": "skos:ConceptScheme",
-            "skos:prefLabel": "Code list for {} codelist scheme".format(column),
-            "qb:codelist": "{}}/def/concept-scheme/{}/{}" \
-                            .format(self.base_url, pathify(self.title), pathify(column))
+            "skos:prefLabel": "Code list for {} codelist schema".format(column_label),
+            "qb:codelist": "{}/def/concept-scheme/{}/{}" \
+                            .format(self.base_url, pathify(self.title), pathify(column_label))
         }
 
-        schema_path = Path(destination / "codelist-{}.schema-json".format(pathify(column_label)))
+        about_end = "{notation" + "}/{parent_notation" + "}"
+        schema = {
+            "@context": [
+                "http://www.w3.org/ns/csvw",
+                {
+                "@language": "en"
+                }],
+            "tables": [table_schema],
+            "aboutUrl": "{}/def/concept-scheme/{}/{}/{}" \
+                            .format(self.base_url, pathify(self.title), 
+                            pathify(column_label), about_end)
+        }
+
+        schema_path = Path(destination / "codelist-{}.schema.json".format(pathify(column_label)))
         with open(schema_path, "w") as f:
-            f.write(json.dumps(table_schema))
+            f.write(json.dumps(schema, indent=2))
 
 
     def _output(self, process_order, destination_folder, is_multiCube, info_json):
