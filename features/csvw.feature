@@ -21,12 +21,29 @@ Feature: Create CSVW metadata
       @prefix sdmx-c: <http://purl.org/linked-data/sdmx/2009/code#> .
       @prefix gss-dim: <http://gss-data.org.uk/def/dimension/> .
       @prefix gss-meas: <http://gss-data.org.uk/def/measure/> .
+      @prefix cl_area: <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/> .
 
       <#dataset> a qb:DataSet ;
-              qb:structure <#structure> .
+        qb:structure <#structure> .
 
       <#structure> a qb:DataStructureDefinition ;
-                qb:component <#component/commodity>, <#component/country> .
+        qb:component <#component/direction>, <#component/industry>, <#component/marker>, <#component/measure_type>,
+                     <#component/commodity>, <#component/country>, <#component/value>, <#component/year> .
+
+      <#component/direction> a qb:ComponentSpecification ;
+        qb:dimension gss-dim:flow-directions .
+
+      <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity/2008/D5/46/IM/T> a qb:Observation ;
+          <#dimension/commodity> <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/commodity/T> ;
+          <#dimension/industry> <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/industry/46> ;
+          gss-dim:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/IM> ;
+          gss-dim:ons-partner-geography <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/D5> ;
+          sdmx-a:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp> ;
+          sdmx-d:refPeriod <http://reference.data.gov.uk/id/year/2008> ;
+          qb:measureType gss-meas:gbp-total ;
+          gss-meas:gbp-total 4.9837e+04 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset> ;
+      .
     """
 
   Scenario: Data Cube, metadata and reference data for PMD4
