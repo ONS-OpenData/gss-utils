@@ -12,7 +12,7 @@ from gssutils import pathify
 from gssutils.csvw.dsd import DataSet, DimensionComponent, MeasureComponent, AttributeComponent, Component, \
     DimensionProperty, DSD, Resource, MeasureProperty, AttributeProperty
 from gssutils.csvw.namespaces import prefix_map, URI
-from gssutils.csvw.table import Column, TableSchema, Table
+from gssutils.csvw.table import Column, TableSchema, Table, ForeignKey
 
 default_map = {
     "Value": {
@@ -38,6 +38,7 @@ class CSVWMapping:
         self._keys: List[str] = []
         self._metadata_filename: Optional[URI] = None
         self._dataset_uri: Optional[URI] = None
+        self._foreign_keys: List[ForeignKey] = None
 
     @staticmethod
     def namify(column_header: str):
@@ -70,6 +71,11 @@ class CSVWMapping:
             self._mapping = mapping['transform']['columns']
         else:
             logging.error(f'No column mapping found.')
+
+    def set_additional_foreign_key(self, foreign_key: ForeignKey):
+        if self._foreign_keys is None:
+            self._foreign_keys = []
+        self._foreign_keys.append(foreign_key)
 
     def set_dataset_uri(self, uri: URI):
         self._dataset_uri = uri
@@ -216,14 +222,28 @@ class CSVWMapping:
         table_uri = URI(Path(self._csv_filename).name)  # default is that metadata is filename + '-metadata.json'
         if self._metadata_filename is not None:
             table_uri = URI(self._csv_filename.relative_to(self._metadata_filename.parent))
-        return self._external_tables + [Table(
-            url=table_uri,
-            tableSchema=TableSchema(
-                columns=list(self._columns.values()),
-                primaryKey=self._keys,
-                aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
+            
+        # TODO - dry
+        if self._foreign_keys is not None:
+            main_table = Table(
+                url=table_uri,
+                tableSchema=TableSchema(
+                    columns=list(self._columns.values()),
+                    primaryKey=self._keys,
+                    aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}"),
+                    foreignKeys=self._foreign_keys
+                )
             )
-        )]
+        else:
+            main_table = Table(
+                url=table_uri,
+                tableSchema=TableSchema(
+                    columns=list(self._columns.values()),
+                    primaryKey=self._keys,
+                    aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
+                )
+            )
+        return self._external_tables + [main_table]
 
     @staticmethod
     def _as_plain_obj(o):

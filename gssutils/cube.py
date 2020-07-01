@@ -11,13 +11,13 @@ from gssutils.utils import pathify
 from gssutils.csvw.t2q import CSVWMetadata
 
 from gssutils.csvw.mapping import CSVWMapping
-
+from gssutils.csvw.table import Table, ForeignKey, ColumnReference
 
 class Cubes(object):
     """
     A class representating multiple datacubes
     """
-    def __init__(self, info_json, ref_path=None, out_path="out", not_a_codelist=[]):
+    def __init__(self, info_json, out_path="out", not_a_codelist=[]):
     
         with open(info_json, "r") as f:
             self.info = json.load(f)
@@ -29,7 +29,6 @@ class Cubes(object):
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = []
 
-        self.ref_path = ref_path
         self.destination_folder = Path(out_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
         self.not_a_codelist = not_a_codelist
@@ -56,7 +55,7 @@ class Cubes(object):
         is_multiCube = False if len(self.cubes) < 2 else True
         for process_order, cube in enumerate(self.cubes):
             try:
-                cube._output(process_order, self.ref_path, self.destination_folder, is_multiCube, 
+                cube._output(process_order, self.destination_folder, is_multiCube, 
                             with_transform, mapping, base_url, base_path, dataset_metadata, with_external,
                             self.info)
             except Exception as e:
@@ -124,15 +123,19 @@ class Cube(object):
 
         return df
 
-    def _output_codelist(self, column_label, destination, df=None):
+    def _generate_codelist_and_schema(self, column_label, destination_folder, df=None):
         """
         Output a given codelists, using the user provided one by preference, but fall
         through to a default one where its not.
         """
         if df is None:
             df = self._build_default_codelist(self.df[column_label])
-        df.to_csv(destination / "codelist-{}.csv".format(pathify(column_label)), index=False)
-        self._generate_codelist_schema(destination, column_label, df)
+
+        df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
+        return Table(
+            url="codelist-{}.csv".format(pathify(column_label)), 
+            tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
+            )
 
 
     def _generate_codelist_schema(self, destination, column_label, df):
@@ -159,36 +162,48 @@ class Cube(object):
             f.write(json.dumps(table_schema))
 
 
-    def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform,
+    def _output(self, process_order, destination_folder, is_multiCube, with_transform,
                                 mapping, base_url, base_path, dataset_metadata, with_external, info_json):
         """
         Generates the output for a single 'Cube' held in the 'Cubes' object
         """
-        base_path = pathify(self.title)
+        pathified_title = pathify(self.title)
         
         self.process_order = process_order
         
         # sort out which trig snapshot to use
-        pathified_title = None
         trig_to_use = None 
         if not is_multiCube:
-            pathified_title = "observations"
             trig_to_use = self.singleton_trig
         else:
-            pathified_title = pathify(self.scraper.dataset.title)
             trig_to_use = self.multi_trig
         
         # output the tidy data
         self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
 
-        # generate codelist csvs and schemas
-        for col in [x for x in self.df.columns.values if x not in self.ignore_codelists]:
-            codelist_df = self.codelists.get(col, None)
-            self._output_codelist(col, destination_folder, df=codelist_df)
+        # generate codelist csvs, schemas and foreign keys
+        additional_tables = []
+        foreign_keys = []
+        for column_label in [x for x in self.df.columns.values if x not in self.ignore_codelists]:
+            codelist_df = self.codelists.get(column_label, None)
+            additional_tables.append(self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
+            foreign_keys.append(
+                ForeignKey(
+                    columnReference=pathify(column_label),
+                    reference=ColumnReference(
+                        resource="codelist-{}.csv".format(pathify(column_label)),
+                        columnReference="notation"
+                        )
+                    )
+                )
 
         with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
             metadata.write(trig_to_use)
 
         mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
+        for additional_table in additional_tables:
+            mapObj._external_tables.append(additional_table)
+        for foreign_key in foreign_keys:
+            mapObj.set_additional_foreign_key(foreign_key)
         mapObj.write(destination_folder / f'{pathified_title}.csv-schema.json')
 
