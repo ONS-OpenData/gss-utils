@@ -6,13 +6,8 @@ import json
 from gssutils.metadata import THEME
 from os import environ
 
-with open("info.json") as f:
-    info = json.load(f)
 
-scraper = Scraper("https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/balanceofpaymentsstatisticalbulletintables")
-
-print(type(scraper))
-scraper
+scraper = Scraper(seed="info.json")
 
 
 # %%
@@ -152,13 +147,12 @@ for letter in "ABCDEFGHIJK":
     destinationFolder = Path('out')
     destinationFolder.mkdir(exist_ok=True, parents=True)
 
-    TITLE = info["title"] + ": " + table_name_lookup[tab.name[-1]]
+    TITLE = "Table f title"
 
 
 # just once, early in script
 # note - need to set family and theme where we don't have an info.json with yht info
-cubes = Cubes("https://gss-cogs.github.io/family-trade/reference/",
-              meta_dict={"family": "cheese", "theme":"bleh"})
+cubes = Cubes("info.json")
     # TODO - make it so that ref argument isn't needed
 
 # add cubes as you make them (whereever you'd usually do .to_csv() etc)

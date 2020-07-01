@@ -1,4 +1,6 @@
 
+import json
+
 from pathlib import Path
 import logging
 from os import environ
@@ -7,16 +9,26 @@ import pandas as pd
 from gssutils.scrape import MetadataError
 from gssutils.utils import pathify
 from gssutils.csvw.t2q import CSVWMetadata
-from gssutils.csvw.table import Table, TableSchema, Column, Datatype
 
+from gssutils.csvw.mapping import CSVWMapping
 
 
 class Cubes(object):
     """
     A class representating multiple datacubes
     """
-    def __init__(self, ref_path=None, out_path="out", meta_dict={}, not_a_codelist=[]):
+    def __init__(self, info_json, ref_path=None, out_path="out", not_a_codelist=[]):
     
+        with open(info_json, "r") as f:
+            self.info = json.load(f)
+
+        # vaidate all the things
+
+        # TODO - add a blank columns to airtable sync
+        # for now, add it where missing
+        if "columns" not in self.info["transform"].keys():
+            self.info["transform"]["columns"] = []
+
         self.ref_path = ref_path
         self.destination_folder = Path(out_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
@@ -25,16 +37,9 @@ class Cubes(object):
         self.cubes = []
         self.has_ran = False
     
-        # allow direct passing of metadata (in case of old url-only pipelines) but
-        # moan about it (we should really be using info.json)
-        self.meta_dict = meta_dict
-        if len(self.meta_dict) != 0:
-               logging.warning("Metadata being passed to 'Cubes' via a dictionary - you should "
-                               "be using the seed for this via info.json.")
-    
     def add_cube(self, distribution, dataframe, title, ignore_codelists=["Value"]):
         is_multiCube = False if len(self.cubes) < 2 else True
-        self.cubes.append(Cube(distribution, dataframe, title, self.meta_dict, is_multiCube,
+        self.cubes.append(Cube(distribution, dataframe, title, is_multiCube,
                             ignore_codelists))
             
     def output_all(self, with_transform=False, mapping=None, base_url="http://gss-data.org.uk", 
@@ -52,7 +57,8 @@ class Cubes(object):
         for process_order, cube in enumerate(self.cubes):
             try:
                 cube._output(process_order, self.ref_path, self.destination_folder, is_multiCube, 
-                            with_transform, mapping, base_url, base_path, dataset_metadata, with_external)
+                            with_transform, mapping, base_url, base_path, dataset_metadata, with_external,
+                            self.info)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                .format(cube.title)) from e
@@ -63,7 +69,7 @@ class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
-    def __init__(self, scraper, dataframe, title, meta_dict, is_multiCube, ignore_codelists, codelists={}):
+    def __init__(self, scraper, dataframe, title, is_multiCube, ignore_codelists, codelists={}):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
@@ -73,10 +79,6 @@ class Cube(object):
         # We need to track the sequence the cubes are processsed in, this allows 
         # us to confirm correct namespacing
         self.process_order = None
-        
-        # Make sure we have the required metadata, fill in where missing
-        for attr_name in ["family", "theme"]:
-            self._check_add_attribute(attr_name, meta_dict)
             
         # ---- Trig files ----:
         # We need to generate the trig now in case the selected distribution changes,
@@ -90,36 +92,27 @@ class Cube(object):
         self.scraper.dataset.title = title
         self.scraper.set_dataset_id(f'{pathify(environ.get("JOB_NAME", ""))}/{pathify(title)}')
         self.multi_trig = scraper.generate_trig()
-        
-            
-    def _check_add_attribute(self, attr_name, meta_dict):
+           
+    def instantiate_map(self, destination_folder, pathified_title, info_json):
         """
-        Make sure that the datacube actually has the attribute in question.
+        Create a CSVWMapping object for this cube from the info.json provided
         """
-        if not hasattr(self.scraper, attr_name):
-            
-            try_dict = True
-            if self.scraper.seed is not None:
-                if attr_name in self.scraper.seed.keys():
-                    self.scraper.__setattr__(attr_name, self.scraper.seed[attr_name])
-                    try_dict = False
-                    
-            if try_dict and attr_name in meta_dict.keys():
-                self.scraper.__setattr__(attr_name, meta_dict[attr_name])
-            else:
-                raise MetadataError(f"A '{attr_name}' attribute is required and is not present " 
-                                "in the seed and has not been passed in at run time")
-        
+        mapObj = CSVWMapping()
+        mapObj.set_mapping(info_json)
+        mapObj.set_csv(destination_folder / f'{pathified_title}.csv')
+        mapObj.set_dataset_uri(pathified_title)
+
+        return mapObj
+
     def _build_default_codelist(self, unique_values):
         """
-        Given a list of values (a column of a csv) build a defauot codelist
+        Given a list of values (a column of a csv) build a default codelist
         """
         
         # just in case
         if len(set(unique_values)) != len(unique_values):
             unique_values = set(unique_values)
 
-        # TODO - neater please
         cl = {
             "Label": [x for x in unique_values],
             "Notation": [pathify(x) for x in unique_values],
@@ -139,28 +132,35 @@ class Cube(object):
         if df is None:
             df = self._build_default_codelist(self.df[column_label])
         df.to_csv(destination / "codelist-{}.csv".format(pathify(column_label)), index=False)
-        self._generate_codelist_schema(destination, df)
+        self._generate_codelist_schema(destination, column_label, df)
 
 
-    def _generate_codelist_schema(self, destination, df):
+    def _generate_codelist_schema(self, destination, column_label, df):
         """
         Given a codelist in the form of a dataframe, generate a codelist schema
         """
         columns = []
         for column in df.columns.values:
-            this_column = Column()
-            Column.required = True
+            pass
 
-        table_schema = TableSchema(columns=columns)
+        # TODO - fugly
+        table_schema = {
+            "url": "codelist-{}-schema.json".format(pathify(column)),
+            "columns": columns,
+            "rdfs:label": "Code list for {} codelist scheme".format(column),
+            "rdf:type": "skos:ConceptScheme",
+            "skos:prefLabel": "Code list for {} codelist scheme".format(column),
+            "qb:codelist": "http://gss-data.org.uk/def/concept-scheme/{}/{}" \
+                            .format(pathify(self.title), pathify(column))
+        }
 
-        schema_path = Path(destination / "codelist-{}.schema-json".format(pathify(column_label)"
-        table = Table(uri=schema_path, tableSchema=table_schema)
+        schema_path = Path(destination / "codelist-{}.schema-json".format(pathify(column_label)))
         with open(schema_path, "w") as f:
-            f.write(table)
+            f.write(json.dumps(table_schema))
 
 
     def _output(self, process_order, ref_path, destination_folder, is_multiCube, with_transform,
-                                mapping, base_url, base_path, dataset_metadata, with_external):
+                                mapping, base_url, base_path, dataset_metadata, with_external, info_json):
         """
         Generates the output for a single 'Cube' held in the 'Cubes' object
         """
@@ -178,7 +178,7 @@ class Cube(object):
             pathified_title = pathify(self.scraper.dataset.title)
             trig_to_use = self.multi_trig
         
-        # output the tody data
+        # output the tidy data
         self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
 
         # generate codelist csvs and schemas
@@ -186,13 +186,9 @@ class Cube(object):
             codelist_df = self.codelists.get(col, None)
             self._output_codelist(col, destination_folder, df=codelist_df)
 
-        generate_codelist_rdf(pathify(self.scraper.dataset.title), self.df, base_url, 
-                                #destination_folder)
-
         with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
             metadata.write(trig_to_use)
 
-        schema = CSVWMetadata(ref_path)
-        schema.create(destination_folder / f'{pathified_title}.csv', destination_folder / \
-                          f'{pathified_title}.csv-schema.json', with_transform, mapping,
-                          base_url, base_path, dataset_metadata, with_external)
+        mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
+        mapObj.write(destination_folder / f'{pathified_title}.csv-schema.json')
+
