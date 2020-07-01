@@ -41,8 +41,7 @@ class Cubes(object):
         self.cubes.append(Cube(distribution, dataframe, title, is_multiCube,
                             ignore_codelists))
             
-    def output_all(self, with_transform=False, mapping=None, base_url="http://gss-data.org.uk", 
-                    base_path=None, dataset_metadata=None, with_external=None):
+    def output_all(self):
         
         if len(self.cubes) == 0:
             raise Exception("Please add at least one datacube with '.add_cube' before "
@@ -55,9 +54,7 @@ class Cubes(object):
         is_multiCube = False if len(self.cubes) < 2 else True
         for process_order, cube in enumerate(self.cubes):
             try:
-                cube._output(process_order, self.destination_folder, is_multiCube, 
-                            with_transform, mapping, base_url, base_path, dataset_metadata, with_external,
-                            self.info)
+                cube._output(process_order, self.destination_folder, is_multiCube, self.info)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                .format(cube.title)) from e
@@ -162,8 +159,7 @@ class Cube(object):
             f.write(json.dumps(table_schema))
 
 
-    def _output(self, process_order, destination_folder, is_multiCube, with_transform,
-                                mapping, base_url, base_path, dataset_metadata, with_external, info_json):
+    def _output(self, process_order, destination_folder, is_multiCube, info_json):
         """
         Generates the output for a single 'Cube' held in the 'Cubes' object
         """

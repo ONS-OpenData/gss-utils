@@ -1,0 +1,23 @@
+{
+    "title": "Quarterly Balance of Payments",
+    "publisher": "Office for National Statistics",
+    "description": "Quarterly summary of balance of payments accounts including the current account, capital transfers, transactions and levels of UK external assets and liabilities.",
+    "landingPage": "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/balanceofpaymentsstatisticalbulletintables",
+    "datasetNotes": [
+        "On landing page, link to latest release page, Link to \"View all data in this statistical bulletin, Balance of Payments time Series"
+    ],
+    "published": "2019-12-20",
+    "families": [
+        "Trade"
+    ],
+    "extract": {
+        "source": "CSV, XLS",
+        "stage": "Prioritized"
+    },
+    "transform": {
+        "airtable": "rec01iOHi8PJSYkiB",
+        "main_issue": 1
+    },
+    "sizingNotes": "",
+    "notes": ""
+}

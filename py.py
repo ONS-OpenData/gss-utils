@@ -151,15 +151,13 @@ for letter in "ABCDEFGHIJK":
 
 
 # just once, early in script
-# note - need to set family and theme where we don't have an info.json with yht info
 cubes = Cubes("info.json")
-    # TODO - make it so that ref argument isn't needed
 
 # add cubes as you make them (whereever you'd usually do .to_csv() etc)
 cubes.add_cube(scraper, df, "The title of this dataset")
 
 # end of script
-cubes.output_all(with_transform=True)
+cubes.output_all()
 
 
 
