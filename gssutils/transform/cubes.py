@@ -194,7 +194,7 @@ class Cube(object):
         # output codelist csv
         df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
 
-        # putput codelist schema
+        # output codelist schema
         self._generate_codelist_schema(column_label, destination_folder, df)
 
         # return tableschema
