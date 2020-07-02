@@ -16,6 +16,7 @@ from gssutils.csvw.t2q import CSVWMetadata
 
 from gssutils.csvw.mapping import CSVWMapping
 from gssutils.csvw.table import Table, ForeignKey, ColumnReference
+from gssutils.transform.codelists import generate_codelist_schema
 
 
 class IndistinctReferenceError(Exception):
@@ -38,7 +39,7 @@ class Cubes(object):
 
         # TODO - validate all the things!
 
-        # TODO - add a blank columns via airtable sync
+        # TODO - add a blank 'columns' key to 'transform' via airtable sync
         # for now, add it where missing
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = []
@@ -195,91 +196,13 @@ class Cube(object):
         df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
 
         # output codelist schema
-        self._generate_codelist_schema(column_label, destination_folder, df)
+        generate_codelist_schema(column_label, destination_folder, self.base_url, self.title)
 
         # return tableschema
         return Table(
             url="codelist-{}.csv".format(pathify(column_label)), 
             tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
             )
-
-    def _generate_codelist_schema(self, column_label, destination, df):
-        """
-        Given a codelist in the form of a dataframe, generate a codelist schema
-        """
-
-        # TODO - use a class not random hacky json
-
-        plain_text_name = "{" + "name" + "}"  # because python string interpolation is stupid
-        columns = [
-            {
-                "titles": "Label",
-                "name": "label",
-                "datatype": "string",
-                "required": True,
-                "propertyUrl": RDFS.label
-            },
-            {
-                "titles": "Notation",
-                "name": "notation",
-                "datatype": {
-                    "base": "string",
-                    "format": "^-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*$"
-                    },
-                "required": True,
-                "propertyUrl": SKOS.notation
-            },
-            {
-                "titles": "Parent Notation",
-                "name": "parent_notation",
-                "datatype": {
-                    "base": "string",
-                    "format": "^(-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*|)$"
-                    },
-                "required": False
-            },
-            {
-                "titles": "Sort Priority",
-                "name": "sort",
-                "datatype": "number",
-                "required": False
-            },
-            {
-                "titles": "Description",
-                "name": "description",
-                "datatype": "string",
-                "required": False
-            }
-        ],
-
-        # TODO - ugly
-        table_schema = {
-            "url": "codelist-{}-schema.json".format(pathify(column_label)),
-            "columns": columns,
-            "primaryKey": ["notation","parent_notation"],
-            "rdfs:label": "Code list for {} codelist schema".format(column_label),
-            "rdf:type": "skos:ConceptScheme",
-            "skos:prefLabel": "Code list for {} codelist schema".format(column_label),
-            "qb:codelist": "{}/def/concept-scheme/{}/{}" \
-                            .format(self.base_url, pathify(self.title), pathify(column_label))
-        }
-
-        about_end = "{notation" + "}/{parent_notation" + "}"
-        schema = {
-            "@context": [
-                "http://www.w3.org/ns/csvw",
-                {
-                "@language": "en"
-                }],
-            "tables": [table_schema],
-            "aboutUrl": "{}/def/concept-scheme/{}/{}/{}" \
-                            .format(self.base_url, pathify(self.title), 
-                            pathify(column_label), about_end)
-        }
-
-        schema_path = Path(destination / "codelist-{}.schema.json".format(pathify(column_label)))
-        with open(schema_path, "w") as f:
-            f.write(json.dumps(schema, indent=2))
 
 
     def _output(self, process_order, destination_folder, is_multiCube, info_json):

@@ -1,0 +1,8 @@
+{
+  "title": "I'm a title of a fake scrape for a cube",
+  "dataURL": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
+  "family": "the-test-family-robinson",
+  "theme": "test-theme",
+  "transform": {},
+  "published": "25/12/2014"
+}
