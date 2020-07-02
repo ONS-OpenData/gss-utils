@@ -1,10 +1,12 @@
 
+import os
 import json
 
 from pathlib import Path
 import logging
 from os import environ
 import pandas as pd
+import logging
 
 from rdflib.namespace import SKOS, DCTERMS, RDFS, RDF
 
@@ -15,33 +17,43 @@ from gssutils.csvw.t2q import CSVWMetadata
 from gssutils.csvw.mapping import CSVWMapping
 from gssutils.csvw.table import Table, ForeignKey, ColumnReference
 
+
+class IndistinctReferenceError(Exception):
+    """ Raised when we're provided more than one definition of the same thing 
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+
 class Cubes(object):
     """
     A class representating multiple datacubes
     """
-    def __init__(self, info_json, out_path="out", not_a_codelist=[], base_url="http://gss-data.org.uk"):
+    def __init__(self, info_json, destination_path="out", codelist_path="codelists", 
+                base_url="http://gss-data.org.uk"):
     
         with open(info_json, "r") as f:
             self.info = json.load(f)
 
-        # TODO - validate all the things
+        # TODO - validate all the things!
 
-        # TODO - add a blank columns to airtable sync
+        # TODO - add a blank columns via airtable sync
         # for now, add it where missing
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = []
 
-        self.destination_folder = Path(out_path)
+        self.destination_folder = Path(destination_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
-        self.not_a_codelist = not_a_codelist
+        self.codelist_path = codelist_path
         self.base_url = base_url
         self.cubes = []
         self.has_ran = False
     
-    def add_cube(self, distribution, dataframe, title, ignore_codelists=["Value"]):
+    def add_cube(self, scraper, dataframe, title, not_a_codelist=["Value"]):
         is_multiCube = False if len(self.cubes) < 2 else True
-        self.cubes.append(Cube(self.base_url, distribution, dataframe, title, is_multiCube,
-                            ignore_codelists))
+        self.cubes.append(Cube(self.base_url, scraper, dataframe, title, is_multiCube,
+                            self.codelist_path, not_a_codelist))
             
     def output_all(self):
         
@@ -67,16 +79,22 @@ class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
-    def __init__(self, base_url, scraper, dataframe, title, is_multiCube, ignore_codelists, codelists={}):
+    def __init__(self, base_url, scraper, dataframe, title, is_multiCube, 
+                            codelist_path, not_a_codelist):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
-        self.codelists = codelists
-        self.ignore_codelists = ignore_codelists
+        self.codelist_path = codelist_path
+        self.codelists = {}
+        self.not_a_codelist = not_a_codelist
         self.base_url = base_url
 
+        # Use a provided codelist where one has been prefabricated
+        self._get_prefabricated_codelists()
+
         # We need to track the sequence the cubes are processsed in, this allows 
-        # us to confirm correct namespacing via the scraper.generate_trig() method 
+        # us to validate correct namespacing where multiple cubes are coming from a
+        # single source
         self.process_order = None
             
         """
@@ -95,6 +113,39 @@ class Cube(object):
         self.scraper.dataset.title = title
         self.scraper.set_dataset_id(f'{pathify(environ.get("JOB_NAME", ""))}/{pathify(title)}')
         self.multi_trig = scraper.generate_trig()
+
+    def _get_prefabricated_codelists(self):
+        """
+        Read in any codelists.csvs already present in the chosen codelists directory.
+        In the event they are already present in the mapping or being passed in
+        at runtime throw an exception (we really shouldn't have multiple definitions
+        of the same thing kicking around).
+        """
+        
+        # if the chosen codelists directory doesnt exists, create it and be loud about it
+        if not os.path.isdir(self.codelist_path):
+            logging.warning("You have the codelist directory set to '{}' but "
+                            "that directory does not exist".format(self.codelist_path))
+
+            logging.warning("Creating '{}' directory".format(self.codelist_path))
+            Path(self.codelist_path).mkdir(exist_ok=True, parents=True)
+            return
+
+        # get all the codelists into our self.codelists {name:dataframe} dictionary
+        # TODO - dont mix pathlib and os, pick one
+        codelist_files = [f for f in os.listdir(self.codelist_path) if 
+                                os.path.isfile(Path(self.codelist_path, f)) and 
+                                f.endswith(".csv")]
+
+        # blow up for multiple definitions of the same thing
+        if len(codelist_files) != len(set(codelist_files)):
+            raise IndistinctReferenceError("A codelist can only be defined once. Have '{}'."
+                                            .format(",".join(codelist_files)))
+
+        for codelist_file in codelist_files:
+            read_from = os.path.join(self.codelist_path, codelist_file)
+            self.codelists[codelist_file[:-4]] = pd.read_csv(read_from)
+
            
     def instantiate_map(self, destination_folder, pathified_title, info_json):
         """
@@ -107,7 +158,7 @@ class Cube(object):
 
         return mapObj
 
-    def _build_default_codelist(self, unique_values):
+    def _build_default_codelist(self, unique_values, column_label):
         """
         Given a list of values (a column of a csv) build a default codelist
         """
@@ -126,6 +177,10 @@ class Cube(object):
         df["Sort Priority"] = ""
         df["Description"] = ""
 
+        # Write default codelist (for next time)
+        write_to = os.path.join(self.codelist_path, column_label)
+        df.to_csv("{}.csv".format(write_to), index=False)
+
         return df
 
     def _generate_codelist_and_schema(self, column_label, destination_folder, df=None):
@@ -134,7 +189,7 @@ class Cube(object):
         through to a default one where its not.
         """
         if df is None:
-            df = self._build_default_codelist(self.df[column_label])
+            df = self._build_default_codelist(self.df[column_label], column_label)
 
         # output codelist csv
         df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
@@ -252,7 +307,7 @@ class Cube(object):
         # generate codelist csvs, schemas and foreign keys
         additional_tables = []
         foreign_keys = []
-        for column_label in [x for x in self.df.columns.values if x not in self.ignore_codelists]:
+        for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
             codelist_df = self.codelists.get(column_label, None)
             additional_tables.append(self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
             foreign_keys.append(
