@@ -5,6 +5,7 @@ from inspect import getmro
 
 from rdflib import RDFS, Literal, BNode, URIRef, RDF
 from rdflib.term import Identifier
+from typing import List
 
 from gssutils.metadata import namespaces
 
@@ -68,6 +69,9 @@ class Metadata:
         else:
             return obs
 
+    def _as_list(self, local_name: str) -> List[str]:
+        return (lambda x: x if type(x) == list else [x])(self.__dict__[local_name])
+
     def add_to_dataset(self, dataset):
         graph = dataset.graph(self._graph)
         for c in getmro(type(self)):
@@ -81,7 +85,7 @@ class Metadata:
             if local_name in self.__dict__:
                 prop, status, f = profile
                 v = self.__dict__[local_name]
-                for obj in (v if type(v) == list else [v]):
+                for obj in self._as_list(local_name):
                     graph.add((self._uri, prop, f(obj)))
                     if isinstance(obj, Metadata):
                         obj.add_to_dataset(dataset)
@@ -92,7 +96,7 @@ class Metadata:
             if local_name in self.__dict__:
                 prop, status, f = profile
                 s = s + f'<dt>{html.escape(prop.n3(namespaces))}</dt>'
-                for obj in self.__dict__[local_name] if isinstance(self.__dict__[local_name], collections.Sequence) else [ self.__dict__[local_name] ]:
+                for obj in self._as_list(local_name):
                     term = f(obj)
                     if type(term) == URIRef:
                         s = s + f'<dd><a href={str(term)}>{html.escape(term.n3())}</a></dd>\n'
