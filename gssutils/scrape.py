@@ -57,14 +57,18 @@ class Scraper:
             "published": "issued"
         }
 
+        # Add an explicit on/off for temp scraping (based on presence of dataURL)
+        self.temp_scrape = False
+
         # Use seed if provided
         if seed is not None:
             with open(seed, "r") as f:
                 self.seed = json.load(f)
                 if "landingPage" not in self.seed and "dataURL" in self.seed:
-                    logging.warning("No landing page has been supplied. Proceeding with"
-                                    "scrape using the 'dataURL'.")
+                    logging.warning("No landing page has been supplied. Proceeding with "
+                                    "a temp scrape using the 'dataURL'.")
                     uri = self.seed["dataURL"]
+                    self.temp_scrape = True
                 elif "landingPage" not in self.seed:
                     raise MetadataError("Aborting, insufficiant seed data. No landing page supplied via "
                                         "info.json and no dataURL to use as a fallback.")
@@ -134,23 +138,23 @@ class Scraper:
         tree = html.fromstring(page.text)
         scraped = False
 
-        # Look for a scraper based on the uri
-        for start_uri, scrape in gssutils.scrapers.scraper_list:
-            if self.uri.startswith(start_uri):
 
-                # Scrape
-                scrape(self, tree)
-                scraped = True
-
-                # If we have a seed..
-                if self.seed is not None:
-                    self._populate_missing_metadata()  # Plug any metadata gaps
-                    self._override_metadata_where_specified()  # Apply overrides
-
-                break
-
-        if not scraped and self.seed is not None:
+        if self.temp_scrape:
             scraped = self._attempt_scraper_from_seed()
+        else:
+            # Look for a scraper based on the uri
+            for start_uri, scrape in gssutils.scrapers.scraper_list:
+                if self.uri.startswith(start_uri):
+
+                    # Scrape
+                    scrape(self, tree)
+                    scraped = True
+
+                    # If we have a seed..
+                    if self.seed is not None:
+                        self._populate_missing_metadata()  # Plug any metadata gaps
+                        self._override_metadata_where_specified()  # Apply overrides
+                    break
 
         if not scraped:
             raise NotImplementedError(f'No scraper for {self.uri} and insufficiant seed metadata passed.')
@@ -181,7 +185,6 @@ class Scraper:
             # NOTE - Don't EVER add a fallback for downloadURL or issued here!! this is a specific safety
             # to stop us "temporary scraping" and publishing new data with old metadata
             if hasattr(distribution, 'downloadURL') and not hasattr(distribution, 'mediaType'):
-                logging.warning("Distribution is lacking a mediaType, attempting to identity")
                 if distribution.downloadURL.lower().endswith(".xls"):
                     distribution.mediaType = mimetype.Excel
                 elif distribution.downloadURL.lower().endswith(".xlsx"):
@@ -194,6 +197,7 @@ class Scraper:
                     distribution.mediaType = mimetype.ZIP
                 else:
                     logging.warning("Unable to find mediaType for distribution")
+                
 
     def _override_metadata_where_specified(self):
         """
@@ -265,7 +269,7 @@ class Scraper:
 
         if len(not_found) > 0:
             raise NotImplementedError(
-                f'No scraper exists for {self.uri} and a "temporary scape" is not possible as the following required '
+                f'A "temporary scape" is not possible as the following required '
                 f'fields were missing from the seed metadata: {",".join(not_found)}. got: {",".join(self.seed.keys())}.'
             )
 
@@ -283,9 +287,7 @@ class Scraper:
         if dist.downloadURL.lower().split(".")[-1] not in allowed:
             raise MetadataError("A temporary scraper must point to a specific data file resouce. "
                                 "Download url is {} but must end with one of: {}"
-                                .format(dist.download_url, ",".join(allowed)))
-
-        logging.warning("This scraper is running in fallback mode, using static metadata rather than scraped metadata.")
+                                .format(dist.downloadURL, ",".join(allowed)))
         return True
 
     @staticmethod

@@ -118,9 +118,8 @@ class Cube(object):
     def _get_prefabricated_codelists(self):
         """
         Read in any codelists.csvs already present in the chosen codelists directory.
-        In the event they are already present in the mapping or being passed in
-        at runtime throw an exception (we really shouldn't have multiple definitions
-        of the same thing kicking around).
+        In the event they are already present in the mapping throw an exception (we 
+        really shouldn't have multiple definitions of the same thing kicking around).
         """
         
         # if the chosen codelists directory doesnt exists, create it and be loud about it
