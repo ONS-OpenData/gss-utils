@@ -1,0 +1,104 @@
+{
+  "@context": [
+  "http://www.w3.org/ns/csvw",
+    {
+      "@language": "en"
+    }
+],
+    "tables": [
+      {
+        "url": "{codelistname}",
+        "@id": "http://gss-data.org.uk/def/concept-scheme/{codelistname}",
+        "aboutUrl": "http://gss-data.org.uk/def/concept-scheme/{codelistname}",
+        "tableSchema": {
+          "@id": "http://gss-data.org.uk/def/concept/{codelistname}",
+          "aboutUrl": "http://gss-data.org.uk/def/concept/{codelistname}",
+          "primaryKey": ["notation","parent_notation"],
+          "columns": [
+            {
+              "titles": "label",
+              "name": "label",
+              "datatype": "string",
+              "required": true,
+              "propertyUrl": "RDFS:label",
+              "valueUrl": "{label}"
+            },
+            {
+              "titles": "notation",
+              "name": "notation",
+              "datatype": {
+                "base": "string",
+                "format": "^-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*$"
+              },
+              "required": true,
+              "propertyUrl": "SKOS:notation",
+              "valueUrl": "{notation}"
+            },
+            {
+              "titles": "parent_notation",
+              "name": "parent_notation",
+              "datatype": {
+                "base": "string",
+                "format": "^(-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*|)$"
+              },
+              "required": false,
+              "propertyUrl": "SKOS:broader",
+              "valueUrl": "{parent-notation}"
+            },
+            {
+              "titles": "sort_priority",
+              "name": "sort_priority",
+              "datatype": "number",
+              "required": false,
+              "propertyUrl": "http://www.w3.org/ns/ui#sortPriority",
+              "valueUrl": "{sort-priority}"
+            },
+            {
+              "name": "top_concept_of",
+              "datatype": "string",
+              "propertyUrl": "SKOS:topConceptOf",
+              "valueUrl": "http://gss-data.org.uk/def/concept-scheme/{codelistname}",
+              "virtual": true
+            },
+            {
+              "name": "pref_label",
+              "datatype": "string",
+              "propertyUrl": "SKOS:prefLabel",
+              "valueUrl": "{label}",
+              "virtual": true
+            },
+            {
+              "name": "in_scheme",
+              "propertyUrl": "SKOS:inScheme",
+              "valueUrl": "http://gss-data.org.uk/def/concept-scheme/{codelistname}",
+              "virtual": true
+            },
+            {
+              "name": "type",
+              "propertyUrl": "RDF:type",
+              "valueUrl": "SKOS:Concept",
+              "virtual": true
+            },
+            {
+              "name": "has_top_concept",
+              "propertyUrl": "SKOS:hasTopConcept",
+              "valueUrl": "http://gss-data.org.uk/def/concept/{codelistname}/{notation}",
+              "virtual": true
+            },
+            {
+              "name": "member",
+              "propertyUrl": "SKOS:member",
+              "valueUrl": "http://gss-data.org.uk/def/concept/{codelistname}/{notation}",
+              "virtual": true
+            }
+          ]
+        }
+      }
+    ],
+    "@id": "http://gss-data.org.uk/def/{codelistname}#tablegroup",
+    "prov:hadDerivation": {
+      "@id": "http://gss-data.org.uk/def/concept-scheme/{codelistname}",
+      "@type": "skos:ConceptScheme",
+      "rdfs:label": "{codelisttitle}"
+    }
+}
