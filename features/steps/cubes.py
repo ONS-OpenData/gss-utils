@@ -2,6 +2,7 @@ import os
 import json
 
 from gssutils import *
+import logging
 
 def get_fixture(file_name):
     """Helper to get specific files out of the fixtures dir"""
@@ -23,29 +24,19 @@ def step_impl(context, cube_name, csv_data, seed_name):
 def stemp_impl(context):
     context.cubes.output_all()
 
-@then('datacube "{cube_no}" references "{expected_num_of_namespaces}" datacube namspace(s)')
-def stemp_impl(context, cube_no, expected_num_of_namespaces):
-
-    # TODO - will likely all need refactoring for mapping
-    cube_no = int(cube_no)-1
-    cube = context.cubes.cubes[cube_no]
+@then('the output metadata references the correct number of namespaces')
+def stemp_impl(context):
 
     # For pipeleines delivering a single cube, a slightly different trig is used
-    trig = None
+    # We're basically checking the first (single cubes) or the last (multi cubes)
     if len(context.cubes.cubes) == 1:
-        trig = cube.singleton_trig
+        trig = context.cubes.cubes[0].singleton_trig
+        namespaces = len([x for x in trig.decode().split("\n") if x.startswith("@prefix ns")]) - 2
     else:
-        trig = cube.multi_trig
+        trig = context.cubes.cubes[-1].multi_trig
+        namespaces = len([x for x in trig.decode().split("\n") if x.startswith("@prefix ns")])
 
-    # For multiple cubes, the number of namespaces declared in the trig is relative to the number
-    # of cubes proccessed (cumulatively) by a given transform script.
-    # The very first cube output has a slightly different namespace declaration
-
-    # TODO - fix cicular logic
-    namespace_mod = cube.process_order - 2 if len(context.cubes.cubes) > 1 else -1
-    namespaces = len([x for x in trig.decode().split("\n") if x.startswith("@prefix ns")]) \
-                        - (cube.process_order - namespace_mod)
-
-    assert namespaces == int(expected_num_of_namespaces), "Datacube {} has the wrong number of namespaces" \
-                                " got {}, expected {}.".format(cube_no+1, namespaces, 
-                                expected_num_of_namespaces)
+    expected_num_of_namespaces = len(context.cubes.cubes)
+    assert namespaces == len(context.cubes.cubes), \
+        "Datacube has the wrong number of namespaces, got {}, expected {}." \
+            .format(namespaces, expected_num_of_namespaces)

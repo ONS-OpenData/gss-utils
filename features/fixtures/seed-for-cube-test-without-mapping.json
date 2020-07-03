@@ -1,8 +1,10 @@
 {
   "title": "I'm a title of a fake scrape for a cube",
-  "dataURL": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
+  "dataURL": "https://www.ons.gov.uk/file?uri=%2fpeoplepopulationandcommunity%2fcrimeandjustice%2fdatasets%2fpublicperceptionsofcrimeinenglandandwalesbulletintables%2fcurrent/publicperceptionsofcrimeinenglandandwalesbulletintables.xls",
   "family": "the-test-family-robinson",
   "theme": "test-theme",
   "transform": {},
+  "description": "im a little testing seed",
+  "publisher": "http://cogs-fake-publishing",
   "published": "25/12/2014"
 }
