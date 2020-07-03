@@ -67,9 +67,9 @@ class Cubes(object):
                             "has already run. You need to add all your datacubes before doing so.")
                 
         is_multiCube = False if len(self.cubes) < 2 else True
-        for process_order, cube in enumerate(self.cubes):
+        for cube in self.cubes:
             try:
-                cube._output(process_order, self.destination_folder, is_multiCube, self.info)
+                cube._output(self.destination_folder, is_multiCube, self.info)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                .format(cube.title)) from e
@@ -80,8 +80,7 @@ class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
-    def __init__(self, base_url, scraper, dataframe, title, is_multiCube, 
-                            codelist_path, not_a_codelist):
+    def __init__(self, base_url, scraper, dataframe, title, is_multiCube, codelist_path, not_a_codelist):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
@@ -92,11 +91,6 @@ class Cube(object):
 
         # Use a provided codelist where one has been prefabricated
         self._get_prefabricated_codelists()
-
-        # We need to track the sequence the cubes are processsed in, this allows 
-        # us to validate correct namespacing where multiple cubes are coming from a
-        # single source
-        self.process_order = None
             
         """
         ---- Trig files ----: 
@@ -149,7 +143,7 @@ class Cube(object):
            
     def instantiate_map(self, destination_folder, pathified_title, info_json):
         """
-        Create a CSVWMapping object for this cube from the info.json provided
+        Create a basic CSVWMapping object for this cube
         """
         mapObj = CSVWMapping()
         mapObj.set_mapping(info_json)
@@ -203,30 +197,21 @@ class Cube(object):
             tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
             )
 
-
-    def _output(self, process_order, destination_folder, is_multiCube, info_json):
+    def _get_trig(self, is_multiCube):
         """
-        Generates the output for a single 'Cube' held in the 'Cubes' object
+        Get the trig being used, this can vary depending on whether this is a single or
+        multiple datacube output
         """
-        pathified_title = pathify(self.title)
-        
-        self.process_order = process_order
-        
-        # sort out which trig snapshot to use
-        trig_to_use = None 
         if not is_multiCube:
-            trig_to_use = self.singleton_trig
+            return self.singleton_trig
         else:
-            trig_to_use = self.multi_trig
-        
-        # output the tidy data
-        self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
+           return self.multi_trig
 
-        # Output the trig 
-        with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
-            metadata.write(trig_to_use)
 
-        # generate codelist csvs, schemas and foreign keys
+    def _populate_csvw_mapping(self, destination_folder, pathified_title, info_json):
+        """
+        Use the provided details object to generate then fully populate the mapping class  
+        """
         additional_tables = []
         foreign_keys = []
         for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
@@ -248,5 +233,26 @@ class Cube(object):
             mapObj._external_tables.append(additional_table)
         for foreign_key in foreign_keys:
             mapObj.set_additional_foreign_key(foreign_key)
-        mapObj.write(destination_folder / f'{pathified_title}.csv-schema.json')
+
+        return mapObj
+
+
+    def _output(self, destination_folder, is_multiCube, info_json):
+        """
+        Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
+        """
+        pathified_title = pathify(self.title)
+        
+        # output the tidy data
+        self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
+
+        # Output the trig 
+        trig_to_use = self._get_trig(is_multiCube)
+        with open(destination_folder / f'{pathified_title}.csv-metadata.trig', 'wb') as metadata:
+            metadata.write(trig_to_use)
+
+        # generate codelist csvs, schemas and foreign keys
+        populatedMapObj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json)
+        populatedMapObj.write(destination_folder / f'{pathified_title}.csv-schema.json')
+
 
