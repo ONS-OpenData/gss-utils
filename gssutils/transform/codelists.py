@@ -7,7 +7,7 @@ from gssutils import pathify
 # TODO - this is awful but we're out of time,
 # Replace and use classes from .metadata to construct in a more OOP way
 
-def generate_codelist_schema(column_label, destination, base_url, dataset_title):
+def get_codelist_schema(column_label, base_url, dataset_title):
         """
         Given a column label representing a codelist, generate a codelist schema
         """
@@ -104,7 +104,7 @@ def generate_codelist_schema(column_label, destination, base_url, dataset_title)
         table_schema = {
             "@id": f"{base_url}/def/concept-scheme/{pathifed_title}/{codelistname}",
             "aboutUrl": f"{base_url}/def/concept-scheme/{codelistname}",
-            "url": f"codelist-{codelistname}-schema.csv",
+            "url": f"codelist-{pathify(column_label)}-schema.csv",
             "columns": columns,
             "primaryKey": ["notation","parent_notation"],
             "prov:hadDerivation": {
@@ -125,6 +125,11 @@ def generate_codelist_schema(column_label, destination, base_url, dataset_title)
             "tables": [table_schema]
         }
 
+        return schema
+
+
+def generate_codelist_schema(column_label, destination, base_url, dataset_title):
+        schema = get_codelist_schema(column_label, base_url, dataset_title)
         schema_path = Path(destination / "codelist-{}.schema.json".format(pathify(column_label)))
         with open(schema_path, "w") as f:
             f.write(json.dumps(schema, indent=2))

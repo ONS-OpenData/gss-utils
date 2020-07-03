@@ -4,6 +4,7 @@ import logging
 
 from pathlib import Path
 
+from gssutils.transform.codelists import get_codelist_schema
 from gssutils import *
 
 def get_fixture(file_name):
@@ -42,6 +43,20 @@ def stemp_impl(context):
     assert namespaces == len(context.cubes.cubes), \
         "Datacube has the wrong number of namespaces, got {}, expected {}." \
             .format(namespaces, expected_num_of_namespaces)
+
+@then('the schema for codelist "{codelist_name}" is created which matches "{correct_schema}"')
+def stemp_impl(context, codelist_name, correct_schema):
+    created_schema_as_dict = get_codelist_schema(codelist_name, context.cubes.base_url, 
+                                    context.cubes.cubes[0].title)
+
+    # Get the "correct" schema from the fixtures
+    with open(get_fixture(correct_schema), "r") as f:
+        correct_schema_as_dict = json.load(f)
+
+    # compare
+    assert created_schema_as_dict == correct_schema_as_dict, "{}\n\n Above schema does not " \
+            "match the expected schema for: '{}', specified in {}.".format(json.dumps(created_schema_as_dict, indent=2),
+                codelist_name, "features/fixtures/{}".format(correct_schema))
 
 @then('the csv-w schema for "{cube_name}" matches "{correct_schema}"')
 def stemp_impl(context, cube_name, correct_schema):

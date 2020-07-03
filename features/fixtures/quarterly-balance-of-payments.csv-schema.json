@@ -1,0 +1,309 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+      "@language": "en"
+    }
+  ],
+  "tables": [
+    {
+      "url": "codelist-geography.csv",
+      "tableSchema": "codelist-geography.csv-schema-json"
+    },
+    {
+      "url": "codelist-period.csv",
+      "tableSchema": "codelist-period.csv-schema-json"
+    },
+    {
+      "url": "codelist-cdid.csv",
+      "tableSchema": "codelist-cdid.csv-schema-json"
+    },
+    {
+      "url": "codelist-bop-services.csv",
+      "tableSchema": "codelist-bop-services.csv-schema-json"
+    },
+    {
+      "url": "codelist-flow-directions.csv",
+      "tableSchema": "codelist-flow-directions.csv-schema-json"
+    },
+    {
+      "url": "codelist-measure-type.csv",
+      "tableSchema": "codelist-measure-type.csv-schema-json"
+    },
+    {
+      "url": "codelist-unit.csv",
+      "tableSchema": "codelist-unit.csv-schema-json"
+    },
+    {
+      "url": "quarterly-balance-of-payments.csv",
+      "tableSchema": {
+        "columns": [
+          {
+            "name": "geography",
+            "titles": "Geography",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/geography",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/geography/{geography}"
+          },
+          {
+            "name": "period",
+            "titles": "Period",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/period",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/period/{period}"
+          },
+          {
+            "name": "cdid",
+            "titles": "CDID",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/cdid",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/cdid/{cdid}"
+          },
+          {
+            "name": "bop_services",
+            "titles": "BOP Services",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/bop-services",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/bop-services/{bop_services}"
+          },
+          {
+            "name": "flow_directions",
+            "titles": "Flow Directions",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/flow-directions",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/flow-directions/{flow_directions}"
+          },
+          {
+            "name": "measure_type",
+            "titles": "Measure Type",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/measure-type",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/measure-type/{measure_type}"
+          },
+          {
+            "name": "value",
+            "titles": "Value",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/value",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/value/{value}"
+          },
+          {
+            "name": "unit",
+            "titles": "Unit",
+            "datatype": "string",
+            "propertyUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/unit",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#concept/unit/{unit}"
+          },
+          {
+            "name": "virt_dataset",
+            "virtual": true,
+            "propertyUrl": "qb:dataSet",
+            "valueUrl": "http://gss-data.org.uk/quarterly-balance-of-payments#dataset"
+          },
+          {
+            "name": "virt_type",
+            "virtual": true,
+            "propertyUrl": "rdf:type",
+            "valueUrl": "qb:Observation"
+          }
+        ],
+        "primaryKey": [
+          "geography",
+          "period",
+          "cdid",
+          "bop_services",
+          "flow_directions",
+          "measure_type",
+          "value",
+          "unit"
+        ],
+        "foreignKeys": [
+          {
+            "columnReference": "geography",
+            "reference": {
+              "resource": "codelist-geography.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "period",
+            "reference": {
+              "resource": "codelist-period.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "cdid",
+            "reference": {
+              "resource": "codelist-cdid.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "bop-services",
+            "reference": {
+              "resource": "codelist-bop-services.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "flow-directions",
+            "reference": {
+              "resource": "codelist-flow-directions.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "measure-type",
+            "reference": {
+              "resource": "codelist-measure-type.csv",
+              "columnReference": "notation"
+            }
+          },
+          {
+            "columnReference": "unit",
+            "reference": {
+              "resource": "codelist-unit.csv",
+              "columnReference": "notation"
+            }
+          }
+        ],
+        "aboutUrl": "http://gss-data.org.uk/quarterly-balance-of-payments/observation/{geography}/{period}/{cdid}/{bop_services}/{flow_directions}/{measure_type}/{value}/{unit}"
+      }
+    }
+  ],
+  "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#tables",
+  "prov:hadDerivation": {
+    "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dataset",
+    "@type": [
+      "qb:DataSet",
+      "dcat:Dataset"
+    ],
+    "qb:structure": {
+      "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#structure",
+      "@type": "qb:DataStructureDefinition",
+      "qb:component": [
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/geography",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/geography",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Geography"
+            },
+            "rdfs:label": "Geography"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/geography"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/period",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/period",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Period"
+            },
+            "rdfs:label": "Period"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/period"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/cdid",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/cdid",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Cdid"
+            },
+            "rdfs:label": "CDID"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/cdid"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/bop-services",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/bop-services",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/BopServices"
+            },
+            "rdfs:label": "BOP Services"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/bop-services"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/flow-directions",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/flow-directions",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/FlowDirections"
+            },
+            "rdfs:label": "Flow Directions"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/flow-directions"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/measure-type",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/measure-type",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/MeasureType"
+            },
+            "rdfs:label": "Measure Type"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/measure-type"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/value",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/value",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Value"
+            },
+            "rdfs:label": "Value"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/value"
+          }
+        },
+        {
+          "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#component/unit",
+          "qb:dimension": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/unit",
+            "@type": "qb:DimensionProperty",
+            "rdfs:range": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Unit"
+            },
+            "rdfs:label": "Unit"
+          },
+          "@type": "qb:ComponentSpecification",
+          "qb:componentProperty": {
+            "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/unit"
+          }
+        }
+      ]
+    }
+  }
+}
