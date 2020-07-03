@@ -17,7 +17,7 @@ def get_fixture(file_name):
 def step_impl(context, seed_name):
     context.cubes = Cubes(get_fixture(seed_name))
 
-@step('I specifiy a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
+@step('I specify a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
 def step_impl(context, cube_name, csv_data, seed_name):
     scraper = Scraper(seed=get_fixture(seed_name))
     df = pd.read_csv(get_fixture(csv_data))
