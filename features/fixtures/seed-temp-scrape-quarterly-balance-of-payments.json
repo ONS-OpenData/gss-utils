@@ -1,8 +1,8 @@
 {
     "title": "Quarterly Balance of Payments",
-    "publisher": "Office for National Statistics",
+    "publisher": "Office-for-National-Statistics",
     "description": "Quarterly summary of balance of payments accounts including the current account, capital transfers, transactions and levels of UK external assets and liabilities.",
-    "landingPage": "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/balanceofpaymentsstatisticalbulletintables",
+    "dataURL": "https://www.ons.gov.uk/file?uri=%2feconomy%2fnationalaccounts%2fbalanceofpayments%2fdatasets%2fbalanceofpaymentsstatisticalbulletintables%2fcurrent/balanceofpayments2020q1.xls",
     "datasetNotes": [
         "On landing page, link to latest release page, Link to \"View all data in this statistical bulletin, Balance of Payments time Series"
     ],
