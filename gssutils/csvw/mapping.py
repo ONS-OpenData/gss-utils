@@ -235,7 +235,7 @@ class CSVWMapping:
                 tableSchema=TableSchema(
                     columns=list(self._columns.values()),
                     primaryKey=self._keys,
-                    aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}"),
+                    aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys)),
                     foreignKeys=self._foreign_keys
                 )
             )
@@ -245,7 +245,7 @@ class CSVWMapping:
                 tableSchema=TableSchema(
                     columns=list(self._columns.values()),
                     primaryKey=self._keys,
-                    aboutUrl=self.join_dataset_uri(f"observation/{'/'.join('{' + s + '}' for s in self._keys)}")
+                    aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys))
                 )
             )
         return self._external_tables + [main_table]
