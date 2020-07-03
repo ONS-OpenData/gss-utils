@@ -262,14 +262,14 @@ class Scraper:
         # Make sure we have the 100% required stuff
         keys = ["title", "description", "dataURL", "publisher", "published"]
         not_found = []
-        for key in keys:
+        for key in keys:\
             if key not in self.seed.keys():
                 if self.seed[key] is not None:
                     not_found.append(key)
 
         if len(not_found) > 0:
             raise NotImplementedError(
-                f'A "temporary scape" is not possible as the following required '
+                f'A "temporary scape" is not possible as the following required ' 
                 f'fields were missing from the seed metadata: {",".join(not_found)}. got: {",".join(self.seed.keys())}.'
             )
 
