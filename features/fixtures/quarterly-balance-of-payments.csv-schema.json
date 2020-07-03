@@ -168,7 +168,7 @@
             }
           }
         ],
-        "aboutUrl": "http://gss-data.org.uk/quarterly-balance-of-payments/observation/{geography}/{period}/{cdid}/{bop_services}/{flow_directions}/{measure_type}/{value}/{unit}"
+        "aboutUrl": "http://gss-data.org.uk/quarterly-balance-of-payments/{geography}/{period}/{cdid}/{bop_services}/{flow_directions}/{measure_type}/{value}/{unit}"
       }
     }
   ],
