@@ -152,11 +152,22 @@ class Cube(object):
 
         return mapObj
 
-    def _build_default_codelist(self, unique_values, column_label):
+
+    def _write_default_codelist(self, unique_values, column_label):
         """
         Given a list of values (a column of a csv) build a default codelist
+        as a dataframe then write it.
         """
-        
+        df = self._build_default_codelist(unique_values)
+        write_to = os.path.join(self.codelist_path, column_label)
+        df.to_csv("{}.csv".format(write_to), index=False)
+        return df
+
+    def _build_default_codelist(self, unique_values):
+        """
+        Given a list of values (a column of a csv) build a default codelist
+        as a dataframe.
+        """
         # just in case
         if len(set(unique_values)) != len(unique_values):
             unique_values = set(unique_values)
@@ -171,10 +182,6 @@ class Cube(object):
         df["Sort Priority"] = ""
         df["Description"] = ""
 
-        # Write default codelist (for next time)
-        write_to = os.path.join(self.codelist_path, column_label)
-        df.to_csv("{}.csv".format(write_to), index=False)
-
         return df
 
     def _generate_codelist_and_schema(self, column_label, destination_folder, df=None):
@@ -183,7 +190,7 @@ class Cube(object):
         through to a default one where its not.
         """
         if df is None:
-            df = self._build_default_codelist(self.df[column_label], column_label)
+            df = self._write_default_codelist(self.df[column_label], column_label)
 
         # output codelist csv
         df.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), index=False)
