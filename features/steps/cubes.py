@@ -1,11 +1,10 @@
-import os
 import json
-import logging
 
-from pathlib import Path
+from behave import *
 
-from gssutils.transform.codelists import get_codelist_schema
 from gssutils import *
+from gssutils.transform.codelists import get_codelist_schema
+
 
 def get_fixture(file_name):
     """Helper to get specific files out of the fixtures dir"""
@@ -13,9 +12,11 @@ def get_fixture(file_name):
     fixture_file_path = Path(feature_path, "fixtures", file_name)
     return fixture_file_path
 
+
 @given('I want to create datacubes from the seed "{seed_name}"')
 def step_impl(context, seed_name):
     context.cubes = Cubes(get_fixture(seed_name))
+
 
 @step('I specify a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
 def step_impl(context, cube_name, csv_data, seed_name):
@@ -23,13 +24,14 @@ def step_impl(context, cube_name, csv_data, seed_name):
     df = pd.read_csv(get_fixture(csv_data))
     context.cubes.add_cube(scraper, df, cube_name)
 
+
 @step('the datacube outputs can be created')
-def stemp_impl(context):
+def step_impl(context):
     context.cubes.output_all()
 
-@then('the output metadata references the correct number of namespaces')
-def stemp_impl(context):
 
+@then('the output metadata references the correct number of namespaces')
+def step_impl(context):
     # For pipeleines delivering a single cube, a slightly different trig is used
     # We're basically checking the first (single cubes) or the last (multi cubes)
     if len(context.cubes.cubes) == 1:
@@ -44,9 +46,9 @@ def stemp_impl(context):
         "Datacube has the wrong number of namespaces, got {}, expected {}." \
             .format(namespaces, expected_num_of_namespaces)
 
+
 @then('for the datacube "{cube_name}" the csv codelist "{codelist_name}" is created which matches "{correct_csv}"')
-def stemp_impl(context, cube_name, codelist_name, correct_csv):
-    
+def step_impl(context, cube_name, codelist_name, correct_csv):
     # make sure we have the requested cube
     cube = [x for x in context.cubes.cubes if x.title == cube_name]
     assert len(cube) == 1, f"A cube with the name {cube_name} is not present"
@@ -72,17 +74,21 @@ def stemp_impl(context, cube_name, codelist_name, correct_csv):
             correct_codelist["composite"] = correct_codelist["composite"] + "," + correct_codelist[col]
         correct_codelist["composite"] = correct_codelist["composite"].str[1:]
 
-        unexpected = [x for x in new_codelist_as_df["composite"].unique() if x not in correct_codelist["composite"].unique()]
-        missing = [x for x in correct_codelist["composite"].unique() if x not in new_codelist_as_df["composite"].unique()]
+        unexpected = [x for x in new_codelist_as_df["composite"].unique() if
+                      x not in correct_codelist["composite"].unique()]
+        missing = [x for x in correct_codelist["composite"].unique() if
+                   x not in new_codelist_as_df["composite"].unique()]
         feedback = {"unexpected rows": unexpected, "missing rows": missing}
 
     assert len(correct_codelist) == len(new_df), "The codelist generated for {} does not match {}" \
-                " details follow: {}".format(codelist_name, f"feature/fixtues/{correct_csv}", \
-                json.dumps(feedback, indent=2))
+                                                 " details follow: {}".format(codelist_name,
+                                                                              f"feature/fixtues/{correct_csv}", \
+                                                                              json.dumps(feedback, indent=2))
 
-@then('for the datacube "{cube_name}" the schema for codelist "{codelist_name}" is created which matches "{correct_schema}"')
-def stemp_impl(context, cube_name, codelist_name, correct_schema):
 
+@then(
+    'for the datacube "{cube_name}" the schema for codelist "{codelist_name}" is created which matches "{correct_schema}"')
+def step_impl(context, cube_name, codelist_name, correct_schema):
     # make sure we have the requested cube
     cube = [x for x in context.cubes.cubes if x.title == cube_name]
     assert len(cube) == 1, f"A cube with the name {cube_name} is not present"
@@ -96,24 +102,25 @@ def stemp_impl(context, cube_name, codelist_name, correct_schema):
 
     # compare
     assert created_schema_as_dict == correct_schema_as_dict, "{}\n\n Above schema does not " \
-            "match the expected schema for: '{}', specified in {}.".format(json.dumps(created_schema_as_dict, indent=2),
-                codelist_name, "features/fixtures/{}".format(correct_schema))
+                                                             "match the expected schema for: '{}', specified in {}.".format(
+        json.dumps(created_schema_as_dict, indent=2),
+        codelist_name, "features/fixtures/{}".format(correct_schema))
+
 
 @then('the csv-w schema for "{cube_name}" matches "{correct_schema}"')
-def stemp_impl(context, cube_name, correct_schema):
-    
+def step_impl(context, cube_name, correct_schema):
     # check we actually have the requested cube
     matched_cubes = [x for x in context.cubes.cubes if x.title == cube_name]
     assert len(matched_cubes) == 1, f"Unable to find datacube {cube_name}"
-    
+
     this_cube = matched_cubes[0]
 
     # Set the "obs file" as a test csv in the fixtures
     feature_path = Path(os.path.dirname(os.path.abspath(__file__))).parent
     obs_fixture_path = Path(feature_path, "fixtures")
-    schemaMapObj = this_cube._populate_csvw_mapping(obs_fixture_path, 
-                        pathify(cube_name), context.cubes.info)
-    
+    schemaMapObj = this_cube._populate_csvw_mapping(obs_fixture_path,
+                                                    pathify(cube_name), context.cubes.info)
+
     # Create the schema
     created_schema_as_dict = schemaMapObj._as_plain_obj(schemaMapObj._as_csvw_object())
 
@@ -123,5 +130,6 @@ def stemp_impl(context, cube_name, correct_schema):
 
     # compare
     assert created_schema_as_dict == correct_schema_as_dict, "{}\n\n Above schema does not " \
-            "match the expected schema for: '{}'.".format(json.dumps(created_schema_as_dict, indent=2),
-                correct_schema)
+                                                             "match the expected schema for: '{}'.".format(
+        json.dumps(created_schema_as_dict, indent=2),
+        correct_schema)

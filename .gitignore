@@ -5,3 +5,5 @@ debug_scrape*
 .idea
 gss-utils.iml
 gssutils.egg*
+out
+codelists

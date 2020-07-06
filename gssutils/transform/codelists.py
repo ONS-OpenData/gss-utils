@@ -7,6 +7,7 @@ from gssutils import pathify
 # TODO - this is awful but we're out of time,
 # Replace and use classes from .metadata to construct in a more OOP way
 
+
 def get_codelist_schema(column_label, base_url, dataset_title):
         """
         Given a column label representing a codelist, generate a codelist schema
@@ -27,7 +28,7 @@ def get_codelist_schema(column_label, base_url, dataset_title):
               "name": "label",
               "datatype": "string",
               "required": True,
-              "propertyUrl": "RDFS:label",
+              "propertyUrl": "rdfs:label",
               "valueUrl": f"{label}"
             },
             {
@@ -38,7 +39,7 @@ def get_codelist_schema(column_label, base_url, dataset_title):
                 "format": "^-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*$"
               },
               "required": True,
-              "propertyUrl": "SKOS:notation",
+              "propertyUrl": "skos:notation",
               "valueUrl": f"{notation}"
             },
             {
@@ -49,7 +50,7 @@ def get_codelist_schema(column_label, base_url, dataset_title):
                 "format": "^(-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*|)$"
               },
               "required": False,
-              "propertyUrl": "SKOS:broader",
+              "propertyUrl": "skos:broader",
               "valueUrl": "{parent-notation}"
             },
             {
@@ -63,38 +64,38 @@ def get_codelist_schema(column_label, base_url, dataset_title):
             {
               "name": "top_concept_of",
               "datatype": "string",
-              "propertyUrl": "SKOS:topConceptOf",
+              "propertyUrl": "skos:topConceptOf",
               "valueUrl": f"{base_url}/def/concept-scheme/{codelistname}",
               "virtual": True
             },
             {
               "name": "pref_label",
               "datatype": "string",
-              "propertyUrl": "SKOS:prefLabel",
+              "propertyUrl": "skos:prefLabel",
               "valueUrl": f"{label}",
               "virtual": True
             },
             {
               "name": "in_scheme",
-              "propertyUrl": "SKOS:inScheme",
+              "propertyUrl": "skos:inScheme",
               "valueUrl": f"{base_url}/def/concept-scheme/{codelistname}",
               "virtual": True
             },
             {
               "name": "type",
-              "propertyUrl": "RDF:type",
-              "valueUrl": "SKOS:Concept",
+              "propertyUrl": "rdf:type",
+              "valueUrl": "skos:Concept",
               "virtual": True
             },
             {
               "name": "has_top_concept",
-              "propertyUrl": "SKOS:hasTopConcept",
+              "propertyUrl": "skos:hasTopConcept",
               "valueUrl": f"{base_url}/def/concept/{codelistname}/{notation}",
               "virtual": True
             },
             {
               "name": "member",
-              "propertyUrl": "SKOS:member",
+              "propertyUrl": "skos:member",
               "valueUrl": f"{base_url}/def/concept/{codelistname}/{notation}",
               "virtual": True
             }
@@ -106,7 +107,7 @@ def get_codelist_schema(column_label, base_url, dataset_title):
             "aboutUrl": f"{base_url}/def/concept-scheme/{codelistname}",
             "url": f"codelist-{pathify(column_label)}-schema.csv",
             "columns": columns,
-            "primaryKey": ["notation","parent_notation"],
+            "primaryKey": ["notation", "parent_notation"],
             "prov:hadDerivation": {
                 "@id": f"{base_url}/def/concept-scheme/{codelistname}",
                 "@type": "skos:ConceptScheme",

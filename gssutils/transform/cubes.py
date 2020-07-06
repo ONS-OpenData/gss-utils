@@ -1,22 +1,16 @@
-
-import os
 import json
-
-from pathlib import Path
 import logging
+import os
 from os import environ
+from pathlib import Path
+
 import pandas as pd
-import logging
-
-from rdflib.namespace import SKOS, DCTERMS, RDFS, RDF
-
-from gssutils.scrape import MetadataError
-from gssutils.utils import pathify
-from gssutils.csvw.t2q import CSVWMetadata
 
 from gssutils.csvw.mapping import CSVWMapping
+from gssutils.csvw.namespaces import URI
 from gssutils.csvw.table import Table, ForeignKey, ColumnReference
 from gssutils.transform.codelists import generate_codelist_schema
+from gssutils.utils import pathify
 
 
 class IndistinctReferenceError(Exception):
@@ -29,11 +23,12 @@ class IndistinctReferenceError(Exception):
 
 class Cubes(object):
     """
-    A class representating multiple datacubes
+    A class representing multiple datacubes
     """
-    def __init__(self, info_json, destination_path="out", codelist_path="codelists", 
-                base_url="http://gss-data.org.uk"):
-    
+
+    def __init__(self, info_json, destination_path="out", codelist_path="codelists",
+                 base_url="http://gss-data.org.uk"):
+
         with open(info_json, "r") as f:
             self.info = json.load(f)
 
@@ -50,36 +45,37 @@ class Cubes(object):
         self.base_url = base_url
         self.cubes = []
         self.has_ran = False
-    
+
     def add_cube(self, scraper, dataframe, title, not_a_codelist=["Value"]):
         is_multiCube = False if len(self.cubes) < 2 else True
         self.cubes.append(Cube(self.base_url, scraper, dataframe, title, is_multiCube,
-                            self.codelist_path, not_a_codelist))
-            
+                               self.codelist_path, not_a_codelist))
+
     def output_all(self):
-        
+
         if len(self.cubes) == 0:
             raise Exception("Please add at least one datacube with '.add_cube' before "
-                           "calling output_all().")
-    
+                            "calling output_all().")
+
         if self.has_ran:
             raise Exception("Calling 'output_all' on the Cubes class is a destructive process and "
                             "has already run. You need to add all your datacubes before doing so.")
-                
+
         is_multiCube = False if len(self.cubes) < 2 else True
         for cube in self.cubes:
             try:
                 cube._output(self.destination_folder, is_multiCube, self.info)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube '{}'." \
-                               .format(cube.title)) from e
+                                .format(cube.title)) from e
         self.has_ran = True
-                          
+
 
 class Cube(object):
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a datacube
     """
+
     def __init__(self, base_url, scraper, dataframe, title, is_multiCube, codelist_path, not_a_codelist):
         self.scraper = scraper
         self.df = dataframe
@@ -91,7 +87,7 @@ class Cube(object):
 
         # Use a provided codelist where one has been prefabricated
         self._get_prefabricated_codelists()
-            
+
         """
         ---- Trig files ----: 
         TODO - just stick all the metadata in the schema
@@ -99,11 +95,11 @@ class Cube(object):
         Until we get to the above, we need to generate the trig now in case the selected distribution,
         changes - but - we don't know yet if it's a single datacube or a part of a list of datacubes
         so for the very first one we'll generate a singleton trig as well.
-        """ 
+        """
         if not is_multiCube:
             # The trig should this transform generate a single output
             self.singleton_trig = scraper.generate_trig()
-        
+
         # The trig for this cube in a multicube:
         self.scraper.dataset.title = title
         self.scraper.set_dataset_id(f'{pathify(environ.get("JOB_NAME", ""))}/{pathify(title)}')
@@ -115,7 +111,7 @@ class Cube(object):
         In the event they are already present in the mapping throw an exception (we 
         really shouldn't have multiple definitions of the same thing kicking around).
         """
-        
+
         # if the chosen codelists directory doesnt exists, create it and be loud about it
         if not os.path.isdir(self.codelist_path):
             logging.warning("You have the codelist directory set to '{}' but "
@@ -127,20 +123,19 @@ class Cube(object):
 
         # get all the codelists into our self.codelists {name:dataframe} dictionary
         # TODO - dont mix pathlib and os, pick one
-        codelist_files = [f for f in os.listdir(self.codelist_path) if 
-                                os.path.isfile(Path(self.codelist_path, f)) and 
-                                f.endswith(".csv")]
+        codelist_files = [f for f in os.listdir(self.codelist_path) if
+                          os.path.isfile(Path(self.codelist_path, f)) and
+                          f.endswith(".csv")]
 
         # blow up for multiple definitions of the same thing
         if len(codelist_files) != len(set(codelist_files)):
             raise IndistinctReferenceError("A codelist can only be defined once. Have '{}'."
-                                            .format(",".join(codelist_files)))
+                                           .format(",".join(codelist_files)))
 
         for codelist_file in codelist_files:
             read_from = os.path.join(self.codelist_path, codelist_file)
             self.codelists[codelist_file[:-4]] = pd.read_csv(read_from)
 
-           
     def instantiate_map(self, destination_folder, pathified_title, info_json):
         """
         Create a basic CSVWMapping object for this cube
@@ -151,7 +146,6 @@ class Cube(object):
         mapObj.set_dataset_uri("{}/{}".format(self.base_url, pathified_title))
 
         return mapObj
-
 
     def _write_default_codelist(self, unique_values, column_label):
         """
@@ -200,9 +194,9 @@ class Cube(object):
 
         # return tableschema
         return Table(
-            url="codelist-{}.csv".format(pathify(column_label)), 
+            url=URI("codelist-{}.csv".format(pathify(column_label))),
             tableSchema="codelist-{}.csv-schema-json".format(pathify(column_label))
-            )
+        )
 
     def _get_trig(self, is_multiCube):
         """
@@ -212,8 +206,7 @@ class Cube(object):
         if not is_multiCube:
             return self.singleton_trig
         else:
-           return self.multi_trig
-
+            return self.multi_trig
 
     def _populate_csvw_mapping(self, destination_folder, pathified_title, info_json):
         """
@@ -223,16 +216,17 @@ class Cube(object):
         foreign_keys = []
         for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
             codelist_df = self.codelists.get(column_label, None)
-            additional_tables.append(self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
+            additional_tables.append(
+                self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
             foreign_keys.append(
                 ForeignKey(
                     columnReference=pathify(column_label),
                     reference=ColumnReference(
-                        resource="codelist-{}.csv".format(pathify(column_label)),
+                        resource=URI("codelist-{}.csv".format(pathify(column_label))),
                         columnReference="notation"
-                        )
                     )
                 )
+            )
 
         # Use map class to output schema
         mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
@@ -243,15 +237,14 @@ class Cube(object):
 
         return mapObj
 
-
     def _output(self, destination_folder, is_multiCube, info_json):
         """
         Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
         """
         pathified_title = pathify(self.title)
-        
+
         # output the tidy data
-        self.df.to_csv(destination_folder / f'{pathified_title}.csv', index = False)
+        self.df.to_csv(destination_folder / f'{pathified_title}.csv', index=False)
 
         # Output the trig 
         trig_to_use = self._get_trig(is_multiCube)
@@ -261,5 +254,3 @@ class Cube(object):
         # generate codelist csvs, schemas and foreign keys
         populatedMapObj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json)
         populatedMapObj.write(destination_folder / f'{pathified_title}.csv-schema.json')
-
-
