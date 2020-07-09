@@ -64,13 +64,12 @@ class Scraper:
         if seed is not None:
             with open(seed, "r") as f:
                 self.seed = json.load(f)
-                if "landingPage" not in self.seed and "dataURL" in self.seed:
-                    logging.warning("No landing page has been supplied. Proceeding with "
-                                    "a temp scrape using the 'dataURL'.")
+                if "dataURL" in self.seed:
+                    logging.warning("A temporary dataURL has been specified; proceeding with a temp scrape.")
                     uri = self.seed["dataURL"]
                     self.temp_scrape = True
                 elif "landingPage" not in self.seed:
-                    raise MetadataError("Aborting, insufficiant seed data. No landing page supplied via "
+                    raise MetadataError("Aborting, insufficient seed data. No landing page supplied via "
                                         "info.json and no dataURL to use as a fallback.")
                 else:
                     uri = self.seed["landingPage"]
@@ -157,7 +156,7 @@ class Scraper:
                     break
 
         if not scraped:
-            raise NotImplementedError(f'No scraper for {self.uri} and insufficiant seed metadata passed.')
+            raise NotImplementedError(f'No scraper for {self.uri} and insufficient seed metadata passed.')
 
         return self
 
