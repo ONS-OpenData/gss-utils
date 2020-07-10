@@ -236,3 +236,7 @@ Feature: Scrape dataset info
   Scenario: gov.uk landing page
     Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
     Then the dataset landing page should be "https://www.gov.uk/government/statistics/alcohol-bulletin"
+
+  Scenario: gov.wales landing page
+    Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
+    Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
