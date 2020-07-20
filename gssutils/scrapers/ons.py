@@ -4,6 +4,7 @@ from dateutil.parser import parse
 
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, CSDB
+import gssutils.scrapers
 
 import mimetypes
 
@@ -43,7 +44,8 @@ def scrape(scraper, tree):
     scraper.dataset.description = landing_page["description"]["metaDescription"]
 
     # Same with date, but use parse() which converts to the right time type
-    scraper.dataset.issued = parse(landing_page["description"]["releaseDate"]).date()
+    scraper.dataset.issued = parse(landing_page["description"]["releaseDate"],
+                                   parserinfo=gssutils.scrapers.UK_DATES).date()
 
     # each json page has a type, represented by the 'type' field in the json
     # the most common one for datasets is dataset_landing_page
@@ -63,7 +65,8 @@ def scrape(scraper, tree):
     try:
         # TODO - a list of things that aren't a date won't scale. Put a real catch in if we get any more.
         if landing_page["description"]["nextRelease"] not in ["To be announced", "Discontinued", ""]:
-            scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"])
+            scraper.dataset.updateDueOn = parse(landing_page["description"]["nextRelease"],
+                                                parserinfo=gssutils.scrapers.UK_DATES)
     except KeyError:
         # if there's no such key in the dict, python will throw a key error. Catch and control it.
         # if we're skipping a field, we might want to know
@@ -112,7 +115,7 @@ def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
     this_distribution = Distribution(scraper)
 
     release_date = this_dataset_page["description"]["releaseDate"]
-    this_distribution.issued = parse(release_date.strip()).date()
+    this_distribution.issued = parse(release_date.strip(), parserinfo=gssutils.scrapers.UK_DATES).date()
     
     # gonna have to go via html ...
     download_url = tree.xpath("//a[text()='xls']/@href")
@@ -127,7 +130,6 @@ def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
 
     logging.debug("Created distribution for download '{}'.".format(download_url))
     scraper.distributions.append(this_distribution)
-    
     
 
 def handler_dataset_landing_page(scraper, landing_page, tree):
@@ -196,7 +198,8 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 # always included. If it happens continue but throw a warning.
                 try:
                     release_date = this_page["description"]["releaseDate"]
-                    this_distribution.issued = parse(release_date.strip()).date()
+                    this_distribution.issued = parse(release_date.strip(),
+                                                     parserinfo=gssutils.scrapers.UK_DATES).date()
                 except KeyError:
                     logging.warning("Download {}. Of datasset versions {} of dataset {} does not have "
                                 "a release date".format(distribution_formats, version_url, dataset_page_url))
@@ -249,7 +252,8 @@ def handler_static_adhoc(scraper, landing_page, tree):
 
         # if we can't get the release date, continue but throw a warning.
         try:
-            this_distribution.issued = parse(landing_page["description"]["releaseDate"]).date()
+            this_distribution.issued = parse(landing_page["description"]["releaseDate"],
+                                             parserinfo=gssutils.scrapers.UK_DATES).date()
         except KeyError:
             logging.warning("Unable to acquire or parse release date")
 

@@ -4,6 +4,7 @@ from dateutil.parser import parse
 
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import CSV
+import gssutils.scrapers
 
 
 def request_json_data(scraper, uri):
@@ -33,11 +34,13 @@ def scrape(scraper, tree):
 
     # Need to get issued from the assciated publication
     publication_document = request_json_data(scraper, dataset_document["publications"][0]["href"]+"/data")
-    scraper.dataset.issued = parse(publication_document["description"]["releaseDate"])
+    scraper.dataset.issued = parse(publication_document["description"]["releaseDate"],
+                                   parserinfo=gssutils.scrapers.UK_DATES)
 
     # Only take next release it its a date
     try:
-        next_release = parse(dataset_document["next_release"])
+        next_release = parse(dataset_document["next_release"],
+                             parserinfo=gssutils.scrapers.UK_DATES)
         scraper.dataset.updateDueOn = next_release
     except:
         pass  # it's fine, "unknown" etc

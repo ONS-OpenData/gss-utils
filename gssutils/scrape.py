@@ -17,6 +17,7 @@ from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
 from gssutils.metadata import namespaces, dcat, pmdcat, mimetype
+from gssutils.scrapers import UK_DATES
 from gssutils.utils import pathify, ensure_list
 
 
@@ -275,7 +276,7 @@ class Scraper:
         # Populate the "unsafe" fields explicitly, then populate the missing
         # metadata from the seed
         dist = dcat.Distribution(self)
-        dist.issued = parse(self.seed["published"]).date()
+        dist.issued = parse(self.seed["published"], parserinfo=UK_DATES).date()
         dist.downloadURL = self.seed["dataURL"]
         self.distributions.append(dist)
         self.dataset.issued = dist.issued

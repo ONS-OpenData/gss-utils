@@ -1,3 +1,5 @@
+from dateutil.parser import parserinfo
+
 from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
     govscot, dcni, govwales
 
@@ -20,3 +22,12 @@ scraper_list = [
     ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape),
     ('https://gov.wales/', govwales.scrape)
 ]
+
+UK_DATES = parserinfo(dayfirst=True)
+BYTE_MULTIPLIERS = {
+    'kB': 1000,
+    'KB': 1024,
+    'MB': 1000000,
+    'GB': 1000000000,
+    'TB': 1000000000000
+}

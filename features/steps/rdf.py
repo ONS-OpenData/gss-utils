@@ -7,6 +7,7 @@ from rdflib import Graph
 from dateutil.parser import parse
 from datetime import datetime, timezone
 from gssutils.metadata import THEME
+from gssutils.scrapers import UK_DATES
 
 
 @step("set the base URI to <{uri}>")
@@ -70,7 +71,7 @@ def step_impl(context, theme):
 
 @step("set the modified time to '{datetime}'")
 def step_impl(context, datetime):
-    modified = parse(datetime)
+    modified = parse(datetime, parserinfo=UK_DATES)
     context.scraper.dataset.modified = modified
 
 

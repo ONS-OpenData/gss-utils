@@ -6,13 +6,15 @@ from dateutil.parser import parse
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel
+import gssutils.scrapers
 
 
 def scrape(scraper, tree):
     scraper.dataset.title = tree.xpath(
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
-        "//span[text() = 'Date published: ']/following-sibling::span/text()")[0].strip()).date()
+        "//span[text() = 'Date published: ']/following-sibling::span/text()")[0].strip(),
+                                   parserinfo=gssutils.scrapers.UK_DATES).date()
     scraper.dataset.keyword = ', '.join(tree.xpath(
         "//div[text()='Statistics: ']/following-sibling::ul/li/a/text()"))
     scraper.dataset.description = scraper.to_markdown(tree.xpath(

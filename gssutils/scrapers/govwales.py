@@ -9,7 +9,7 @@ from lxml import html
 from gssutils.metadata.mimetype import ODS
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
-
+import gssutils.scrapers
 
 FILE_TYPE_AND_SIZE_RE = re.compile(r'.*file type:\s+([^\s]+),\s+file size:\s+([0-9]+)\s+(\w+)', re.DOTALL)
 
@@ -28,7 +28,7 @@ def scrape(scraper, tree):
     published = meta.xpath(
         "div[contains(concat(' ', @class, ' '), ' first-published ')]/" + \
         "div[contains(concat(' ', @class, ' '), ' item ')]/text()")[0].strip()
-    scraper.dataset.issued = parse(published)
+    scraper.dataset.issued = parse(published, parserinfo=gssutils.scrapers.UK_DATES)
     updated = meta.xpath(
         "div[contains(concat(' ', @class, ' '), ' last-updated ')]/" + \
         "div[contains(concat(' ', @class, ' '), ' item ')]//time/@datetime")[0].strip()

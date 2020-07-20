@@ -11,6 +11,7 @@ from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel
 from gssutils.metadata.pmdcat import Dataset
+import gssutils.scrapers
 
 
 def scrape(scraper, tree):
@@ -59,7 +60,7 @@ def scrape(scraper, tree):
         published = anchors[0].xpath("../preceding-sibling::p[1]/child::*/text()")
         dist_issued = None
         if len(published) > 0 and published[0].startswith('Published '):
-            dist_issued = parse(published[0][len('Published '):])
+            dist_issued = parse(published[0][len('Published '):], parserinfo=gssutils.scrapers.UK_DATES)
             # we'll use the latest publication date for the dataset
             if not (hasattr(dataset, 'issued') and dist_issued <= dataset.issued):
                 dataset.issued = dist_issued

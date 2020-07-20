@@ -7,6 +7,7 @@ from lxml import html
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.pmdcat import Dataset
+import gssutils.scrapers
 
 
 def scrape(scraper, tree):
@@ -44,7 +45,7 @@ def scrape(scraper, tree):
                     else:
                         details[key].append(value)
             if 'Publication date:' in details:
-                dataset.issued = parse(details['Publication date:'][0])
+                dataset.issued = parse(details['Publication date:'][0], parserinfo=gssutils.scrapers.UK_DATES)
             resources = article_tree.xpath("//ul[@data-uipath='ps.publication.resources-attachments']/li/a")
             for link in resources:
                 dist = Distribution(scraper)

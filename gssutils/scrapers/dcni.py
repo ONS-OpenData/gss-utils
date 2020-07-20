@@ -4,6 +4,7 @@ from lxml import html
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import ODS, Excel
+import gssutils.scrapers
 
 
 def scrape(scraper, tree):
@@ -65,8 +66,10 @@ def scrape(scraper, tree):
             this_distribution.mediaType = media_type
 
             # Published and modifed time
-            this_distribution.issued = parse(distro_tree.xpath("//*[@property='article:published_time']/@content")[0]).date()
-            this_distribution.modified = parse(distro_tree.xpath("//*[@property='article:modified_time']/@content")[0]).date()
+            this_distribution.issued = parse(distro_tree.xpath("//*[@property='article:published_time']/@content")[0],
+                                             parserinfo=gssutils.scrapers.UK_DATES).date()
+            this_distribution.modified = parse(distro_tree.xpath("//*[@property='article:modified_time']/@content")[0],
+                                               parserinfo=gssutils.scrapers.UK_DATES).date()
             this_distribution.description = distro_tree.xpath("//*[@class='field-summary']/p/text()")[0]
 
             if last_issued is None:

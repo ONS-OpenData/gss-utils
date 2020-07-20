@@ -9,6 +9,7 @@ from rdflib.namespace import DCTERMS
 import gssutils.metadata.dcat
 from gssutils.metadata import DCAT, GOV
 from gssutils.metadata.dcat import Distribution
+import gssutils.scrapers
 
 
 def scrape(scraper, tree):
@@ -28,8 +29,10 @@ def scrape(scraper, tree):
         scraper.dataset.publisher = GOV['welsh-government']
     else:
         scraper.dataset.publisher = publisher
-    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created)).date()
-    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified)).date()
+    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created),
+                                   parserinfo=gssutils.scrapers.UK_DATES).date()
+    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified),
+                                     parserinfo=gssutils.scrapers.UK_DATES).date()
     for pageDist in pageGraph.subjects(RDF.type, DCAT.Distribution):
         dist = Distribution(scraper)
         dist.title = pageGraph.value(pageDist, DCTERMS.title).value.strip()
