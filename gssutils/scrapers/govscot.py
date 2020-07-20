@@ -26,7 +26,7 @@ def scrape(scraper, tree):
                 match = title_size_date.match(cell.text_content())
                 if match:
                     dist.title = match.group(1)
-                    scraper.dataset.issued = parse(match.group(5)).date()
+                    scraper.dataset.issued = parse(match.group(5), dayfirst=True).date()
                 dist.downloadURL = urljoin(scraper.uri, cell.xpath('a/@href')[0])
                 dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
                 scraper.distributions.append(dist)

@@ -28,8 +28,8 @@ def scrape(scraper, tree):
         scraper.dataset.publisher = GOV['welsh-government']
     else:
         scraper.dataset.publisher = publisher
-    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created)).date()
-    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified)).date()
+    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created), dayfirst=True).date()
+    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified), dayfirst=True).date()
     for pageDist in pageGraph.subjects(RDF.type, DCAT.Distribution):
         dist = Distribution(scraper)
         dist.title = pageGraph.value(pageDist, DCTERMS.title).value.strip()

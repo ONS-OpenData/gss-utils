@@ -12,7 +12,7 @@ def scrape(scraper, tree):
     scraper.dataset.title = tree.xpath(
         "//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
-        "//span[text() = 'Date published: ']/following-sibling::span/text()")[0].strip()).date()
+        "//span[text() = 'Date published: ']/following-sibling::span/text()", dayfirst=True)[0].strip()).date()
     scraper.dataset.keyword = ', '.join(tree.xpath(
         "//div[text()='Statistics: ']/following-sibling::ul/li/a/text()"))
     scraper.dataset.description = scraper.to_markdown(tree.xpath(

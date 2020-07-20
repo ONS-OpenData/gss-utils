@@ -44,7 +44,7 @@ def scrape(scraper, tree):
                     else:
                         details[key].append(value)
             if 'Publication date:' in details:
-                dataset.issued = parse(details['Publication date:'][0])
+                dataset.issued = parse(details['Publication date:'][0], dayfirst=True)
             resources = article_tree.xpath("//ul[@data-uipath='ps.publication.resources-attachments']/li/a")
             for link in resources:
                 dist = Distribution(scraper)

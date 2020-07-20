@@ -28,7 +28,7 @@ def scrape(scraper, tree):
     published = meta.xpath(
         "div[contains(concat(' ', @class, ' '), ' first-published ')]/" + \
         "div[contains(concat(' ', @class, ' '), ' item ')]/text()")[0].strip()
-    scraper.dataset.issued = parse(published)
+    scraper.dataset.issued = parse(published, dayfirst=True)
     updated = meta.xpath(
         "div[contains(concat(' ', @class, ' '), ' last-updated ')]/" + \
         "div[contains(concat(' ', @class, ' '), ' item ')]//time/@datetime")[0].strip()

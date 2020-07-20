@@ -59,7 +59,7 @@ def scrape(scraper, tree):
         published = anchors[0].xpath("../preceding-sibling::p[1]/child::*/text()")
         dist_issued = None
         if len(published) > 0 and published[0].startswith('Published '):
-            dist_issued = parse(published[0][len('Published '):])
+            dist_issued = parse(published[0][len('Published '):], dayfirst=True)
             # we'll use the latest publication date for the dataset
             if not (hasattr(dataset, 'issued') and dist_issued <= dataset.issued):
                 dataset.issued = dist_issued

@@ -13,7 +13,8 @@ type_size_re = re.compile(r"([^\s]*)\s+\(([0-9\.]+)\s+([KMG]B)")
 def scrape(scraper, tree):
     scraper.dataset.title = tree.xpath("//h1/text()")[0].strip()
     scraper.dataset.issued = parse(tree.xpath(
-        "//p[contains(concat(' ', @class, ' '), ' date-pub ')]/span[@class='date-display-single']/text()")[0]).date()
+        "//p[contains(concat(' ', @class, ' '), ' date-pub ')]/span[@class='date-display-single']/text()")[0],
+                                   dayfirst=True).date()
     scraper.dataset.publisher = GOV['department-of-health-northern-ireland']
     for doc_link in tree.xpath(
             "//div[contains(concat(' ', @class, ' '), ' publicationDocs ')]"

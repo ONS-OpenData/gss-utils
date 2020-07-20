@@ -40,7 +40,7 @@ def scrape_pages(scraper, tree):
                     elif k == 'Publication Source' or k == 'Source':
                         pass
                     elif k == 'Release Date' or k == 'Released':
-                        dataset.issued = parse(v.text.strip())
+                        dataset.issued = parse(v.text.strip(), dayfirst=True)
                     elif k == 'Bulletin Date' or k == 'Period':
                         bulletin_date = v.text
                     elif k == 'View' or k == 'View Archive':
@@ -56,7 +56,7 @@ def scrape_pages(scraper, tree):
                                 cols = release_row.xpath("td")
                                 dist.downloadURL = urljoin(view_url, cols[1].xpath("a/@href")[0].replace(' ', '%20'))
                                 archive_date = cols[0].text
-                                dist.issued = parse(archive_date.strip())
+                                dist.issued = parse(archive_date.strip(), dayfirst=True)
                                 dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
                                 dist.title = dataset.title + ' ' + archive_date
                                 dataset.distribution.append(dist)
@@ -92,7 +92,7 @@ def scrape_ots_reports(scraper, tree):
                 if k == 'Published':
                     try:
                         if v.text is not None:
-                            publication_date = parse(v.text.strip().strip(u'\u200B\ufeff'))
+                            publication_date = parse(v.text.strip().strip(u'\u200B\ufeff'), dayfirst=True)
                     except ValueError as e:
                         logging.warning(f"Unable to parse published date {e}")
                 elif k == 'Report':
