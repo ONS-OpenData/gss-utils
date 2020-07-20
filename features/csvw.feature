@@ -16,6 +16,7 @@ Feature: Create CSVW metadata
       @base <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity> .
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
       @prefix qb:    <http://purl.org/linked-data/cube#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
       @prefix sdmx-a: <http://purl.org/linked-data/sdmx/2009/attribute#> .
       @prefix sdmx-d: <http://purl.org/linked-data/sdmx/2009/dimension#> .
       @prefix sdmx-c: <http://purl.org/linked-data/sdmx/2009/code#> .

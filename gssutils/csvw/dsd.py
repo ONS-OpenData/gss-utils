@@ -14,6 +14,7 @@ class DimensionProperty(NamedTuple):
     qb_codeList: Optional[Resource] = None
     rdfs_range: Optional[Resource] = None
     rdfs_label: Optional[str] = None
+    rdfs_comment: Optional[str] = None
 
 
 class MeasureProperty(NamedTuple):

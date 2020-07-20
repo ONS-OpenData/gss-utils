@@ -113,7 +113,7 @@ class CSVWMapping:
 
     def _as_csvw_object(self):
         for name in self._column_names:
-            if self._mapping is not None and name in self._mapping:
+            if self._mapping is not None and name in self._mapping and isinstance(self._mapping[name], dict):
                 obj = self._mapping[name]
                 if "dimension" in obj and "value" in obj:
                     self._keys.append(self._columns[name].name)
@@ -131,7 +131,7 @@ class CSVWMapping:
                             )
                         )
                     ))
-                if "attribute" in obj and "value" in obj:
+                elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),
                         valueUrl=URI(obj["value"])
@@ -146,7 +146,7 @@ class CSVWMapping:
                             )
                         )
                     ))
-                if "unit" in obj and "measure" in obj:
+                elif "unit" in obj and "measure" in obj:
                     self._columns[name] = self._columns[name]._replace(propertyUrl=obj["measure"])
                     if "datatype" in obj:
                         self._columns[name] = self._columns[name]._replace(datatype=obj["datatype"])
@@ -180,7 +180,10 @@ class CSVWMapping:
                         valueUrl=URI(obj["measure"])
                     )
             else:
-                # assume local dimension
+                # assume local dimension, with optional definition
+                description: Optional[str] = None
+                if self._mapping is not None and name in self._mapping and isinstance(self._mapping[name], str):
+                    description = self._mapping[name]
                 self._keys.append(self._columns[name].name)
                 self._columns[name] = self._columns[name]._replace(
                     propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
@@ -194,7 +197,8 @@ class CSVWMapping:
                         rdfs_range=Resource(
                             at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                         ),
-                        rdfs_label=name
+                        rdfs_label=name,
+                        rdfs_comment=description
                     )
                 ))
         self._columns["virt_dataset"] = Column(

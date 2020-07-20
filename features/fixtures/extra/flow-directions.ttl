@@ -69,7 +69,8 @@
 
 <http://gss-data.org.uk/def/concept-scheme/flow-directions>
         a                   skos:ConceptScheme ;
-        rdfs:label          "Flow Directions"@en ;
+        rdfs:label          "Flow Direction"@en ;
+        rdfs:comment        "The direction of trade"@en ;
         <http://purl.org/dc/terms/title>
                 "Flow Directions"@en ;
         skos:hasTopConcept  <http://gss-data.org.uk/def/concept/flow-directions/debits> , <http://gss-data.org.uk/def/concept/flow-directions/balance> , <http://gss-data.org.uk/def/concept/flow-directions/credits> , <http://gss-data.org.uk/def/concept/flow-directions/imports> , <http://gss-data.org.uk/def/concept/flow-directions/exports> , <http://gss-data.org.uk/def/concept/flow-directions/terms-of-trade> , <http://gss-data.org.uk/def/concept/flow-directions/balances> .
