@@ -197,6 +197,9 @@ class CSVWMapping:
                         rdfs_range=Resource(
                             at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                         ),
+                        qb_codeList=Resource(
+                            at_id = self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                        ),
                         rdfs_label=name,
                         rdfs_comment=description
                     )
