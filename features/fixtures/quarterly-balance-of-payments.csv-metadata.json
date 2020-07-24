@@ -188,6 +188,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/geography",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/geography"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Geography"
             },
@@ -203,6 +206,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/period",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/period"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Period"
             },
@@ -218,6 +224,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/cdid",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/cdid"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Cdid"
             },
@@ -233,6 +242,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/bop-services",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/bop-services"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/BopServices"
             },
@@ -248,6 +260,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/flow-directions",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/flow-directions"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/FlowDirections"
             },
@@ -263,6 +278,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/measure-type",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/measure-type"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/MeasureType"
             },
@@ -278,6 +296,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/value",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/value"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Value"
             },
@@ -293,6 +314,9 @@
           "qb:dimension": {
             "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#dimension/unit",
             "@type": "qb:DimensionProperty",
+            "qb:codeList": {
+              "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#scheme/unit"
+            },
             "rdfs:range": {
               "@id": "http://gss-data.org.uk/quarterly-balance-of-payments#class/Unit"
             },

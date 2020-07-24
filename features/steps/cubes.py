@@ -1,7 +1,7 @@
 import json
 
 from behave import *
-
+from nose.tools import *
 from gssutils import *
 from gssutils.transform.codelists import get_codelist_schema
 
@@ -129,7 +129,7 @@ def step_impl(context, cube_name, correct_schema):
         correct_schema_as_dict = json.load(f)
 
     # compare
-    assert created_schema_as_dict == correct_schema_as_dict, "{}\n\n Above schema does not " \
-                                                             "match the expected schema for: '{}'.".format(
+    assert_equal(created_schema_as_dict, correct_schema_as_dict, "{}\n\n Above schema does not " \
+                                                                 "match the expected schema for: '{}'.".format(
         json.dumps(created_schema_as_dict, indent=2),
-        correct_schema)
+        correct_schema))
