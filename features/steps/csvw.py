@@ -272,3 +272,11 @@ def step_impl(context):
 @step('I add extra RDF files "{files}"')
 def step_impl(context, files):
     context.extra_files = [f.strip() for f in files.split(',')]
+
+
+@step('I add local codelists "{files}"')
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    raise NotImplementedError(u'STEP: And I add local codelists "commodity.csv, industry.csv"')

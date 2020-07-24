@@ -47,6 +47,7 @@ Feature: Create CSVW metadata
       .
     """
 
+  @skip
   Scenario: Data Cube, metadata and reference data for PMD4
     Given a CSV file 'product-observations.csv'
     And a JSON map file 'mapping-info.json'
@@ -54,4 +55,5 @@ Feature: Create CSVW metadata
     When I create a CSVW file from the mapping and CSV
     And gsscogs/csv2rdf generates RDF
     And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf, sdmx-bop-catalog.ttl, flow-directions.ttl, flow-directions-catalog.ttl"
+    And I add local codelists "commodity.csv, industry.csv"
     Then the RDF should pass the PMD4 constraints
