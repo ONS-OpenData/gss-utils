@@ -1,11 +1,11 @@
 import logging
-from typing import Optional, List
+from typing import Optional, List, TextIO
 
 import sys
 import csv
 import json
 import time
-from io import BytesIO, SEEK_END, StringIO
+from io import BytesIO, SEEK_END, StringIO, TextIOBase
 from pathlib import Path
 from tarfile import TarFile, TarInfo
 from urllib.parse import urljoin
@@ -127,29 +127,28 @@ def step_impl(context):
     g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
-@step("gsscogs/csv2rdf generates RDF")
-def step_impl(context):
+def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metadata_io: TextIO):
     client = docker.from_env()
     csv2rdf = client.containers.create(
         'gsscogs/csv2rdf',
-        command=f'csv2rdf -m annotated -o /tmp/output.ttl -t /tmp/{context.csv_filename} -u /tmp/{context.metadata_filename}'
+        command=f'csv2rdf -m annotated -o /tmp/output.ttl -t /tmp/{csv_filename} -u /tmp/{metadata_filename}'
     )
     archive = BytesIO()
-    context.metadata_io.seek(0, SEEK_END)
-    metadata_size = context.metadata_io.tell()
-    context.metadata_io.seek(0)
-    context.csv_io.seek(0, SEEK_END)
-    csv_size = context.csv_io.tell()
-    context.csv_io.seek(0)
+    metadata_io.seek(0, SEEK_END)
+    metadata_size = metadata_io.tell()
+    metadata_io.seek(0)
+    csv_io.seek(0, SEEK_END)
+    csv_size = csv_io.tell()
+    csv_io.seek(0)
     with TarFile(fileobj=archive, mode='w') as t:
-        tis = TarInfo(str(context.metadata_filename))
+        tis = TarInfo(str(metadata_filename))
         tis.size = metadata_size
         tis.mtime = time.time()
-        t.addfile(tis, BytesIO(context.metadata_io.read().encode('utf-8')))
-        tic = TarInfo(str(context.csv_filename))
+        t.addfile(tis, BytesIO(metadata_io.read().encode('utf-8')))
+        tic = TarInfo(str(csv_filename))
         tic.size = csv_size
         tic.mtime = time.time()
-        t.addfile(tic, BytesIO(context.csv_io.read().encode('utf-8')))
+        t.addfile(tic, BytesIO(csv_io.read().encode('utf-8')))
     archive.seek(0)
     csv2rdf.put_archive('/tmp/', archive)
     csv2rdf.start()
@@ -163,7 +162,12 @@ def step_impl(context):
     output_archive.seek(0)
     with TarFile(fileobj=output_archive, mode='r') as t:
         output_ttl = t.extractfile('output.ttl')
-        context.turtle = output_ttl.read()
+        return output_ttl.read()
+
+
+@step("gsscogs/csv2rdf generates RDF")
+def step_impl(context):
+    context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io)
 
 
 @when("I create a CSVW metadata file '{filename}' for base '{base}' and path '{path}' with dataset metadata")
@@ -185,11 +189,11 @@ def step_impl(context, filename, base, path):
     )
 
 
-def run_ics(group: str, turtle: str, extra_data: List[str] = ()):
+def run_ics(group: str, turtle: str, extra_files: List[str] = (), extra_data: List[str] = ()):
     client = docker.from_env()
     files = ['data.ttl']
-    if len(extra_data) > 0:
-        files.extend(extra_data)
+    if len(extra_files) > 0:
+        files.extend(extra_files)
     tests = client.containers.create(
         'gsscogs/gdp-sparql-tests',
         command=f'''sparql-test-runner -t /usr/local/tests/{group} -p dsgraph='<urn:x-arq:DefaultGraph>' '''
@@ -200,12 +204,19 @@ def run_ics(group: str, turtle: str, extra_data: List[str] = ()):
         ttl = TarInfo('data.ttl')
         ttl.size = len(turtle)
         ttl.mtime = time.time()
-        t.addfile(ttl, BytesIO(turtle))
-        for filename in extra_data:
+        t.addfile(ttl, BytesIO(turtle.encode('utf-8')))
+        for filename in extra_files:
             actual_path = Path('features') / 'fixtures' / 'extra' / filename
             with actual_path.open('rb') as actual_file:
                 extra_file = t.gettarinfo(arcname=filename, fileobj=actual_file)
                 t.addfile(extra_file, actual_file)
+        for i, add_turtle in enumerate(extra_data):
+            filename = f'extra_{i}.ttl'
+            add_ttl = TarInfo(filename)
+            add_ttl.size = len(add_turtle)
+            add_ttl.mtime = time.time()
+            t.addfile(add_ttl, BytesIO(add_turtle.encode('utf-8')))
+            files.append(filename)
     archive.seek(0)
     tests.put_archive('/tmp/', archive)
     tests.start()
@@ -275,8 +286,11 @@ def step_impl(context, files):
 
 
 @step('I add local codelists "{files}"')
-def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    raise NotImplementedError(u'STEP: And I add local codelists "commodity.csv, industry.csv"')
+def step_impl(context, files):
+    codelists = [f.strip() for f in files.split(',')]
+    context.extra_data = []
+    for csv in codelists:
+        csv_path = Path('features') / 'fixtures' / 'extra' / csv
+        metadata_path = csv_path.with_suffix('.csv-metadata.json')
+        with csv_path.open('r') as csv_file, metadata_path.open('r') as metadata_file:
+            context.extra_data.append(run_csv2rdf(csv_path.name, metadata_file.name, csv_file, metadata_file))
