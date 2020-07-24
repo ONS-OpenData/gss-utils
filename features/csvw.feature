@@ -29,10 +29,13 @@ Feature: Create CSVW metadata
 
       <#structure> a qb:DataStructureDefinition ;
         qb:component <#component/direction>, <#component/industry>, <#component/marker>, <#component/measure_type>,
-                     <#component/commodity>, <#component/country>, <#component/value>, <#component/year> .
+                     <#component/commodity>, <#component/country>, <#component/value>, <#component/year>, <#component/unit> .
 
       <#component/direction> a qb:ComponentSpecification ;
         qb:dimension gss-dim:flow-directions .
+
+      <#component/unit> a qb:ComponentSpecification ;
+        qb:attribute sdmx-a:unitMeasure .
 
       <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity/2008/D5/46/IM/T> a qb:Observation ;
           <#dimension/commodity> <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/commodity/T> ;

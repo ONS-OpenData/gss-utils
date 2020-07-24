@@ -165,6 +165,15 @@ class CSVWMapping:
                             at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                             qb_componentProperty=Resource(at_id=obj["measure"]),
                             qb_measure=MeasureProperty(at_id=obj["measure"])
+                        ),
+                        AttributeComponent(
+                            at_id=self.join_dataset_uri(f"#component/unit"),
+                            qb_componentProperty=Resource(
+                                at_id=URI("http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure")
+                            ),
+                            qb_attribute=AttributeProperty(
+                                at_id=URI("http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure")
+                            )
                         )
                     ])
                     self._columns["virt_unit"] = Column(
