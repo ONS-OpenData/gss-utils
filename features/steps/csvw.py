@@ -189,7 +189,7 @@ def step_impl(context, filename, base, path):
     )
 
 
-def run_ics(group: str, turtle: str, extra_files: List[str] = (), extra_data: List[str] = ()):
+def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[str] = ()):
     client = docker.from_env()
     files = ['data.ttl']
     if len(extra_files) > 0:
@@ -204,7 +204,7 @@ def run_ics(group: str, turtle: str, extra_files: List[str] = (), extra_data: Li
         ttl = TarInfo('data.ttl')
         ttl.size = len(turtle)
         ttl.mtime = time.time()
-        t.addfile(ttl, BytesIO(turtle.encode('utf-8')))
+        t.addfile(ttl, BytesIO(turtle))
         for filename in extra_files:
             actual_path = Path('features') / 'fixtures' / 'extra' / filename
             with actual_path.open('rb') as actual_file:
