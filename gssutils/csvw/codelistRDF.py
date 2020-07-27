@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import csv
 import json
+import os
 
 
 class COGSCSVtoRDF:
@@ -206,7 +207,7 @@ class CSVCodelists:
         self._column_names = []
 
     
-    def create_codelists(self, vals, path):
+    def create_codelists(self, vals, path, fam, nme):
         try:
             self._column_names = list(vals)
             for c in self._column_names:
@@ -221,33 +222,41 @@ class CSVCodelists:
                 out.mkdir(exist_ok=True)
                 dat.to_csv(path + f'/{pathify(c)}.csv', index = False)
         except Exception as e:
-            print('Error: ' + str(e))
-            #with open('codelist-schema.json', 'r') as schema:
-            #    txt = schema.read()
-            #    schema.close()
+            print('CODELIST Error: ' + str(e))
+
+        try:
+            #with open('../../Reference/codelist-template.csv-metadata.json', 'r') as schema:
+            with open('gssutils/csvw/codelist-template.csv-metadata.json', 'r') as schema:
+                txt = schema.read()
+                schema.close()
             
-            #txt = txt.replace('{codelistname}',pathify(c))
-            #txt = txt.replace('{codelistlabel}',c)
+            txt = txt.replace('{codelist}',pathify(c))
+            txt = txt.replace('{family}',fam)
+            txt = txt.replace('{transformname}',nme)
             
-            #f = open(path + f"/{pathify(c)}-schema.json", "w")
-            #f.write(txt)
-            #f.close()
+            
+            txt = txt.replace('{codelistlabel}',c)
+            f = open(path + f"/{pathify(c)}.csv-metadata.json", "w")
+            f.write(txt)
+            f.close()
+        except Exception as e:
+            print('SCHEMA Error: ' + str(e))
 
 
-
-#df = pd.read_csv (r'gssutils/csvw/out/observations.csv')
+#df = pd.read_csv (r'gssutils/csvw/observations.csv')
 #df['Location of Death'] = df['Location of Death'].str.replace("-"," ")
-#df['Location of Death'] = df['Location of Death'].str.capitalize()
 #df['Cause of Death'] = df['Cause of Death'].str.replace("-"," ")
+#df['Location of Death'] = df['Location of Death'].str.capitalize()
 #df['Cause of Death'] = df['Cause of Death'].str.capitalize()
 #cl = CSVCodelists()
-#print(df1['Location of Death'].unique())
-##df1 = pd.DataFrame(df['Location of Death'])
-#cl.create_codelists(df1, 'gssutils/csvw/codelists')
-#df1 = pd.DataFrame(df['Cause of Death'] )
+#df1 = pd.DataFrame(df['Location of Death'])
+#cl.create_codelists(df1, 'gssutils/csvw/codelists', 'covid-19', Path(os.getcwd()).name)
 #print(df1['Cause of Death'].unique())
-#cl.create_codelists(df1, 'gssutils/csvw/codelists')
+##df1 = pd.DataFrame(df['Cause of Death'] )
+#cl.create_codelists(df1, 'gssutils/csvw/codelists', 'covid-19', Path(os.getcwd()).name)
 
 #rd = COGSCSVtoRDF()
 #rd.initialise("Air Arrivals", "gssutils/csvw/out")
 #rd.convert_To_RDF()
+
+#'codelist-template.csv-metadata.json'
