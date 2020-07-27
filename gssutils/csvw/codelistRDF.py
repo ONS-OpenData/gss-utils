@@ -225,8 +225,8 @@ class CSVCodelists:
             print('CODELIST Error: ' + str(e))
 
         try:
-            #with open('../../Reference/codelist-template.csv-metadata.json', 'r') as schema:
-            with open('gssutils/csvw/codelist-template.csv-metadata.json', 'r') as schema:
+            with open('../../Reference/codelist-template.csv-metadata.json', 'r') as schema:
+            #with open('gssutils/csvw/codelist-template.csv-metadata.json', 'r') as schema:
                 txt = schema.read()
                 schema.close()
             
