@@ -9,7 +9,7 @@ from gssutils.tracing.transform import TransformTrace
 from gssutils.refdata import *
 from gssutils.csvw.t2q import CSVWMetadata
 from gssutils.csvw.mapping import CSVWMapping
-#from gssutils.csvw.codelists import CSVCodelists
+from gssutils.csvw.codelistRDF import CSVCodelists
 from gssutils.transform.cubes import Cubes
 from databaker.framework import *
 import pandas as pd
