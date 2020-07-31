@@ -22,7 +22,6 @@ default_map = {
     }
 }
 
-
 class CSVWMapping:
     def __init__(self):
         self._csv_filename: Optional[URI] = None
@@ -121,6 +120,7 @@ class CSVWMapping:
                         propertyUrl=URI(obj["dimension"]),
                         valueUrl=URI(obj["value"])
                     )
+                    regex = self._regex_for(obj["value"])
                     self._components.append(DimensionComponent(
                         at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                         qb_componentProperty=Resource(at_id=URI(obj["dimension"])),
