@@ -131,6 +131,32 @@ class CSVWMapping:
                             )
                         )
                     ))
+                elif "parent" in obj and "value" in obj:
+                    # a local dimension that has a super property
+                    description: Optional[str] = None
+                    if "description" in obj:
+                        description = obj["description"]
+                    self._keys.append(self._columns[name].name)
+                    self._columns[name] = self._columns[name]._replace(
+                        propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
+                        valueUrl=URI(obj["value"])
+                    )
+                    self._components.append(DimensionComponent(
+                        at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
+                        qb_componentProperty=Resource(at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}")),
+                        qb_dimension=DimensionProperty(
+                            at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
+                            rdfs_range=Resource(
+                                at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
+                            ),
+                            qb_codeList=Resource(
+                                at_id = self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                            ),
+                            rdfs_label=name,
+                            rdfs_comment=description,
+                            rdfs_subPropertyOf=Resource(at_id=URI(obj["parent"]))
+                        )
+                    ))
                 elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),
