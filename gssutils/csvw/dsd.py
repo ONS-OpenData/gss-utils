@@ -15,7 +15,8 @@ class DimensionProperty(NamedTuple):
     rdfs_range: Optional[Resource] = None
     rdfs_label: Optional[str] = None
     rdfs_comment: Optional[str] = None
-    rdfs_subPropertyOf: Optional[URI] = None
+    rdfs_subPropertyOf: Optional[Resource] = None
+    rdfs_isDefinedBy: Optional[Resource] = None
 
 
 class MeasureProperty(NamedTuple):

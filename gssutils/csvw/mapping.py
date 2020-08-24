@@ -136,6 +136,9 @@ class CSVWMapping:
                     description: Optional[str] = None
                     if "description" in obj:
                         description = obj["description"]
+                    source: Optional[URI] = None
+                    if "source" in obj:
+                        source = URI(obj["source"])
                     self._keys.append(self._columns[name].name)
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
@@ -150,13 +153,41 @@ class CSVWMapping:
                                 at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             ),
                             qb_codeList=Resource(
-                                at_id = self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                                at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
                             ),
                             rdfs_label=name,
                             rdfs_comment=description,
-                            rdfs_subPropertyOf=Resource(at_id=URI(obj["parent"]))
+                            rdfs_subPropertyOf=Resource(at_id=URI(obj["parent"])),
+                            rdfs_isDefinedBy=Resource(at_id=source)
                         )
                     ))
+                elif "description" in obj:
+                    # local dimension with a definition and maybe source of the definition
+                    source: Optional[URI] = None
+                    if "source" in obj:
+                        source = URI(obj["source"])
+                    self._keys.append(self._columns[name].name)
+                    self._columns[name] = self._columns[name]._replace(
+                        propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
+                        valueUrl=self.join_dataset_uri(f"#concept/{pathify(name)}/{{{self._columns[name].name}}}")
+                    )
+                    self._components.append(DimensionComponent(
+                        at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
+                        qb_componentProperty=Resource(at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}")),
+                        qb_dimension=DimensionProperty(
+                            at_id=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
+                            rdfs_range=Resource(
+                                at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
+                            ),
+                            qb_codeList=Resource(
+                                at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                            ),
+                            rdfs_label=name,
+                            rdfs_comment=obj["description"],
+                            rdfs_isDefinedBy=Resource(at_id=source)
+                        )
+                    ))
+
                 elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),

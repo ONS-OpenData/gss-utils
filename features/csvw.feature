@@ -94,11 +94,13 @@ Feature: Create CSVW metadata
       <#dimension/notification-date> a qb:DimensionProperty ;
         rdfs:label "Notification Date"@en ;
         rdfs:comment "Date of notification of death by the care home provider, not necessarily the date of death."@en ;
-        rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> .
+        rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> ;
+        rdfs:isDefinedBy <https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes-1-march-14-august-2020-html#section-48615> .
 
       <#dimension/cause-of-death> a qb:DimensionProperty ;
         rdfs:label "Cause of Death"@en ;
         rdfs:comment "Cause of death is reported by the care home provider and not necessarily based on laboratory confirmed tests, so is not directly comparable with Public Health Wales data."@en ;
+        rdfs:isDefinedBy <https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes-1-march-14-august-2020-html#section-48615> ;
       .
 
       <#component/unit> a qb:ComponentSpecification ;
