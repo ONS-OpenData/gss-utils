@@ -15,6 +15,7 @@ gssutils = {editable = true,path = "."}
 requests = {extras = ["security"],version = "*"}
 certifi = "*"
 uritemplate = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.7"
