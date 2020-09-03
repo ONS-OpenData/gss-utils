@@ -3,16 +3,29 @@ import os
 import uuid
 import json
 import shutil
+import logging
 
+from jinja2 import Template, TemplateError
 from datetime import datetime
 from pathlib import Path
 from databaker.framework import savepreviewhtml
 import pandas as pd
+import requests
 
 from gssutils.utils import pathify
 
 PREVIEW_NOTE = " -- Preview created -- "
 
+
+def excelRange(bag):
+    """Get the furthermost tope-left and bottom-right cells of a given selection"""
+    min_x = min([cell.x for cell in bag])
+    max_x = max([cell.x for cell in bag])
+    min_y = min([cell.y for cell in bag])
+    max_y = max([cell.y for cell in bag])
+    top_left_cell = xypath.contrib.excel.excel_location(bag.filter(lambda x: x.x == min_x and x.y == min_y))
+    bottom_right_cell = xypath.contrib.excel.excel_location(bag.filter(lambda x: x.x == max_x and x.y == max_y))
+    return f"{top_left_cell}:{bottom_right_cell}"
 
 class CubeSegment(object):
     """
@@ -52,11 +65,19 @@ class Column(object):
         self.comments = []
         self.var = None
 
-    def __call__(self, comment, var=None):
+    def __call__(self, comment, var=None, excelRange=None):
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
-        if var is not None:
+        if var is not None and excelRange is not None:
+            raise Exception("Aborting. 'excelRange' is a means of populating the 'var keyword argument."
+                            "Therefore you cannot pass both 'excelRange' and 'var' in the same constructor")
+        
+        elif var is not None:
             self.var = var
-            comment = comment.format(var)
+            comment = comment.format(self.var)
+        elif excelRange is not None:
+            self.var = excelRange(excelRange)
+            comment = comment.format(self.var)
+
         self.comments.append({now: comment})
 
 
@@ -70,6 +91,10 @@ class TransformTrace(object):
         self.composite_key = None
         self.df_store = {}
         self.all_composite_keys = []
+        
+        # Track warnings - we don't want to trigger them over
+        # and over when we loop tabs etc
+        self.warned = []
 
         # Remove any lingering documentation from the last run
         if os.path.exists("documentation"):
@@ -100,7 +125,14 @@ class TransformTrace(object):
         for column in columns:
             self.add_column(column)
 
+    # Depreciating - should never have used caps
     def OBS(self, comment):
+        if "OBS" not in self.warned:
+            logging.warning('We\'re depreciating the ".OBS" command, please use the standards-compliant ".obs" instead.')
+            self.warned.append("OBS")
+        self.cubes[self.composite_key].obs = comment
+        
+    def obs(self, comment):
         self.cubes[self.composite_key].obs = comment
 
     def add_column(self, column):
@@ -108,15 +140,22 @@ class TransformTrace(object):
 
     def multi(self, columns, comment):
         """
-        An action that applies to ach column listed in columns
+        An action that applies to each column listed in columns
         """
         for column in columns:
             self.cubes[self.composite_key].columns[column](comment)
 
+    # Depreciating - should never have used caps
     def ALL(self, comment):
         """
         An action that applies to all columns
         """
+        if "ALL" not in self.warned:
+            logging.warning('We\'re depreciating the ".OBS" command, please use the standards-compliant ".obs" instead.')
+            self.warned.append("ALL")
+            self.ALL(comment)
+
+    def all(self, comment):
         for columnObj in self.cubes[self.composite_key].columns.values():
             columnObj('ALL: '+comment)
 
@@ -200,6 +239,7 @@ class TransformTrace(object):
                             "{} : {}".format(cubeObj.source, cubeObj.tab)
 
                 output = {
+                    "composite_key": composite_key,
                     "sourced_from": cubeObj.source,
                     "id": sid,
                     "tab": cubeObj.tab,
@@ -215,101 +255,187 @@ class TransformTrace(object):
                 outputs[cube_name].append(output)
         return {cube_name: outputs}
 
+    # DEVNOTE: I've switched this off, the raw traced output_dict is accessible via
+    # the renderer so no particular reason we need a hard copy.
     def _write_output_dict(self, output_dict):
         destinationFolder = Path('documentation')
         destinationFolder.mkdir(exist_ok=True, parents=True)
 
-        for dataset, dataset_details in output_dict.items():
+        for dataset_details in output_dict.values():
             for cube_name, details in dataset_details.items():
                 output = {cube_name: details}
                 with open("documentation/{}.json".format(pathify(cube_name)), "w") as f:
-                    json.dump(output, f)
+                    json.dump(output, f, indent=4)
 
-    def _create_html_output(self, output_dict):
+    def _update_transform_stage(self, output_dict):
+        
+        with open("info.json", "r") as f:
+            data = json.load(f)
+            data["transform"]["transformStage"] = []
 
-        colour_pick = 0
-        def next_colour():
-            # Vary table colour for readibility
-            pallette = {
-                0: "#8cd98c",
-                1: "#99b3e6",
-                2: "#ffdf80"
-            }
-            nonlocal colour_pick
-            if colour_pick == len(pallette)-1:
-                colour_pick = 0
+            # Get the identifier for each cube segment being traced (i.e each tab or combined tab)
+            for trace_key in self.all_composite_keys:
+
+                # get the 'CubeSegment' class for it: ... scroll up for class definition
+                cube_segment = self.cubes[trace_key]
+
+                columns = []
+                extraction_note = []
+                for column_name, columnObj in cube_segment.columns.items():
+                    columns.append({
+                        # take the comments, but without the time stamp
+                        column_name: [next( v for k,v in x.items()) for x in columnObj.comments]
+                    })
+                    if columnObj.var is not None:
+                        extraction_note.append({columnObj.name: columnObj.var})
+
+                source = cube_segment.source
+                if not isinstance(source, list):
+                    source = [source]
+                split_source = []
+                for s in source:
+                    s_href = s.split(" : ")[0]
+                    # Not all sources have comments, account for it
+                    try:
+                        s_text = s.split(" : ")[1]
+                    except IndexError:
+                        s_text = ""
+                    split_source.append({s_href: s_text})
+
+                # TODO - column name isn't necessarily unique
+                update = {
+                    "source_name": cube_segment.cube_name,
+                    "identifier": trace_key,
+                    "source": split_source,
+                    "title": cube_segment.tab,
+                    "preview": cube_segment.preview,
+                    "observation_selection": cube_segment.obs,
+                    "columns": extraction_note,
+                    "postTransformNotes": columns
+                    }
+
+                data["transform"]["transformStage"].append(update)
+
+        with open("info.json", "w") as f:
+            json.dump(data, f, indent=4)
+
+        return data
+
+    def output(self):
+        logging.warning("We're depreciated .output() can you use .render() instead please, " \
+                        "if you use if with no arguments it'll get you to the same place.")
+        self.render()
+
+    def render(self, template=None, output="./out/spec.html", foreign_sources={}, local=None, local_sources=None):
+        """
+        With no parameters render will update the info.json with the transformation information
+        with params we'll render a html inline.
+        """
+        
+        # base data sources
+        raw_data = self._create_output_dict()
+        info_json = self._update_transform_stage(raw_data) 
+
+        # we also need some basic jenkins details
+        # Jenkins is case sensitive, and the pattern si different for covid
+        family = info_json["families"][0].lower()
+        if "COVID" in family.upper():
+            family = family.upper()
+        else:
+            family = "-".join([x.capitalize() for x in family.split("-")])
+
+        # Jenkins Job ---------
+        # TODO - this bits very unlikely to be robust, but only matters for running
+        # locaally.... sometimes is better than never
+        jenkins_title = info_json["title"].replace(",", "").replace(" ", "-")
+        pub_name = info_json["publisher"].split(" ")
+        try:
+            jenkins_title = pub_name[0] + "-" + pub_name[1][:1] + "-" + jenkins_title
+        except IndexError:
+            jenkins_title = pub_name[0] + jenkins_title
+
+        jenkins_job = pathify(os.environ.get('JOB_NAME', f'replace-with-family-name/job/')) + jenkins_title
+        jenkins_job = jenkins_job.replace("replace-with-family-name", family)
+        jenkins = {"job": jenkins_job}
+
+        # Jenkins Build Status ---------
+        jenkins_build = f"https://ci.floop.org.uk/buildStatus/icon?job=GSS_data%2F{family}%2F{jenkins_title}/"
+        jenkins["build"] = jenkins_build
+
+        if local is not None and template is not None:
+            raise Exception("You can only pass EITHER local= or a remote template url/name, not both")
+
+        # Templating, going to wrap this in case something goes bang
+        try:
+
+            if local is not None:
+                try:
+                    with open(local, "r") as f:
+                        localTemplate = f.read()
+                except Exception as e:
+                    raise Exception("Unable to open template from location {}.".format(local)) from e
+            elif template is None:
+                # Exit immediately if no local template and we don't want to render
+                return
+            elif "/" not in template:
+                # If it's just a file name so it's a template from the standard library
+                template = "https://raw.githubusercontent.com/GSS-Cogs/frontend-template-resources/master/templates/jinja2/"+template
             else:
-                colour_pick +=1
-            return pallette[colour_pick]
+                pass
 
-        for dataset, dataset_details in output_dict.items():
-            for title, details in dataset_details.items():
-                html_lines = []
-                html_lines.append("<h3>{}</h3>".format(title))
-                for detail in details:
-                        html_lines.append("<hr>")
-                        html_lines.append("<br>")
-                        table_colour = next_colour()
-                        html_lines.append("<strong>identifier</strong>    : {}<br>".format(detail["id"]))
+            """
+            A foreign source is where we want to call in a little more data for the renderer,
+            We'll add them to the two existing data sources we always make availible, which are:
 
-                        if "tab" in detail.keys():
-                            html_lines.append("<strong>tab</strong>    : {}<br>".format(detail["tab"]))
+            info_json: the info.json
+            raw_data: the dictionary that is the tracer store (similar but with a little extra info)
+            """
+            kwargs = {
+                "info_json": info_json,
+                "raw_data": raw_data,
+                "jenkins": jenkins
+            }
+            for template_referal, url in foreign_sources.items():
+                
+                # template_referal is how we want to refer to this exta data
+                # in the template. Make sure it's not overwriting a standard data key
+                if template_referal in ["info_json", "raw_data"]:
+                    raise Exception("Aborting, you cannot pass a data source with the protected " \
+                                    "label of {}.".format(template_referal))
 
-                        if isinstance(detail["sourced_from"], list):
-                            html_lines.append("<strong>sourced from</strong>:<br>")
-                            for source in detail["sourced_from"]:
-                                html_lines.append(source + "<br>")
-                        else:
-                            html_lines.append("<strong>sourced_from</strong>   : {}<br>".format(detail["sourced_from"]))
+                r = requests.get(url)
+                if r.status_code != 200:
+                    raise Exception("Unable to additional data from: {}, status code {}".format(url, r.status_code))
 
-                        if "preview" in detail.keys():
-                            html_lines.append("<strong>preview</strong>       : <a href={}>{}</a><br>".format(detail["preview"][14:], detail["preview"][14:]))
-                        if "observations" in detail.keys():
-                            html_lines.append("<strong>observation selection</strong>   : {}<br>".format(detail["observations"]))
+                kwargs[template_referal] = r.json()
 
-                        html_lines.append("<br>")
-                        if "column_actions" in detail.keys():
-                            if len(detail["column_actions"]) > 0:
-                                for column_data in detail["column_actions"]:
-                                    html_lines.append('<table class="fixed">')
-                                    html_lines.append("""<col width="200px" /><col width="1000px" />""")
-                                    html_lines.append('<th style="background-color:{}" colspan="2">{}</th>'.format(table_colour, column_data["column_label"]))
-                                    for action in column_data["actions"]:
-                                        for time_stamp, comment in action.items():
-                                            html_lines.append("""<tr>
-                                                <td>{}</td>
-                                                <td>{}</td>
-                                                </tr>""".format(time_stamp, comment))
-                                    html_lines.append("</table>")
-                                    html_lines.append("<br>")
-                                html_lines.append("<br>")
+            # the user might also pass in some additional dictionaries
+            if local_sources is not None:
+                for template_referal, extra_dict in local_sources.items():
+                
+                    # template_referal is how we want to refer to this exta data
+                    # in the template. Make sure it's not overwriting a standard data key
+                    if template_referal in ["info_json", "raw_data"]:
+                        raise Exception("Aborting, you cannot pass a data source with the protected " \
+                                        "label of {}.".format(template_referal))
 
-                with open(Path('documentation') / "{}.html".format(pathify(title)), "w") as f:
-                    f.write("""
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                    <style>
-                    fixed, th, td {
-                        border: 1px solid black;
-                    }
-                    tr {
-                        background-color: white;
-                        color: black;
-                    }
-                    table-layout:fixed
-                    </style>
-                    </head>
-                    <body>""")
-                    for line in html_lines:
-                        f.write(line + "\n")
-                        f.write("""
-                                </body>
-                                </html>
-                                """)
+                    kwargs[template_referal] = extra_dict
+           
 
-    def output(self, with_html=True):
-        output_dict = self._create_output_dict()
-        self._write_output_dict(output_dict)
-        if with_html:
-            self._create_html_output(output_dict)
+            if local is None:
+                r = requests.get(template)
+                if r.status_code != 200:
+                    raise Exception("Unable to http get template from: {}, status code {}".format(template, r.status_code))
+                templateRenderer = Template(r.text)
+            else:
+                templateRenderer = Template(localTemplate)
+            outputText = templateRenderer.render(**kwargs)
+            
+            with open(output, "w") as f:
+                f.write(outputText)
+
+            print("Template {} rendered as {}".format(template, output))
+
+        except Exception as e:
+            raise TemplateError("Problem encountered attmepting to render template") from e
+
