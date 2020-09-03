@@ -20,6 +20,7 @@ setuptools.setup(
                       'lockfile',
                       'databaker',
                       'ipython',
+                      'jinja2',
                       'pandas==0.25.3',
                       'pyexcel',
                       'pyexcel-io',
