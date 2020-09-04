@@ -356,7 +356,10 @@ class TransformTrace(object):
 
         jenkins_job = pathify(os.environ.get('JOB_NAME', f'replace-with-family-name/job/')) + jenkins_title
         jenkins_job = jenkins_job.replace("replace-with-family-name", family)
-        jenkins = {"job": jenkins_job}
+        jenkins = {
+            "job": jenkins_job,
+            "family": family
+        }
 
         # Jenkins Build Status ---------
         jenkins_build = f"https://ci.floop.org.uk/buildStatus/icon?job=GSS_data%2F{family}%2F{jenkins_title}/"
@@ -421,7 +424,6 @@ class TransformTrace(object):
 
                     kwargs[template_referal] = extra_dict
            
-
             if local is None:
                 r = requests.get(template)
                 if r.status_code != 200:
