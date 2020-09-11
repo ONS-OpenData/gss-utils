@@ -287,7 +287,7 @@ class TransformTrace(object):
                         column_name: [next( v for k,v in x.items()) for x in columnObj.comments]
                     })
                     if columnObj.var is not None:
-                        extraction_note.append({columnObj.name: columnObj.var})
+                        extraction_note.append({columnObj.label: columnObj.var})
 
                 source = cube_segment.source
                 if not isinstance(source, list):
