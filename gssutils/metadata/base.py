@@ -81,6 +81,7 @@ class Metadata:
                         graph.add((self._uri, RDF.type, t))
                 else:
                     graph.add((self._uri, RDF.type, c._type))
+                break  # Only add the most specific declared type(s).
         for local_name, profile in self._properties_metadata.items():
             if local_name in self.__dict__:
                 prop, status, f = profile
