@@ -240,3 +240,7 @@ Feature: Scrape dataset info
   Scenario: gov.wales landing page
     Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
     Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
+
+  Scenario: deal with ONS publication datetime as Europe/London date.
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
+    Then the publication date should match "2020-07-03"
