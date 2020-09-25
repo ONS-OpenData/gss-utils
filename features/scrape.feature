@@ -240,3 +240,6 @@ Feature: Scrape dataset info
   Scenario: gov.wales landing page
     Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
     Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
+    
+  Scenario: ONS scrape from seed
+    Given I use the testing seed "seed-ons-personal-well-being.json"
