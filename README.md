@@ -2,6 +2,23 @@
 
 Shared data transformation utilities for GSS data.
 
+### Known issues
+
+#### vcrpy does not overwrite interactions
+
+When running tests with `record-mode=all` e.g.
+```shell script
+ pipenv run behave -D record_mode=all --tags=-skip -n 'NHS' features/scrape.feature
+```
+the scrape.yml sections are not overwritten. Instead, new ones are appended.
+
+**Workaround**:
+After running the tests, use the `clean-fixtures.py` script to remove repeated interactions.
+The run the same tests with `record-mode=none` to confirm they all pass.
+```shell script
+ pipenv run behave -D record_mode=none --tags=-skip -n 'NHS' features/scrape.feature
+```
+
 ---
 
    Copyright 2018 Alex Tucker
