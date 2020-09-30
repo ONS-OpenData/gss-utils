@@ -37,7 +37,7 @@ class Cubes(object):
         with open(info_json, "r") as f:
             self.info = json.load(f)
 
-        # Where we don't have a mapping field, add one to avoid iteration errors down later 
+        # Where we don't have a mapping field, add one to avoid iteration errors later 
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = []
 
@@ -52,7 +52,7 @@ class Cubes(object):
     def add_cube(self, scraper, dataframe, title, not_a_codelist=["Value"]):
         """
         Add a single datacube to out cubes class. The handling is slightly different
-        for every cube after the first,,hence is_multicube check.
+        for every cube after the first, hence the is_multicube check.
         """
         is_multiCube = False if len(self.cubes) < 2 else True
         self.cubes.append(Cube(self.base_url, scraper, dataframe, title, is_multiCube,
@@ -90,18 +90,11 @@ class Cube(object):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
-        self.scraper.dataset.title = title
         self.codelist_path = codelist_path
         self.codelists = {}
         self.not_a_codelist = not_a_codelist
-        self.base_url = base_url
-
-        # Use a provided codelist where one has been prefabricated
-        self._get_prefabricated_codelists()
-        
+        self.base_url = base_url        
         self.scraper.set_base_uri(self.base_url)
-        
-
 
         """
         ---- Trig files ----: 
@@ -128,8 +121,6 @@ class Cube(object):
     def _get_prefabricated_codelists(self):
         """
         Read in any codelists.csvs already present in the chosen codelists directory.
-        In the event they are already present in the mapping throw an exception (we 
-        really shouldn't have multiple definitions of the same thing kicking around).
         """
 
         # if the chosen codelists directory doesnt exists, create it and be loud about it
@@ -156,7 +147,7 @@ class Cube(object):
             read_from = os.path.join(self.codelist_path, codelist_file)
             self.codelists[codelist_file[:-4]] = pd.read_csv(read_from)
 
-    def instantiate_map(self, destination_folder, pathified_title, info_json):
+    def _instantiate_map(self, destination_folder, pathified_title, info_json):
         """
         Create a basic CSVWMapping object for this cube
         """
@@ -234,11 +225,14 @@ class Cube(object):
         """
         
         # The base CSVWmapping class
-        mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
+        map_obj = self._instantiate_map(destination_folder, pathified_title, info_json)
         
         # Add all the additional details around codelist and foreign keys
         # ...if... generate_codelists is flagged True
         if generate_codelists:
+            
+            self._get_prefabricated_codelists()
+            
             additional_tables = []
             foreign_keys = []
             for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
@@ -256,11 +250,11 @@ class Cube(object):
                 )
 
             for additional_table in additional_tables:
-                mapObj._external_tables.append(additional_table)
+                map_obj._external_tables.append(additional_table)
             for foreign_key in foreign_keys:
-                mapObj.set_additional_foreign_key(foreign_key)
+                map_obj.set_additional_foreign_key(foreign_key)
 
-        return mapObj
+        return map_obj
 
     def _output(self, destination_folder, is_multiCube, info_json, generate_codelists):
         """
