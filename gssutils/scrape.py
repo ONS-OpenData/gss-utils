@@ -173,7 +173,7 @@ class Scraper:
                 self.dataset.description = self.seed["description"]
             if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
                 self.dataset.publisher = self.seed["publisher"]
-
+                
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "
                                 "the info.json for supplementary metadata.") from e

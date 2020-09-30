@@ -2,8 +2,9 @@ import json
 import logging
 import os
 from os import environ
-from pathlib import Path
 
+from pathlib import Path
+from urllib.parse import urljoin
 import pandas as pd
 
 from gssutils.csvw.mapping import CSVWMapping
@@ -26,16 +27,17 @@ class Cubes(object):
     A class representing multiple datacubes
     """
 
-    def __init__(self, info_json, destination_path="out", codelist_path="codelists",
-                 base_url="http://gss-data.org.uk"):
+    def __init__(self, info_json="info.json", destination_path="out", codelist_path="codelists",
+                 base_url="http://gss-data.org.uk", generate_codelists=False):
+        
+        # NOTE - I'm flagging generate_codelists to false (above) for now as it's functionality
+        # we don't need/havn't quite bottomed out yet. We should be able to switch the
+        # flag back when we get to that task.
 
         with open(info_json, "r") as f:
             self.info = json.load(f)
 
-        # TODO - validate all the things!
-
-        # TODO - add a blank 'columns' key to 'transform' via airtable sync
-        # for now, add it where missing
+        # Where we don't have a mapping field, add one to avoid iteration errors down later 
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = []
 
@@ -45,13 +47,21 @@ class Cubes(object):
         self.base_url = base_url
         self.cubes = []
         self.has_ran = False
+        self.generate_codelists = generate_codelists
 
     def add_cube(self, scraper, dataframe, title, not_a_codelist=["Value"]):
+        """
+        Add a single datacube to out cubes class. The handling is slightly different
+        for every cube after the first,,hence is_multicube check.
+        """
         is_multiCube = False if len(self.cubes) < 2 else True
         self.cubes.append(Cube(self.base_url, scraper, dataframe, title, is_multiCube,
                                self.codelist_path, not_a_codelist))
 
     def output_all(self):
+        """
+        Output every cube object we've added to the cubes() class.
+        """
 
         if len(self.cubes) == 0:
             raise Exception("Please add at least one datacube with '.add_cube' before "
@@ -64,7 +74,7 @@ class Cubes(object):
         is_multiCube = False if len(self.cubes) < 2 else True
         for cube in self.cubes:
             try:
-                cube._output(self.destination_folder, is_multiCube, self.info)
+                cube._output(self.destination_folder, is_multiCube, self.info, self.generate_codelists)
             except Exception as e:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                 .format(cube.title)) from e
@@ -80,6 +90,7 @@ class Cube(object):
         self.scraper = scraper
         self.df = dataframe
         self.title = title
+        self.scraper.dataset.title = title
         self.codelist_path = codelist_path
         self.codelists = {}
         self.not_a_codelist = not_a_codelist
@@ -87,6 +98,10 @@ class Cube(object):
 
         # Use a provided codelist where one has been prefabricated
         self._get_prefabricated_codelists()
+        
+        self.scraper.set_base_uri(self.base_url)
+        
+
 
         """
         ---- Trig files ----: 
@@ -97,12 +112,17 @@ class Cube(object):
         so for the very first one we'll generate a singleton trig as well.
         """
         if not is_multiCube:
-            # The trig should this transform generate a single output
+            # The trig should this cubes class end up generating only a single output
             self.singleton_trig = scraper.generate_trig()
 
-        # The trig for this cube in a multicube:
+        # Set title and dataset_id, need to do this before generating the multicube variant trig
+        # file as these are values that change depending on single vs multiple cube outputs.
         self.scraper.dataset.title = title
-        self.scraper.set_dataset_id(f'{pathify(environ.get("JOB_NAME", ""))}/{pathify(title)}')
+        
+        dataset_path = pathify(os.environ.get('JOB_NAME', f'gss_data/{scraper.dataset.family}/' + Path(os.getcwd()).name)).lower()
+        self.scraper.set_dataset_id(dataset_path)
+        
+        # The trig for this cube if it's one cube of many
         self.multi_trig = scraper.generate_trig()
 
     def _get_prefabricated_codelists(self):
@@ -143,7 +163,8 @@ class Cube(object):
         mapObj = CSVWMapping()
         mapObj.set_mapping(info_json)
         mapObj.set_csv(destination_folder / f'{pathified_title}.csv')
-        mapObj.set_dataset_uri("{}/{}".format(self.base_url, pathified_title))
+        mapObj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
+        #mapObj.set_dataset_uri("{}/{}".format(self.base_url, pathified_title))
 
         return mapObj
 
@@ -208,36 +229,41 @@ class Cube(object):
         else:
             return self.multi_trig
 
-    def _populate_csvw_mapping(self, destination_folder, pathified_title, info_json):
+    def _populate_csvw_mapping(self, destination_folder, pathified_title, info_json, generate_codelists):
         """
         Use the provided details object to generate then fully populate the mapping class  
         """
-        additional_tables = []
-        foreign_keys = []
-        for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
-            codelist_df = self.codelists.get(column_label, None)
-            additional_tables.append(
-                self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
-            foreign_keys.append(
-                ForeignKey(
-                    columnReference=pathify(column_label),
-                    reference=ColumnReference(
-                        resource=URI("codelist-{}.csv".format(pathify(column_label))),
-                        columnReference="notation"
+        
+        # The base CSVWmapping class
+        mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
+        
+        # Add all the additional details around codelist and foreign keys
+        # ...if... generate_codelists is flagged True
+        if generate_codelists:
+            additional_tables = []
+            foreign_keys = []
+            for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
+                codelist_df = self.codelists.get(column_label, None)
+                additional_tables.append(
+                    self._generate_codelist_and_schema(column_label, destination_folder, df=codelist_df))
+                foreign_keys.append(
+                    ForeignKey(
+                        columnReference=pathify(column_label),
+                        reference=ColumnReference(
+                            resource=URI("codelist-{}.csv".format(pathify(column_label))),
+                            columnReference="notation"
+                        )
                     )
                 )
-            )
 
-        # Use map class to output schema
-        mapObj = self.instantiate_map(destination_folder, pathified_title, info_json)
-        for additional_table in additional_tables:
-            mapObj._external_tables.append(additional_table)
-        for foreign_key in foreign_keys:
-            mapObj.set_additional_foreign_key(foreign_key)
+            for additional_table in additional_tables:
+                mapObj._external_tables.append(additional_table)
+            for foreign_key in foreign_keys:
+                mapObj.set_additional_foreign_key(foreign_key)
 
         return mapObj
 
-    def _output(self, destination_folder, is_multiCube, info_json):
+    def _output(self, destination_folder, is_multiCube, info_json, generate_codelists):
         """
         Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
         """
@@ -252,5 +278,5 @@ class Cube(object):
             metadata.write(trig_to_use)
 
         # generate codelist csvs, schemas and foreign keys
-        populatedMapObj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json)
+        populatedMapObj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json, generate_codelists)
         populatedMapObj.write(destination_folder / f'{pathified_title}.csv-metadata.json')
