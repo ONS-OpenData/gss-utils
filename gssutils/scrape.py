@@ -16,7 +16,7 @@ from rdflib import BNode, URIRef
 from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
-from gssutils.metadata import namespaces, dcat, pmdcat, mimetype
+from gssutils.metadata import namespaces, dcat, pmdcat, mimetype, GOV
 from gssutils.utils import pathify, ensure_list
 
 
@@ -172,7 +172,7 @@ class Scraper:
             if not hasattr(self.dataset, 'description') and "description" in self.seed.keys():
                 self.dataset.description = self.seed["description"]
             if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
-                self.dataset.publisher = self.seed["publisher"]
+                self.dataset.publisher = GOV[pathify(self.seed["publisher"])]
 
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "
