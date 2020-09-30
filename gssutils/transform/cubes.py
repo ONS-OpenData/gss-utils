@@ -119,7 +119,7 @@ class Cube(object):
         # file as these are values that change depending on single vs multiple cube outputs.
         self.scraper.dataset.title = title
         
-        dataset_path = pathify(os.environ.get('JOB_NAME', f'gss_data/{scraper.dataset.family}/' + Path(os.getcwd()).name)).lower()
+        dataset_path = pathify(os.environ.get('JOB_NAME', f'gss_data/{self.scraper.dataset.family}/' + Path(os.getcwd()).name)).lower()
         self.scraper.set_dataset_id(dataset_path)
         
         # The trig for this cube if it's one cube of many
@@ -164,8 +164,7 @@ class Cube(object):
         mapObj.set_mapping(info_json)
         mapObj.set_csv(destination_folder / f'{pathified_title}.csv')
         mapObj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
-        #mapObj.set_dataset_uri("{}/{}".format(self.base_url, pathified_title))
-
+        
         return mapObj
 
     def _write_default_codelist(self, unique_values, column_label):

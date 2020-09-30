@@ -16,7 +16,7 @@ from rdflib import BNode, URIRef
 from rdflib.graph import Dataset as RDFDataset
 
 import gssutils.scrapers
-from gssutils.metadata import namespaces, dcat, pmdcat, mimetype
+from gssutils.metadata import namespaces, dcat, pmdcat, mimetype, GOV
 from gssutils.utils import pathify, ensure_list
 
 
@@ -152,11 +152,13 @@ class Scraper:
                     # If we have a seed..
                     if self.seed is not None:
                         self._populate_missing_metadata()  # Plug any metadata gaps
-                        self._override_metadata_where_specified()  # Apply overrides
                     break
 
         if not scraped:
             raise NotImplementedError(f'No scraper for {self.uri} and insufficient seed metadata passed.')
+
+        # Apply overrides to either method of scraping
+        self._override_metadata_where_specified()
 
         return self
 
@@ -172,7 +174,9 @@ class Scraper:
             if not hasattr(self.dataset, 'description') and "description" in self.seed.keys():
                 self.dataset.description = self.seed["description"]
             if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
-                self.dataset.publisher = self.seed["publisher"]
+                self.dataset.publisher = GOV[pathify(self.seed["publisher"])]
+            if not hasattr(self.dataset, 'family') and "families" in self.seed.keys():
+                self.dataset.family = pathify(self.seed["families"][0])
                 
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "
@@ -259,7 +263,7 @@ class Scraper:
         """
 
         # Make sure we have the 100% required stuff
-        keys = ["title", "description", "dataURL", "publisher", "published"]
+        keys = ["title", "description", "dataURL", "publisher", "published", "families"]
         not_found = []
         for key in keys:
             if key not in self.seed.keys():
@@ -277,6 +281,7 @@ class Scraper:
         dist = dcat.Distribution(self)
         dist.issued = parse(self.seed["published"]).date()
         dist.downloadURL = self.seed["dataURL"]
+        self.family = pathify(self.seed["families"][0])
         self.distributions.append(dist)
         self.dataset.issued = dist.issued
         self._populate_missing_metadata()
