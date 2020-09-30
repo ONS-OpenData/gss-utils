@@ -277,5 +277,5 @@ class Cube(object):
             metadata.write(trig_to_use)
 
         # generate codelist csvs, schemas and foreign keys
-        populatedMapObj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json, generate_codelists)
-        populatedMapObj.write(destination_folder / f'{pathified_title}.csv-metadata.json')
+        populated_map_obj = self._populate_csvw_mapping(destination_folder, pathified_title, info_json, generate_codelists)
+        populated_map_obj.write(destination_folder / f'{pathified_title}.csv-metadata.json')
