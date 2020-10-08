@@ -50,10 +50,10 @@ class Cubes:
 
     def add_cube(self, scraper, dataframe, title, not_a_codelist=["Value"]):
         """
-        Add a single datacube to out cubes class. The handling is slightly different
+        Add a single datacube to the cubes class. The handling is slightly different
         for every cube after the first, hence the is_multi_cube check.
         """
-        is_multi_cube = not len(self.cubes) < 2
+        is_multi_cube = len(self.cubes) >= 2
         self.cubes.append(Cube(self.base_url, scraper, dataframe, title, is_multi_cube,
                                self.codelist_path, not_a_codelist))
 
@@ -70,7 +70,7 @@ class Cubes:
             raise Exception("Calling 'output_all' on the Cubes class is a destructive process and "
                             "has already run. You need to add all your datacubes before doing so.")
 
-        is_multi_cube = not len(self.cubes) < 2
+        is_multi_cube = len(self.cubes) >= 2
         for cube in self.cubes:
             try:
                 cube.output(self.destination_folder, is_multi_cube, self.info,
@@ -89,7 +89,7 @@ class Cube:
     def __init__(self, base_url, scraper, dataframe, title, is_multi_cube,
                 codelist_path, not_a_codelist):
         self.scraper = scraper
-        self.df = dataframe
+        self.dataframe = dataframe
         self.title = title
         self.codelist_path = codelist_path
         self.codelists = {}
@@ -193,7 +193,7 @@ class Cube:
         through to a default one where its not.
         """
         if dataframe is None:
-            dataframe = self._write_default_codelist(self.df[column_label], column_label)
+            dataframe = self._write_default_codelist(self.dataframe[column_label], column_label)
 
         # output codelist csv
         dataframe.to_csv(destination_folder / "codelist-{}.csv".format(pathify(column_label)), 
@@ -234,7 +234,7 @@ class Cube:
 
             additional_tables = []
             foreign_keys = []
-            for column_label in [x for x in self.df.columns.values if x not in self.not_a_codelist]:
+            for column_label in [x for x in self.dataframe.columns.values if x not in self.not_a_codelist]:
                 codelist_df = self.codelists.get(column_label, None)
                 additional_tables.append(
                     self._generate_codelist_and_schema(column_label, destination_folder,
@@ -263,7 +263,7 @@ class Cube:
         pathified_title = pathify(self.title)
 
         # output the tidy data
-        self.df.to_csv(destination_folder / f'{pathified_title}.csv', index=False)
+        self.dataframe.to_csv(destination_folder / f'{pathified_title}.csv', index=False)
 
         # Output the trig
         trig_to_use = self._get_trig(is_multi_cube)
