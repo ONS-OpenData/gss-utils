@@ -36,6 +36,10 @@ def scrape(scraper, tree):
     except Exception as e:
         raise ValueError("Aborting operation This is not json-able content.") from e
 
+    accepted_page_types = ["dataset_landing_page"]
+    if landing_page["type"] not in accepted_page_types:
+        raise ValueError("Aborting operation This page type is not supported.")
+
     # Acquire title and description from the page json
     # literally just whatever's in {"description": {"title": <THIS> }}
     # and {"description": {"metaDescription": <THIS> }}
