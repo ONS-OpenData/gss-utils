@@ -48,7 +48,7 @@ class Metadata:
         elif name in self._core_properties:
             super().__setattr__(name, value)
         else:
-            raise AttributeError(f'Unkown attribute {name}')
+            raise AttributeError(f'Unknown attribute {name}')
 
     def get_unset(self):
         for local_name, profile in self._properties_metadata.items():

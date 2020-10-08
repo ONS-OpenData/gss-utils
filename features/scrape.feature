@@ -247,3 +247,7 @@ Feature: Scrape dataset info
 
   Scenario: ONS scrape from url
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/datasets/coronaviruspersonalandeconomicwellbeingimpacts"
+
+  Scenario: deal with ONS publication datetime as Europe/London date.
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
+    Then the publication date should match "2020-07-03"
