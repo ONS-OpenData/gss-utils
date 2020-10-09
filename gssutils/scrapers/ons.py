@@ -13,7 +13,7 @@ ONS_PREFIX = "https://www.ons.gov.uk"
 ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 
 
-def scrape(scraper, tree, page_type_check = True):
+def scrape(scraper, tree):
     """
     This is json scraper for ons.gov.uk pages
 
@@ -38,7 +38,7 @@ def scrape(scraper, tree, page_type_check = True):
         raise ValueError("Aborting operation This is not json-able content.") from e
 
     accepted_page_types = ["dataset_landing_page"]
-    if page_type_check and landing_page["type"] not in accepted_page_types:
+    if landing_page["type"] not in accepted_page_types:
         raise ValueError("Aborting operation This page type is not supported.")
 
     # Acquire title and description from the page json
