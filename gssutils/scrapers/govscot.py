@@ -17,7 +17,7 @@ import requests
 from lxml import html
 
 
-def publications(tree):
+def publications(scraper, tree):
 	scraper.dataset.title = tree.xpath('.// *[@id="page-content"] / div[1] / div / header / div[1] / div / h1')[0].text
 
 	scraper.dataset.description = \
@@ -47,7 +47,7 @@ def publications(tree):
 			else:
 				scraper.distributions.append(dist)
 
-def collections(tree):
+def collections(scraper, tree):
 
 	scraper.dataset.title = tree.xpath('.// *[@id="page-content"] / header / div / div[1] / h1')[0].text
 
@@ -91,9 +91,9 @@ def scrape(scraper, tree):
 	scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
 
 	if 'publications' in parse_object.path:
-		publications(tree)
+		publications(scraper, tree)
 	elif 'collections' in parse_object.path:
-		collections(tree)
+		collections(scraper, tree)
 	else:
 		print('GovScot Scraper does not support given landing page')
 
