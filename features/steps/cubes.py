@@ -119,7 +119,7 @@ def step_impl(context, cube_name, correct_schema):
     feature_path = Path(os.path.dirname(os.path.abspath(__file__))).parent
     obs_fixture_path = Path(feature_path, "fixtures")
     schemaMapObj = this_cube._populate_csvw_mapping(obs_fixture_path,
-                                                    pathify(cube_name), context.cubes.info, False)
+                                                    pathify(cube_name), context.cubes.info)
 
     # Create the schema
     created_schema_as_dict = schemaMapObj._as_plain_obj(schemaMapObj._as_csvw_object())
