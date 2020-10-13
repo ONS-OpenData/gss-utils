@@ -158,7 +158,8 @@ class Scraper:
             raise NotImplementedError(f'No scraper for {self.uri} and insufficient seed metadata passed.')
 
         # Apply overrides to either method of scraping
-        self._override_metadata_where_specified()
+        if self.seed is not None:
+            self._override_metadata_where_specified()
 
         return self
 

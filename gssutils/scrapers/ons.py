@@ -37,7 +37,7 @@ def scrape(scraper, tree):
     except Exception as e:
         raise ValueError("Aborting operation This is not json-able content.") from e
 
-    accepted_page_types = ["dataset_landing_page"]
+    accepted_page_types = ["dataset_landing_page", "static_adhoc"]
     if landing_page["type"] not in accepted_page_types:
         raise ValueError("Aborting operation This page type is not supported.")
 
