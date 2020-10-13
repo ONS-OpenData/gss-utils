@@ -2,6 +2,6 @@
   "title": "I am a title from the metadata seed",
   "description": "I am a description from the metadata seed",
   "dataURL": "https://www.contextures.com/SampleData.zip",
-  "publisher": "https://www.gov.uk/government/organisations/cogs-data-testing",
+  "publisher": "COGS data testing",
   "published": "2019-01-01"
 }
