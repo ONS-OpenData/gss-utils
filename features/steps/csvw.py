@@ -69,6 +69,12 @@ def step_impl(context):
     json.load(context.schema_io)
 
 
+@then("The input format of the csv is recorded as csv")
+def step_impl(context):
+    input_file = json.load(context.metadata_io)["tables"][0]["url"]
+    assert input_file.endswith(".csv"), 'The input file should end .csv, got "{}"'.format(input_file)
+
+
 @step("gsscogs/csvlint validates ok")
 def step_impl(context):
     client = docker.from_env()

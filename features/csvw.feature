@@ -120,3 +120,4 @@ Feature: Create CSVW metadata
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/covid-19/wg-notifications-of-deaths-of-residents-related-to-covid-19-in-adult-care-homes'
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
+    And the input format of the csv is recorded as csv

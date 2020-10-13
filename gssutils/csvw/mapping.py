@@ -75,7 +75,7 @@ class CSVWMapping:
 
     def set_input(self, filename: URI, stream: TextIO):
         self._csv_stream = stream
-        self._csv_filename = filename
+        self._csv_filename = Path(str(filename)[:-3]) if str(filename).endswith(".csv.gz") else filename
         reader = csv.DictReader(stream)
         self._column_names = reader.fieldnames
         for col in self._column_names:
