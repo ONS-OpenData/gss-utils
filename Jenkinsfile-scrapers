@@ -5,9 +5,7 @@ pipeline {
     stages {
         stage('Test') {
             agent {
-                dockerfile {
-                    args '-u root:root'
-                }
+                dockerfile true
             }
             steps {
                 sh "behave -D record_mode=all --tags=-skip -f json.cucumber -o test-scraper-results.json features/scrape.feature"
