@@ -14,28 +14,28 @@
             "name": "year",
             "titles": "Year",
             "datatype": "string",
-            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/year",
+            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/year",
             "valueUrl": "http://reference.data.gov.uk/id/{+year}"
           },
           {
             "name": "local_authority",
             "titles": "Local Authority",
             "datatype": "string",
-            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/local-authority",
+            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/local-authority",
             "valueUrl": "http://statistics.data.gov.uk/id/statistical-geography/{local_authority}"
           },
           {
             "name": "middle_layer_super_output_area",
             "titles": "Middle Layer Super Output Area",
             "datatype": "string",
-            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/middle-layer-super-output-area",
+            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/middle-layer-super-output-area",
             "valueUrl": "http://statistics.data.gov.uk/id/statistical-geography/{middle_layer_super_output_area}"
           },
           {
             "name": "lower_layer_super_output_area",
             "titles": "Lower Layer Super Output Area",
             "datatype": "string",
-            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/lower-layer-super-output-area",
+            "propertyUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/lower-layer-super-output-area",
             "valueUrl": "http://statistics.data.gov.uk/id/statistical-geography/{lower_layer_super_output_area}"
           },
           {
@@ -60,7 +60,7 @@
             "name": "virt_dataset",
             "virtual": true,
             "propertyUrl": "qb:dataSet",
-            "valueUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dataset"
+            "valueUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dataset"
           },
           {
             "name": "virt_type",
@@ -75,31 +75,31 @@
           "middle_layer_super_output_area",
           "lower_layer_super_output_area"
         ],
-        "aboutUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils/{year}/{local_authority}/{middle_layer_super_output_area}/{lower_layer_super_output_area}"
+        "aboutUrl": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption/{year}/{local_authority}/{middle_layer_super_output_area}/{lower_layer_super_output_area}"
       }
     }
   ],
-  "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#tables",
+  "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#tables",
   "prov:hadDerivation": {
-    "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dataset",
+    "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dataset",
     "@type": [
       "qb:DataSet",
       "dcat:Dataset"
     ],
     "qb:structure": {
-      "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#structure",
+      "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#structure",
       "@type": "qb:DataStructureDefinition",
       "qb:component": [
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/year",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/year",
           "qb:dimension": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/year",
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/year",
             "@type": "qb:DimensionProperty",
             "qb:codeList": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#scheme/year"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#scheme/year"
             },
             "rdfs:range": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#class/Year"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#class/Year"
             },
             "rdfs:label": "Year",
             "rdfs:subPropertyOf": {
@@ -109,19 +109,19 @@
           },
           "@type": "qb:ComponentSpecification",
           "qb:componentProperty": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/year"
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/year"
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/local-authority",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/local-authority",
           "qb:dimension": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/local-authority",
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/local-authority",
             "@type": "qb:DimensionProperty",
             "qb:codeList": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#scheme/local-authority"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#scheme/local-authority"
             },
             "rdfs:range": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#class/LocalAuthority"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#class/LocalAuthority"
             },
             "rdfs:label": "Local Authority",
             "rdfs:comment": "A local authority is an administrative body in local government. There are 317 local authorities in England, 22 local authorities in Wales and 32 local authorities in Scotland. There are 11 district councils in Northern Ireland. This level of disaggregation is similar to the local authority level for Great Britain.",
@@ -132,19 +132,19 @@
           },
           "@type": "qb:ComponentSpecification",
           "qb:componentProperty": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/local-authority"
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/local-authority"
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/middle-layer-super-output-area",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/middle-layer-super-output-area",
           "qb:dimension": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/middle-layer-super-output-area",
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/middle-layer-super-output-area",
             "@type": "qb:DimensionProperty",
             "qb:codeList": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#scheme/middle-layer-super-output-area"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#scheme/middle-layer-super-output-area"
             },
             "rdfs:range": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#class/MiddleLayerSuperOutputArea"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#class/MiddleLayerSuperOutputArea"
             },
             "rdfs:label": "Middle Layer Super Output Area",
             "rdfs:comment": "Middle Layer Super Output Areas (MSOAs) were defined in a two-stage process: an initial set was generated automatically but the boundaries were then modified in consultation with local authorities and other local bodies. The final boundaries were released to the public in August 2004. As with the LSOAs, initial MSOAs were generated automatically by zone-design software. They were built using 2001 Census data from groups of Lower Layer SOAs and had a minimum size of 5,000 residents and 2,000 households. They also fitted within the boundaries of local authorities as at the end of 2002 (corresponding with the geography of the Census). A nationwide consultation exercise gave local authorities the opportunity to amend the initial MSOAs to define areas more suited to local requirements. The consultation resulted in 7,193 MSOAs with an average population size of 7,200.",
@@ -155,19 +155,19 @@
           },
           "@type": "qb:ComponentSpecification",
           "qb:componentProperty": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/middle-layer-super-output-area"
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/middle-layer-super-output-area"
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/lower-layer-super-output-area",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/lower-layer-super-output-area",
           "qb:dimension": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/lower-layer-super-output-area",
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/lower-layer-super-output-area",
             "@type": "qb:DimensionProperty",
             "qb:codeList": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#scheme/lower-layer-super-output-area"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#scheme/lower-layer-super-output-area"
             },
             "rdfs:range": {
-              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#class/LowerLayerSuperOutputArea"
+              "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#class/LowerLayerSuperOutputArea"
             },
             "rdfs:label": "Lower Layer Super Output Area",
             "rdfs:comment": "Lower Layer Super Output Areas (LSOAs) in England and Wales were built by zone-design software using 2011 Census data from groups of Output Areas (typically four to six) and were constrained by the Standard Table wards6 used for 2011 Census outputs. They have a minimum size of 1,000 residents or 400 households and have an average of 1,500 residents. Following the 2011 Census, there are now 34,753 LSOAs in England and Wales.",
@@ -178,11 +178,11 @@
           },
           "@type": "qb:ComponentSpecification",
           "qb:componentProperty": {
-            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#dimension/lower-layer-super-output-area"
+            "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#dimension/lower-layer-super-output-area"
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/measure_type",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/measure_type",
           "qb:dimension": {
             "@id": "http://purl.org/linked-data/cube#measureType",
             "@type": "qb:DimensionProperty",
@@ -196,7 +196,7 @@
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/value",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/value",
           "qb:measure": {
             "@id": "http://gss-data.org.uk/def/measure/kilowatt",
             "@type": "qb:MeasureProperty"
@@ -207,7 +207,7 @@
           }
         },
         {
-          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/gss-utils#component/unit",
+          "@id": "http://gss-data.org.uk/data/gss_data/towns-high-streets/lower-super-output-areas-lsoa-electricity-consumption#component/unit",
           "qb:attribute": {
             "@id": "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
             "@type": "qb:AttributeProperty"

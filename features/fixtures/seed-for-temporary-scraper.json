@@ -3,5 +3,8 @@
   "description": "I am a description from the metadata seed",
   "dataURL": "https://www.contextures.com/SampleData.zip",
   "publisher": "COGS data testing",
-  "published": "2019-01-01"
+  "published": "2019-01-01",
+  "families": [
+    "Swiss Family Robinson"
+  ]
 }
