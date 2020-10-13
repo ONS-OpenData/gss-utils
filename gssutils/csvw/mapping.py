@@ -63,10 +63,10 @@ class CSVWMapping:
     def set_csv(self, csv_filename: URI):
 
         # csv and csv.gz need to be read in slightly different ways
-        if csv_filename.endswith("csv"):
+        if str(csv_filename).endswith("csv"):
             with open(csv_filename, newline='', encoding='utf-8') as f:
                 self.set_input(csv_filename, f)
-        elif csv_filename.endswith("csv.gz"):
+        elif str(csv_filename).endswith("csv.gz"):
             with gzip.open(csv_filename, encoding='utf-8') as f:
                 self.set_input(csv_filename, f)
         else:
