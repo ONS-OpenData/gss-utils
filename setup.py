@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/ONS-OpenData/gss-utils",
     packages=setuptools.find_packages(),
-    setup_requires=['setuptools-git-version'],
+    setup_requires=['better-setuptools-git-version'],
     install_requires=['requests',
                       'python_dateutil',
                       'CacheControl',

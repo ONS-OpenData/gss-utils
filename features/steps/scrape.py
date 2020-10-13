@@ -27,6 +27,23 @@ def step_impl(context, file_name):
     context.scraper = Scraper(seed=seed_path)
 
 
+@given('I fetch the seed path "{file_name}"')
+def step_impl(context, file_name):
+    feature_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    seed_path = os.path.join(feature_path, "fixtures", file_name)
+    context.seed_path = seed_path
+
+
+@then('building scrapper should fail with "{error_message}"')
+def step_impl(context, error_message):
+    captured_error_message = ""
+    try:
+        context.scrapper = Scraper(seed=context.seed_path)
+    except ValueError as err:
+        captured_error_message = str(err)
+    assert_equal(error_message, captured_error_message)
+
+
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):

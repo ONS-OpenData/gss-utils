@@ -240,6 +240,13 @@ Feature: Scrape dataset info
   Scenario: gov.wales landing page
     Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
     Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
+    
+  Scenario: ONS scrape from seed with non supported page type
+    Given I fetch the seed path "seed-ons-personal-well-being.json"
+    Then building scrapper should fail with "Aborting operation This page type is not supported."
+
+  Scenario: ONS scrape from url
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/datasets/coronaviruspersonalandeconomicwellbeingimpacts"
 
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
