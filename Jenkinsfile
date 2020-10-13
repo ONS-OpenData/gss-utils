@@ -5,7 +5,9 @@ pipeline {
     stages {
         stage('Test') {
             agent {
-                dockerfile true
+                dockerfile {
+                    args '-u root:root'
+                }
             }
             steps {
                 sh "pipenv run behave -D record_mode=none --tags=-skip -f json.cucumber -o test-results.json"
