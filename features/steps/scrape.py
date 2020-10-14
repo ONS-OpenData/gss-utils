@@ -47,14 +47,14 @@ def step_impl(context, error_message):
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+        context.distribution = context.scraper.distribution(latest=True)
     assert_equal(context.distribution.downloadURL, uri)
 
 
 @then('the data download URL should match "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+        context.distribution = context.scraper.distribution(latest=True)
     assert_regexp_matches(context.distribution.downloadURL, uri)
 
 
