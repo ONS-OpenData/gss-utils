@@ -1,6 +1,7 @@
 import logging
 from typing import Optional, List, TextIO
 
+import gzip
 import sys
 import csv
 import json
@@ -40,7 +41,14 @@ def step_impl(context, filename):
         for row in context.table:
             writer.writerow(row)
     else:
-        context.csv_io = open(Path('features') / 'fixtures' / filename, 'r', encoding='utf-8')
+        csv_path = Path('features') / 'fixtures' / filename
+        if filename.endswith("csv"):
+            context.csv_io = open(csv_path, 'r', encoding='utf-8')
+        elif filename.endswith("csv.gz"):
+            context.csv_io = gzip.open(csv_path, mode='rt', encoding='utf-8')
+        else:
+            raise ValueError('Can only open files of type ".csv" and ".csv.gz" '
+                            'not {}.'.format(filename))
 
 
 @when("I create a CSVW schema '{filename}'")
@@ -59,6 +67,12 @@ def step_impl(context, filename):
 def step_impl(context):
     context.schema_io.seek(0)
     json.load(context.schema_io)
+
+
+@then("The input format of the csv is recorded as csv")
+def step_impl(context):
+    input_file = json.load(context.metadata_io)["tables"][0]["url"]
+    assert input_file.endswith(".csv"), 'The input file should end .csv, got "{}"'.format(input_file)
 
 
 @step("gsscogs/csvlint validates ok")
