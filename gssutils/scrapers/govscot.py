@@ -11,10 +11,12 @@ from gssutils.metadata.dcat import Distribution
 from cachecontrol import CacheControl, serialize
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import LastModified
+from datetime import datetime
 
 import requests
 
 from lxml import html
+
 
 
 def publications(scraper, tree):
@@ -24,10 +26,8 @@ def publications(scraper, tree):
 	tree.xpath('.// *[@id="page-content"] / div[1] / div / header / div[2] / div[2] / div / p')[0].text
 
 	try:
-		pubDate = tree.xpath(
-			'// *[@id="page-content"] / div[1] / div / header / div[2] / div[1] / section / div[1] / span[2] / strong')[
-			0].text
-		scraper.dataset.issued = pubDate
+		pubDate = tree.xpath('// *[@id="page-content"] / div[1] / div / header / div[2] / div[1] / section / div[1] / span[2] / strong')[0].text
+		scraper.dataset.issued = datetime.strptime(pubDate, '%d %b %Y').date()
 	except:
 		pass
 
