@@ -178,7 +178,7 @@ Feature: Scrape dataset info
   Scenario: Scrape new gov.scot dataset page
     Given I scrape the page "https://www.gov.scot/publications/scottish-index-of-multiple-deprivation-2020v2-ranks/"
     Then dct:title should be `"Scottish Index of Multiple Deprivation 2020v2 - ranks"@en`
-    And the data download URL should match "https://www.gov.scot/binaries/.*/.xlsx"
+    And the data download URL should match "https://www\.gov\.scot/binaries/.*\.xlsx"
     And dct:publisher should be `gov:the-scottish-government`
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
 
