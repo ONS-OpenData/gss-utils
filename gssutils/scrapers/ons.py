@@ -6,6 +6,9 @@ from dateutil.parser import parse, isoparse
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, CSDB
 
+from urllib.parse import urljoin, urlparse
+from lxml import html
+
 import mimetypes
 
 # save ourselves some typing later
@@ -37,15 +40,14 @@ def scrape(scraper, tree):
     except Exception as e:
         raise ValueError("Aborting operation This is not json-able content.") from e
 
-    accepted_page_types = ["dataset_landing_page", "static_adhoc"]
-    if landing_page["type"] not in accepted_page_types:
-        raise ValueError("Aborting operation This page type is not supported.")
-
     # Acquire title and description from the page json
     # literally just whatever's in {"description": {"title": <THIS> }}
     # and {"description": {"metaDescription": <THIS> }}
     scraper.dataset.title = landing_page["description"]["title"].strip()
-    scraper.dataset.description = landing_page["description"]["metaDescription"]
+    try:
+    	scraper.dataset.description = landing_page["description"]["metaDescription"]
+    except:
+    	scraper.dataset.description = landing_page["description"]["summary"]
 
     # Same with date, but use parse_as_local_date() which converts to the right time type
     scraper.dataset.issued = parse_as_local_date(landing_page["description"]["releaseDate"])
@@ -58,7 +60,10 @@ def scrape(scraper, tree):
     if page_type == "dataset_landing_page":
         scraper.dataset.comment = landing_page["description"]["summary"].strip()
     else:
-        scraper.dataset.comment = landing_page["markdown"][0]
+        try:
+        	scraper.dataset.comment = landing_page["markdown"][0]
+        except:
+        	scraper.dataset.comment = landing_page["description"]["summary"].strip()
 
     # not all page types have a next Release date field, also - "to be announced" is useless as is a blank entry.
     # so if its present, not blank, and doesnt say "to be announced" get it as
@@ -92,7 +97,8 @@ def scrape(scraper, tree):
     # so we're switching to page-type specific handling
     page_handlers = {
         "static_adhoc": handler_static_adhoc,
-        "dataset_landing_page": handler_dataset_landing_page
+        "dataset_landing_page": handler_dataset_landing_page,
+        "release": handler_release,
     }
 
     # if the page "type" isn't one we do, blow up
@@ -294,3 +300,22 @@ def handler_static_adhoc(scraper, landing_page, tree):
 
         logging.debug("Created distribution for download '{}'.".format(download_url))
         scraper.distributions.append(this_distribution)
+
+def handler_release(scraper, landing_page, tree):
+
+    for link in landing_page['relatedDatasets']:
+
+        url = urljoin("https://www.ons.gov.uk/", link['uri'])
+
+        r = scraper.session.get(url + "/data")
+        if r.status_code != 200:
+            raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
+                             " returned was '{}.".format(scraper.Øuri + "/data", r.status_code))
+        try:
+            landing_page = r.json()
+        except Exception as e:
+            raise ValueError("Aborting operation This is not json-able content.") from e
+
+        newTree = html.fromstring(r.text)
+
+        handler_dataset_landing_page(scraper, landing_page, newTree)
