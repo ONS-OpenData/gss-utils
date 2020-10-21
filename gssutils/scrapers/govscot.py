@@ -1,7 +1,6 @@
 import mimetypes
 import re
 from urllib.parse import urljoin, urlparse
-from urllib.request import Request, urlopen
 
 from dateutil.parser import parse
 
