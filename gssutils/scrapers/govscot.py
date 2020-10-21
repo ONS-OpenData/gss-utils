@@ -77,31 +77,32 @@ def collections(scraper, tree):
 					scraper.distributions.append(dist)
 
 def scrape(scraper, tree):
+    """ Scrapes GovScot landing page.
 
-	r = scraper.session.get(scraper.uri)
+    When provided with a GovScot landing page this will determine whether it is a publication page - which contains
+    the dataset(s) and metadata - or a collections page which contains links to many publications pages.
 
-	parse_object = urlparse(r.url)
+    If a publications link is provided it will take all the datasets on the publications page and turn them into
+    distributions containing the dataURL and basic meta data. If a collections link is provided then it will open
+    each publications link on the page and go through each adding to the list of distributions whenever an excel/csv
+    file is found.
+    """
 
-	scraper.dataset.publisher = GOV['the-scottish-government']
+    r = scraper.session.get(scraper.uri)
 
-	scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+    parse_object = urlparse(r.url)
 
-	if 'publications' in parse_object.path:
-		publications(scraper, tree)
-	elif 'collections' in parse_object.path:
-		collections(scraper, tree)
-	else:
-		print('GovScot Scraper does not support given landing page')
+    scraper.dataset.publisher = GOV['the-scottish-government']
 
-"""
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
 
-When provided with a GovScot landing page this will determine whther it is a publication page - which contains the dataset(s) and metadata -
-or a collections page which contains links to many publications pages. 
+    if 'publications' in parse_object.path:
+        publications(scraper, tree)
+    elif 'collections' in parse_object.path:
+        collections(scraper, tree)
+    else:
+        print('GovScot Scraper does not support given landing page')
 
-If a publications link is provided it will take all the datasets on the publications page and turn them into distributions containing the dataURL and basic meta data.
-If a collections link is provided then it will open each publications link on the page and go through each adding to the list of distributions whenever an excel/csv file is found.
-
-"""
 
 def scrape_old(scraper, tree):
     """Deprecated scraper for 'https://www2.gov.scot/Topics/Statistics/Browse/' links."""
