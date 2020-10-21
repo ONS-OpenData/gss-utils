@@ -9,7 +9,6 @@ from gssutils.metadata.dcat import Distribution
 
 from datetime import datetime
 
-import requests
 
 from lxml import html
 
