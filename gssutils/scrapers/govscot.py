@@ -129,9 +129,3 @@ def scrape_old(scraper, tree):
                 scraper.distributions.append(dist)
         except:
             break
-
-"""
-
-Depreciated scraper for 'https://www2.gov.scot/Topics/Statistics/Browse/' links
-
-"""
