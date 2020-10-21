@@ -104,6 +104,8 @@ If a collections link is provided then it will open each publications link on th
 """
 
 def scrape_old(scraper, tree):
+    """Deprecated scraper for 'https://www2.gov.scot/Topics/Statistics/Browse/' links."""
+
     scraper.dataset.publisher = GOV['the-scottish-government']
     scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
     scraper.dataset.title = tree.xpath(
