@@ -7,9 +7,6 @@ from dateutil.parser import parse
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 
-from cachecontrol import CacheControl, serialize
-from cachecontrol.caches.file_cache import FileCache
-from cachecontrol.heuristics import LastModified
 from datetime import datetime
 
 import requests
