@@ -38,7 +38,7 @@ def publications(scraper, tree):
 			dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
 			if dist.mediaType in ['application/msword', 'application/pdf', 'None']:
 				return
-			elif dist.mediaType == None:
+			elif dist.mediaType is None:
 				return
 			else:
 				scraper.distributions.append(dist)
