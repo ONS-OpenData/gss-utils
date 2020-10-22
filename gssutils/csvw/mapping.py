@@ -1,4 +1,5 @@
 import csv
+import gzip
 import json
 import logging
 from io import TextIOBase
@@ -60,12 +61,21 @@ class CSVWMapping:
             return URI(urljoin(self._dataset_uri + '/', relative, allow_fragments=True))
 
     def set_csv(self, csv_filename: URI):
-        with open(csv_filename, newline='', encoding='utf-8') as f:
-            self.set_input(csv_filename, f)
+
+        # csv and csv.gz need to be read in slightly different ways
+        if str(csv_filename).endswith("csv"):
+            with open(csv_filename, newline='', encoding='utf-8') as f:
+                self.set_input(csv_filename, f)
+        elif str(csv_filename).endswith("csv.gz"):
+            with gzip.open(csv_filename, encoding='utf-8') as f:
+                self.set_input(csv_filename, f)
+        else:
+            raise ValueError("Only csv types of .csv and /csv.gz are supported."
+                    " Not {}".format(csv_filename))
 
     def set_input(self, filename: URI, stream: TextIO):
         self._csv_stream = stream
-        self._csv_filename = filename
+        self._csv_filename = Path(str(filename)[:-3]) if str(filename).endswith(".csv.gz") else filename
         reader = csv.DictReader(stream)
         self._column_names = reader.fieldnames
         for col in self._column_names:
