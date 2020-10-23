@@ -318,7 +318,7 @@ class Scraper:
     def select_dataset(self, **kwargs):
         dataset = self._filter_one(self.catalog.dataset, **kwargs)
         self.dataset = dataset
-        self.dataset.landingPage = uri
+        self.dataset.landingPage = self.uri
         if not hasattr(self.dataset, 'description') and hasattr(self.catalog, 'description'):
             self.dataset.description = self.catalog.description
         self.dataset.modified = datetime.now()  # TODO: decision on modified date
