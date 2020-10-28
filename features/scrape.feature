@@ -32,6 +32,12 @@ Feature: Scrape dataset info
     Then the title should be "Migration between Scotland and Overseas"
     And the description should start "Migration between Scotland and overseas refers to people moving between"
 
+  Scenario: Scrape nrscotland COVID19
+    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/general-publications/births-deaths-and-other-vital-events-quarterly-figures"
+    Then dct:title should be `"Births, Deaths and Other Vital Events - Quarterly Figures"@en`
+    And the data download URL should match "https://www.nrscotland.gov.uk/files//statistics/.*\.xlsx"
+    And dct:publisher should be `gov:national-records-of-scotland`
+
   Scenario: nrscotland downloads
     Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-flows/migration-between-scotland-and-overseas"
     And select the distribution given by
