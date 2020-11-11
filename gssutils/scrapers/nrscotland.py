@@ -24,6 +24,7 @@ def statistics_handler(scraper, tree):
 
     scraper.dataset.publisher = GOV['national-records-of-scotland']
     scraper.dataset.title = tree.xpath('//div[@property = "dc:title"]/h2/text()')[0].strip()
+    scraper.dataset.description = tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[2]/text()')[0].strip()
 
     contact = tree.xpath('//*[@id="node-stats-home-page-3022"]/div[2]/div/div/p[10]/a')
     for i in contact:
