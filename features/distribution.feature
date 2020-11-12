@@ -23,7 +23,7 @@ Feature: distribution downloading
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Migration between Scotland and overseas by age             |
     And fetch the 'SYOA Females (2001-)' tab as a pandas DataFrame
-    Then the dataframe should have 70 rows
+    Then the dataframe should have 73 rows
 
   Scenario: databaker from ODS
     Given I scrape the page "https://www.gov.uk/government/statistics/national-insurance-number-allocations-to-adult-overseas-nationals-to-march-2018"
