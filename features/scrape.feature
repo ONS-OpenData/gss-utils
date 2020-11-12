@@ -33,8 +33,8 @@ Feature: Scrape dataset info
     And the description should start "Migration between Scotland and overseas refers to people moving between"
 
   Scenario: Scrape nrscotland COVID19
-    Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/vital-events/general-publications/births-deaths-and-other-vital-events-quarterly-figures"
-    Then dct:title should be `"Births, Deaths and Other Vital Events - Quarterly Figures"@en`
+    Given I scrape the page "https://www.nrscotland.gov.uk/covid19stats"
+    Then dct:title should be `"Deaths involving coronavirus (COVID-19) in Scotland"@en`
     And the data download URL should match "https://www.nrscotland.gov.uk/files//statistics/.*\.xlsx"
     And dct:publisher should be `gov:national-records-of-scotland`
 
@@ -44,7 +44,7 @@ Feature: Scrape dataset info
       | key       | value                                                      |
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Migration between administrative areas and overseas by sex |
-    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/flows/apr-19/mig-overseas-admin-sex-tab1.xlsx"
+    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/flows/apr-20/mig-overseas-admin-sex-tab1.xlsx"
 
   Scenario: Scrape NISRA
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
