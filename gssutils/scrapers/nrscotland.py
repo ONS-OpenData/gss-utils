@@ -11,17 +11,7 @@ from lxml import html
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
-def scrape(scraper, tree):
-
-    if scraper.uri.endswith('covid19stats'):
-        covid_handler(scraper, tree)
-    elif 'statistics-and-data/statistics/' in scraper.uri:
-        statistics_handler(scraper, tree)
-    else:
-        print('Given URI not supported by NRS scraper')
-
 def statistics_handler(scraper, tree):
-
     scraper.dataset.publisher = GOV['national-records-of-scotland']
     scraper.dataset.title = tree.xpath('//div[@property = "dc:title"]/h2/text()')[0].strip()
     scraper.dataset.description = tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[2]/text()')[0].strip()
@@ -37,10 +27,12 @@ def statistics_handler(scraper, tree):
             file_type = node.text.lower()
             if file_type in ['excel', 'csv']:
                 distribution = Distribution(scraper)
-                distribution.title = scraper.dataset.title + ' ' + node.text
+                distribution.title = node.getparent().xpath('.//strong/text()')[0].strip()
                 distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
+                distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0].strip()).date()
                 if 'Last update' in tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()'):
-                    distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0]).date()
+                    distribution.issued = parse(
+                        tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0]).date()
                 distribution.mediaType = {
                     'csv': 'text/csv',
                     'excel': 'application/vnd.ms-excel'
@@ -48,7 +40,11 @@ def statistics_handler(scraper, tree):
                     file_type,
                     mimetypes.guess_type(distribution.downloadURL)[0]
                 )
-                scraper.distributions.append(distribution)
+                if distribution.mediaType in ACCEPTED_MIMETYPES:
+                    scraper.distributions.append(distribution)
+                else:
+                    pass
+
     elif tree.findall('.//*[@id="node-stats-home-page-3022"]/div[2]/div/div/p/a'):
         for publication in tree.findall('.//*[@id="node-stats-home-page-3022"]/div[2]/div/div/p/a'):
             if publication.attrib['href'].startswith('/statistics-and-data/statistics/'):
@@ -56,7 +52,8 @@ def statistics_handler(scraper, tree):
                 r = scraper.session.get(url)
                 if r.status_code != 200:
                     raise Exception(
-                        'Failed to get url {url}, with status code "{status_code}".'.format(url=url, status_code=r.status_code))
+                        'Failed to get url {url}, with status code "{status_code}".'.format(url=url,
+                                                                                            status_code=r.status_code))
                 pubTree = html.fromstring(r.text)
 
                 if pubTree.xpath(".//a[text()='Excel']") or pubTree.xpath(".//a[text()='CSV']"):
@@ -68,8 +65,10 @@ def statistics_handler(scraper, tree):
                             distribution = Distribution(scraper)
                             distribution.title = scraper.dataset.title + ' ' + publication.text + ' ' + node.text
                             distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
-                            if 'Last update' in pubTree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p/strong/text()')[0]:
-                                distribution.issued = parse(pubTree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0]).date()
+                            if 'Last update' in pubTree.xpath(
+                                    '//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p/strong/text()')[0]:
+                                distribution.issued = parse(pubTree.xpath(
+                                    '//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0]).date()
                             else:
                                 try:
                                     distribution.issued = parse(re.search('\(([^)]+)', publication.getparent().text_content()).group(1)).date()
@@ -82,7 +81,10 @@ def statistics_handler(scraper, tree):
                                 file_type,
                                 mimetypes.guess_type(distribution.downloadURL)[0]
                             )
-                            scraper.distributions.append(distribution)
+                            if distribution.mediaType in ACCEPTED_MIMETYPES:
+                                scraper.distributions.append(distribution)
+                            else:
+                                pass
                     else:
                         pass
             else:
@@ -95,6 +97,7 @@ def statistics_handler(scraper, tree):
             distribution.title = dataset.text
             distribution.downloadURL = dataset.attrib['href']
             distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
+            distribution.issued = scraper.dataset.issued
             if distribution.mediaType in ACCEPTED_MIMETYPES:
                 scraper.distributions.append(distribution)
             else:
@@ -102,9 +105,9 @@ def statistics_handler(scraper, tree):
 
 
 def covid_handler(scraper, tree):
-
     scraper.dataset.publisher = GOV['national-records-of-scotland']
     scraper.dataset.title = tree.xpath('//*[@id="node-stats-home-page-3315"]/div[1]/div/div/h2/text()')[0].strip()
+    scraper.dataset.description = tree.xpath('//*[@id="node-stats-home-page-3315"]/div[2]/div/div/p[4]/text()')[0].strip() #TEMP as no description on page is more applicable
 
     pubDate = tree.xpath('//*[@id="node-stats-home-page-3315"]/div[2]/div/div/p[1]/text()')[0]
     nextDue = tree.xpath('//*[@id="node-stats-home-page-3315"]/div[2]/div/div/p[1]/text()')[2]
@@ -115,7 +118,7 @@ def covid_handler(scraper, tree):
     for i in contact:
         scraper.dataset.contactPoint = i.attrib['href']
 
-    dataNodes = tree.findall('.//*[@id="node-stats-home-page-3315"]/div[2]/div/div/table[2]/tbody/tr[1]/td[4]/p[2]/a')
+    dataNodes = tree.findall('.//*[@id="node-stats-home-page-3315"]/div[2]/div/div/table/tbody/tr[1]/td[4]/p[2]/a')
 
     for node in dataNodes:
         file_type = node.text.lower()
@@ -123,6 +126,7 @@ def covid_handler(scraper, tree):
             distribution = Distribution(scraper)
             distribution.title = scraper.dataset.title + ' ' + node.text
             distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
+            distribution.issued = scraper.dataset.issued
             distribution.mediaType = {
                 'csv': 'text/csv',
                 'excel': 'application/vnd.ms-excel'
@@ -132,8 +136,8 @@ def covid_handler(scraper, tree):
             )
             scraper.distributions.append(distribution)
 
-def old_statistics_handler(scraper, tree):
 
+def old_statistics_handler(scraper, tree):
     scraper.dataset.publisher = GOV['national-records-of-scotland']
     scraper.dataset.title = tree.xpath('//div[@property = "dc:title"]/h2/text()')[0].strip()
     after_background = tree.xpath(
