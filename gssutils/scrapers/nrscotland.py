@@ -33,7 +33,7 @@ def statistics_handler(scraper, tree):
                     distribution.title = scraper.dataset.title + ' ' + node.text
                 distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
                 try:
-                    distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0].strip()).replace('Last Updated:', '')).date()
+                    distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0].strip().replace('Last Updated:', '')).date()
                 except:
                     distribution.issued = parse(tree.xpath('//*[@id="node-stats-home-page-3066"]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/div[2]/text()')[0].strip().replace('Last Updated:', '')).date()
                 if 'Last update' in tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()'):
