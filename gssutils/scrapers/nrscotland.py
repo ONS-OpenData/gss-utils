@@ -27,9 +27,15 @@ def statistics_handler(scraper, tree):
             file_type = node.text.lower()
             if file_type in ['excel', 'csv']:
                 distribution = Distribution(scraper)
-                distribution.title = node.getparent().xpath('.//strong/text()')[0].strip()
+                try:
+                    distribution.title = node.getparent().xpath('.//strong/text()')[0].strip()
+                except:
+                    distribution.title = scraper.dataset.title + ' ' + node.text
                 distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
-                distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0].strip()).date()
+                try:
+                    distribution.issued = parse(tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0].strip()).date()
+                except:
+                    distribution.issued = parse(tree.xpath('//*[@id="node-stats-home-page-3066"]/div[2]/div/div/div[1]/table/tbody/tr/td[1]/div[2]/text()')[0].strip().replace('Last Updated:', '')).date()
                 if 'Last update' in tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()'):
                     distribution.issued = parse(
                         tree.xpath('//*[@id="block-system-main"]/div/div/div/div[2]/div/div/p[1]/text()')[0]).date()
