@@ -16,10 +16,8 @@ ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 def scrape(scraper, tree):
     """
     This is json scraper for ons.gov.uk pages
-
     This scraper will attempt to gather metadata from "standard" fields shared across page types
     then drop into page-type specific handlers.
-
     :param scraper:         the Scraper object
     :param landing_page:    the provided url
     :return:
@@ -76,7 +74,7 @@ def scrape(scraper, tree):
 
     # not all page types have contact field so we need another catch
     # if the page does, get the email address as contact info.
-    # stick "mailto:" on the start because metadata expects it.
+    # stick "mailto:" on the start because metadata expects it.
     try:
         contact_dict = landing_page["description"]["contact"]
         scraper.dataset.contactPoint = "mailto:"+contact_dict["email"].strip()
@@ -106,7 +104,6 @@ def parse_as_local_date(dt: str):
     """
     Dates provided by the /data JSON are actually given as date times using ISO 8601 with UTC, so during
     British Summer Time, will be one hour before midnight the day before.
-
     We can account for this if we figure out the datetime in the Europe/London timezone and then take the date.
     """
     tz_ons = tz.gettz('Europe/London')
