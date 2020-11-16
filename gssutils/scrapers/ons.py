@@ -6,9 +6,6 @@ from dateutil.parser import parse, isoparse
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, CSDB
 
-from urllib.parse import urljoin, urlparse
-from lxml import html
-
 import mimetypes
 
 # save ourselves some typing later
@@ -19,10 +16,8 @@ ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
 def scrape(scraper, tree):
     """
     This is json scraper for ons.gov.uk pages
-
     This scraper will attempt to gather metadata from "standard" fields shared across page types
     then drop into page-type specific handlers.
-
     :param scraper:         the Scraper object
     :param landing_page:    the provided url
     :return:
@@ -40,14 +35,15 @@ def scrape(scraper, tree):
     except Exception as e:
         raise ValueError("Aborting operation This is not json-able content.") from e
 
+    accepted_page_types = ["dataset_landing_page", "static_adhoc"]
+    if landing_page["type"] not in accepted_page_types:
+        raise ValueError("Aborting operation This page type is not supported.")
+
     # Acquire title and description from the page json
     # literally just whatever's in {"description": {"title": <THIS> }}
     # and {"description": {"metaDescription": <THIS> }}
     scraper.dataset.title = landing_page["description"]["title"].strip()
-    try:
-    	scraper.dataset.description = landing_page["description"]["metaDescription"]
-    except:
-    	scraper.dataset.description = landing_page["description"]["summary"]
+    scraper.dataset.description = landing_page["description"]["metaDescription"]
 
     # Same with date, but use parse_as_local_date() which converts to the right time type
     scraper.dataset.issued = parse_as_local_date(landing_page["description"]["releaseDate"])
@@ -60,10 +56,7 @@ def scrape(scraper, tree):
     if page_type == "dataset_landing_page":
         scraper.dataset.comment = landing_page["description"]["summary"].strip()
     else:
-        try:
-        	scraper.dataset.comment = landing_page["markdown"][0]
-        except:
-        	scraper.dataset.comment = landing_page["description"]["summary"].strip()
+        scraper.dataset.comment = landing_page["markdown"][0]
 
     # not all page types have a next Release date field, also - "to be announced" is useless as is a blank entry.
     # so if its present, not blank, and doesnt say "to be announced" get it as
@@ -81,7 +74,7 @@ def scrape(scraper, tree):
 
     # not all page types have contact field so we need another catch
     # if the page does, get the email address as contact info.
-    # stick "mailto:" on the start because metadata expects it.
+    # stick "mailto:" on the start because metadata expects it.
     try:
         contact_dict = landing_page["description"]["contact"]
         scraper.dataset.contactPoint = "mailto:"+contact_dict["email"].strip()
@@ -97,8 +90,7 @@ def scrape(scraper, tree):
     # so we're switching to page-type specific handling
     page_handlers = {
         "static_adhoc": handler_static_adhoc,
-        "dataset_landing_page": handler_dataset_landing_page,
-        "release": handler_release,
+        "dataset_landing_page": handler_dataset_landing_page
     }
 
     # if the page "type" isn't one we do, blow up
@@ -112,7 +104,6 @@ def parse_as_local_date(dt: str):
     """
     Dates provided by the /data JSON are actually given as date times using ISO 8601 with UTC, so during
     British Summer Time, will be one hour before midnight the day before.
-
     We can account for this if we figure out the datetime in the Europe/London timezone and then take the date.
     """
     tz_ons = tz.gettz('Europe/London')
@@ -300,22 +291,3 @@ def handler_static_adhoc(scraper, landing_page, tree):
 
         logging.debug("Created distribution for download '{}'.".format(download_url))
         scraper.distributions.append(this_distribution)
-
-def handler_release(scraper, landing_page, tree):
-
-    for link in landing_page['relatedDatasets']:
-
-        url = urljoin("https://www.ons.gov.uk/", link['uri'])
-
-        r = scraper.session.get(url + "/data")
-        if r.status_code != 200:
-            raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
-                             " returned was '{}.".format(scraper.Øuri + "/data", r.status_code))
-        try:
-            landing_page = r.json()
-        except Exception as e:
-            raise ValueError("Aborting operation This is not json-able content.") from e
-
-        newTree = html.fromstring(r.text)
-
-        handler_dataset_landing_page(scraper, landing_page, newTree)
