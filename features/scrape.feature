@@ -173,6 +173,8 @@ Feature: Scrape dataset info
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
     And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
 
+  # Turning this off, it's just getting redirected to the other scots gov handler
+  @skip
   Scenario: Scrape old gov.scot dataset page
     Given I scrape the page "https://www2.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables"
     Then dct:title should be `"Housing statistics: Stock by tenure"@en`
