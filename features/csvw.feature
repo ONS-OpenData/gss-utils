@@ -107,7 +107,7 @@ Feature: Create CSVW metadata
         qb:attribute sdmx-a:unitMeasure .
 
       <#dimension/area-code> a qb:DimensionProperty ;
-        rdfs:label "Area Code"@en ;
+        rdfs:label "Area"@en ;
         qb:codeList <#scheme/area-code> ;
         rdfs:range <#class/AreaCode> ;
         rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refArea> .

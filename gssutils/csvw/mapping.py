@@ -29,7 +29,7 @@ class CSVWMapping:
         self._csv_filename: Optional[URI] = None
         self._csv_stream: Optional[TextIO] = None
         self._mapping: Dict[str, Any] = {}
-        self._column_names = List[str]
+        self._column_names: List[str] = []
         self._columns: Dict[str, Column] = {}
         self._external_tables: List[Table] = []
         self._dataset_uri: Optional[URI] = None
@@ -39,7 +39,7 @@ class CSVWMapping:
         self._keys: List[str] = []
         self._metadata_filename: Optional[URI] = None
         self._dataset_uri: Optional[URI] = None
-        self._foreign_keys: List[ForeignKey] = None
+        self._foreign_keys: Optional[List[ForeignKey]] = None
 
     @staticmethod
     def namify(column_header: str):
@@ -143,12 +143,11 @@ class CSVWMapping:
                     ))
                 elif "parent" in obj and "value" in obj:
                     # a local dimension that has a super property
-                    description: Optional[str] = None
-                    if "description" in obj:
-                        description = obj["description"]
-                    source: Optional[URI] = None
+                    description: Optional[str] = obj.get("description", None)
+                    label: str = obj.get("label", name)
+                    source: Optional[Resource] = None
                     if "source" in obj:
-                        source = URI(obj["source"])
+                        source = Resource(at_id=URI(obj["source"]))
                     self._keys.append(self._columns[name].name)
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
@@ -165,17 +164,19 @@ class CSVWMapping:
                             qb_codeList=Resource(
                                 at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
                             ),
-                            rdfs_label=name,
+                            rdfs_label=label,
                             rdfs_comment=description,
                             rdfs_subPropertyOf=Resource(at_id=URI(obj["parent"])),
-                            rdfs_isDefinedBy=Resource(at_id=source)
+                            rdfs_isDefinedBy=source
                         )
                     ))
-                elif "description" in obj:
-                    # local dimension with a definition and maybe source of the definition
-                    source: Optional[URI] = None
+                elif "description" in obj or "label" in obj:
+                    # local dimension with a definition/label and maybe source of the definition
+                    description: Optional[str] = obj.get("description", None)
+                    label: Optional[str] = obj.get("label", name)
+                    source: Optional[Resource] = None
                     if "source" in obj:
-                        source = URI(obj["source"])
+                        source = Resource(at_id=URI(obj["source"]))
                     self._keys.append(self._columns[name].name)
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
@@ -192,9 +193,9 @@ class CSVWMapping:
                             qb_codeList=Resource(
                                 at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
                             ),
-                            rdfs_label=name,
-                            rdfs_comment=obj["description"],
-                            rdfs_isDefinedBy=Resource(at_id=source)
+                            rdfs_label=label,
+                            rdfs_comment=description,
+                            rdfs_isDefinedBy=source
                         )
                     ))
 
