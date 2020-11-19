@@ -43,8 +43,8 @@ def statistics_handler(scraper, tree):
                     try:
                         distribution.issued = parse(tree.xpath("//*[contains(text(),'Updated')]/text()")[0].lower().replace('last updated:', '')).date()
                     except:
-                    	logging.warning("No Last Issue Date Found. Please update manually")
-                        pass                        
+                        logging.warning("No Last Issue Date Found. Please update manually")
+                        pass
                 distribution.mediaType = {
                     'csv': 'text/csv',
                     'excel': 'application/vnd.ms-excel'
