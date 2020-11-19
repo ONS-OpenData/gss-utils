@@ -12,6 +12,7 @@
         "source": "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes-1-march-14-august-2020-html#section-48615"
       },
       "Area Code": {
+        "label": "Area",
         "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
         "value": "http://statistics.data.gov.uk/id/statistical-geography/{area_code}"
       },

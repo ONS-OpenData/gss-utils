@@ -27,6 +27,8 @@ def publications(scraper, tree):
 		pubDate = tree.xpath('// *[@id="page-content"] / div[1] / div / header / div[2] / div[1] / section / div[1] / span[2] / strong')[0].text
 		scraper.dataset.issued = parse(pubDate).date()
 	except:
+		scraper.dataset.issued = parse('January 1 1900').date()
+		logging.warning("No issued date found, placement date added (1900-01-01)")
 		pass
 
 	dists = tree.findall('.//*[@id="page-content"]/div[3]/div/div/div[2]/section')
@@ -62,6 +64,8 @@ def collections(scraper, tree):
 				pubDate = pubTree.xpath('// *[@id="page-content"] / div[1] / div / header / div[2] / div[1] / section / div[1] / span[2] / strong')[0].text
 				scraper.dataset.issued = parse(pubDate).date()
 			except:
+				scraper.dataset.issued = parse('January 1 1900').date()				
+				logging.warning("No issued date found, placement date added (1900-01-01)")
 				pass
 
 			dists = pubTree.xpath('//*[@id="page-content"]/div[3]/div/div/div[2]/section/div/div[2]/h3/a')
@@ -133,4 +137,3 @@ def scrape_old(scraper, tree):
 				scraper.distributions.append(dist)
 		except:
 			break
-
