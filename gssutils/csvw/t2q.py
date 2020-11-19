@@ -3,59 +3,15 @@ import csv
 import json
 import logging
 from codecs import iterdecode
+from typing import Dict, Any
 from pathlib import Path
 from urllib import request, parse
 from urllib.parse import urljoin
 
 from rdflib import URIRef, RDF, Literal
 
+from gssutils.csvw.namespaces import prefix_map
 from gssutils.utils import pathify
-
-
-csvw_namespaces = {
-    "as": "https://www.w3.org/ns/activitystreams#",
-    "cc": "http://creativecommons.org/ns#",
-    "csvw": "http://www.w3.org/ns/csvw#",
-    "ctag": "http://commontag.org/ns#",
-    "dc": "http://purl.org/dc/terms/",
-    "dc11": "http://purl.org/dc/elements/1.1/",
-    "dcat": "http://www.w3.org/ns/dcat#",
-    "dcterms": "http://purl.org/dc/terms/",
-    "dctypes": "http://purl.org/dc/dcmitype/",
-    "dqv": "http://www.w3.org/ns/dqv#",
-    "duv": "https://www.w3.org/TR/vocab-duv#",
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "gr": "http://purl.org/goodrelations/v1#",
-    "grddl": "http://www.w3.org/2003/g/data-view#",
-    "ical": "http://www.w3.org/2002/12/cal/icaltzd#",
-    "ldp": "http://www.w3.org/ns/ldp#",
-    "ma": "http://www.w3.org/ns/ma-ont#",
-    "oa": "http://www.w3.org/ns/oa#",
-    "og": "http://ogp.me/ns#",
-    "org": "http://www.w3.org/ns/org#",
-    "owl": "http://www.w3.org/2002/07/owl#",
-    "prov": "http://www.w3.org/ns/prov#",
-    "qb": "http://purl.org/linked-data/cube#",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    "rdfa": "http://www.w3.org/ns/rdfa#",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "rev": "http://purl.org/stuff/rev#",
-    "rif": "http://www.w3.org/2007/rif#",
-    "rr": "http://www.w3.org/ns/r2rml#",
-    "schema": "http://schema.org/",
-    "sd": "http://www.w3.org/ns/sparql-service-description#",
-    "sioc": "http://rdfs.org/sioc/ns#",
-    "skos": "http://www.w3.org/2004/02/skos/core#",
-    "skosxl": "http://www.w3.org/2008/05/skos-xl#",
-    "v": "http://rdf.data-vocabulary.org/#",
-    "vcard": "http://www.w3.org/2006/vcard/ns#",
-    "void": "http://rdfs.org/ns/void#",
-    "wdr": "http://www.w3.org/2007/05/powder#",
-    "wrds": "http://www.w3.org/2007/05/powder-s#",
-    "xhv": "http://www.w3.org/1999/xhtml/vocab#",
-    "xml": "rdf:XMLLiteral",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
-}
 
 
 class CSVWMetadata:
@@ -71,15 +27,16 @@ class CSVWMetadata:
         self._col_def = CSVWMetadata._csv_lookup(
             parse.urljoin(self._ref_base, 'columns.csv'), 'title')
         self._comp_def = CSVWMetadata._csv_lookup(
+
             parse.urljoin(self._ref_base, 'components.csv'), 'Label')
-        self._codelists = {}
+        self._codelists: Dict[str, Any] = {}
         for table in json.load(request.urlopen(parse.urljoin(self._ref_base, 'codelists-metadata.json')))['tables']:
             codelist_url = f'http://gss-data.org.uk/def/concept-scheme/{pathify(table["rdfs:label"])}'
             self._codelists[codelist_url] = table
         # need to resolve ref_common against relative URIs
 
     @staticmethod
-    def _csv_lookup(url, key):
+    def _csv_lookup(url: str, key: str) -> Dict[str, Dict[str, str]]:
         stream = request.urlopen(url)
         reader = csv.DictReader(iterdecode(stream, 'utf-8'))
         return {row[key]: row for row in reader}
@@ -94,7 +51,7 @@ class CSVWMetadata:
                 else:
                     self.create_io(csv_io, schema_io, str(csv_filename.relative_to(schema_filename.parent)))
 
-    def create_io(self, csv_io, schema_io, csv_url, with_transform=False,
+    def create_io(self, csv_io, schema_io, csv_url, with_transform=False, mapping=None,
                   base_url=None, base_path=None, dataset_metadata=None, with_external=True):
         schema_columns = []
         schema_tables = []
@@ -105,8 +62,13 @@ class CSVWMetadata:
         measure_types = set()
         if with_transform: # need to figure out the measure types used
             measure_types.update(row['Measure Type'] for row in reader)
+        column_map = {}
+        if mapping is not None:
+            column_map = json.load(mapping)
         for column in reader.fieldnames:
-            if column in self._col_def:
+            if column in column_map:
+                pass
+            elif column in self._col_def:
                 column_def = self._col_def[column]
                 is_unit = column_def['property_template'] == 'http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure'
                 column_schema = {
@@ -166,7 +128,7 @@ class CSVWMetadata:
                     if column in self._comp_def:
                         codelist = self._comp_def[column]['Codelist']
                         if codelist is not None and codelist != '':
-                            comp_attach['qb:codelist'] = {'@id': codelist}
+                            comp_attach['qb:codeList'] = {'@id': codelist}
                             if 'rdfs:range' not in comp_attach:
                                 comp_attach['rdfs:range'] = {'@id': 'http://www.w3.org/2004/02/skos/core#ConceptScheme'}
                     dsd_def = {
@@ -241,14 +203,14 @@ class CSVWMetadata:
             }
             if dataset_metadata is not None:
                 def csvw_prefix(uri):
-                    for prefix, namespace in csvw_namespaces.items():
+                    for prefix, namespace in prefix_map.items():
                         if uri.startswith(namespace):
                             return f'{prefix}:{uri[len(namespace):]}'
                     return None
                 for s, p, o, g in dataset_metadata.quads((URIRef(dataset_uri), None, None, None)):
                     if p == RDF.type:
                         t = csvw_prefix(str(o))
-                        if t is not None:
+                        if t is not None and t not in ds_meta['@type']:
                             ds_meta['@type'].append(t)
                     else:
                         prefixed_p = csvw_prefix(str(p))

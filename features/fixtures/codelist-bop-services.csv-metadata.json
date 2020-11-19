@@ -1,0 +1,104 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/csvw",
+    {
+      "@language": "en"
+    }
+  ],
+  "@id": "http://gss-data.org.uk/def/{bop-services}#tablegroup",
+  "tables": [
+    {
+      "@id": "http://gss-data.org.uk/def/concept-scheme/quarterly-balance-of-payments/{bop-services}",
+      "aboutUrl": "http://gss-data.org.uk/def/concept-scheme/{bop-services}",
+      "url": "codelist-bop-services-schema.csv",
+      "columns": [
+        {
+          "titles": "label",
+          "name": "label",
+          "datatype": "string",
+          "required": true,
+          "propertyUrl": "rdfs:label",
+          "valueUrl": "{label}"
+        },
+        {
+          "titles": "notation",
+          "name": "notation",
+          "datatype": {
+            "base": "string",
+            "format": "^-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*$"
+          },
+          "required": true,
+          "propertyUrl": "skos:notation",
+          "valueUrl": "{notation}"
+        },
+        {
+          "titles": "parent_notation",
+          "name": "parent_notation",
+          "datatype": {
+            "base": "string",
+            "format": "^(-?[\\w\\.\\/]+(-[\\w\\.\\/]+)*|)$"
+          },
+          "required": false,
+          "propertyUrl": "skos:broader",
+          "valueUrl": "{parent-notation}"
+        },
+        {
+          "titles": "sort_priority",
+          "name": "sort_priority",
+          "datatype": "number",
+          "required": false,
+          "propertyUrl": "http://www.w3.org/ns/ui#sortPriority",
+          "valueUrl": "{sort-priority}"
+        },
+        {
+          "name": "top_concept_of",
+          "datatype": "string",
+          "propertyUrl": "skos:topConceptOf",
+          "valueUrl": "http://gss-data.org.uk/def/concept-scheme/{bop-services}",
+          "virtual": true
+        },
+        {
+          "name": "pref_label",
+          "datatype": "string",
+          "propertyUrl": "skos:prefLabel",
+          "valueUrl": "{label}",
+          "virtual": true
+        },
+        {
+          "name": "in_scheme",
+          "propertyUrl": "skos:inScheme",
+          "valueUrl": "http://gss-data.org.uk/def/concept-scheme/{bop-services}",
+          "virtual": true
+        },
+        {
+          "name": "type",
+          "propertyUrl": "rdf:type",
+          "valueUrl": "skos:Concept",
+          "virtual": true
+        },
+        {
+          "name": "has_top_concept",
+          "propertyUrl": "skos:hasTopConcept",
+          "valueUrl": "http://gss-data.org.uk/def/concept/{bop-services}/{notation}",
+          "virtual": true
+        },
+        {
+          "name": "member",
+          "propertyUrl": "skos:member",
+          "valueUrl": "http://gss-data.org.uk/def/concept/{bop-services}/{notation}",
+          "virtual": true
+        }
+      ],
+      "primaryKey": [
+        "notation",
+        "parent_notation"
+      ],
+      "prov:hadDerivation": {
+        "@id": "http://gss-data.org.uk/def/concept-scheme/{bop-services}",
+        "@type": "skos:ConceptScheme",
+        "rdfs:label": "Code list for BOP Services codelist schema",
+        "skos:prefLabel": "Code list for BOP Services codelist schema"
+      }
+    }
+  ]
+}

@@ -2,7 +2,9 @@ import logging
 
 from dateutil.parser import parse
 
-from gssutils.metadata import Distribution, CSV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import CSV
+
 
 def request_json_data(scraper, uri):
     """

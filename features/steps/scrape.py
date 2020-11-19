@@ -1,10 +1,13 @@
-from behave import *
-from gssutils import Scraper
-from nose.tools import *
-import vcr
-import requests
-from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces, Excel
 import os
+
+import requests
+import vcr
+from behave import *
+from nose.tools import *
+
+from gssutils import Scraper
+from gssutils.metadata import DCTERMS, DCAT, RDFS, namespaces
+from gssutils.metadata.mimetype import Excel
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
@@ -17,17 +20,41 @@ def step_impl(context, uri):
         context.scraper = Scraper(uri, requests.Session())
 
 
+@given('I use the testing seed "{file_name}"')
+def step_impl(context, file_name):
+    feature_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    seed_path = os.path.join(feature_path, "fixtures", file_name)
+    context.scraper = Scraper(seed=seed_path)
+
+
+@given('I fetch the seed path "{file_name}"')
+def step_impl(context, file_name):
+    feature_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    seed_path = os.path.join(feature_path, "fixtures", file_name)
+    context.seed_path = seed_path
+
+
+@then('building scrapper should fail with "{error_message}"')
+def step_impl(context, error_message):
+    captured_error_message = ""
+    try:
+        context.scrapper = Scraper(seed=context.seed_path)
+    except ValueError as err:
+        captured_error_message = str(err)
+    assert_equal(error_message, captured_error_message)
+
+
 @then('the data can be downloaded from "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+        context.distribution = context.scraper.distribution(latest=True)
     assert_equal(context.distribution.downloadURL, uri)
 
 
 @then('the data download URL should match "{uri}"')
 def step_impl(context, uri):
     if not hasattr(context, 'distribution'):
-        context.distribution = context.scraper.distribution(latest=True, mediaType=Excel)
+        context.distribution = context.scraper.distribution(latest=True)
     assert_regexp_matches(context.distribution.downloadURL, uri)
 
 
@@ -179,3 +206,8 @@ def step_impl(context, encoding):
                           record_mode=context.config.userdata.get('record_mode',
                                                                   DEFAULT_RECORD_MODE)):
         context.pandas = context.pandas = context.distribution.as_pandas(encoding=encoding)
+
+
+@then('the dataset landing page should be "{url}"')
+def step_impl(context, url):
+    eq_(context.scraper.dataset.landingPage, url)

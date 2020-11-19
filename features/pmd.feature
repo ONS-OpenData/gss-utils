@@ -14,13 +14,12 @@ Feature: PMD metadata
     And set the description to 'Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)'
     And generate TriG
     Then the TriG should contain
-
       """
       @prefix dct: <http://purl.org/dc/terms/> .
       @prefix dcat: <http://www.w3.org/ns/dcat#> .
       @prefix gdp: <http://gss-data.org.uk/def/gdp#> .
       @prefix ns1: <http://gss-data.org.uk/graph/foreign-direct-investment-inward/> .
-      @prefix pmd: <http://publishmydata.com/def/dataset#> .
+      @prefix pmdcat: <http://publishmydata.com/pmdcat#> .
       @prefix qb: <http://purl.org/linked-data/cube#> .
       @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
       @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -29,14 +28,13 @@ Feature: PMD metadata
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
       <http://gss-data.org.uk/graph/foreign-direct-investment-inward/metadata> {
-        <http://gss-data.org.uk/data/foreign-direct-investment-inward> a pmd:Dataset,
-          pmd:LinkedDataset,
-          qb:DataSet ;
+        <http://gss-data.org.uk/data/foreign-direct-investment-inward-catalog-entry> a pmdcat:Dataset ;
         rdfs:label "Foreign direct investment involving UK companies: inward"@en ;
         dcat:theme <http://gss-data.org.uk/def/concept/statistics-authority-themes/business-industry-trade-energy>;
         gdp:family gdp:trade ;
-        pmd:contactEmail <mailto:fdi@ons.gov.uk> ;
-        pmd:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
+        dcat:contactPoint <mailto:fdi@ons.gov.uk> ;
+        pmdcat:graph <http://gss-data.org.uk/graph/foreign-direct-investment-inward> ;
+        pmdcat:datasetContents <http://gss-data.org.uk/data/foreign-direct-investment-inward#dataset> ;
         dct:creator <https://www.gov.uk/government/organisations/office-for-national-statistics> ;
         dct:issued "2019-12-03"^^xsd:date ;
         dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/> ;
@@ -44,16 +42,16 @@ Feature: PMD metadata
         dct:title "Foreign direct investment involving UK companies: inward"@en ;
         void:sparqlEndpoint <http://gss-data.org.uk/sparql> ;
         rdfs:comment "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."@en ;
-        dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"^^<https://www.w3.org/ns/iana/media-types/text/markdown#Resource> .
+        dct:description "Inward Foreign Direct Investment (FDI) Involving UK Companies, 2016 (Directional Principle)"@en .
       }
       """
 
     Scenario: convention over configuration
-      Given the 'JOB_NAME' environment variable is 'GSS/Trade/ONS-FDI-inward'
+      Given the 'JOB_NAME' environment variable is 'GSS_data/Trade/ONS-FDI-inward'
       And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
-      Then the dataset URI should be <http://gss-data.org.uk/data/trade/ons-fdi-inward>
-      And the metadata graph should be <http://gss-data.org.uk/graph/trade/ons-fdi-inward/metadata>
+      Then the dataset contents URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward#dataset>
+      And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward>
       And the modified date should be quite recent
 
     Scenario: licensed dataset
@@ -65,7 +63,16 @@ Feature: PMD metadata
       Then the modified date should be quite recent
 
     Scenario: catalog scraped datasets
-      Given the 'JOB_NAME' environment variable is 'GSS/Health/ISD-Drugs-and-Alcohol'
+      Given the 'JOB_NAME' environment variable is 'GSS_data/Health/ISD-Drugs-and-Alcohol'
       Given I scrape the page "http://www.isdscotland.org/Health-Topics/Drugs-and-Alcohol-Misuse/Publications/"
       And I select the dataset "National Drug and Alcohol Treatment Waiting Times"
       Then generate TriG
+
+    Scenario: generate catalogue metadata for PMD4
+      Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompaniesoutwardtables"
+      And set the base URI to <http://gss-data.org.uk>
+      And set the dataset ID to <gss_data/trade/ons-fdi>
+      And set the family to 'trade'
+      And set the theme to <business-industry-trade-energy>
+      And generate TriG
+      Then the TriG should contain triples given by "pmd4-metadata.ttl"

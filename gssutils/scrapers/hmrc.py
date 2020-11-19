@@ -1,10 +1,14 @@
 import logging
 import mimetypes
-import string
 from urllib.parse import urljoin
-from gssutils.metadata import Dataset, Excel, Distribution, PMDDataset, GOV, THEME
+
 from dateutil.parser import parse
 from lxml import html
+
+from gssutils.metadata import GOV, THEME
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
+from gssutils.metadata.pmdcat import Dataset
 
 
 def scrape_pages(scraper, tree):
@@ -25,7 +29,7 @@ def scrape_pages(scraper, tree):
                 columns = [t.strip() for t in row.xpath("th/text()")]
                 header = False
             else:
-                dataset = PMDDataset()
+                dataset = Dataset(scraper.uri)
                 dataset.publisher = scraper.catalog.publisher
                 dataset.license = scraper.catalog.license
                 dataset.distribution = []
@@ -36,7 +40,7 @@ def scrape_pages(scraper, tree):
                     elif k == 'Publication Source' or k == 'Source':
                         pass
                     elif k == 'Release Date' or k == 'Released':
-                        dataset.issued = parse(v.text.strip())
+                        dataset.issued = parse(v.text.strip(), dayfirst=True)
                     elif k == 'Bulletin Date' or k == 'Period':
                         bulletin_date = v.text
                     elif k == 'View' or k == 'View Archive':
@@ -52,7 +56,7 @@ def scrape_pages(scraper, tree):
                                 cols = release_row.xpath("td")
                                 dist.downloadURL = urljoin(view_url, cols[1].xpath("a/@href")[0].replace(' ', '%20'))
                                 archive_date = cols[0].text
-                                dist.issued = parse(archive_date.strip())
+                                dist.issued = parse(archive_date.strip(), dayfirst=True)
                                 dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
                                 dist.title = dataset.title + ' ' + archive_date
                                 dataset.distribution.append(dist)
@@ -88,7 +92,7 @@ def scrape_ots_reports(scraper, tree):
                 if k == 'Published':
                     try:
                         if v.text is not None:
-                            publication_date = parse(v.text.strip().strip(u'\u200B\ufeff'))
+                            publication_date = parse(v.text.strip().strip(u'\u200B\ufeff'), dayfirst=True)
                     except ValueError as e:
                         logging.warning(f"Unable to parse published date {e}")
                 elif k == 'Report':
@@ -99,7 +103,7 @@ def scrape_ots_reports(scraper, tree):
                             continue
                         title = links[0].text.strip().strip(u'\u200B\ufeff')
                         if title not in dataset_titles:
-                            dataset = PMDDataset()
+                            dataset = Dataset(scraper.uri)
                             if publication_date is not None:
                                 dataset.issued = publication_date
                             dataset.publisher = scraper.catalog.publisher
@@ -167,3 +171,11 @@ def scrape_rts(scraper, metadata_tree):
         dist.downloadURL = urljoin(scraper.uri, anchor.get('href'))
         dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
         scraper.distributions.append(dist)
+        
+    for anchor in distributions_tree.xpath("//div[h1[text()='Open periods']]/ul/li/a"):
+        dist2 = Distribution(scraper)
+        dist2.title = anchor.text.strip()
+        dist2.downloadURL = urljoin(scraper.uri, anchor.get('href'))
+        dist2.mediaType, encoding = mimetypes.guess_type(dist2.downloadURL)
+        scraper.distributions.append(dist2)
+

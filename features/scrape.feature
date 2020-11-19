@@ -5,7 +5,6 @@ Feature: Scrape dataset info
 
   Scenario: Scrape ONS
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables/current/inwardfdistatisticaltables.xlsx"
     And the title should be "Foreign direct investment involving UK companies: inward"
     And the publication date should match "20[0-9]{2}-[01][0-9]-[0-3][0-9]"
     And the comment should be "Annual statistics on the investment of foreign companies into the UK, including for investment flows, positions and earnings."
@@ -32,13 +31,19 @@ Feature: Scrape dataset info
     Then the title should be "Migration between Scotland and Overseas"
     And the description should start "Migration between Scotland and overseas refers to people moving between"
 
+  Scenario: Scrape nrscotland COVID19
+    Given I scrape the page "https://www.nrscotland.gov.uk/covid19stats"
+    Then dct:title should be `"Deaths involving coronavirus (COVID-19) in Scotland"@en`
+    And the data download URL should match "https://www.nrscotland.gov.uk/files//statistics/.*\.xlsx"
+    And dct:publisher should be `gov:national-records-of-scotland`
+
   Scenario: nrscotland downloads
     Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-flows/migration-between-scotland-and-overseas"
     And select the distribution given by
       | key       | value                                                      |
       | mediaType | application/vnd.ms-excel                                   |
       | title     | Migration between administrative areas and overseas by sex |
-    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/flows/apr-19/mig-overseas-admin-sex-tab1.xlsx"
+    Then the data can be downloaded from "https://www.nrscotland.gov.uk/files//statistics/migration/flows/apr-20/mig-overseas-admin-sex-tab1.xlsx"
 
   Scenario: Scrape NISRA
     Given I scrape the page "https://www.nisra.gov.uk/publications/2017-mid-year-population-estimates-northern-ireland-new-format-tables"
@@ -168,10 +173,19 @@ Feature: Scrape dataset info
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
     And dct:license should be `<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>`
 
+  # Turning this off, it's just getting redirected to the other scots gov handler
+  @skip
   Scenario: Scrape old gov.scot dataset page
     Given I scrape the page "https://www2.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables"
-    Then dct:title should be `"Stock by tenure"@en`
-    And the data download URL should match "https://www2\.gov\.scot/Resource/.*\.xls"
+    Then dct:title should be `"Housing statistics: Stock by tenure"@en`
+    And the data download URL should match "https://www\.gov.*\.xls"
+    And dct:publisher should be `gov:the-scottish-government`
+    And dct:issued should match `"[1-2][0-9][0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
+
+  Scenario: Scrape new gov.scot dataset page
+    Given I scrape the page "https://www.gov.scot/publications/scottish-index-of-multiple-deprivation-2020v2-ranks/"
+    Then dct:title should be `"Scottish Index of Multiple Deprivation 2020v2 - ranks"@en`
+    And the data download URL should match "https://www\.gov\.scot/binaries/.*\.xlsx"
     And dct:publisher should be `gov:the-scottish-government`
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
 
@@ -207,6 +221,26 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Local"
     Then dct:title should be `"Local authority housing statistics data returns for 2018 to 2019"@en`
 
+  Scenario: Replace missing metadata using a seed
+    Given I use the testing seed "seed-with-missing-metadata.json"
+    Then the title should be "I am the missing title of a thing"
+    And the description should start "I am the missing description of a thing"
+
+  Scenario: Create scrape using only a metadata seed
+    Given I use the testing seed "seed-for-temporary-scraper.json"
+    And select the distribution given by
+      | key       | value              |
+      | mediaType | application/zip    |
+    Then the title should be "I am a title from the metadata seed"
+    And the description should start "I am a description from the metadata seed"
+    And the data can be downloaded from "https://www.contextures.com/SampleData.zip"
+    And dct:publisher should be `gov:cogs-data-testing`
+    And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
+
+  Scenario: Override scrape metadata using a metadata seed
+    Given I use the testing seed "seed-for-metadata-overrides.json"
+    Then dct:title should match `"I did override a thing"@en`
+
   Scenario: gov.uk descriptions
     Given I scrape the page "https://www.gov.uk/government/collections/uk-regional-trade-in-goods-statistics-disaggregated-by-smaller-geographical-areas"
     And the catalog has more than one dataset
@@ -217,3 +251,21 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
     And select the distribution whose title starts with "UK Alcohol Duty Statistics Tables"
 
+  Scenario: gov.uk landing page
+    Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
+    Then the dataset landing page should be "https://www.gov.uk/government/statistics/alcohol-bulletin"
+
+  Scenario: gov.wales landing page
+    Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
+    Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
+    
+  Scenario: ONS scrape from seed with non supported page type
+    Given I fetch the seed path "seed-ons-personal-well-being.json"
+    Then building scrapper should fail with "Aborting operation This page type is not supported."
+
+  Scenario: ONS scrape from url
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/datasets/coronaviruspersonalandeconomicwellbeingimpacts"
+
+  Scenario: deal with ONS publication datetime as Europe/London date.
+    Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
+    Then the publication date should match "2020-07-03"

@@ -1,4 +1,3 @@
-import urllib
 from io import StringIO
 from urllib.parse import urlparse
 
@@ -7,7 +6,9 @@ from dateutil.parser import parse
 from rdflib import RDF, URIRef
 from rdflib.namespace import DCTERMS
 
-from gssutils.metadata import DCAT, Distribution, GOV
+import gssutils.metadata.dcat
+from gssutils.metadata import DCAT, GOV
+from gssutils.metadata.dcat import Distribution
 
 
 def scrape(scraper, tree):
@@ -27,8 +28,8 @@ def scrape(scraper, tree):
         scraper.dataset.publisher = GOV['welsh-government']
     else:
         scraper.dataset.publisher = publisher
-    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created)).date()
-    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified)).date()
+    scraper.dataset.issued = parse(pageGraph.value(dataset, DCTERMS.created), dayfirst=True).date()
+    scraper.dataset.modified = parse(pageGraph.value(dataset, DCTERMS.modified), dayfirst=True).date()
     for pageDist in pageGraph.subjects(RDF.type, DCAT.Distribution):
         dist = Distribution(scraper)
         dist.title = pageGraph.value(pageDist, DCTERMS.title).value.strip()

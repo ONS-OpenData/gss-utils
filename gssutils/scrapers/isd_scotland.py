@@ -7,8 +7,10 @@ from urllib.parse import urldefrag, urljoin, urlparse
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import Distribution, PDF, Excel, Dataset, PMDDataset, GOV
-from gssutils.utils import pathify
+from gssutils.metadata import GOV
+from gssutils.metadata.dcat import Distribution
+from gssutils.metadata.mimetype import Excel
+from gssutils.metadata.pmdcat import Dataset
 
 
 def scrape(scraper, tree):
@@ -27,7 +29,7 @@ def scrape(scraper, tree):
     for record in tree.xpath("//div[contains(concat(' ', @class, ' '), ' pubtitlel ')]"):
         dataset_title = record.text.strip()
         if dataset_title not in title2dataset:
-            dataset = PMDDataset()
+            dataset = Dataset(scraper.uri)
             dataset.title = dataset_title
             dataset.publisher = scraper.catalog.publisher
             dataset.rights = scraper.catalog.rights
@@ -57,7 +59,7 @@ def scrape(scraper, tree):
         published = anchors[0].xpath("../preceding-sibling::p[1]/child::*/text()")
         dist_issued = None
         if len(published) > 0 and published[0].startswith('Published '):
-            dist_issued = parse(published[0][len('Published '):])
+            dist_issued = parse(published[0][len('Published '):], dayfirst=True)
             # we'll use the latest publication date for the dataset
             if not (hasattr(dataset, 'issued') and dist_issued <= dataset.issued):
                 dataset.issued = dist_issued
@@ -74,7 +76,7 @@ def scrape(scraper, tree):
                 break
             distribution.title = title_node.text
             if dist_issued is not None:
-                distribution.issues = dist_issued
+                distribution.issued = dist_issued
             distribution.downloadURL = download_node[0].get('href')
             type_image = type_node[0].get('src').lower()
             if 'excel' in type_image:
