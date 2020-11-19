@@ -43,8 +43,8 @@ def statistics_handler(scraper, tree):
                     try:
                         distribution.issued = parse(tree.xpath("//*[contains(text(),'Updated')]/text()")[0].lower().replace('last updated:', '')).date()
                     except:
-                        distribution.issued = '1900-01-01'
-                        logging.warning("No Last Issue Date Found, placement date provided (1900-01-01). Please update manually")
+                    	logging.warning("No Last Issue Date Found. Please update manually")
+                        pass                        
                 distribution.mediaType = {
                     'csv': 'text/csv',
                     'excel': 'application/vnd.ms-excel'
@@ -109,8 +109,7 @@ def statistics_handler(scraper, tree):
             distribution.title = dataset.text
             distribution.downloadURL = dataset.attrib['href']
             distribution.mediaType, encoding = mimetypes.guess_type(distribution.downloadURL)
-            distribution.issued = '1900-01-01'
-            logging.warning("No Last Issue Date Found, placement date provided (1900-01-01). Please update manually")
+            logging.warning("No Last Issue Date Found. Please update manually")
             if distribution.mediaType in ACCEPTED_MIMETYPES:
                 scraper.distributions.append(distribution)
             else:
