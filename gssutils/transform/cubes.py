@@ -8,8 +8,6 @@ from urllib.parse import urljoin
 import pandas as pd
 
 from gssutils.csvw.mapping import CSVWMapping
-from gssutils.csvw.namespaces import URI
-from gssutils.csvw.table import Table, ForeignKey, ColumnReference
 from gssutils.utils import pathify
 
 
