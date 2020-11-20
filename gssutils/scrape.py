@@ -66,13 +66,11 @@ class Scraper:
                 self.seed = json.load(f)
                 if "dataURL" in self.seed:
                     logging.warning("A temporary dataURL has been specified; proceeding with a temp scrape.")
-                    uri = self.seed["dataURL"]
                     self.temp_scrape = True
-                elif "landingPage" not in self.seed:
-                    raise MetadataError("Aborting, insufficient seed data. No landing page supplied via "
-                                        "info.json and no dataURL to use as a fallback.")
-                else:
-                    uri = self.seed["landingPage"]
+                if "landingPage" not in self.seed.keys():
+                    raise MetadataError('We always need to provide a "landingPage" via the seed. Either' \
+                                    ' it\'s own or alongside a dataURL for temporary scrapes.')
+                uri = self.seed["landingPage"]
         else:
             self.seed = None
 
@@ -131,16 +129,20 @@ class Scraper:
             return html2text.html2text(html.tostring(node, encoding='unicode'))
 
     def _run(self):
-        page = self.session.get(self.uri)
-
-        # TODO - not all scrapers will necessarily need the beautified HTML DOM
-        tree = html.fromstring(page.text)
         scraped = False
 
-
+        # Using a temporary scraper
         if self.temp_scrape:
+            temp_uri = self.seed["dataURL"]
+            page = self.session.get(temp_uri)
             scraped = self._attempt_scraper_from_seed()
+            
+        # Using a standard scraper
         else:
+            page = self.session.get(self.uri)
+            # TODO - not all scrapers will necessarily need the beautified HTML DOM
+            tree = html.fromstring(page.text)
+            
             # Look for a scraper based on the uri
             for start_uri, scrape in gssutils.scrapers.scraper_list:
                 if self.uri.startswith(start_uri):
@@ -305,7 +307,10 @@ class Scraper:
             )]
         if len(matches) > 1:
             if latest:
-                return max(matches, key=lambda d: d.issued)
+                if len([d for d in matches if not hasattr(d, 'issued')]) > 0:
+                    return matches[0]  # assume the publisher lists distributions in order of most to least recent.
+                else:
+                    return max(matches, key=lambda d: d.issued)
             else:
                 raise FilterError('more than one match for given filter(s)')
         elif len(matches) == 0:
