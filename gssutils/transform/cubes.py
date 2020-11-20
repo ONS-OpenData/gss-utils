@@ -17,7 +17,7 @@ class Cubes:
     """
 
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
-                job_name=None):
+                 job_name=None):
 
         with open(info_json, "r") as info_file:
             self.info = json.load(info_file)
@@ -62,9 +62,9 @@ class Cubes:
         # single vs multiple namespaces logic, so we're going to explicitly check for and handle that
         is_many_to_one = False
         if is_multi_cube:
-            to_graph_statments = [x.graph for x in self.cubes if x.graph is not None]
-            if len(to_graph_statments) == len(self.cubes):
-                if len(set(to_graph_statments)) == 1:
+            to_graph_statements = [x.graph for x in self.cubes if x.graph is not None]
+            if len(to_graph_statements) == len(self.cubes):
+                if len(set(to_graph_statements)) == 1:
                     is_many_to_one = True
 
         for cube in self.cubes:
@@ -82,8 +82,8 @@ class Cube:
     """
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, job_name, info_json_dict):
-        
-        self.scraper = scraper        # note - the metadata of a scrape, not the actual data source
+
+        self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
         self.title = title
         self.scraper.set_base_uri(base_uri)
@@ -110,7 +110,7 @@ class Cube:
         return map_obj
 
     def _populate_csvw_mapping(self, destination_folder, pathified_title,
-                        info_json):
+                               info_json):
         """
         Use the provided details object to generate then fully populate the mapping class
         """
@@ -131,24 +131,24 @@ class Cube:
         """
         graph_name = pathify(self.title) if self.graph is None else pathify(self.graph)
 
-        if is_many_to_one:            
-            # Sanity check, becuse this isn't an obvious as I'd like / a bit weird
+        if is_many_to_one:
+            # Sanity check, because this isn't an obvious as I'd like / a bit weird
             err_msg = 'Aborting. Where you are writing multiple cubes to a single output graph, the ' \
-                    + 'pathified graph specified needs to match you pathified current working directory. ' \
-                    + 'Got "{}", expected "{}".'.format(graph_name, pathify(Path(os.getcwd()).name))
+                      + 'pathified graph specified needs to match you pathified current working directory. ' \
+                      + 'Got "{}", expected "{}".'.format(graph_name, pathify(Path(os.getcwd()).name))
             assert pathify(Path(os.getcwd()).name) == graph_name, err_msg
 
             logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
             dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/') \
-                                + graph_name
+                           + graph_name
         elif is_multi_cube:
             logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
-            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/' 
-                                + Path(os.getcwd()).name + "/") + graph_name
+            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/'
+                                   + Path(os.getcwd()).name + "/") + graph_name
         else:
             logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
-            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/' 
-                                + Path(os.getcwd()).name)
+            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/'
+                                   + Path(os.getcwd()).name)
         self.scraper.set_dataset_id(dataset_path)
 
         # output the tidy data
