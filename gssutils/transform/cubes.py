@@ -127,7 +127,7 @@ class Cube:
 
         return map_obj
 
-    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json):
+    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, write_output=True):
         """
         Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
         """
@@ -140,27 +140,36 @@ class Cube:
                     + 'Got "{}", expected "{}".'.format(graph_name, pathify(Path(os.getcwd()).name))
             assert pathify(Path(os.getcwd()).name) == graph_name, err_msg
 
-            logging.debug("Output Scenario 1: Many cubes written to the default output (cwd())")
+            logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
             dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/') \
                                 + graph_name
         elif is_multi_cube:
-            logging.debug("Output Scenario 2: Many cubes written to many stated outputs")
+            logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
             dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/' 
                                 + Path(os.getcwd()).name + "/") + graph_name
         else:
-            logging.debug("Output Scenario 3: A single cube written to the default output (cwd())")
+            logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
             dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/' 
                                 + Path(os.getcwd()).name)
+
         self.scraper.set_dataset_id(dataset_path)
 
-        # output the tidy data
-        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}.csv', index=False)
+        # Switch for testingm as we're going to want to trigger the above without writing files
+        # TODO - arguable put in an eg _prep_cube() method and lose the flag
+        if write_output:
+            # output the tidy data
+            self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}.csv', index=False)
 
-        # Output the trig
-        trig_to_use = self.scraper.generate_trig()
-        with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
-            metadata.write(trig_to_use)
+            # Output the trig
+            trig_to_use = self.scraper.generate_trig()
+            with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
+                metadata.write(trig_to_use)
 
-        # Output csv and csvw
-        populated_map_obj = self._populate_csvw_mapping(destination_folder, pathify(self.title), info_json)
-        populated_map_obj.write(destination_folder / f'{pathify(self.title)}.csv-metadata.json')
+            # Output csv and csvw
+            populated_map_obj = self._populate_csvw_mapping(destination_folder, pathify(self.title), info_json)
+            populated_map_obj.write(destination_folder / f'{pathify(self.title)}.csv-metadata.json')
+        else:
+            # We're testing, return a populated map object so we can check it
+            map_obj = CSVWMapping()
+            map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
+            return map_obj
