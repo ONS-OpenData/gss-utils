@@ -95,7 +95,21 @@ def content_api_publication(scraper, metadata):
             if len(orgs) > 1:
                 logging.warning('More than one organisation listed, taking the first.')
             ds.publisher = orgs[0]["web_url"]
-    if 'details' in doc_info and 'documents' in doc_info['details']:
+    if 'details' in doc_info and 'attachments' in doc_info['details']:
+        distributions = []
+        for attachment in doc_info['details']['attachments']:
+            dist = Distribution(scraper)
+            if 'url' in attachment:
+                dist.downloadURL = urljoin('https://www.gov.uk/', attachment['url'])
+            if 'title' in attachment:
+                dist.title = attachment['title']
+            if 'file_size' in attachment:
+                dist.byteSize = attachment['file_size']
+            if 'content_type' in attachment:
+                dist.mediaType = attachment['content_type']
+            distributions.append(dist)
+        ds.distribution = distributions
+    elif 'details' in doc_info and 'documents' in doc_info['details']:
         distributions = []
         for link in doc_info['details']['documents']:
             link_tree = html.fromstring(link)
@@ -158,7 +172,29 @@ def content_api_sds(scraper, metadata):
                 logging.warning('More than one organisation listed, taking the first.')
             scraper.catalog.publisher = orgs[0]["web_url"]
     scraper.catalog.dataset = []
-    if 'details' in metadata and 'body' in metadata['details']:
+    if 'details' in metadata and 'attachments' in metadata['details']:
+        # assume they're all part of the same dataset
+        ds = Dataset(scraper.uri)
+        ds.title = scraper.catalog.title
+        ds.description = scraper.catalog.description
+        ds.publisher = scraper.catalog.publisher
+        ds.issued = scraper.catalog.issued
+        ds.modified = scraper.catalog.modified
+        ds.distribution = []
+        for attachment in metadata['details']['attachments']:
+            dist = Distribution(scraper)
+            if 'url' in attachment:
+                dist.downloadURL = urljoin('https://www.gov.uk/', attachment['url'])
+            if 'title' in attachment:
+                dist.title = attachment['title']
+            if 'file_size' in attachment:
+                dist.byteSize = attachment['file_size']
+            if 'content_type' in attachment:
+                dist.mediaType = attachment['content_type']
+            ds.distribution.append(dist)
+        scraper.catalog.dataset.append(ds)
+        scraper.select_dataset(latest=True)
+    elif 'details' in metadata and 'body' in metadata['details']:
         body_tree = html.fromstring(metadata['details']['body'])
         # look for the same HTML as is used in content_api_publication yet here
         # joined into one blob
