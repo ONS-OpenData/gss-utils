@@ -121,3 +121,35 @@ Feature: Create CSVW metadata
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
     And the input format of the csv is recorded as csv
+
+  Scenario: CSVMetadata from mapping with measure type and unit columns
+    Given a CSV file 'observations.csv'
+      | Period          | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          |
+      | quarter/2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  |
+      | quarter/2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  |
+      | quarter/2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | gbp-total    | gbp-thousands |
+      | quarter/2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | gbp-total    | gbp-thousands |
+    And a column map
+    """
+    "columns": {
+      "Period": {
+      },
+      "Flow": {
+      },
+      "SITC 4": {
+      },
+      "Value": {
+        "measureRef": "Measure Type",
+        "unitRef": "Unit",
+        "datatype": "integer"
+      }
+    }
+    """
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/hmrc_rts'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the RDF should contain
+    """
+    """

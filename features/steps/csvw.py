@@ -308,3 +308,8 @@ def step_impl(context, files):
         metadata_path = csv_path.with_suffix('.csv-metadata.json')
         with csv_path.open('r') as csv_file, metadata_path.open('r') as metadata_file:
             context.extra_data.append(run_csv2rdf(csv_path.name, metadata_file.name, csv_file, metadata_file))
+
+
+@step("a column map")
+def step_impl(context):
+    raise NotImplementedError(u'STEP: And a column map')
