@@ -255,18 +255,6 @@ class TransformTrace(object):
                 outputs[cube_name].append(output)
         return {cube_name: outputs}
 
-    # DEVNOTE: I've switched this off, the raw traced output_dict is accessible via
-    # the renderer so no particular reason we need a hard copy.
-    def _write_output_dict(self, output_dict):
-        destinationFolder = Path('documentation')
-        destinationFolder.mkdir(exist_ok=True, parents=True)
-
-        for dataset_details in output_dict.values():
-            for cube_name, details in dataset_details.items():
-                output = {cube_name: details}
-                with open("documentation/{}.json".format(pathify(cube_name)), "w") as f:
-                    json.dump(output, f, indent=4)
-
     def _update_transform_stage(self, output_dict):
         
         with open("info.json", "r") as f:
@@ -316,9 +304,11 @@ class TransformTrace(object):
 
                 data["transform"]["transformStage"].append(update)
 
-        with open("info.json", "w") as f:
-            json.dump(data, f, indent=4)
-
+        # Dump trace info into out
+        destinationFolder = Path('out')
+        destinationFolder.mkdir(exist_ok=True, parents=True)
+        with open("./out/trace.json", "w") as f:
+            json.dump(data, f, indent=2)
         return data
 
     def output(self):
