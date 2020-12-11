@@ -312,4 +312,6 @@ def step_impl(context, files):
 
 @step("a column map")
 def step_impl(context):
-    raise NotImplementedError(u'STEP: And a column map')
+    mapping = {'transform': {'columns': json.loads(context.text)}}
+    context.json_io = StringIO()
+    json.dump(mapping, context.json_io)

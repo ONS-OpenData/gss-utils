@@ -131,12 +131,18 @@ Feature: Create CSVW metadata
       | quarter/2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | gbp-total    | gbp-thousands |
     And a column map
     """
-    "columns": {
+    {
       "Period": {
+        "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
+        "value": "http://reference.data.gov.uk/id/{+period}"
       },
       "Flow": {
+        "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
+        "value": "http://gss-data.org.uk/def/concept/flow-directions/{flow}"
       },
       "SITC 4": {
+        "dimension": "http://gss-data.org.uk/def/dimension/sitc-4",
+        "value": "http://gss-data.org.uk/def/concept/sitc-4/{sitc_4}"
       },
       "Value": {
         "measureRef": "Measure Type",
@@ -152,4 +158,117 @@ Feature: Create CSVW metadata
     And the RDF should pass the Data Cube integrity constraints
     And the RDF should contain
     """
+      @base <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> .
+      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+      @prefix owl: <http://www.w3.org/2002/07/owl#> .
+      @prefix void: <http://rdfs.org/ns/void#> .
+      @prefix dcterms: <http://purl.org/dc/terms/> .
+      @prefix dcat: <http://www.w3.org/ns/dcat#> .
+      @prefix sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      @prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+      @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+      @prefix sdmx-concept: <http://purl.org/linked-data/sdmx/2009/concept#> .
+      @prefix gss-d: <http://gss-data.org.uk/def/dimension/> .
+
+      <#dataset> a qb:DataSet ;
+        qb:structure <#structure> .
+
+      <#component/flow>
+          qb:dimension gss-d:flow-directions ;
+          a qb:ComponentSpecification .
+
+      <#component/gbp-total>
+          qb:measure <http://gss-data.org.uk/def/measure/gbp-total> ;
+          a qb:ComponentSpecification .
+
+      <#component/hmrc-partner-geography>
+          qb:dimension <#dimension/hmrc-partner-geography> ;
+          a qb:ComponentSpecification .
+
+      <#component/hmrc-reporter-region>
+          qb:dimension <#dimension/hmrc-reporter-region> ;
+          a qb:ComponentSpecification .
+
+      <#component/measure-type>
+          qb:dimension qb:measureType ;
+          a qb:ComponentSpecification .
+
+      <#component/net-mass>
+          qb:measure <http://gss-data.org.uk/def/measure/net-mass> ;
+          a qb:ComponentSpecification .
+
+      <#component/period>
+          qb:dimension sdmx-dimension:refPeriod ;
+          a qb:ComponentSpecification .
+
+      <#component/sitc4>
+          qb:dimension gss-d:sitc-4 ;
+          a qb:ComponentSpecification .
+
+      <#component/unit>
+          qb:attribute sdmx-attribute:unitMeasure ;
+          a qb:ComponentSpecification .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/01/net-mass>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/01> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
+          <http://gss-data.org.uk/def/measure/net-mass> 2.43E3 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/net-mass> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/kg-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/02/net-mass>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/02> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/A> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/EA> ;
+          <http://gss-data.org.uk/def/measure/net-mass> 2.0E0 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/net-mass> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/kg-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/88/gbp-total>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/88> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
+          <http://gss-data.org.uk/def/measure/gbp-total> 1.0E1 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
+          a qb:Observation .
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/89/gbp-total>
+          gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
+          gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/89> ;
+          gss-d:hmrc-partner-geography <http://gss-data.org.uk/def/concept/hmrc-geographies/TR> ;
+          gss-d:hmrc-reporter-region <http://gss-data.org.uk/def/concept/hmrc-regions/ZB> ;
+          <http://gss-data.org.uk/def/measure/gbp-total> 3.52E2 ;
+          qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
+          sdmx-dimension:refPeriod <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
+          a qb:Observation .
+
+      <#structure>
+          qb:component <#component/flow>,
+                       <#component/gbp_total>,
+                       <#component/hmrc_partner_geography>,
+                       <#component/hmrc_reporter_region>,
+                       <#component/measure_type>,
+                       <#component/net_mass>,
+                       <#component/period>,
+                       <#component/sitc4>,
+                       <#component/unit> ;
+          a qb:DataStructureDefinition .
     """
