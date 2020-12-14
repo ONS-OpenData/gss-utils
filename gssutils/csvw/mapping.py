@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import List, Optional, Dict, TextIO, Any, Set, Union
 from urllib.parse import urljoin
 
-from uritemplate import variables
+from uritemplate import variables, URITemplate
 
 from gssutils import pathify
 from gssutils.csvw.dsd import DataSet, DimensionComponent, MeasureComponent, AttributeComponent, Component, \
@@ -40,6 +40,8 @@ class CSVWMapping:
         self._metadata_filename: Optional[URI] = None
         self._dataset_uri: Optional[URI] = None
         self._foreign_keys: Optional[List[ForeignKey]] = None
+        self._measureTemplate: Optional[URITemplate] = None
+        self._measureTypes: Optional[List[str]] = None
 
     @staticmethod
     def namify(column_header: str):
@@ -122,6 +124,23 @@ class CSVWMapping:
             logging.error(f"Unknown prefixes used: {used_prefixes.difference(prefix_map.keys())}")
 
     def _as_csvw_object(self):
+        # Look to see whether the measure type has its own column
+        for map_name, map_obj in self._mapping.items():
+            if "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
+                self._measureTemplate = URITemplate(map_obj["value"])
+                if "types" in map_obj:
+                    self._measureTypes = map_obj["types"]
+                    # add a component specification for each measure
+                    for t in map_obj["types"]:
+                        template_vars = {CSVWMapping.namify(map_name): t}
+                        self._components.append(
+                            MeasureComponent(
+                                at_id=self.join_dataset_uri(f"#component/{pathify(t)}"),
+                                qb_componentProperty=Resource(at_id=self._measureTemplate.expand(template_vars)),
+                                qb_measure=MeasureProperty(at_id=self._measureTemplate.expand(template_vars))
+                            )
+                        )
+        # Now iterate over column headers in the given CSV file
         for name in self._column_names:
             if self._mapping is not None and name in self._mapping and isinstance(self._mapping[name], dict):
                 obj = self._mapping[name]
@@ -198,7 +217,6 @@ class CSVWMapping:
                             rdfs_isDefinedBy=source
                         )
                     ))
-
                 elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),
@@ -229,6 +247,7 @@ class CSVWMapping:
                                 rdfs_range=Resource(at_id=URI("http://purl.org/linked-data/cube#MeasureProperty"))
                             )
                         ),
+                        # ToDo: figure out the measures used, either from CSV column values, or declared in mapping.
                         MeasureComponent(
                             at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                             qb_componentProperty=Resource(at_id=obj["measure"]),
@@ -256,6 +275,17 @@ class CSVWMapping:
                         propertyUrl=URI("http://purl.org/linked-data/cube#measureType"),
                         valueUrl=URI(obj["measure"])
                     )
+                elif "datatype" in obj and not ("measure" in obj or "unit" in obj):
+                    # Where a measure type column exists
+                    assert self._measureTemplate is not None, "Must have a measure type column."
+                    self._columns[name] = self._columns[name]._replace(
+                        propertyUrl=self._measureTemplate.uri,
+                        datatype=obj["datatype"]
+                    )
+            elif self._mapping is not None and name in self._mapping and isinstance(self._mapping[name], bool):
+                self._columns[name] = self._columns[name]._replace(
+                    suppressOutput=not self._mapping[name]
+                )
             else:
                 # assume local dimension, with optional definition
                 description: Optional[str] = None
@@ -311,27 +341,15 @@ class CSVWMapping:
         table_uri = URI(Path(self._csv_filename).name)  # default is that metadata is filename + '-metadata.json'
         if self._metadata_filename is not None:
             table_uri = URI(self._csv_filename.relative_to(self._metadata_filename.parent))
-            
-        # TODO - dry
-        if self._foreign_keys is not None:
-            main_table = Table(
-                url=table_uri,
-                tableSchema=TableSchema(
-                    columns=list(self._columns.values()),
-                    primaryKey=self._keys,
-                    aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys)),
-                    foreignKeys=self._foreign_keys
-                )
+        main_table = Table(
+            url=table_uri,
+            tableSchema=TableSchema(
+                columns=list(self._columns.values()),
+                primaryKey=self._keys,
+                aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys)),
+                foreignKeys=self._foreign_keys
             )
-        else:
-            main_table = Table(
-                url=table_uri,
-                tableSchema=TableSchema(
-                    columns=list(self._columns.values()),
-                    primaryKey=self._keys,
-                    aboutUrl=self.join_dataset_uri('/'.join('{' + s + '}' for s in self._keys))
-                )
-            )
+        )
         return self._external_tables + [main_table]
 
     @staticmethod
