@@ -24,7 +24,7 @@ Feature: Scrape dataset info
       | key       | value                                                      |
       | mediaType | application/vnd.oasis.opendocument.spreadsheet             |
       | title     | Entry clearance visas granted outside the UK data tables immigration statistics October to December 2017 volume 1 |
-    Then the data can be downloaded from "https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/683359/entry-visas1-oct-dec-2017-tables.ods"
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/683359/entry-visas1-oct-dec-2017-tables.ods"
 
   Scenario: Scrape nrscotland
     Given I scrape the page "https://www.nrscotland.gov.uk/statistics-and-data/statistics/statistics-by-theme/migration/migration-statistics/migration-flows/migration-between-scotland-and-overseas"
@@ -71,8 +71,8 @@ Feature: Scrape dataset info
       | key       | value                                                                     |
       | mediaType | application/vnd.oasis.opendocument.spreadsheet                            |
       | title     | Reported drink drive accidents and casualties in Great Britain since 1979 |
-    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/827490/ras51001.ods"
-    And dct:description should match `"Data about the reported drink-drive accidents and casualties.*`
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/912044/ras51001.ods"
+    And dct:description should match `"Data about the reported drink drive accidents and casualties.*`
     And the contact email address should be "mailto:roadacc.stats@dft.gov.uk"
     And dct:publisher should be `gov:department-for-transport`
 
@@ -149,7 +149,7 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Substance misuse treatment for adults"
     Then dct:title should match `"Substance misuse treatment for adults: statistics.*"@en`
     And dct:publisher should be `gov:public-health-england`
-    And dct:description should match `.*alcohol and drug misuse treatment for adults from PHE’s National Drug Treatment Monitoring System.*`
+    And dct:description should match `.*alcohol and drug misuse treatment for adults from Public Health England's National Drug Treatment Monitoring System.*`
 
   Scenario: Scrape NHS digital
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/statistics-on-alcohol"
@@ -210,11 +210,10 @@ Feature: Scrape dataset info
     When I select the latest dataset whose title starts with "Measures"
     Then dct:title should match `"Measures from the Adult Social Care Outcomes Framework, England.*"@en`
 
-  @skip
   Scenario: MCHLG live tables from gov.uk
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants"
     And select the distribution whose title starts with "Table 100:"
-    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/814669/LT_100.xls"
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/887050/LT_100v2.xls"
 
   Scenario: MCHLG LA housing stats from gov.uk
     Given I scrape the page "https://www.gov.uk/government/statistical-data-sets/local-authority-housing-statistics-data-returns-for-2018-to-2019"
@@ -249,7 +248,7 @@ Feature: Scrape dataset info
 
   Scenario: latest distribution but no issued date
     Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
-    And select the distribution whose title starts with "UK Alcohol Duty Statistics Tables"
+    And select the distribution whose title starts with "Alcohol Bulletin tables"
 
   Scenario: gov.uk landing page
     Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"

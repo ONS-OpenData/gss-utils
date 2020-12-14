@@ -95,7 +95,21 @@ def content_api_publication(scraper, metadata):
             if len(orgs) > 1:
                 logging.warning('More than one organisation listed, taking the first.')
             ds.publisher = orgs[0]["web_url"]
-    if 'details' in doc_info and 'documents' in doc_info['details']:
+    if 'details' in doc_info and 'attachments' in doc_info['details']:
+        distributions = []
+        for attachment in doc_info['details']['attachments']:
+            dist = Distribution(scraper)
+            if 'url' in attachment:
+                dist.downloadURL = urljoin('https://www.gov.uk/', attachment['url'])
+            if 'title' in attachment:
+                dist.title = attachment['title']
+            if 'file_size' in attachment:
+                dist.byteSize = attachment['file_size']
+            if 'content_type' in attachment:
+                dist.mediaType = attachment['content_type']
+            distributions.append(dist)
+        ds.distribution = distributions
+    elif 'details' in doc_info and 'documents' in doc_info['details']:
         distributions = []
         for link in doc_info['details']['documents']:
             link_tree = html.fromstring(link)
@@ -122,7 +136,7 @@ def extract_distributions(distributions, link_tree, scraper):
                         dist.byteSize = int(float(span_size[:-2]) * 1000)
                     elif span_size.endswith('MB'):
                         dist.byteSize = int(float(span_size[:-2]) * 1000000)
-                    anchor = next(iter(div_attach.xpath("h2/a")), None)
+                    anchor = next(iter(div_attach.xpath("h3/a")), None)
                     if anchor is not None:
                         url = anchor.get('href')
                         if url is not None:
@@ -170,9 +184,11 @@ def content_api_sds(scraper, metadata):
             ds.publisher = scraper.catalog.publisher
             ds.issued = scraper.catalog.issued
             ds.modified = scraper.catalog.modified
-            email_anchor = next(iter(body_tree.xpath("//a[@class='email']")), None)
-            if email_anchor is not None:
-                ds.contactPoint = email_anchor.get('href')
+            vcard = next(iter(body_tree.xpath("//div[contains(concat(' ', @class, ' '), ' vcard ')]")), None)
+            if vcard is not None:
+                email_anchor = next(iter(vcard.xpath("//p[@class='email']/a")), None)
+                if email_anchor is not None:
+                    ds.contactPoint = email_anchor.get('href')
             ds.distribution = []
             for link_tree in sections:
                 extract_distributions(ds.distribution, link_tree, scraper)
@@ -187,30 +203,49 @@ def content_api_sds(scraper, metadata):
                 ds.publisher = scraper.catalog.publisher
                 ds.issued = scraper.catalog.issued
                 ds.modified = scraper.catalog.modified
-                email_anchor = next(iter(body_tree.xpath("//a[@class='email']")), None)
-                if email_anchor is not None:
-                    ds.contactPoint = email_anchor.get('href')
+                vcard = next(iter(body_tree.xpath("//div[contains(concat(' ', @class, ' '), ' vcard ')]")), None)
+                if vcard is not None:
+                    email_anchor = next(iter(vcard.xpath("//p[@class='email']/a")), None)
+                    if email_anchor is not None:
+                        ds.contactPoint = email_anchor.get('href')
                 ds.distribution = []
                 for attachment in body_tree.xpath(f"//h2[@id='{id}']/" + \
                                                   f"following-sibling::p[preceding-sibling::h2[1][@id='{id}']]/" + \
                                                   "span[@class='attachment-inline']"):
                     dist = Distribution(scraper)
-                    dist.title = next(iter(attachment.xpath("a/text()")), None)
-                    dist.downloadURL = next(iter(attachment.xpath("a/@href")), None)
-                    dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
-                    abbr = next(iter(attachment.xpath("descendant::abbr/text()")), None)
-                    if abbr is not None:
-                        if abbr.upper() == 'PDF':
-                            dist.mediaType = PDF
-                        elif abbr.upper() == 'ODS':
-                            dist.mediaType = ODS
-                    size = next(iter(attachment.xpath("descendant::span[@class='file-size']/text()")), None)
-                    if size is not None:
-                        if size.endswith('KB'):
-                            dist.byteSize = int(float(size[:-2]) * 1024)
-                        elif size.endswith('kB'):
-                            dist.byteSize = int(float(size[:-2]) * 1000)
-                        elif size.endswith('MB'):
-                            dist.byteSize = int(float(size[:-2]) * 1000000)
+                    # see if we can find the attachment in the more structured metadata
+                    if 'attachments' in metadata['details'] and attachment.get('id').startswith('attachment_'):
+                        attachment_id = attachment.get('id')[len('attachment_'):]
+                        resource = next((
+                            r for r in metadata['details']['attachments'] if r['id'] == attachment_id),
+                            None
+                        )
+                        if resource is not None:
+                            if 'title' in resource:
+                                dist.title = resource['title']
+                            if 'content_type' in resource:
+                                dist.mediaType = resource['content_type']
+                            if 'file_size' in resource:
+                                dist.byteSize = resource['file_size']
+                            if 'url' in resource:
+                                dist.downloadURL = resource['url']
+                    else:
+                        dist.title = next(iter(attachment.xpath("a/text()")), None)
+                        dist.downloadURL = next(iter(attachment.xpath("a/@href")), None)
+                        dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
+                        abbr = next(iter(attachment.xpath("descendant::abbr/text()")), None)
+                        if abbr is not None:
+                            if abbr.upper() == 'PDF':
+                                dist.mediaType = PDF
+                            elif abbr.upper() == 'ODS':
+                                dist.mediaType = ODS
+                        size = next(iter(attachment.xpath("descendant::span[@class='file-size']/text()")), None)
+                        if size is not None:
+                            if size.endswith('KB'):
+                                dist.byteSize = int(float(size[:-2]) * 1024)
+                            elif size.endswith('kB'):
+                                dist.byteSize = int(float(size[:-2]) * 1000)
+                            elif size.endswith('MB'):
+                                dist.byteSize = int(float(size[:-2]) * 1000000)
                     ds.distribution.append(dist)
                 scraper.catalog.dataset.append(ds)
