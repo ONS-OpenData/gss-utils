@@ -124,17 +124,18 @@ Feature: Create CSVW metadata
 
   Scenario: CSVMetadata from mapping with measure type and unit columns
     Given a CSV file 'observations.csv'
-      | Period          | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          |
-      | quarter/2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  |
-      | quarter/2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  |
-      | quarter/2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | gbp-total    | gbp-thousands |
-      | quarter/2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | gbp-total    | gbp-thousands |
+      | Period  | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          |
+      | 2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  |
+      | 2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  |
+      | 2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | total        | gbp-thousands |
+      | 2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | total        | gbp-thousands |
     And a column map
     """
     {
       "Period": {
+        "label": "Quarter",
         "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
-        "value": "http://reference.data.gov.uk/id/{+period}"
+        "value": "http://reference.data.gov.uk/id/quarter/{period}"
       },
       "Flow": {
         "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
@@ -147,7 +148,7 @@ Feature: Create CSVW metadata
       "Measure Type": {
         "dimension": "http://purl.org/linked-data/cube#measureType",
         "value": "http://gss-data.org.uk/def/measure/{measure_type}",
-        "types": ["net-mass", "gbp-total"]
+        "types": ["net-mass", "total"]
       },
       "Unit": {
         "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
@@ -187,8 +188,8 @@ Feature: Create CSVW metadata
           qb:dimension gss-d:flow-directions ;
           a qb:ComponentSpecification .
 
-      <#component/gbp-total>
-          qb:measure <http://gss-data.org.uk/def/measure/gbp-total> ;
+      <#component/total>
+          qb:measure <http://gss-data.org.uk/def/measure/total> ;
           a qb:ComponentSpecification .
 
       <#component/hmrc-partner-geography>
@@ -212,7 +213,7 @@ Feature: Create CSVW metadata
           a qb:ComponentSpecification .
 
       <#dimension/period> a qb:DimensionProperty ;
-          rdfs:label "Period"@en ;
+          rdfs:label "Quarter"@en ;
           qb:codeList <#scheme/period> ;
           rdfs:range <#class/Period> ;
           rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> .
@@ -225,7 +226,7 @@ Feature: Create CSVW metadata
           qb:attribute sdmx-attribute:unitMeasure ;
           a qb:ComponentSpecification .
 
-      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/01/net-mass>
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/2018-Q1/exports/EA/A/01/net-mass>
           gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/01> ;
           <#dimension/hmrc-partner-geography> <#concept/hmrc-partner-geography/A> ;
@@ -237,7 +238,7 @@ Feature: Create CSVW metadata
           <#dimension/period> <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
           a qb:Observation .
 
-      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q1/exports/EA/A/02/net-mass>
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/2018-Q1/exports/EA/A/02/net-mass>
           gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/exports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/02> ;
           <#dimension/hmrc-partner-geography> <#concept/hmrc-partner-geography/A> ;
@@ -249,33 +250,33 @@ Feature: Create CSVW metadata
           <#dimension/period> <http://reference.data.gov.uk/id/quarter/2018-Q1> ;
           a qb:Observation .
 
-      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/88/gbp-total>
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/2018-Q4/imports/ZB/TR/88/total>
           gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/88> ;
           <#dimension/hmrc-partner-geography> <#concept/hmrc-partner-geography/TR> ;
           <#dimension/hmrc-reporter-region> <#concept/hmrc-reporter-region/ZB> ;
-          <http://gss-data.org.uk/def/measure/gbp-total> 10 ;
+          <http://gss-data.org.uk/def/measure/total> 10 ;
           qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts#dataset> ;
-          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/total> ;
           sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
           <#dimension/period> <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
           a qb:Observation .
 
-      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/quarter/2018-Q4/imports/ZB/TR/89/gbp-total>
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/2018-Q4/imports/ZB/TR/89/total>
           gss-d:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/imports> ;
           gss-d:sitc-4 <http://gss-data.org.uk/def/concept/sitc-4/89> ;
           <#dimension/hmrc-partner-geography> <#concept/hmrc-partner-geography/TR> ;
           <#dimension/hmrc-reporter-region> <#concept/hmrc-reporter-region/ZB> ;
-          <http://gss-data.org.uk/def/measure/gbp-total> 352 ;
+          <http://gss-data.org.uk/def/measure/total> 352 ;
           qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts#dataset> ;
-          qb:measureType <http://gss-data.org.uk/def/measure/gbp-total> ;
+          qb:measureType <http://gss-data.org.uk/def/measure/total> ;
           sdmx-attribute:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp-thousands> ;
           <#dimension/period> <http://reference.data.gov.uk/id/quarter/2018-Q4> ;
           a qb:Observation .
 
       <#structure>
           qb:component <#component/flow>,
-                       <#component/gbp-total>,
+                       <#component/total>,
                        <#component/hmrc-partner-geography>,
                        <#component/hmrc-reporter-region>,
                        <#component/measure-type>,
