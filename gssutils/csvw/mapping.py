@@ -247,7 +247,6 @@ class CSVWMapping:
                                 rdfs_range=Resource(at_id=URI("http://purl.org/linked-data/cube#MeasureProperty"))
                             )
                         ),
-                        # ToDo: figure out the measures used, either from CSV column values, or declared in mapping.
                         MeasureComponent(
                             at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
                             qb_componentProperty=Resource(at_id=obj["measure"]),
