@@ -6,7 +6,7 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'python:3.7'
+                    image 'python:3.9'
                     reuseNode true
                     alwaysPull true
                     args '-u root:root -v /tmp/.pipcache:/root/.cache'
