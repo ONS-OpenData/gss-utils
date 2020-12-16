@@ -95,3 +95,11 @@ Feature: distribution downloading
       | mediaType | text/csv |
     And fetch the distribution as a pandas dataframe with encoding "Windows-1252"
     Then the dataframe should have 75648 rows
+
+  Scenario: ODS conversion has bad tab name
+    Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
+    And select the distribution given by
+      | key       | value                                            |
+      | mediaType | application/vnd.oasis.opendocument.spreadsheet   |
+      | title     | Alcohol Bulletin tables (August to October 2020) |
+    And fetch the distribution as a databaker object
