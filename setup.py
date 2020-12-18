@@ -21,7 +21,7 @@ setuptools.setup(
                       'databaker',
                       'ipython',
                       'jinja2',
-                      'pandas==1.1',
+                      'pandas',
                       'pyexcel',
                       'pyexcel-io',
                       'pyexcel-xls',
