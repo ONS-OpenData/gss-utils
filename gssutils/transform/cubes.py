@@ -24,7 +24,7 @@ class Cubes:
 
         # Where we don't have a mapping field, add one to avoid iteration errors later
         if "columns" not in self.info["transform"].keys():
-            self.info["transform"]["columns"] = []
+            self.info["transform"]["columns"] = {}
 
         self.destination_folder = Path(destination_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
