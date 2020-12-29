@@ -1,5 +1,6 @@
 from typing import Dict
-from utils import override
+
+from .utils import override
 
 
 def is_catalog_record_link_node(node: Dict) -> bool:

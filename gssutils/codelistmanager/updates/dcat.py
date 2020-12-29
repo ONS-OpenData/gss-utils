@@ -1,7 +1,7 @@
-from nodes.dataset import configure_dataset_node, is_dataset_node
-from nodes.catalogrecord import configure_catalog_record, is_catalog_record_node
-from nodes.catalogrecordlink import configure_catalog_record_link, is_catalog_record_link_node
-from nodes.utils import find
+from .nodes.dataset import configure_dataset_node, is_dataset_node
+from .nodes.catalogrecord import configure_catalog_record, is_catalog_record_node
+from .nodes.catalogrecordlink import configure_catalog_record_link, is_catalog_record_link_node
+from .nodes.utils import find
 
 from typing import Dict, Union, List
 

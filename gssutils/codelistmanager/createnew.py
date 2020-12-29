@@ -1,11 +1,11 @@
-import config
-from updates.nodes.utils import override
-
 import re
 import csv
 from os import path
 from typing import List, Dict
 import json
+
+from .config import pmdcat_base_uri
+from .updates.nodes.utils import override
 
 
 def create_metadata_shell_for_csv(csv_file_path: str) -> str:
@@ -36,7 +36,7 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
             "@id": concept_scheme_uri,
             "@type": [
                 "skos:ConceptScheme",
-                f"{config.pmdcat_base_uri}DatasetContents"
+                f"{pmdcat_base_uri}DatasetContents"
             ]
         }
     }

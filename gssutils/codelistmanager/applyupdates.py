@@ -1,9 +1,9 @@
 from typing import Dict
 from datetime import datetime
 
-from updates.dcat import ensure_dcat_metadata_populated
-from updates.standardiselabels import standardise_labels
-import config
+from .updates.dcat import ensure_dcat_metadata_populated
+from .updates.standardiselabels import standardise_labels
+from .config import pmdcat_base_uri
 
 
 def refactor_structure_with_updates(csvw_mapping: Dict, allow_human_input: bool):
@@ -22,5 +22,5 @@ def refactor_structure_with_updates(csvw_mapping: Dict, allow_human_input: bool)
 
     catalog_label: str = csvw_mapping.get("rdfs:label")
 
-    ensure_dcat_metadata_populated(config.pmdcat_base_uri, allow_human_input, concept_scheme_uri,
+    ensure_dcat_metadata_populated(pmdcat_base_uri, allow_human_input, concept_scheme_uri,
                                    csvw_mapping, dt_now, catalog_label)

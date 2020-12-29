@@ -12,22 +12,20 @@ import glob
 from typing import List
 import argparse
 
-from createnew import create_metadata_shell_for_csv
-from applyupdates import refactor_structure_with_updates
+from .createnew import create_metadata_shell_for_csv
+from .applyupdates import refactor_structure_with_updates
 
 
-def main():
+def codelist_manager():
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--auto", help="Automatically process upgrades without human input.",
-                        action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("-a", "--auto", help="Automatically process upgrades without human input.", default=False)
     parser.add_argument("-c", "--csv",
                         help="A CSV file. The script will create a corresponding `.csv-metadata.json` file.",
                         type=str, default=None)
     parser.add_argument("-s", "--schema", help="An individual schema file to upgrade.", type=str, default=None)
     parser.add_argument("-u", "--upgrade-all",
                         help="Finds all `.csv-metadata.json` files within the current directory (it recursively "
-                             "searches through sub-directories) and applies any upgrades required.",
-                        action=argparse.BooleanOptionalAction, default=False)
+                             "searches through sub-directories) and applies any upgrades required.", default=False)
     args = parser.parse_args()
 
     metadata_files: List[str]
@@ -55,4 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    codelist_manager()

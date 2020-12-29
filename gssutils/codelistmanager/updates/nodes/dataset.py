@@ -1,6 +1,7 @@
 from typing import Dict
-from utils import node_has_type, override, supplement
 import datetime
+
+from .utils import node_has_type, override, supplement
 
 
 def is_dataset_node(node: Dict) -> bool:

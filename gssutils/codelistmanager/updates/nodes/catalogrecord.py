@@ -1,5 +1,6 @@
-from utils import override, supplement, node_has_type
 from typing import Dict
+
+from .utils import override, supplement, node_has_type
 
 
 def is_catalog_record_node(node: Dict) -> bool:
