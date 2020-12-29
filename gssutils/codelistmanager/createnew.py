@@ -4,7 +4,7 @@ from os import path
 from typing import List, Dict
 import json
 
-from .config import pmdcat_base_uri
+from .config import pmdcat_base_uri, reference_data_base_uri
 from .updates.nodes.utils import override
 
 
@@ -156,6 +156,6 @@ def _generate_concept_scheme_root_uri(label: str):
         if len(family_name) == 0:
             raise Exception("Family Name not provided.")
 
-        return f"{config.reference_data_base_uri}/{family_name}/concept-scheme/{label_uri_format}"
+        return f"{reference_data_base_uri}/{family_name}/concept-scheme/{label_uri_format}"
     else:
-        return f"{config.reference_data_base_uri}/concept-scheme/{label_uri_format}"
+        return f"{reference_data_base_uri}/concept-scheme/{label_uri_format}"
