@@ -55,8 +55,9 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
         reader = csv.reader(csv_file, delimiter=",", quotechar="\"")
         column_names: List[str] = next(reader)
 
+    concept_base_uri = _map_concept_scheme_uri_to_concept_base(concept_scheme_uri)
     for column_name in column_names:
-        column = _generate_schema_for_column(column_name, concept_scheme_uri)
+        column = _generate_schema_for_column(column_name, concept_base_uri)
         columns.append(column)
 
     columns.append({
@@ -73,7 +74,7 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
     if "notation" in [c.lower() for c in column_names]:
         override(table_schema, {
             "primaryKey": "notation",
-            "aboutUrl": concept_scheme_uri + "/{notation}"
+            "aboutUrl": concept_base_uri + "/{notation}"
         })
     else:
         print("WARNING: could not determine primary key. As a result, `aboutUrl` property is not specified and " +
@@ -85,12 +86,27 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
     return str(metadata_file)
 
 
+def _map_concept_scheme_uri_to_concept_base(concept_scheme_uri: str) -> str:
+    """
+    If the URL is one of the dataset-specific `#scheme/code-list-name` variety, then the URI for individual concepts
+    is of the form `#concept/code-list-name`. Since this behaviour is driven by gss-utils automatic URI generation,
+    it's imperitive that we follow it here.
+
+    Family and Global codelists don't follow this rule and since URIs aren't auto-generated it isn't such a problem.
+    """
+    hash_url_match_regex = r"(.*)#scheme(/.*)?"
+    if re.match(hash_url_match_regex, concept_scheme_uri):
+        return re.sub(hash_url_match_regex, "\\1#concept\\2", concept_scheme_uri)
+    else:
+        return concept_scheme_uri
+
+
 def _map_file_path_to_label(file_path: str) -> str:
     file_name_without_ext = re.sub(".*?([^/]+)\\..*$", "\\1", file_path)
     return file_name_without_ext.replace("-", " ").title()
 
 
-def _generate_schema_for_column(column_name: str, concept_scheme_uri: str) -> Dict:
+def _generate_schema_for_column(column_name: str, concept_base_uri: str) -> Dict:
     """
     Generates column schema structure for a given column name.
     If the column name matches one of the standard GSS code-list column names then we link up the associated metadata.
@@ -125,7 +141,7 @@ def _generate_schema_for_column(column_name: str, concept_scheme_uri: str) -> Di
             },
             "required": False,
             "propertyUrl": "skos:broader",
-            "valueUrl": concept_scheme_uri + "/{" + column_name_snake_case + "}"
+            "valueUrl": concept_base_uri + "/{" + column_name_snake_case + "}"
         })
     elif column_name_lower == "sort priority":
         override(column, {
