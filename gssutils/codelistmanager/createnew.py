@@ -3,9 +3,16 @@ import csv
 from os import path
 from typing import List, Dict
 import json
+from enum import Enum
 
 from .config import pmdcat_base_uri, reference_data_base_uri
 from .updates.nodes.utils import override
+
+
+class CodeListLevel(Enum):
+    Global = 0
+    Family = 1
+    Dataset = 2
 
 
 def create_metadata_shell_for_csv(csv_file_path: str) -> str:
@@ -19,7 +26,7 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
         raise Exception(f"CSV file {csv_file_path} does not exist.")
 
     label = _map_file_path_to_label(csv_file_path)
-    concept_scheme_uri = _generate_concept_scheme_root_uri(label)
+    concept_scheme_uri = _generate_concept_scheme_root_uri(csv_file_path, label)
 
     # Just inserting basic structure at this point as already exists in standard files. Additional metadata will be
     # added as the script continues to run.
@@ -139,23 +146,50 @@ def _generate_schema_for_column(column_name: str, concept_scheme_uri: str) -> Di
     return column
 
 
-def _generate_concept_scheme_root_uri(label: str):
-    def code_list_is_in_family() -> bool:
-        global_family_response = input("Is the code list defined at the Global level or at the Family level? (G/f): ") \
-            .strip().lower()
-        is_global = len(global_family_response) == 0 or global_family_response == "g"
-        if not is_global and global_family_response != "f":
-            raise Exception(f"Invalid Global or family response '{global_family_response}'")
+def _generate_concept_scheme_root_uri(csv_file_path: str, label: str):
+    label_uri_format = _to_uri_format(label)
+    code_list_level = _get_code_list_level()
 
-        return not is_global
-
-    label_uri_format = re.sub("\\s+", "-", label.lower())
-
-    if code_list_is_in_family():
-        family_name = input("Please enter the family name (e.g. trade): ").strip().lower()
-        if len(family_name) == 0:
-            raise Exception("Family Name not provided.")
-
-        return f"{reference_data_base_uri}/{family_name}/concept-scheme/{label_uri_format}"
+    if code_list_level == CodeListLevel.Family:
+        family_path = _get_family_name_path()
+        return f"{reference_data_base_uri}def/{family_path}/concept-scheme/{label_uri_format}"
+    elif code_list_level == CodeListLevel.Dataset:
+        family_path = _get_family_name_path()
+        dataset_path = _get_dataset_name_path(csv_file_path)
+        return f"{reference_data_base_uri}data/gss_data/{family_path}/{dataset_path}#scheme/{label_uri_format}"
     else:
-        return f"{reference_data_base_uri}/concept-scheme/{label_uri_format}"
+        return f"{reference_data_base_uri}def/concept-scheme/{label_uri_format}"
+
+
+def _get_code_list_level() -> CodeListLevel:
+    level_response = input(
+        "Is the code list defined at the Global level, the Family level or the Dataset level? (G/f/d): ")\
+        .strip().lower()
+
+    if len(level_response) == 0 or level_response == "g":
+        return CodeListLevel.Global
+    elif level_response == "f":
+        return CodeListLevel.Family
+    elif level_response == "d":
+        return CodeListLevel.Dataset
+    else:
+        raise Exception(f"Invalid code list level response '{level_response}'")
+
+
+def _get_dataset_name_path(csv_file_path: str) -> str:
+    [dir_path, _] = path.split(path.abspath(csv_file_path))
+    [parent_dir_path, _] = path.split(dir_path)
+    data_set_uri_name: str = parent_dir_path.lower()
+    return _to_uri_format(data_set_uri_name)
+
+
+def _get_family_name_path() -> str:
+    family_name = input("Please enter the family name (e.g. trade): ").strip().lower()
+    if len(family_name) == 0:
+        raise Exception("Family Name not provided.")
+    return _to_uri_format(family_name)
+
+
+def _to_uri_format(input: str) -> str:
+    return re.sub("\\s+", "-", input.strip().lower())
+
