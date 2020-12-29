@@ -4,7 +4,7 @@ from .utils import override, supplement, node_has_type
 
 
 def is_catalog_record_node(node: Dict) -> bool:
-    node_has_type(node, "dcat:CatalogRecord")
+    return node_has_type(node, "dcat:CatalogRecord")
 
 
 def configure_catalog_record(
