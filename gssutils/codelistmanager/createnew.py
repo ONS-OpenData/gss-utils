@@ -179,7 +179,8 @@ def _get_code_list_level() -> CodeListLevel:
 def _get_dataset_name_path(csv_file_path: str) -> str:
     [dir_path, _] = path.split(path.abspath(csv_file_path))
     [parent_dir_path, _] = path.split(dir_path)
-    data_set_uri_name: str = parent_dir_path.lower()
+    [_, parent_dir_name] = path.split(parent_dir_path)
+    data_set_uri_name: str = parent_dir_name.lower()
     return _to_uri_format(data_set_uri_name)
 
 
