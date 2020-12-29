@@ -44,6 +44,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': ['create-schema=gssutils.csvw:create_schema',
-                            'create-transform=gssutils.csvw:create_transform']
+                            'create-transform=gssutils.csvw:create_transform',
+                            'codelist-manager=gssutils.codelist-manager:main']
     }
 )
