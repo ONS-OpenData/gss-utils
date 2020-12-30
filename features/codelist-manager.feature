@@ -214,7 +214,6 @@ Feature: Create and Manage CodeList Metadata files
                         "valueUrl": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list"
                     }
                 ],
-                "primaryKey": "notation",
                 "aboutUrl": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list/{notation}"
             },
             "prov:hadDerivation": {
@@ -251,7 +250,6 @@ Feature: Create and Manage CodeList Metadata files
                         "valueUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#scheme/my-favourite-code-list"
                     }
                 ],
-                "primaryKey": "notation",
                 "aboutUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#concept/my-favourite-code-list/{notation}"
             },
             "prov:hadDerivation": {
@@ -289,13 +287,6 @@ Scenario: Creating New Global Level Metadata File from CSV with atypical column 
                         "propertyUrl": "skos:inScheme",
                         "valueUrl": "http://gss-data.org.uk/def/concept-scheme/my-favourite-code-list"
                     }
-                ]
-            },
-            "prov:hadDerivation": {
-                "@id": "http://gss-data.org.uk/def/concept-scheme/my-favourite-code-list",
-                "@type": [
-                    "skos:ConceptScheme",
-                    "http://publishmydata.com/pmdcat#DatasetContents"
                 ]
             }
         }
