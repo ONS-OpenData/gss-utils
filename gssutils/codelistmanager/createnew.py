@@ -7,6 +7,7 @@ from enum import Enum
 
 from .config import pmdcat_base_uri, reference_data_base_uri
 from .updates.nodes.utils import override
+from ..utils import pathify
 
 
 class CodeListLevel(Enum):
@@ -163,7 +164,7 @@ def _generate_schema_for_column(column_name: str, concept_base_uri: str) -> Dict
 
 
 def _generate_concept_scheme_root_uri(csv_file_path: str, label: str):
-    label_uri_format = _to_uri_format(label)
+    label_uri_format = pathify(label)
     code_list_level = _get_code_list_level()
 
     if code_list_level == CodeListLevel.Family:
@@ -197,16 +198,12 @@ def _get_dataset_name_path(csv_file_path: str) -> str:
     [parent_dir_path, _] = path.split(dir_path)
     [_, parent_dir_name] = path.split(parent_dir_path)
     data_set_uri_name: str = parent_dir_name.lower()
-    return _to_uri_format(data_set_uri_name)
+    return pathify(data_set_uri_name)
 
 
 def _get_family_name_path() -> str:
     family_name = input("Please enter the family name (e.g. trade): ").strip().lower()
     if len(family_name) == 0:
         raise Exception("Family Name not provided.")
-    return _to_uri_format(family_name)
-
-
-def _to_uri_format(input: str) -> str:
-    return re.sub("\\s+", "-", input.strip().lower())
+    return pathify(family_name)
 
