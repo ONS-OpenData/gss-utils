@@ -1,13 +1,14 @@
 import re
 import csv
 from os import path
-from typing import List, Dict
+from typing import List, Dict, Optional, Callable
 import json
 from enum import Enum
 
 from .config import pmdcat_base_uri, reference_data_base_uri
 from .updates.nodes.utils import override
 from ..utils import pathify
+from .infojson import find_maybe_info_json_nearest_file
 
 
 class CodeListLevel(Enum):
@@ -26,8 +27,36 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
     if not path.exists(csv_file_path):
         raise Exception(f"CSV file {csv_file_path} does not exist.")
 
+    maybe_info_json_config = find_maybe_info_json_nearest_file(csv_file_path)
+
+    with open(csv_file_path, newline="") as csv_file:
+        reader = csv.reader(csv_file, delimiter=",", quotechar="\"")
+        column_names: List[str] = next(reader)
+
+    code_list_level = _get_code_list_level()
+
+    metadata = generate_csvw_metadata(column_names, csv_file_path, code_list_level, maybe_info_json_config)
+
+    with open(metadata_file, 'w+') as file:
+        file.write(json.dumps(metadata, indent=4))
+
+    return str(metadata_file)
+
+
+def generate_csvw_metadata(
+        column_names: List[str],
+        csv_file_path: str,
+        code_list_level: CodeListLevel,
+        maybe_info_json_config: Optional[Dict],
+        override_get_family_name_pathify: Optional[Callable[[], str]] = None
+) -> Dict:
     label = _map_file_path_to_label(csv_file_path)
-    concept_scheme_uri = _generate_concept_scheme_root_uri(csv_file_path, label)
+    get_family_name_pathify = _request_family_name_pathify \
+        if override_get_family_name_pathify is None \
+        else override_get_family_name_pathify
+
+    concept_scheme_uri = _generate_concept_scheme_root_uri(label, maybe_info_json_config, code_list_level,
+                                                           get_family_name_pathify)
 
     # Just inserting basic structure at this point as already exists in standard files. Additional metadata will be
     # added as the script continues to run.
@@ -48,30 +77,22 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
             ]
         }
     }
-
     table_schema: Dict = metadata["tableSchema"]
     columns: List[Dict] = table_schema["columns"]
-
-    with open(csv_file_path, newline="") as csv_file:
-        reader = csv.reader(csv_file, delimiter=",", quotechar="\"")
-        column_names: List[str] = next(reader)
-
     concept_base_uri = _map_concept_scheme_uri_to_concept_base(concept_scheme_uri)
     for column_name in column_names:
         column = _generate_schema_for_column(column_name, concept_base_uri)
         columns.append(column)
-
     columns.append({
-            "virtual": True,
-            "propertyUrl": "rdf:type",
-            "valueUrl": "skos:Concept"
+        "virtual": True,
+        "propertyUrl": "rdf:type",
+        "valueUrl": "skos:Concept"
     })
     columns.append({
-            "virtual": True,
-            "propertyUrl": "skos:inScheme",
-            "valueUrl": concept_scheme_uri
+        "virtual": True,
+        "propertyUrl": "skos:inScheme",
+        "valueUrl": concept_scheme_uri
     })
-
     if "notation" in [c.lower() for c in column_names]:
         override(table_schema, {
             "primaryKey": "notation",
@@ -81,10 +102,7 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
         print("WARNING: could not determine primary key. As a result, `aboutUrl` property is not specified and " +
               "so each row will not have a true URI. This is basically required. Manual configuration required.")
 
-    with open(metadata_file, 'w+') as file:
-        file.write(json.dumps(metadata, indent=4))
-
-    return str(metadata_file)
+    return metadata
 
 
 def _map_concept_scheme_uri_to_concept_base(concept_scheme_uri: str) -> str:
@@ -163,16 +181,23 @@ def _generate_schema_for_column(column_name: str, concept_base_uri: str) -> Dict
     return column
 
 
-def _generate_concept_scheme_root_uri(csv_file_path: str, label: str):
+def _generate_concept_scheme_root_uri(
+        label: str,
+        maybe_info_json_config: Optional[Dict],
+        code_list_level: CodeListLevel,
+        get_family_name: Callable[[], str]
+) -> str:
     label_uri_format = pathify(label)
-    code_list_level = _get_code_list_level()
 
     if code_list_level == CodeListLevel.Family:
-        family_path = _get_family_name_path()
+        family_path = get_family_name()
         return f"{reference_data_base_uri}def/{family_path}/concept-scheme/{label_uri_format}"
     elif code_list_level == CodeListLevel.Dataset:
-        family_path = _get_family_name_path()
-        dataset_path = _get_dataset_name_path(csv_file_path)
+        family_path = get_family_name()
+        if maybe_info_json_config is None:
+            raise Exception("Info JSON Config must be provided.")
+
+        dataset_path = _get_dataset_name_path(maybe_info_json_config)
         return f"{reference_data_base_uri}data/gss_data/{family_path}/{dataset_path}#scheme/{label_uri_format}"
     else:
         return f"{reference_data_base_uri}def/concept-scheme/{label_uri_format}"
@@ -183,27 +208,28 @@ def _get_code_list_level() -> CodeListLevel:
         "Is the code list defined at the Global level, the Family level or the Dataset level? (G/f/d): ")\
         .strip().lower()
 
-    if len(level_response) == 0 or level_response == "g":
+    return _map_str_to_code_list_level(level_response)
+
+
+def _map_str_to_code_list_level(level: str) -> CodeListLevel:
+    if len(level) == 0 or level == "g":
         return CodeListLevel.Global
-    elif level_response == "f":
+    elif level == "f":
         return CodeListLevel.Family
-    elif level_response == "d":
+    elif level == "d":
         return CodeListLevel.Dataset
     else:
-        raise Exception(f"Invalid code list level response '{level_response}'")
+        raise Exception(f"Invalid code list level response '{level}'")
 
 
-def _get_dataset_name_path(csv_file_path: str) -> str:
-    [dir_path, _] = path.split(path.abspath(csv_file_path))
-    [parent_dir_path, _] = path.split(dir_path)
-    [_, parent_dir_name] = path.split(parent_dir_path)
-    data_set_uri_name: str = parent_dir_name.lower()
-    return pathify(data_set_uri_name)
+def _get_dataset_name_path(info_json_config: Dict) -> str:
+    return pathify(info_json_config["title"])
 
 
-def _get_family_name_path() -> str:
+def _request_family_name_pathify() -> str:
     family_name = input("Please enter the family name (e.g. trade): ").strip().lower()
     if len(family_name) == 0:
         raise Exception("Family Name not provided.")
+
     return pathify(family_name)
 
