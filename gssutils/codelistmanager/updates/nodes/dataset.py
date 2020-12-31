@@ -1,5 +1,5 @@
 from typing import Dict
-import datetime
+from datetime import datetime
 
 from .utils import node_has_type, override, supplement
 
