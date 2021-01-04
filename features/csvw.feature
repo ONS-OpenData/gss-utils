@@ -108,7 +108,7 @@ Feature: Create CSVW metadata
 
       <#dimension/area-code> a qb:DimensionProperty ;
         rdfs:label "Area"@en ;
-        qb:codeList <#scheme/area-code> ;
+        qb:codeList <http://statistics.data.gov.uk/id/statistical-geography/some-code-list> ;
         rdfs:range <#class/AreaCode> ;
         rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refArea> .
 

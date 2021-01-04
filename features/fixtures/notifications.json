@@ -14,7 +14,8 @@
       "Area Code": {
         "label": "Area",
         "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
-        "value": "http://statistics.data.gov.uk/id/statistical-geography/{area_code}"
+        "value": "http://statistics.data.gov.uk/id/statistical-geography/{area_code}",
+        "codelist": "http://statistics.data.gov.uk/id/statistical-geography/some-code-list"
       },
       "Value": {
         "unit": "http://gss-data.org.uk/def/concept/measurement-units/deaths",

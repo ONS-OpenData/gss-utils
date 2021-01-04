@@ -181,7 +181,7 @@ class CSVWMapping:
                                 at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             ),
                             qb_codeList=Resource(
-                                at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                                at_id=obj.get("codelist", self.join_dataset_uri(f"#scheme/{pathify(name)}"))
                             ),
                             rdfs_label=label,
                             rdfs_comment=description,
@@ -210,7 +210,7 @@ class CSVWMapping:
                                 at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             ),
                             qb_codeList=Resource(
-                                at_id=self.join_dataset_uri(f"#scheme/{pathify(name)}")
+                                at_id=obj.get("codelist", self.join_dataset_uri(f"#scheme/{pathify(name)}"))
                             ),
                             rdfs_label=label,
                             rdfs_comment=description,
