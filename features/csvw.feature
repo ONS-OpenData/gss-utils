@@ -135,7 +135,8 @@ Feature: Create CSVW metadata
       "Period": {
         "label": "Quarter",
         "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
-        "value": "http://reference.data.gov.uk/id/quarter/{period}"
+        "value": "http://reference.data.gov.uk/id/quarter/{period}",
+        "codelist": false
       },
       "Flow": {
         "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
@@ -214,7 +215,6 @@ Feature: Create CSVW metadata
 
       <#dimension/period> a qb:DimensionProperty ;
           rdfs:label "Quarter"@en ;
-          qb:codeList <#scheme/period> ;
           rdfs:range <#class/Period> ;
           rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> .
 

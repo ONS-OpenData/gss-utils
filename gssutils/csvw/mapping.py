@@ -124,6 +124,21 @@ class CSVWMapping:
             logging.error(f"Unknown prefixes used: {used_prefixes.difference(prefix_map.keys())}")
 
     def _as_csvw_object(self):
+        def get_conventional_local_codelist_uri(column_name: str) -> Resource:
+            return Resource(at_id=self.join_dataset_uri(f"#scheme/{pathify(column_name)}"))
+
+        def get_maybe_codelist_for_col(column_config: object, column_name: str) -> Optional[Resource]:
+            if "codelist" in column_config:
+                codelist = column_config["codelist"]
+                if isinstance(codelist, bool) and not codelist:
+                    # Config explicitly forbids a codelist being linked here.
+                    return None
+
+                return Resource(at_id=codelist)
+
+            # Codelist should exist. Convention dictates it should be a local codelist.
+            return get_conventional_local_codelist_uri(column_name)
+
         # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
             if "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
@@ -180,9 +195,7 @@ class CSVWMapping:
                             rdfs_range=Resource(
                                 at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             ),
-                            qb_codeList=Resource(
-                                at_id=obj.get("codelist", self.join_dataset_uri(f"#scheme/{pathify(name)}"))
-                            ),
+                            qb_codeList=get_maybe_codelist_for_col(obj, name),
                             rdfs_label=label,
                             rdfs_comment=description,
                             rdfs_subPropertyOf=Resource(at_id=URI(obj["parent"])),
@@ -209,9 +222,7 @@ class CSVWMapping:
                             rdfs_range=Resource(
                                 at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                             ),
-                            qb_codeList=Resource(
-                                at_id=obj.get("codelist", self.join_dataset_uri(f"#scheme/{pathify(name)}"))
-                            ),
+                            qb_codeList=get_maybe_codelist_for_col(obj, name),
                             rdfs_label=label,
                             rdfs_comment=description,
                             rdfs_isDefinedBy=source
@@ -303,9 +314,7 @@ class CSVWMapping:
                         rdfs_range=Resource(
                             at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                         ),
-                        qb_codeList=Resource(
-                            at_id = self.join_dataset_uri(f"#scheme/{pathify(name)}")
-                        ),
+                        qb_codeList=get_conventional_local_codelist_uri(name),
                         rdfs_label=name,
                         rdfs_comment=description
                     )
