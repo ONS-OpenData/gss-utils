@@ -6,6 +6,7 @@ from io import TextIOBase
 from pathlib import Path
 from typing import List, Optional, Dict, TextIO, Any, Set, Union
 from urllib.parse import urljoin
+import re
 
 from uritemplate import variables, URITemplate
 
@@ -33,12 +34,12 @@ class CSVWMapping:
         self._columns: Dict[str, Column] = {}
         self._external_tables: List[Table] = []
         self._dataset_uri: Optional[URI] = None
+        self._dataset_root_uri: Optional[URI] = None
         self._dataset = DataSet()
         self._components: List[Component] = []
         self._registry: Optional[URI] = None
         self._keys: List[str] = []
         self._metadata_filename: Optional[URI] = None
-        self._dataset_uri: Optional[URI] = None
         self._foreign_keys: Optional[List[ForeignKey]] = None
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
@@ -51,16 +52,26 @@ class CSVWMapping:
     def classify(column_header: str):
         return ''.join(part.capitalize() for part in pathify(column_header).split('-'))
 
-    def join_dataset_uri(self, relative: str):
+    def join_dataset_uri(self, relative: str, use_true_dataset_root: bool = False):
         # treat the dataset URI as an entity that when joined with a fragment, just adds
         # the fragment, but when joined with a relative path, turns the dataset URI into a container
         # by adding a / to the end before adding the relative path
-        if self._dataset_uri is None:
+
+        f"""
+        Where datasets have multiple distinct dataframes, `self._dataset_uri` is of the form
+            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>/<dataset_path>
+
+        Codelists are defined at the `dataset_root_path` level, so we need to be able to create URIs relative to
+            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>
+        """
+        root_uri = self._dataset_root_uri if use_true_dataset_root else self._dataset_uri
+
+        if root_uri is None:
             return URI(relative)
         elif relative.startswith('#'):
-            return URI(urljoin(self._dataset_uri, relative, allow_fragments=True))
+            return URI(urljoin(root_uri, relative, allow_fragments=True))
         else:
-            return URI(urljoin(self._dataset_uri + '/', relative, allow_fragments=True))
+            return URI(urljoin(root_uri + '/', relative, allow_fragments=True))
 
     def set_csv(self, csv_filename: URI):
 
@@ -94,8 +105,36 @@ class CSVWMapping:
             self._foreign_keys = []
         self._foreign_keys.append(foreign_key)
 
-    def set_dataset_uri(self, uri: URI):
+    def set_dataset_uri(self, uri: URI, dataset_root_uri: Optional[URI] = None):
+        f"""
+        Please make sure you set the dataset_root_uri.
+
+        If this dataset has only one dataframe associated then both {uri} and {dataset_root_uri} should be the same, 
+        e.g.
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>`
+
+        If the dataset has more than one dataframe associated and so has a {uri} of the form
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>/<dataframe-name>`
+        then the {dataset_root_uri} must represent the URI fragment common to all dataframes, e.g.
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>`
+        """
         self._dataset_uri = uri
+
+        if dataset_root_uri is None:
+            print("WARNING: dataset_root_uri is unset. " +
+                  "In future this warning will be converted to an error and terminate your build.")
+
+            # Legacy compatibility code:
+            # This code will NOT survive any change is URI standards.
+            if self._dataset_uri is not None:
+                matches: re.Match = re.match("^(.+)/gss_data/([^/]+)/([^/]+).*$", self._dataset_uri,
+                                             re.RegexFlag.IGNORECASE)
+                base_uri = f"{matches.group(1)}/gss_data"
+                family_path = matches.group(2)
+                dataset_root_path = matches.group(3)
+                dataset_root_uri = f"{base_uri}/{family_path}/{dataset_root_path}"
+
+        self._dataset_root_uri = dataset_root_uri
 
     def set_registry(self, uri: URI):
         self._registry = uri
@@ -125,7 +164,8 @@ class CSVWMapping:
 
     def _as_csvw_object(self):
         def get_conventional_local_codelist_uri(column_name: str) -> Resource:
-            return Resource(at_id=self.join_dataset_uri(f"#scheme/{pathify(column_name)}"))
+            codelist_uri = self.join_dataset_uri(f"#scheme/{pathify(column_name)}", use_true_dataset_root=True)
+            return Resource(at_id=codelist_uri)
 
         def get_maybe_codelist_for_col(column_config: object, column_name: str) -> Optional[Resource]:
             if "codelist" in column_config:
