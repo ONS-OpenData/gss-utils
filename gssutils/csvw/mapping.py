@@ -52,25 +52,23 @@ class CSVWMapping:
     def classify(column_header: str):
         return ''.join(part.capitalize() for part in pathify(column_header).split('-'))
 
-    def get_dataset_root_uri(self) -> Optional[str]:
-        f"""
-        Where datasets have multiple distinct dataframes, `self._dataset_uri` is of the form
-            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>/<dataset_path>
-            
-        Codelists are defined at the `dataset_root_path` level, so we need to be able to create URIs relative to
-            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>
-            
-        This function helps extract the URI up to the `dataset_root_path` fragment by removing any `dataset_path` 
-        fragment from `self._dataset_uri`.
-        """
-        if self._dataset_root_uri is not None:
-            return self._dataset_root_uri
 
     def join_dataset_uri(self, relative: str, use_true_dataset_root: bool = False):
         # treat the dataset URI as an entity that when joined with a fragment, just adds
         # the fragment, but when joined with a relative path, turns the dataset URI into a container
         # by adding a / to the end before adding the relative path
-        root_uri = self.get_dataset_root_uri() if use_true_dataset_root else self._dataset_uri
+
+        f"""
+        Where datasets have multiple distinct dataframes, `self._dataset_uri` is of the form
+            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>/<dataset_path>
+
+        Codelists are defined at the `dataset_root_path` level, so we need to be able to create URIs relative to
+            http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>
+
+        This function helps extract the URI up to the `dataset_root_path` fragment by removing any `dataset_path` 
+        fragment from `self._dataset_uri`.
+        """
+        root_uri = self._dataset_root_uri if use_true_dataset_root else self._dataset_uri
 
         if root_uri is None:
             return URI(relative)
