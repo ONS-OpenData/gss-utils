@@ -53,7 +53,7 @@ class CSVWMapping:
         return ''.join(part.capitalize() for part in pathify(column_header).split('-'))
 
 
-    def join_dataset_uri(self, relative: str, use_true_dataset_root: bool = False):
+def join_dataset_uri(self, relative: str, use_true_dataset_root: bool = False):
         # treat the dataset URI as an entity that when joined with a fragment, just adds
         # the fragment, but when joined with a relative path, turns the dataset URI into a container
         # by adding a / to the end before adding the relative path
