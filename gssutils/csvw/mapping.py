@@ -63,9 +63,6 @@ class CSVWMapping:
 
         Codelists are defined at the `dataset_root_path` level, so we need to be able to create URIs relative to
             http://gss-data.org.uk/data/gss_data/<family_path>/<dataset_root_path>
-
-        This function helps extract the URI up to the `dataset_root_path` fragment by removing any `dataset_path` 
-        fragment from `self._dataset_uri`.
         """
         root_uri = self._dataset_root_uri if use_true_dataset_root else self._dataset_uri
 
@@ -128,16 +125,14 @@ class CSVWMapping:
                   "In future this warning will be converted to an error and terminate your build.")
 
             # Legacy compatibility code:
-            if self._dataset_uri is None:
-                return None
-
             # This code will NOT survive any change is URI standards.
-            matches: re.Match = re.match("^(.+)/gss_data/([^/]+)/([^/]+).*$", self._dataset_uri,
-                                         re.RegexFlag.IGNORECASE)
-            base_uri = f"{matches.group(1)}/gss_data"
-            family_path = matches.group(2)
-            dataset_root_path = matches.group(3)
-            dataset_root_uri = f"{base_uri}/{family_path}/{dataset_root_path}"
+            if self._dataset_uri is not None:
+                matches: re.Match = re.match("^(.+)/gss_data/([^/]+)/([^/]+).*$", self._dataset_uri,
+                                             re.RegexFlag.IGNORECASE)
+                base_uri = f"{matches.group(1)}/gss_data"
+                family_path = matches.group(2)
+                dataset_root_path = matches.group(3)
+                dataset_root_uri = f"{base_uri}/{family_path}/{dataset_root_path}"
 
         self._dataset_root_uri = dataset_root_uri
 
