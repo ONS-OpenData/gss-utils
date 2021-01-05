@@ -34,12 +34,12 @@ class CSVWMapping:
         self._columns: Dict[str, Column] = {}
         self._external_tables: List[Table] = []
         self._dataset_uri: Optional[URI] = None
+        self._dataset_root_uri: Optional[URI] = None
         self._dataset = DataSet()
         self._components: List[Component] = []
         self._registry: Optional[URI] = None
         self._keys: List[str] = []
         self._metadata_filename: Optional[URI] = None
-        self._dataset_uri: Optional[URI] = None
         self._foreign_keys: Optional[List[ForeignKey]] = None
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
@@ -63,13 +63,8 @@ class CSVWMapping:
         This function helps extract the URI up to the `dataset_root_path` fragment by removing any `dataset_path` 
         fragment from `self._dataset_uri`.
         """
-        if self._dataset_uri is None:
-            return None
-        matches: re.Match = re.match("^(.+)/gss_data/([^/]+)/([^/]+).*$", self._dataset_uri, re.RegexFlag.IGNORECASE)
-        base_uri = f"{matches.group(1)}/gss_data"
-        family_path = matches.group(2)
-        dataset_root_path = matches.group(3)
-        return f"{base_uri}/{family_path}/{dataset_root_path}"
+        if self._dataset_root_uri is not None:
+            return self._dataset_root_uri
 
     def join_dataset_uri(self, relative: str, use_true_dataset_root: bool = False):
         # treat the dataset URI as an entity that when joined with a fragment, just adds
@@ -116,8 +111,38 @@ class CSVWMapping:
             self._foreign_keys = []
         self._foreign_keys.append(foreign_key)
 
-    def set_dataset_uri(self, uri: URI):
+    def set_dataset_uri(self, uri: URI, dataset_root_uri: Optional[URI] = None):
+        f"""
+        Please make sure you set the dataset_root_uri.
+
+        If this dataset has only one dataframe associated then both {uri} and {dataset_root_uri} should be the same, 
+        e.g.
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>`
+
+        If the dataset has more than one dataframe associated and so has a {uri} of the form
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>/<dataframe-name>`
+        then the {dataset_root_uri} must represent the URI fragment common to all dataframes, e.g.
+            `http://gss-data.org.uk/data/gss_data/<family-name>/<dataset-name>`
+        """
         self._dataset_uri = uri
+
+        if dataset_root_uri is None:
+            print("WARNING: dataset_root_uri is unset. " +
+                  "In future this warning will be converted to an error and terminate your build.")
+
+            # Legacy compatibility code:
+            if self._dataset_uri is None:
+                return None
+
+            # This code will NOT survive any change is URI standards.
+            matches: re.Match = re.match("^(.+)/gss_data/([^/]+)/([^/]+).*$", self._dataset_uri,
+                                         re.RegexFlag.IGNORECASE)
+            base_uri = f"{matches.group(1)}/gss_data"
+            family_path = matches.group(2)
+            dataset_root_path = matches.group(3)
+            dataset_root_uri = f"{base_uri}/{family_path}/{dataset_root_path}"
+
+        self._dataset_root_uri = dataset_root_uri
 
     def set_registry(self, uri: URI):
         self._registry = uri
