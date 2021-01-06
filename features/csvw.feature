@@ -333,7 +333,6 @@ Scenario: Codelist URIS are built relative to the dataset root directory URI - n
     """
 
 Scenario: Ensure column definition `value` field is respected when `parent` is not specified.
-  # N.B. this implicitly tests `CSVWMapping.get_dataset_root_uri`
     Given a CSV file 'observations.csv'
       | Implicit Flow | Explicit Flow | Undefined Flow | Value | Measure Type | Unit          |
       | exports       | exports       | exports        | 2430  | net-mass     | kg-thousands  |
