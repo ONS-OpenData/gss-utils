@@ -179,7 +179,7 @@ class CSVWMapping:
             # Codelist should exist. Convention dictates it should be a local codelist.
             return get_conventional_local_codelist_scheme_uri(column_name)
 
-        def get_convential_local_codelist_concept_uri_template(column_name: str) -> URI:
+        def get_conventional_local_codelist_concept_uri_template(column_name: str) -> URI:
             return self.join_dataset_uri(f"#concept/{pathify(column_name)}/{{{self._columns[column_name].name}}}",
                                          use_true_dataset_root=True)
 
@@ -187,7 +187,7 @@ class CSVWMapping:
             if "value" in column_def:
                 return URI(column_def["value"])
 
-            return get_convential_local_codelist_concept_uri_template(column_name)
+            return get_conventional_local_codelist_concept_uri_template(column_name)
 
         # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
@@ -354,7 +354,7 @@ class CSVWMapping:
                 self._keys.append(self._columns[name].name)
                 self._columns[name] = self._columns[name]._replace(
                     propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
-                    valueUrl=get_convential_local_codelist_concept_uri_template(name)
+                    valueUrl=get_conventional_local_codelist_concept_uri_template(name)
                 )
                 self._components.append(DimensionComponent(
                     at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
