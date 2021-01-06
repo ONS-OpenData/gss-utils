@@ -163,7 +163,7 @@ class CSVWMapping:
             logging.error(f"Unknown prefixes used: {used_prefixes.difference(prefix_map.keys())}")
 
     def _as_csvw_object(self):
-        def get_conventional_local_codelist_uri(column_name: str) -> Resource:
+        def get_conventional_local_codelist_scheme_uri(column_name: str) -> Resource:
             codelist_uri = self.join_dataset_uri(f"#scheme/{pathify(column_name)}", use_true_dataset_root=True)
             return Resource(at_id=codelist_uri)
 
@@ -177,7 +177,17 @@ class CSVWMapping:
                 return Resource(at_id=codelist)
 
             # Codelist should exist. Convention dictates it should be a local codelist.
-            return get_conventional_local_codelist_uri(column_name)
+            return get_conventional_local_codelist_scheme_uri(column_name)
+
+        def get_conventional_local_codelist_concept_uri_template(column_name: str) -> URI:
+            return self.join_dataset_uri(f"#concept/{pathify(column_name)}/{{{self._columns[column_name].name}}}",
+                                         use_true_dataset_root=True)
+
+        def get_value_uri_template_for_col(column_def: object, column_name: str) -> URI:
+            if "value" in column_def:
+                return URI(column_def["value"])
+
+            return get_conventional_local_codelist_concept_uri_template(column_name)
 
         # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
@@ -225,7 +235,7 @@ class CSVWMapping:
                     self._keys.append(self._columns[name].name)
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
-                        valueUrl=URI(obj["value"])
+                        valueUrl=get_value_uri_template_for_col(obj, name)
                     )
                     self._components.append(DimensionComponent(
                         at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
@@ -252,7 +262,7 @@ class CSVWMapping:
                     self._keys.append(self._columns[name].name)
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
-                        valueUrl=self.join_dataset_uri(f"#concept/{pathify(name)}/{{{self._columns[name].name}}}")
+                        valueUrl=get_value_uri_template_for_col(obj, name)
                     )
                     self._components.append(DimensionComponent(
                         at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
@@ -344,7 +354,7 @@ class CSVWMapping:
                 self._keys.append(self._columns[name].name)
                 self._columns[name] = self._columns[name]._replace(
                     propertyUrl=self.join_dataset_uri(f"#dimension/{pathify(name)}"),
-                    valueUrl=self.join_dataset_uri(f"#concept/{pathify(name)}/{{{self._columns[name].name}}}")
+                    valueUrl=get_conventional_local_codelist_concept_uri_template(name)
                 )
                 self._components.append(DimensionComponent(
                     at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
@@ -354,7 +364,7 @@ class CSVWMapping:
                         rdfs_range=Resource(
                             at_id=self.join_dataset_uri(f"#class/{CSVWMapping.classify(name)}")
                         ),
-                        qb_codeList=get_conventional_local_codelist_uri(name),
+                        qb_codeList=get_conventional_local_codelist_scheme_uri(name),
                         rdfs_label=name,
                         rdfs_comment=description
                     )
