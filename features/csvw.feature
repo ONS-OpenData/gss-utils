@@ -331,3 +331,60 @@ Scenario: Codelist URIS are built relative to the dataset root directory URI - n
       <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/first_dataframe/exports/net-mass>
           <#dimension/flow> <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts#concept/flow/exports>.
     """
+
+Scenario: Ensure column definition `value` field is respected when `parent` is not specified.
+  # N.B. this implicitly tests `CSVWMapping.get_dataset_root_uri`
+    Given a CSV file 'observations.csv'
+      | Implicit Flow | Explicit Flow | Undefined Flow | Value | Measure Type | Unit          |
+      | exports       | exports       | exports        | 2430  | net-mass     | kg-thousands  |
+    And a column map
+    """
+    {
+      "Implicit Flow": {
+        "description": "The flow, don't ya know?"
+      },
+      "Explicit Flow": {
+        "description": "The flow, don't ya know?",
+        "value": "http://hg2g.is.cool#concept/flow/{explicit_flow}",
+        "codelist": "http://hg2g.is.cool#scheme/flow"
+      },
+      "Measure Type": {
+        "dimension": "http://purl.org/linked-data/cube#measureType",
+        "value": "http://gss-data.org.uk/def/measure/{measure_type}",
+        "types": ["net-mass", "total"]
+      },
+      "Unit": {
+        "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
+        "value": "http://gss-data.org.uk/def/concept/measurement-units/{unit}"
+      },
+      "Value": {
+        "datatype": "integer"
+      }
+    }
+    """
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/hmrc_rts'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the RDF should contain
+    """
+      @base <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+
+      <#dimension/implicit-flow> a qb:DimensionProperty ;
+          qb:codeList <#scheme/implicit-flow>.
+
+      <#dimension/explicit-flow> a qb:DimensionProperty ;
+          qb:codeList <http://hg2g.is.cool#scheme/flow>.
+
+      <#dimension/undefined-flow> a qb:DimensionProperty ;
+          qb:codeList <#scheme/undefined-flow>.
+
+
+      <http://gss-data.org.uk/data/gss_data/trade/hmrc_rts/exports/exports/exports/net-mass>
+          <#dimension/implicit-flow> <#concept/implicit-flow/exports>;
+          <#dimension/explicit-flow> <http://hg2g.is.cool#concept/flow/exports>;
+          <#dimension/undefined-flow> <#concept/undefined-flow/exports>
+          .
+    """
