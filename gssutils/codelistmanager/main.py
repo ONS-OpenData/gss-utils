@@ -15,14 +15,15 @@ from .applyupdates import refactor_structure_with_updates
 
 def codelist_manager():
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--auto", help="Automatically process upgrades without human input.", default=False)
+    parser.add_argument("-a", "--auto", help="Automatically process upgrades without human input.", action='store_true')
     parser.add_argument("-c", "--csv",
                         help="A CSV file. The script will create a corresponding `.csv-metadata.json` file.",
                         type=str, default=None)
     parser.add_argument("-s", "--schema", help="An individual schema file to upgrade.", type=str, default=None)
     parser.add_argument("-u", "--upgrade-all",
                         help="Finds all `.csv-metadata.json` files within the current directory (it recursively "
-                             "searches through sub-directories) and applies any upgrades required.", default=False)
+                             "searches through sub-directories) and applies any upgrades required.",
+                        action='store_true')
     args = parser.parse_args()
 
     metadata_files: List[str]
