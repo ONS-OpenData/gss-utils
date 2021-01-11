@@ -114,15 +114,19 @@ class Scraper:
                 md = md + "### Distributions\n\n"
                 for d in self.distributions:
                     def mediaType_label(d):
-                        mt = getattr(d, 'mediaType', 'Unknown')
+                        mt = getattr(d, 'mediaType', '*unknown*')
                         return {
                             mimetype.Excel: 'MS Excel Spreadsheet',
                             mimetype.ODS: 'ODF Spreadsheet'
                         }.get(mt, mt)
-                    if hasattr(d, 'issued'):
-                        md = md + f"1. {d.title} ([{mediaType_label(d)}]({d.downloadURL})) - {d.issued}\n"
+                    md = md + f"1. {getattr(d, 'title', '*no title*')}"
+                    if hasattr(d, 'downloadURL'):
+                        md = md + f" ([{mediaType_label(d)}]({d.downloadURL}))"
                     else:
-                        md = md + f"1. {d.title} ([{mediaType_label(d)}]({d.downloadURL}))\n"
+                        md = md + f" ({mediaType_label(d)}, *no download URL*)"
+                    if hasattr(d, 'issued'):
+                        md = md + f" - {d.issued}"
+                    md = md + "\n"
 
         return md
 
