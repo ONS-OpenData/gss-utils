@@ -1,5 +1,5 @@
 """
-A script which aides in the creation and maintainance of `.csv-metadata.json` schema files.
+A script which aids in the creation and maintainance of `.csv-metadata.json` schema files.
 
 Call with `--help` arg for further instructions.
 """
