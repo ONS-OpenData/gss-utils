@@ -1,6 +1,6 @@
 import re
 import csv
-from os import path
+from pathlib import Path
 from typing import List, Dict, Optional, Callable
 import json
 from enum import Enum
@@ -17,14 +17,14 @@ class CodeListLevel(Enum):
     Dataset = 2
 
 
-def create_metadata_shell_for_csv(csv_file_path: str) -> str:
+def create_metadata_shell_for_csv(csv_file_path: Path) -> Path:
     """
     Returns the path for the metadata file which has been created.
     """
-    metadata_file = f"{csv_file_path}-metadata.json"
-    if path.exists(metadata_file):
+    metadata_file = Path(f"{csv_file_path}-metadata.json")
+    if metadata_file.exists():
         raise Exception(f"Metadata file {metadata_file} already exists.")
-    if not path.exists(csv_file_path):
+    if not csv_file_path.exists():
         raise Exception(f"CSV file {csv_file_path} does not exist.")
 
     maybe_info_json_config = find_maybe_info_json_nearest_file(csv_file_path)
@@ -40,12 +40,12 @@ def create_metadata_shell_for_csv(csv_file_path: str) -> str:
     with open(metadata_file, 'w+') as file:
         file.write(json.dumps(metadata, indent=4))
 
-    return str(metadata_file)
+    return metadata_file
 
 
 def generate_csvw_metadata(
         column_names: List[str],
-        csv_file_path: str,
+        csv_file_path: Path,
         code_list_level: CodeListLevel,
         maybe_info_json_config: Optional[Dict],
         override_get_family_name_pathify: Optional[Callable[[], str]] = None
@@ -63,7 +63,7 @@ def generate_csvw_metadata(
     metadata = {
         "@context": "http://www.w3.org/ns/csvw",
         "@id": concept_scheme_uri,
-        "url": csv_file_path,
+        "url": str(csv_file_path),
         "rdfs:label": label,
         "dc:title": label,
         "tableSchema": {
@@ -120,8 +120,8 @@ def _map_concept_scheme_uri_to_concept_base(concept_scheme_uri: str) -> str:
         return concept_scheme_uri
 
 
-def _map_file_path_to_label(file_path: str) -> str:
-    file_name_without_ext = re.sub(".*?([^/]+)\\..*$", "\\1", file_path)
+def _map_file_path_to_label(file_path: Path) -> str:
+    file_name_without_ext = re.sub(".*?([^/]+)\\..*$", "\\1", str(file_path))
     return file_name_without_ext.replace("-", " ").title()
 
 

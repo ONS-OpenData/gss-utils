@@ -5,7 +5,7 @@ Call with `--help` arg for further instructions.
 """
 
 import json
-import glob
+from pathlib import Path
 from typing import List
 import argparse
 
@@ -26,15 +26,15 @@ def codelist_manager():
                         action='store_true')
     args = parser.parse_args()
 
-    metadata_files: List[str]
+    metadata_files: List[Path]
     if args.schema is not None:
-        metadata_files = [args.schema]
+        metadata_files = [Path(args.schema)]
     elif args.upgrade_all:
-        metadata_files = glob.glob("**/*.csv-metadata.json", recursive=True)
+        metadata_files = Path(".").rglob("**/*.csv-metadata.json")
     elif args.csv is not None:
         if args.auto:
             raise Exception("Cannot create a new metadata file from an existing CSV without human input.")
-        metadata_files = [create_metadata_shell_for_csv(args.csv)]
+        metadata_files = [create_metadata_shell_for_csv(Path(args.csv))]
     else:
         parser.print_help()
         exit()
