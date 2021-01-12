@@ -11,7 +11,7 @@ setuptools.setup(
     description="Common functions used by GSS data transformations",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/ONS-OpenData/gss-utils",
+    url="https://github.com/GSS-Cogs/gss-utils",
     packages=setuptools.find_packages(),
     setup_requires=['better-setuptools-git-version'],
     install_requires=['requests',
@@ -44,6 +44,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': ['create-schema=gssutils.csvw:create_schema',
-                            'create-transform=gssutils.csvw:create_transform']
+                            'create-transform=gssutils.csvw:create_transform',
+                            'codelist-manager=gssutils.codelistmanager.main:codelist_manager']
     }
 )
