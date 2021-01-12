@@ -10,14 +10,14 @@ def ensure_dcat_metadata_populated(
         pmdcat_base_uri: str,
         allow_human_input: bool,
         concept_scheme_uri: str,
-        csvw_mapping: Dict,
+        table_mapping: Dict,
         dt_now: str,
         catalog_label: str
 ):
     """
     Ensures that the relevant PMDCAT and DCAT metadata is linked to the ConceptScheme.
     """
-    prov_derivation_object = csvw_mapping["prov:hadDerivation"]
+    prov_derivation_object = table_mapping["prov:hadDerivation"]
 
     catalog_record_uri = concept_scheme_uri + "/catalog-record"
     dataset_uri = concept_scheme_uri + "/dataset"
@@ -26,7 +26,7 @@ def ensure_dcat_metadata_populated(
 
     # Ensure rdfs:seeAlso section is populated with dcat:CatalogRecord,
     # dcat:Dataset and a link between the top-level codelist catalog and the CatalogRecord for this codelist.
-    rdfs_see_also: List[Dict] = csvw_mapping.get("rdfs:seeAlso", [])
+    rdfs_see_also: List[Dict] = table_mapping.get("rdfs:seeAlso", [])
     dataset_node = find(rdfs_see_also, is_dataset_node)
     if not dataset_node:
         dataset_node = {}
@@ -53,7 +53,7 @@ def ensure_dcat_metadata_populated(
     configure_catalog_record(pmdcat_base_uri, catalog_record, catalog_record_uri, concept_scheme_uri, dataset_uri,
                              dt_now, catalog_label)
 
-    csvw_mapping["rdfs:seeAlso"] = rdfs_see_also
+    table_mapping["rdfs:seeAlso"] = rdfs_see_also
 
 
 def _ensure_type_updated(pmdcat_base_uri: str, prov_derivation_object: Dict):
