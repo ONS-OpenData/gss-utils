@@ -219,3 +219,8 @@ def step_impl(context, encoding):
 @then('the dataset landing page should be "{url}"')
 def step_impl(context, url):
     eq_(context.scraper.dataset.landingPage, url)
+
+
+@step("the markdown representation should start with")
+def step_impl(context):
+    assert(context.scraper._repr_markdown_().startswith(context.text))

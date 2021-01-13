@@ -302,3 +302,13 @@ Feature: Scrape dataset info
     Given an additional entity URL is provided
     Then fetch the dataset from the API endpoint
     And return it as a dataframe
+  Scenario: gov.uk mediaType missing
+    Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
+    Then the markdown representation should start with
+    """
+    ## Alcohol Bulletin
+
+    ### Description
+
+    Monthly statistics from the 4 different alcohol duty regimes
+    """

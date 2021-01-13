@@ -31,13 +31,16 @@ class Cubes:
         self.base_uri = base_uri
         self.cubes = []
         self.has_ran = False
-        self.job_name = os.environ.get('JOB_NAME', '') if job_name is None else job_name
+        
+        if job_name is not None:
+            logging.warning("The passing of job_name= has been depreciated and no longer does anything, please"
+                            "remove this keyword argument")
 
     def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None):
         """
         Add a single datacube to the cubes class.
         """
-        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, self.job_name, info_json_dict))
+        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict))
 
     def output_all(self):
         """
@@ -81,14 +84,13 @@ class Cube:
     A class to encapsulate the dataframe and associated metadata that constitutes a single datacube
     """
 
-    def __init__(self, base_uri, scraper, dataframe, title, graph, job_name, info_json_dict):
+    def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict):
 
         self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
         self.title = title
         self.scraper.set_base_uri(base_uri)
         self.graph = graph
-        self.job_name = job_name
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
 
     def _instantiate_map(self, destination_folder, pathified_title, info_json):
@@ -118,10 +120,7 @@ class Cube:
         # The base CSVWMapping class
         map_obj = self._instantiate_map(destination_folder, pathified_title, info_json)
 
-        # TODO - next iteration
-        # codelists generation would go here
-        # so we can assign Foreign keys (where/if necessary) to the principle csvw
-        # created above
+        # TODO - IF we do codelist generation here, this would be the point of intervention
 
         return map_obj
 
@@ -139,15 +138,15 @@ class Cube:
             assert pathify(Path(os.getcwd()).name) == graph_name, err_msg
 
             logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
-            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/') \
+            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/') \
                            + graph_name
         elif is_multi_cube:
             logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
-            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/'
+            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
                                    + Path(os.getcwd()).name + "/") + graph_name
         else:
             logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
-            dataset_path = pathify(self.job_name + f'gss_data/{self.scraper.dataset.family}/'
+            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
                                    + Path(os.getcwd()).name)
         self.scraper.set_dataset_id(dataset_path)
 
