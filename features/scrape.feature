@@ -269,39 +269,6 @@ Feature: Scrape dataset info
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
     Then the publication date should match "2020-07-03"
 
-
-  # This section covers APIScraper, which is a child class of Scraper
-  # APIScraper will have some additional funcitonality, namely returning multiple
-  # pandas.DataFrame()s when provided additional URLs, but will not support as_databaker().
-  
-  @api
-  Scenario: Download primary data to existing dataset
-    Given I fetch the dataset from an API endpoint
-    When the dataset already exists on target PMD
-    Then I establish the next period to download
-    And download it
-    And return it as a dataframe
-
-  @api
-  Scenario: Download primary data to new dataset
-    Given I fetch the dataset from an API endpoint
-    When the dataset does not exist on target PMD
-    Then I find the first period to download
-    And download it
-    And return it as a dataframe
-  
-  @api
-  Scenario: Establish next period to download
-    Given target dataset exists on PMD
-    Then I find the periods for that dataset on PMD
-    And I find the periods available on the API endpoint
-    And I calculate which is the next period to download
-
-  @api
-  Scenario: Download related data to datasets
-    Given an additional entity URL is provided
-    Then fetch the dataset from the API endpoint
-    And return it as a dataframe
   Scenario: gov.uk mediaType missing
     Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
     Then the markdown representation should start with
