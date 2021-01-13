@@ -1,0 +1,11 @@
+{
+  "title": "I am a title from the metadata seed",
+  "description": "I am a description from the metadata seed",
+  "landingPage": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
+  "dataURL": "https://www.contextures.com/SampleData.zip",
+  "publisher": "COGS data testing",
+  "published": "2019-01-01",
+  "families": [
+    "Swiss Family Robinson"
+  ]
+}

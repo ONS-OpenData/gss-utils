@@ -156,7 +156,12 @@ class Distribution(Metadata):
                 return tabs
         raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
 
-    def as_pandas(self, **kwargs):
+    def as_pandas(self, api=None, **kwargs):
+
+        # Where we're explicitly getting data from an api, hand this off to the relevent constructor
+        if api is not None:
+            return construct_dataframe(self, api)
+
         if self.mediaType in ExcelTypes:
             with self.open() as fobj:
                 # pandas 0.25 now tries to seek(0), so we need to read and buffer the stream
@@ -190,3 +195,35 @@ class Distribution(Metadata):
                     to_fetch = None
             return pd.concat(tables, ignore_index=True)
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
+
+def construct_dataframe(distro: Distribution, api: str) -> pd.Dataframe:
+    """
+    Construct a dataframe via a series of api calls.
+    The "api" arg is effectively the name of the handler we want to use
+    """
+
+    if api == "hmrc_odata":
+        pmd_periods = get_pmd_periods(distro.downloadURL)
+        hrrc_api_periods = get_hmrc_api_periods(distro.downloadURL)
+
+        # TODO - everything else
+    else:
+        raise Exception(f'No api handler found for "{api}"')
+
+def get_pmd_periods(url: str) -> list:
+    """
+    Given the downloadURL from the scraper, return a list of periods from pmd4
+    note - when testing with a seed, url here will be the dataURL from the info.json
+    """
+
+    #TODO - everything
+    return ["foo", "bar", "baz"]
+
+def get_hmrc_api_periods(url: str) -> list:
+    """
+    Given the downloadURL from the scraper, return a list of periods from the hmrc api
+    note - when testing with a seed, url here will be the dataURL from the info.json
+    """
+    
+    #TODO - everything
+    return ["ray", "ego", "winston", "ray"]
