@@ -1,11 +1,33 @@
 {
-  "title": "I am a title from the metadata seed",
-  "description": "I am a description from the metadata seed",
-  "landingPage": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
-  "dataURL": "https://www.contextures.com/SampleData.zip",
-  "publisher": "COGS data testing",
-  "published": "2019-01-01",
+  "title": "REGIONAL TRADE STATISTICS",
+  "publisher": "HM Revenue & Customs",
+  "description": "",
+  "landingPage": "https://www.uktradeinfo.com/trade-data/regional/",
+  "published": "2019-12-05",
+  "dataURL": "https://api.uktradeinfo.com/RTS?fake=.csv",
   "families": [
-    "Swiss Family Robinson"
+      "Trade"
+  ],
+  "extract": {
+      "source": "application/json",
+      "stage": "Done"
+  },
+  "transform": {
+      "validate": false,
+      "airtable": "reclNM0WAApNZVyh4",
+      "main_issue": 12,
+      "to_rdf": "csv2rdf"
+  },
+  "apiEndpoints": {
+      "main": "https://api.uktradeinfo.com/RTS",
+      "FlowTypeId": "https://api.uktradeinfo.com/FlowType",
+      "GovRegionId": "https://api.uktradeinfo.com/Region",
+      "CountryId": "https://api.uktradeinfo.com/Country",
+      "CommoditySitc2Id": "https://api.uktradeinfo.com/SITC"
+  },
+  "sizingNotes": "",
+  "notes": "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/",
+  "datasetNotes": [
+      "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/"
   ]
 }

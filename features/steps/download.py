@@ -6,7 +6,7 @@ from nose.tools import *
 from urllib.parse import urlparse
 
 from gssutils import *
-from gssutils.scraper.metadata.dcat import get_pmd_periods, get_hmrc_api_periods
+from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
@@ -29,22 +29,23 @@ def step_impl(context, fixture_path):
 
 @given('And the dataset already exists on target PMD')
 def step_impl(context):
-    # TODO - this. for now am leaving it to pass trivially
+    # TODO - this. for now I'm leaving it to pass trivially
     pass
 
-@given('Then I identify the periods for that dataset on the API as')
-def step_impl(context, fixture_path):
+@then('I identify the periods for that dataset on the API as')
+def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    api_periods = get_hmrc_api_periods(distro.downloadURL)
-    expected_periods = json.loads(context.text)
-    assert api_periods == expected_periods, f'Expecting "{expected_periods}" got "{api_periods}".'
+    api_periods = get_odata_api_periods(distro).sort()
+    expected_periods = [x.strip() for x in context.text.split(",")].sort()
+    assert api_periods == expected_periods, \
+        f'Expecting "{expected_periods}". \nGot "{api_periods}".'
 
-@given('I identify the periods for that dataset on PMD as')
-def step_impl(context, fixture_path):
+@then('I identify the periods for that dataset on PMD as')
+def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    pmd_periods = get_hmrc_api_periods(distro.downloadURL)
-    expected_periods = json.loads(context.text)
-    assert pmd_periods == expected_periods, f'Expecting "{expected_periods}" got "{pmd_periods}".'
+    pmd_periods = get_pmd_periods(distro).sort()
+    expected_periods = [x.strip() for x in context.text.split(",")].sort()
+    assert pmd_periods == expected_periods, f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
 
     

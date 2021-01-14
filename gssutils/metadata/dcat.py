@@ -1,6 +1,7 @@
 import json
 from io import BytesIO
 
+import datetime
 import messytables
 import pandas as pd
 import pyexcel
@@ -156,11 +157,10 @@ class Distribution(Metadata):
                 return tabs
         raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
 
-    def as_pandas(self, api=None, **kwargs):
+    def as_pandas(self, **kwargs):
 
-        # Where we're explicitly getting data from an api, hand this off to the relevent constructor
-        if api is not None:
-            return construct_dataframe(self, api)
+        if "uktradeinfo.com" in self.downloadURL:
+            return construct_uktradeinfo_dataframe(self)
 
         if self.mediaType in ExcelTypes:
             with self.open() as fobj:
@@ -196,21 +196,60 @@ class Distribution(Metadata):
             return pd.concat(tables, ignore_index=True)
         raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
 
-def construct_dataframe(distro: Distribution, api: str) -> pd.Dataframe:
+
+def find_missing_periods(odata_api_periods: list, pmd_periods: list) -> list:
+    """
+    Given two lists, one of periods from the odata api, another of periods
+    from pmd. Return items that are on the api but not pmd.
+    """
+    
+    # TODO - this function! returning everything for now
+    return odata_api_periods
+
+
+def get_principle_dataframe(distro: Distribution, periods_wanted: list):
+    """
+    Given a distribution object and a list of periods of data we want
+    return a dataframe
+    """
+    url = distro.downloadURL
+
+    # TODO - something magical thingy that uses the url and periods wanted
+    # and returns a dataframe
+
+    return pd.DataFrame() # TODO - dont forget we're returning a blank dataframe here!
+
+
+def supplement_uktradeinfo_dataframe(distro: Distribution, df):
+    """
+    Supplement the base datframe with expand and foreign deifnition calls etc
+    """
+
+    # TODO - everything :)
+    return df
+
+
+def construct_uktradeinfo_dataframe(distro: Distribution, periods_wanted: list = None):
     """
     Construct a dataframe via a series of api calls.
-    The "api" arg is effectively the name of the handler we want to use
     """
 
-    if api == "hmrc_odata":
-        pmd_periods = get_pmd_periods(distro.downloadURL)
-        hrrc_api_periods = get_hmrc_api_periods(distro.downloadURL)
+    # Unless periods have been explicitly requested, use PMD and the odataAPI to
+    # work out what periods of data we want
+    if periods_wanted is None:
+        pmd_periods = get_pmd_periods(distro)
+        odata_api_periods = get_odata_api_periods(distro)
+        periods_wanted = find_missing_periods(odata_api_periods, pmd_periods)
 
-        # TODO - everything else
-    else:
-        raise Exception(f'No api handler found for "{api}"')
+    # use those periods to construct the principle dataframe
+    df = get_principle_dataframe(distro.downloadURL, periods_wanted)
 
-def get_pmd_periods(url: str) -> list:
+    # expand this dataaframe with supplementary data
+    df = supplement_uktradeinfo_dataframe(distro, df)
+
+    return df
+
+def get_pmd_periods(distro: Distribution) -> list:
     """
     Given the downloadURL from the scraper, return a list of periods from pmd4
     note - when testing with a seed, url here will be the dataURL from the info.json
@@ -219,11 +258,24 @@ def get_pmd_periods(url: str) -> list:
     #TODO - everything
     return ["foo", "bar", "baz"]
 
-def get_hmrc_api_periods(url: str) -> list:
+def get_odata_api_periods(distro: Distribution) -> list:
     """
-    Given the downloadURL from the scraper, return a list of periods from the hmrc api
-    note - when testing with a seed, url here will be the dataURL from the info.json
+    Given the downloadURL from the scraper, return a list of periods from the odata api
     """
-    
-    #TODO - everything
-    return ["ray", "ego", "winston", "ray"]
+    r = distro._session.get(distro.downloadURL+'$apply=groupby((MonthId))')
+    if r.status_code != 200:
+        raise Exception(f'failed on url {distro.downloadURL} with code {r.status_code}')
+    period_dict = r.json()
+
+    periods = [x["MonthId"] for x in period_dict["value"]]
+
+    formatted_periods = []
+    for period in periods:
+        
+        # format as per pmd
+        year = str(period)[:4]
+        month = str(period)[-2:]
+        period = f'/month/{year}-{month}'
+        formatted_periods.append(period)
+
+    return list(set(formatted_periods))
