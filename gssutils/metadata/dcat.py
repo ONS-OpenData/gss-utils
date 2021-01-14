@@ -244,7 +244,7 @@ def construct_uktradeinfo_dataframe(distro: Distribution, periods_wanted: list =
     # use those periods to construct the principle dataframe
     df = get_principle_dataframe(distro.downloadURL, periods_wanted)
 
-    # expand this dataaframe with supplementary data
+    # expand this dataframe with supplementary data
     df = supplement_uktradeinfo_dataframe(distro, df)
 
     return df
@@ -278,4 +278,4 @@ def get_odata_api_periods(distro: Distribution) -> list:
         period = f'/month/{year}-{month}'
         formatted_periods.append(period)
 
-    return list(set(formatted_periods))
+    return formatted_periods
