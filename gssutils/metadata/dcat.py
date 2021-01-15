@@ -165,8 +165,8 @@ class Distribution(Metadata):
 
     def as_pandas(self, **kwargs):
 
-        if "uktradeinfo.com" in self.downloadURL:
-            return construct_uktradeinfo_dataframe(self)
+        if "odataConversion" in self.info.keys():
+            return construct_odata_dataframe(self)
 
         if self.mediaType in ExcelTypes:
             with self.open() as fobj:
@@ -240,7 +240,7 @@ def get_supplimentary_dataframes(distro: Distribution) -> dict:
 def _get_odata_data(url) -> pd.DataFrame():
     return pd.DataFrame()
 
-def construct_uktradeinfo_dataframe(distro: Distribution, periods_wanted: list = None):
+def construct_odata_dataframe(distro: Distribution, periods_wanted: list = None):
     """
     Construct a dataframe via a series of api calls.
     """
