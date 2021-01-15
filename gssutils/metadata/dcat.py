@@ -8,6 +8,10 @@ import pyexcel
 import xypath.loader
 import os
 import logging
+import requests
+from cachecontrol import CacheControl
+from cachecontrol.caches.file_cache import FileCache
+from cachecontrol.heuristics import ExpiresAfter
 
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
@@ -218,27 +222,47 @@ def get_principle_dataframe(distro: Distribution, periods_wanted: list):
     Given a distribution object and a list of periods of data we want
     return a dataframe
     """
-    url = distro.downloadURL
+    principle_url = distro.downloadURL
+    key = distro.info['odatConversion']['periodColumn']
 
-    return _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
+    if len(periods_wanted) != 0:
+        for period in periods_wanted:
+            url = f"{principle_url}$filter={key} eq {period}"
+            return _get_odata_data(url)
+            
+    else: 
+        url = principle_url
+        return _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
 
 
 def get_supplimentary_dataframes(distro: Distribution) -> dict:
     """
-    Supplement the base datframe with expand and foreign deifnition calls etc
+    Supplement the base dataframe with expand and foreign deifnition calls etc
     """
 
     sup = distro.info['odatConversion']['supplementalEndpoints']
+    
+    sup_dfs = {}
 
     for name, url in sup, sup['endpoint']:
+        sup_dfs[name] = _get_odata_data(url)
         
-        pass
-
     # TODO - everything :)
-    return {'key', pd.DataFrame}
+    return sup_dfs
+    #return {'key', pd.DataFrame}
 
 def _get_odata_data(url) -> pd.DataFrame():
-    return pd.DataFrame()
+
+        page = cached_sess.get(url)
+        contents = page.json()
+        df = pd.DataFrame(contents['value'])
+        # print('Fetching data from {url}.'.format(url=page.url))
+        while '@odata.nextLink' in contents.keys():
+            # print('Fetching more data from {url}.'.format(url=contents['@odata.nextLink']))
+            page = cached_sess.get(contents['@odata.nextLink'])
+            contents = page.json()
+            df = df.append(pd.DataFrame(contents['value']))
+        return df
 
 def construct_odata_dataframe(distro: Distribution, periods_wanted: list = None):
     """
