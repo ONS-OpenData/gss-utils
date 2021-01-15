@@ -6,8 +6,13 @@ import messytables
 import pandas as pd
 import pyexcel
 import xypath.loader
+import os
+import logging
+
+from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
+from pathlib import Path
 
 from gssutils.metadata import DCAT, PROV, ODRL, SPDX
 from gssutils.metadata.base import Metadata, Status
@@ -130,6 +135,7 @@ class Distribution(Metadata):
     def __init__(self, scraper):
         super().__init__()
         self._session = scraper.session
+        self._info = scraper.info
 
     def __setattr__(self, key, value):
         if key == 'downloadURL':
@@ -214,20 +220,25 @@ def get_principle_dataframe(distro: Distribution, periods_wanted: list):
     """
     url = distro.downloadURL
 
-    # TODO - something magical thingy that uses the url and periods wanted
-    # and returns a dataframe
-
-    return pd.DataFrame() # TODO - dont forget we're returning a blank dataframe here!
+    return _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
 
 
-def supplement_uktradeinfo_dataframe(distro: Distribution, df):
+def get_supplimentary_dataframes(distro: Distribution) -> dict:
     """
     Supplement the base datframe with expand and foreign deifnition calls etc
     """
 
-    # TODO - everything :)
-    return df
+    sup = distro.info['odatConversion']['supplementalEndpoints']
 
+    for name, url in sup, sup['endpoint']:
+        
+        pass
+
+    # TODO - everything :)
+    return {'key', pd.DataFrame}
+
+def _get_odata_data(url) -> pd.DataFrame():
+    return pd.DataFrame()
 
 def construct_uktradeinfo_dataframe(distro: Distribution, periods_wanted: list = None):
     """
@@ -245,7 +256,7 @@ def construct_uktradeinfo_dataframe(distro: Distribution, periods_wanted: list =
     df = get_principle_dataframe(distro.downloadURL, periods_wanted)
 
     # expand this dataframe with supplementary data
-    df = supplement_uktradeinfo_dataframe(distro, df)
+    df = get_supplimentary_dataframes(distro)
 
     return df
 
@@ -255,8 +266,26 @@ def get_pmd_periods(distro: Distribution) -> list:
     note - when testing with a seed, url here will be the dataURL from the info.json
     """
 
-    #TODO - everything
-    return ["foo", "bar", "baz"]
+    dataset = Path(os.path.dirname(os.path.abspath(__file__))).parent.split()[-1]
+    family = distro.info['families'][0]
+    # Assumption that no cases of multiple datasets from a single API endpoint, so...
+
+    dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
+    endpoint_url = distro.info['odataConversion']['publishedLocation']
+
+    logging.info('Dataset url is {}'.format(dataset_url))
+    logging.info('SPARQL endpoint is {}'.format(endpoint_url))
+
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?object a qb:DataSet . ?obs qb:dataSet ?obj ; ?p ?period . ?obs dim:refPeriod ?period . FILTER (?obj = <{dataset_url}>) }}'
+    logging.info(f'Query is {query}')
+
+    sparql = SPARQLWrapper(endpoint_url)
+    query = sparql.setQuery(query)
+
+    sparql.setReturnFormat(JSON)
+    result = sparql.query().convert()
+
+    return [x['period']['value'] for x in result['results']['bindings']]
 
 def get_odata_api_periods(distro: Distribution) -> list:
     """

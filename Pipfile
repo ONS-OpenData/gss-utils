@@ -16,6 +16,7 @@ requests = {extras = ["security"],version = "*"}
 certifi = "*"
 uritemplate = "*"
 jinja2 = "*"
+sparqlwrapper = "*"
 
 [requires]
 python_version = "3.7"

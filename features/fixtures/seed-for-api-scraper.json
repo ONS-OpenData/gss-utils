@@ -18,12 +18,31 @@
       "main_issue": 12,
       "to_rdf": "csv2rdf"
   },
-  "apiEndpoints": {
-      "main": "https://api.uktradeinfo.com/RTS",
-      "FlowTypeId": "https://api.uktradeinfo.com/FlowType",
-      "GovRegionId": "https://api.uktradeinfo.com/Region",
-      "CountryId": "https://api.uktradeinfo.com/Country",
-      "CommoditySitc2Id": "https://api.uktradeinfo.com/SITC"
+  "odataConversion": {
+      "publishedLocation": "https://staging.gss-data.org.uk/sparql",
+      "periodColumn": "MonthId",
+      "supplementalEndpoints": {
+          "FlowType": {
+              "endpoint": "https://api.uktradeinfo.com/FlowType",
+              "primaryKey": "FlowTypeId",
+              "foreignKey": "FlowTypeId"
+          },
+          "GovRegionId": {
+              "endpoint": "https://api.uktradeinfo.com/Region",
+              "primaryKey": "RegionId",
+              "foreignKey": "GovRegionId"
+          }, 
+          "CountryId": {
+              "endpoint": "https://api.uktradeinfo.com/Country",
+              "primaryKey": "CountryId",
+              "foreignKey": "CountryId"
+          },
+          "CommoditySitc2Id": {
+              "endpoint": "https://api.uktradeinfo.com/SITC",
+              "primaryKey": "CommoditySitcId",
+              "foreignKey": "CommoditySitc2Id"
+          } 
+        } 
   },
   "sizingNotes": "",
   "notes": "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/",
