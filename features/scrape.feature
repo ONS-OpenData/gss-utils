@@ -268,3 +268,14 @@ Feature: Scrape dataset info
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
     Then the publication date should match "2020-07-03"
+
+  Scenario: gov.uk mediaType missing
+    Given I scrape the page "https://www.gov.uk/government/statistics/alcohol-bulletin"
+    Then the markdown representation should start with
+    """
+    ## Alcohol Bulletin
+
+    ### Description
+
+    Monthly statistics from the 4 different alcohol duty regimes
+    """
