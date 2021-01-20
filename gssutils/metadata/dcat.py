@@ -9,6 +9,8 @@ import xypath.loader
 import os
 import logging
 
+import backoff
+import requests
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
@@ -135,7 +137,7 @@ class Distribution(Metadata):
     def __init__(self, scraper):
         super().__init__()
         self._session = scraper.session
-        self._info = scraper.info
+        self._seed = scraper.seed
 
     def __setattr__(self, key, value):
         if key == 'downloadURL':
@@ -165,7 +167,7 @@ class Distribution(Metadata):
 
     def as_pandas(self, **kwargs):
 
-        if "odataConversion" in self.info.keys():
+        if "odataConversion" in self._seed.keys():
             return construct_odata_dataframe(self)
 
         if self.mediaType in ExcelTypes:
@@ -228,7 +230,7 @@ def get_supplimentary_dataframes(distro: Distribution) -> dict:
     Supplement the base datframe with expand and foreign deifnition calls etc
     """
 
-    sup = distro.info['odatConversion']['supplementalEndpoints']
+    sup = distro._seed['odatConversion']['supplementalEndpoints']
 
     for name, url in sup, sup['endpoint']:
         
@@ -267,11 +269,11 @@ def get_pmd_periods(distro: Distribution) -> list:
     """
 
     dataset = Path(os.path.dirname(os.path.abspath(__file__))).parent.split()[-1]
-    family = distro.info['families'][0]
+    family = distro._seed['families'][0]
     # Assumption that no cases of multiple datasets from a single API endpoint, so...
 
     dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
-    endpoint_url = distro.info['odataConversion']['publishedLocation']
+    endpoint_url = distro._seed['odataConversion']['publishedLocation']
 
     logging.info('Dataset url is {}'.format(dataset_url))
     logging.info('SPARQL endpoint is {}'.format(endpoint_url))
@@ -287,10 +289,12 @@ def get_pmd_periods(distro: Distribution) -> list:
 
     return [x['period']['value'] for x in result['results']['bindings']]
 
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_odata_api_periods(distro: Distribution) -> list:
     """
     Given the downloadURL from the scraper, return a list of periods from the odata api
     """
+
     r = distro._session.get(distro.downloadURL+'$apply=groupby((MonthId))')
     if r.status_code != 200:
         raise Exception(f'failed on url {distro.downloadURL} with code {r.status_code}')
