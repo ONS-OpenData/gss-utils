@@ -56,36 +56,75 @@ Feature: Download Source data
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
             Then I identify the periods for that dataset on the API as
             """
-            /month/2019-01, /month/2020-04, /month/2017-10, /month/2013-01,
-            /month/2013-07, /month/2019-07, /month/2015-01, /month/2018-10,
-            /month/2020-07, /month/2014-07, /month/2016-04, /month/2015-04,
-            /month/2016-07, /month/2014-04, /month/2013-10, /month/2015-10,
-            /month/2019-04, /month/2015-07, /month/2016-01, /month/2014-01,
-            /month/2020-01, /month/2017-07, /month/2014-10, /month/2018-01,
-            /month/2013-04, /month/2018-04, /month/2017-01, /month/2019-10,
-            /month/2016-10, /month/2018-07, /month/2017-04
+            http://reference.data.gov.uk/id/month/2019-01, 
+            http://reference.data.gov.uk/id/month/2020-04,
+            http://reference.data.gov.uk/id/month/2017-10,
+            http://reference.data.gov.uk/id/month/2013-01,
+            http://reference.data.gov.uk/id/month/2013-07,
+            http://reference.data.gov.uk/id/month/2019-07,
+            http://reference.data.gov.uk/id/month/2015-01,
+            http://reference.data.gov.uk/id/month/2018-10,
+            http://reference.data.gov.uk/id/month/2020-07,
+            http://reference.data.gov.uk/id/month/2014-07,
+            http://reference.data.gov.uk/id/month/2016-04,
+            http://reference.data.gov.uk/id/month/2015-04,
+            http://reference.data.gov.uk/id/month/2016-07,
+            http://reference.data.gov.uk/id/month/2014-04,
+            http://reference.data.gov.uk/id/month/2013-10,
+            http://reference.data.gov.uk/id/month/2015-10,
+            http://reference.data.gov.uk/id/month/2019-04,
+            http://reference.data.gov.uk/id/month/2015-07,
+            http://reference.data.gov.uk/id/month/2016-01,
+            http://reference.data.gov.uk/id/month/2014-01,
+            http://reference.data.gov.uk/id/month/2020-01,
+            http://reference.data.gov.uk/id/month/2017-07,
+            http://reference.data.gov.uk/id/month/2014-10,
+            http://reference.data.gov.uk/id/month/2018-01,
+            http://reference.data.gov.uk/id/month/2013-04,
+            http://reference.data.gov.uk/id/month/2018-04,
+            http://reference.data.gov.uk/id/month/2017-01,
+            http://reference.data.gov.uk/id/month/2019-10,
+            http://reference.data.gov.uk/id/month/2016-10,
+            http://reference.data.gov.uk/id/month/2018-07,
+            http://reference.data.gov.uk/id/month/2017-04
             """
 
+        # TODO - switch to calling the apis to get the times once we
+        # have a sample odata dataset across both endpoints.
         Scenario: ApiScraper - Establish next period to download
-            Given I scrape datasets using info.json "seed-for-api-scraper.json"
-            And the dataset already exists on target PMD
-            Then the next period to download is "<period we're expecting>"
+            Given PMD periods of
+            """
+            http://reference.data.gov.uk/id/month/2018-12,
+            http://reference.data.gov.uk/id/month/2019-01,
+            http://reference.data.gov.uk/id/month/2019-02,
+            http://reference.data.gov.uk/id/month/2019-03,
+            http://reference.data.gov.uk/id/month/2019-04,
+            http://reference.data.gov.uk/id/month/2019-05,
+            """
+            And odata API periods of
+            """
+            http://reference.data.gov.uk/id/month/2019-01,
+            http://reference.data.gov.uk/id/month/2019-02,
+            http://reference.data.gov.uk/id/month/2019-04
+            """
+            Then the next period to download is "http://reference.data.gov.uk/id/month/2018-12"
 
         # download specific chunks of main dataset
         Scenario: ApiScraper - Download a period of data
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
             And specify the required periods as
             """
-                <specifiy periods to represent individual chunks needing updating>
+            http://reference.data.gov.uk/id/month/2019-01
             """
+            # TODO - next line currently passing trivially
             And caching is set to "<a caching short heuristic>"
-            And fetch the data from the API endpoint
-            Then the data is equal to "<path-to-fixture of what we're expecting>"
+            And fetch the initial data from the API endpoint
+            Then the data is equal to "expected_odata_api_data.csv"
 
         # download supplimentary datasets
         Scenario: ApiScraper - Download supplementary data as dictionary of 
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
-            And fetch the data from the API endpoint
+            And fetch the supplementary data from the API endpoint
             And caching is set to "<a caching long heuristic>"
             Then the data is equal to "<path-to-fixture of what we're expecting>"
             # Dictionary of dataframes

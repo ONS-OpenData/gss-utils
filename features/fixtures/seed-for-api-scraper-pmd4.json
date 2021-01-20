@@ -1,0 +1,29 @@
+{
+    "title": "Lower and Middle Super Output Areas gas consumption",
+    "publisher": "Department for Business, Energy and Industrial Strategy",
+    "description": "Lower Super Output Area (LSOA), Middle Super Output Area (MSOA) and Intermediate Geography Zone (IGZ) gas data.",
+    "dataURL": "https://www.ons.gov.uk/file?uri=%2feconomy%2fnationalaccounts%2fbalanceofpayments%2fdatasets%2fbalanceofpaymentsstatisticalbulletintables%2fcurrent/balanceofpayments2020q1.xls",
+    "landingPage": "https://www.gov.uk/government/collections/local-alcohol-profiles-for-england-lape",
+    "published": "2019-12-20","families": [
+      "Trade"
+  ],
+  "extract": {
+      "source": "application/json",
+      "stage": "Done"
+  },
+  "transform": {
+      "validate": false,
+      "airtable": "reclNM0WAApNZVyh4",
+      "main_issue": 12,
+      "to_rdf": "csv2rdf"
+  },
+  "odataConversion": {
+      "publishedLocation": "https://staging.gss-data.org.uk/sparql",
+      "datasetIdentifier": "http://gss-data.org.uk/data/gss_data/covid-19/nrs-deaths-involving-coronavirus-covid-19-in-scotland#dataset"
+  },
+  "sizingNotes": "",
+  "notes": "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/",
+  "datasetNotes": [
+      "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/"
+  ]
+}

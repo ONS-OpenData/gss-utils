@@ -4,14 +4,15 @@ import os
 from behave import *
 from nose.tools import *
 from urllib.parse import urlparse
+import pandas as pd
 
 from gssutils import *
-from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods
+from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods, get_principle_dataframe
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
-# TODO - surely this a pythonic way of doing this?
+# TODO - surely there is a pythonic way of doing this?
 def compare_unordered_lists(list1: list, list2: list) -> bool:
     """
     Compare two unordered lists, needs to return False where
@@ -28,7 +29,7 @@ def compare_unordered_lists(list1: list, list2: list) -> bool:
 
 def cassette(uri: str) -> str:
     host = urlparse(uri).hostname
-    if host == 'www.gov.uk':
+    if host in ['www.gss-data.org.uk', '']:
         return f'features/fixtures/cassettes/{host}.yml'
     return 'features/fixtures/scrape.yml'
 
@@ -47,6 +48,39 @@ def step_impl(context):
     # TODO - this. for now I'm leaving it to pass trivially
     pass
 
+@given('caching is set to "{caching_heuristic}"')
+def step_impl(context, caching_heuristic):
+    # TODO - this. for now I'm leaving it to pass trivially
+    pass
+
+@given(u'PMD periods of')
+def step_impl(context):
+    context.pmd_periods = [x.strip() for x in context.text.split(",")]
+
+@given(u'odata API periods of')
+def step_impl(context):
+    context.odata_periods = [x.strip() for x in context.text.split(",")]
+
+@given(u'specify the required periods as')
+def step_impl(context):
+    context.required_periods = [x.strip() for x in context.text.split(",")]
+
+@given('fetch the initial data from the API endpoint')
+def step_impl(context):
+    distro = context.scraper.distribution(latest=True)
+    context.df = get_principle_dataframe(distro, periods_wanted=context.required_periods)
+
+@given('fetch the supplementary data from the API endpoint')
+def step_impl(context):
+    # TODO - this
+    pass
+
+@then('the data is equal to "{name_of_fixture}"')
+def step_impl(context, name_of_fixture):
+    df = pd.read_csv(get_fixture(name_of_fixture))
+    assert df.equals(context.df), \
+        f"Data retrieved does not match data expected. Expected:\n {context.df}\v\nGot:\n{df}"
+
 @then('I identify the periods for that dataset on the API as')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
@@ -63,5 +97,6 @@ def step_impl(context):
     assert compare_unordered_lists(pmd_periods, expected_periods), \
         f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
-
-    
+@then(u'the next period to download is "{period_expected}"')
+def step_impl(context, period_expected):
+    raise NotImplementedError(f'STEP: Then the next period to download is "{period_expected}"')

@@ -273,9 +273,9 @@ def get_pmd_periods(distro: Distribution) -> list:
     family = distro._seed['families'][0]
 
     # Assumption that no cases of multiple datasets from a single API endpoint, so...
-    #dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
-    dataset_url = "http://gss-data.org.uk/data/gss_data/covid-19/nrs-deaths-involving-coronavirus-covid-19-in-scotland#dataset"
+    dataset_url = distro._seed['odataConversion']['datasetIdentifier']
     endpoint_url = distro._seed['odataConversion']['publishedLocation']
+    distro._seed['odataConversion']['datasetIdentifier']
 
     query = f"""
         PREFIX qb: <http://purl.org/linked-data/cube#> 
@@ -295,10 +295,7 @@ def get_pmd_periods(distro: Distribution) -> list:
 
     result = sparql.query().convert()
 
-    results = [x['period']['value'] for x in result['results']['bindings']]
-    if len(results) == 0:
-        raise Exception(f'No results returned for SPARQL query:\n\n{query}\n\n against dataset {dataset_url}')
-    return results
+    return [x['period']['value'] for x in result['results']['bindings']]
 
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_odata_api_periods(distro: Distribution) -> list:
@@ -315,11 +312,22 @@ def get_odata_api_periods(distro: Distribution) -> list:
 
     formatted_periods = []
     for period in periods:
-        
-        # format as per pmd
-        year = str(period)[:4]
-        month = str(period)[-2:]
-        period = f'/month/{year}-{month}'
+
+        period = format_as_url_period(period)
         formatted_periods.append(period)
 
     return formatted_periods
+
+
+def format_as_url_period(period: str) -> str:
+    """
+    Given a period of time formatted as per odata conventions, convert to a full
+    period url as used by pmd4
+    """
+
+    # TODO - this function probably needs to be "convert_to_datetime"
+    year = str(period)[:4]
+    month = str(period)[-2:]
+    period = f'/month/{year}-{month}'
+
+    return period
