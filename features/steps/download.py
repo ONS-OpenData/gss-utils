@@ -42,7 +42,7 @@ def get_fixture(file_name: str) -> Path:
 def step_impl(context, fixture_path: Path):
     context.scraper = Scraper(seed=get_fixture(fixture_path))
 
-@given('And the dataset already exists on target PMD')
+@given('the dataset already exists on target PMD')
 def step_impl(context):
     # TODO - this. for now I'm leaving it to pass trivially
     pass
@@ -58,7 +58,7 @@ def step_impl(context):
 @then('I identify the periods for that dataset on PMD as')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    pmd_periods = list(set(get_pmd_periods(distro).sort()))
+    pmd_periods = list(set(get_pmd_periods(distro)))
     expected_periods = [x.strip() for x in context.text.split(",")]
     assert compare_unordered_lists(pmd_periods, expected_periods), \
         f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'

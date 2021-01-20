@@ -19,6 +19,7 @@ from pathlib import Path
 from gssutils.metadata import DCAT, PROV, ODRL, SPDX
 from gssutils.metadata.base import Metadata, Status
 from gssutils.metadata.mimetype import ExcelTypes, ODS
+from gssutils.utils import pathify
 
 
 class Resource(Metadata):
@@ -265,29 +266,39 @@ def construct_odata_dataframe(distro: Distribution, periods_wanted: list = None)
 def get_pmd_periods(distro: Distribution) -> list:
     """
     Given the downloadURL from the scraper, return a list of periods from pmd4
-    note - when testing with a seed, url here will be the dataURL from the info.json
     """
 
-    dataset = Path(os.path.dirname(os.path.abspath(__file__))).parent.split()[-1]
+    # TODO, think, is this accurate? do we want an explicit info.json field
+    dataset = pathify(distro._seed["title"])
     family = distro._seed['families'][0]
-    # Assumption that no cases of multiple datasets from a single API endpoint, so...
 
-    dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
+    # Assumption that no cases of multiple datasets from a single API endpoint, so...
+    #dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
+    dataset_url = "http://gss-data.org.uk/data/gss_data/covid-19/nrs-deaths-involving-coronavirus-covid-19-in-scotland#dataset"
     endpoint_url = distro._seed['odataConversion']['publishedLocation']
 
-    logging.info('Dataset url is {}'.format(dataset_url))
-    logging.info('SPARQL endpoint is {}'.format(endpoint_url))
-
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?object a qb:DataSet . ?obs qb:dataSet ?obj ; ?p ?period . ?obs dim:refPeriod ?period . FILTER (?obj = <{dataset_url}>) }}'
-    logging.info(f'Query is {query}')
+    query = f"""
+        PREFIX qb: <http://purl.org/linked-data/cube#> 
+        PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> 
+        
+        SELECT DISTINCT ?period WHERE {{ 
+            ?object a qb:DataSet .
+            ?obs qb:dataSet ?obj ; 
+                ?p ?period . 
+            ?obs dim:refPeriod ?period . 
+        FILTER (?obj = <{dataset_url}>) }}
+        """
 
     sparql = SPARQLWrapper(endpoint_url)
-    query = sparql.setQuery(query)
-
+    sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
+
     result = sparql.query().convert()
 
-    return [x['period']['value'] for x in result['results']['bindings']]
+    results = [x['period']['value'] for x in result['results']['bindings']]
+    if len(results) == 0:
+        raise Exception(f'No results returned for SPARQL query:\n\n{query}\n\n against dataset {dataset_url}')
+    return results
 
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_odata_api_periods(distro: Distribution) -> list:
