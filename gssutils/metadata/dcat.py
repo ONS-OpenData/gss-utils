@@ -328,6 +328,6 @@ def format_as_url_period(period: str) -> str:
     # TODO - this function probably needs to be "convert_to_datetime"
     year = str(period)[:4]
     month = str(period)[-2:]
-    period = f'/month/{year}-{month}'
+    period = f'http://reference.data.gov.uk/id/month/{year}-{month}'
 
     return period
