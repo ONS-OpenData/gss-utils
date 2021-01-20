@@ -9,10 +9,10 @@ import xypath.loader
 import os
 import logging
 import requests
+
 from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
 from cachecontrol.heuristics import ExpiresAfter
-
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
@@ -225,15 +225,21 @@ def get_principle_dataframe(distro: Distribution, periods_wanted: list):
     principle_url = distro.downloadURL
     key = distro.info['odatConversion']['periodColumn']
 
+    principle_df = pd.dataframe()
+    df_list = []
+
     if len(periods_wanted) != 0:
         for period in periods_wanted:
             url = f"{principle_url}$filter={key} eq {period}"
-            return _get_odata_data(url)
+            df_list.append(_get_odata_data(url))
+
+        principle_df = pd.concat(df_list)
             
     else: 
         url = principle_url
-        return _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
+        principle_df = _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
 
+    return principle_df
 
 def get_supplimentary_dataframes(distro: Distribution) -> dict:
     """
@@ -246,8 +252,7 @@ def get_supplimentary_dataframes(distro: Distribution) -> dict:
 
     for name, url in sup, sup['endpoint']:
         sup_dfs[name] = _get_odata_data(url)
-        
-    # TODO - everything :)
+
     return sup_dfs
     #return {'key', pd.DataFrame}
 
