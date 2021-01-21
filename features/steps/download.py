@@ -1,6 +1,8 @@
 import json
 import os
 
+import requests
+import vcr
 from behave import *
 from nose.tools import *
 from urllib.parse import urlparse
@@ -11,12 +13,6 @@ from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods, get_p
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
-
-def cassette(uri: str) -> str:
-    host = urlparse(uri).hostname
-    if host in ['www.gss-data.org.uk', '']:
-        return f'features/fixtures/cassettes/{host}.yml'
-    return 'features/fixtures/scrape.yml'
 
 def get_fixture(file_name: str) -> Path:
     """Helper to get specific files out of the fixtures dir"""
@@ -69,10 +65,13 @@ def step_impl(context, name_of_fixture):
 @then('I identify the periods for that dataset on the API as')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    api_periods = list(set(get_odata_api_periods(distro)))
-    expected_periods = [x.strip() for x in context.text.split(",")]
-    assert set(pmd_periods) == set(api_periods), \
-        f'Expecting "{expected_periods}". \nGot "{api_periods}".'
+    with vcr.use_cassette("features/fixtures/cassettes/odate_api.yml",
+                        record_mode=context.config.userdata.get('record_mode',
+                                                                DEFAULT_RECORD_MODE)):
+        api_periods = list(set(get_odata_api_periods(distro)))
+        expected_periods = [x.strip() for x in context.text.split(",")]
+        assert set(api_periods) == set(api_periods), \
+            f'Expecting "{expected_periods}". \nGot "{api_periods}".'
 
 @then('I identify the periods for that dataset on PMD as')
 def step_impl(context):
