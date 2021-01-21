@@ -17,6 +17,7 @@ certifi = "*"
 uritemplate = "*"
 jinja2 = "*"
 sparqlwrapper = "*"
+backoff = "*"
 
 [requires]
 python_version = "3.7"
