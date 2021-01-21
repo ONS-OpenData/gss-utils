@@ -310,24 +310,4 @@ def get_odata_api_periods(distro: Distribution) -> list:
 
     periods = [x["MonthId"] for x in period_dict["value"]]
 
-    formatted_periods = []
-    for period in periods:
-
-        period = format_as_url_period(period)
-        formatted_periods.append(period)
-
-    return formatted_periods
-
-
-def format_as_url_period(period: str) -> str:
-    """
-    Given a period of time formatted as per odata conventions, convert to a full
-    period url as used by pmd4
-    """
-
-    # TODO - this function probably needs to be "convert_to_datetime"
-    year = str(period)[:4]
-    month = str(period)[-2:]
-    period = f'http://reference.data.gov.uk/id/month/{year}-{month}'
-
-    return period
+    return periods
