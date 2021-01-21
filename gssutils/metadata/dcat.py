@@ -217,7 +217,7 @@ def find_missing_periods(odata_api_periods: list, pmd_periods: list) -> list:
     return odata_api_periods
 
 
-def get_principle_dataframe(distro: Distribution, periods_wanted: list):
+def get_principle_dataframe(distro: Distribution, periods_wanted: list = None):
     """
     Given a distribution object and a list of periods of data we want
     return a dataframe
@@ -226,18 +226,15 @@ def get_principle_dataframe(distro: Distribution, periods_wanted: list):
     key = distro.info['odatConversion']['periodColumn']
 
     principle_df = pd.dataframe()
-    df_list = []
 
-    if len(periods_wanted) != 0:
+    if len(periods_wanted) is not None:
         for period in periods_wanted:
             url = f"{principle_url}$filter={key} eq {period}"
-            df_list.append(_get_odata_data(url))
-
-        principle_df = pd.concat(df_list)
+            principle_df = principle_df.append(_get_odata_data(url))
             
     else: 
         url = principle_url
-        principle_df = _get_odata_data(url) # TODO - dont forget we're returning a blank dataframe here!
+        principle_df = _get_odata_data(url)
 
     return principle_df
 
@@ -254,9 +251,13 @@ def get_supplimentary_dataframes(distro: Distribution) -> dict:
         sup_dfs[name] = _get_odata_data(url)
 
     return sup_dfs
-    #return {'key', pd.DataFrame}
 
 def _get_odata_data(url) -> pd.DataFrame():
+
+        #@backoff.on_exception(backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError))
+
+        sess = requests.session()
+        cached_sess = CacheControl(sess, cache=FileCache('.cache'), heuristic=ExpiresAfter(days=7))
 
         page = cached_sess.get(url)
         contents = page.json()
@@ -305,7 +306,7 @@ def get_pmd_periods(distro: Distribution) -> list:
     logging.info('Dataset url is {}'.format(dataset_url))
     logging.info('SPARQL endpoint is {}'.format(endpoint_url))
 
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?object a qb:DataSet . ?obs qb:dataSet ?obj ; ?p ?period . ?obs dim:refPeriod ?period . FILTER (?obj = <{dataset_url}>) }}'
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?v WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?v . }}'
     logging.info(f'Query is {query}')
 
     sparql = SPARQLWrapper(endpoint_url)
