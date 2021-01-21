@@ -86,7 +86,8 @@ Feature: distribution downloading
     Given I scrape the page "https://statswales.gov.wales/Catalogue/Housing/Dwelling-Stock-Estimates/dwellingstockestimates-by-localauthority-tenure"
     And select the distribution whose title starts with "Items"
     Then the data can be downloaded from "http://open.statswales.gov.wales/en-gb/discover/datasetdimensionitems?$filter=Dataset+eq+'hous0501'"
-    
+  
+  @skip
   Scenario: NHS Digital Open data CSV
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-outcomes-framework-ascof"
     When I select the latest dataset whose title starts with "Measures"

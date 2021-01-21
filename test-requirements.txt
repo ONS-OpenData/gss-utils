@@ -1,4 +1,0 @@
-behave
-nose
-vcrpy
-docker
