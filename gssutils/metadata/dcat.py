@@ -268,16 +268,12 @@ def get_pmd_periods(distro: Distribution) -> list:
     Given the downloadURL from the scraper, return a list of periods from pmd4
     """
 
-    # TODO, think, is this accurate? do we want an explicit info.json field
-    dataset = pathify(distro._seed["title"])
-    family = distro._seed['families'][0]
-
     # Assumption that no cases of multiple datasets from a single API endpoint, so...
     dataset_url = distro._seed['odataConversion']['datasetIdentifier']
     endpoint_url = distro._seed['odataConversion']['publishedLocation']
     distro._seed['odataConversion']['datasetIdentifier']
 
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?v WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?v . }}'
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?period . }}'
     logging.info(f'Query is {query}')
 
     sparql = SPARQLWrapper(endpoint_url)

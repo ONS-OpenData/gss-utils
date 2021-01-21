@@ -12,21 +12,6 @@ from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods, get_p
 
 DEFAULT_RECORD_MODE = 'new_episodes'
 
-# TODO - surely there is a pythonic way of doing this?
-def compare_unordered_lists(list1: list, list2: list) -> bool:
-    """
-    Compare two unordered lists, needs to return False where
-    a list is None.
-    """
-    if list1 is None or list2 is None:
-        return False
-    if len(list1) != len(list2):
-        return False
-    for item in list1:
-        if item not in list2:
-            return False
-    return True
-
 def cassette(uri: str) -> str:
     host = urlparse(uri).hostname
     if host in ['www.gss-data.org.uk', '']:
@@ -86,7 +71,7 @@ def step_impl(context):
     distro = context.scraper.distribution(latest=True)
     api_periods = list(set(get_odata_api_periods(distro)))
     expected_periods = [x.strip() for x in context.text.split(",")]
-    assert compare_unordered_lists(api_periods, expected_periods), \
+    assert set(pmd_periods) == set(api_periods), \
         f'Expecting "{expected_periods}". \nGot "{api_periods}".'
 
 @then('I identify the periods for that dataset on PMD as')
@@ -94,7 +79,7 @@ def step_impl(context):
     distro = context.scraper.distribution(latest=True)
     pmd_periods = list(set(get_pmd_periods(distro)))
     expected_periods = [x.strip() for x in context.text.split(",")]
-    assert compare_unordered_lists(pmd_periods, expected_periods), \
+    assert set(pmd_periods) == set(expected_periods), \
         f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
 @then(u'the next period to download is "{period_expected}"')
