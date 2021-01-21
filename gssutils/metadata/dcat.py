@@ -276,7 +276,7 @@ def get_pmd_periods(distro: Distribution) -> list:
     logging.info('Dataset url is {}'.format(dataset_url))
     logging.info('SPARQL endpoint is {}'.format(endpoint_url))
 
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?object a qb:DataSet . ?obs qb:dataSet ?obj ; ?p ?period . ?obs dim:refPeriod ?period . FILTER (?obj = <{dataset_url}>) }}'
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?v WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?v . }}'
     logging.info(f'Query is {query}')
 
     sparql = SPARQLWrapper(endpoint_url)
