@@ -124,11 +124,11 @@ Feature: Create CSVW metadata
 
   Scenario: CSVMetadata from mapping with measure type and unit columns
     Given a CSV file 'observations.csv'
-      | Period  | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          |
-      | 2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  |
-      | 2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  |
-      | 2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | total        | gbp-thousands |
-      | 2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | total        | gbp-thousands |
+      | Period  | Flow    | HMRC Reporter Region | HMRC Partner Geography | SITC 4 | Value | Measure Type | Unit          | Nugatory |
+      | 2018-Q1 | exports | EA                   | A                      | 01     | 2430  | net-mass     | kg-thousands  | yes      |
+      | 2018-Q1 | exports | EA                   | A                      | 02     | 2     | net-mass     | kg-thousands  | yes      |
+      | 2018-Q4 | imports | ZB                   | TR                     | 88     | 10    | total        | gbp-thousands | yes      |
+      | 2018-Q4 | imports | ZB                   | TR                     | 89     | 352   | total        | gbp-thousands | yes      |
     And a column map
     """
     {
@@ -157,7 +157,8 @@ Feature: Create CSVW metadata
       },
       "Value": {
         "datatype": "integer"
-      }
+      },
+      "Nugatory": false
     }
     """
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/hmrc_rts'
