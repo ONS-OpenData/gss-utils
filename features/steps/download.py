@@ -65,9 +65,8 @@ def step_impl(context, name_of_fixture):
 @then('I identify the periods for that dataset on the API as')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    with vcr.use_cassette("features/fixtures/cassettes/odate_api.yml",
-                        record_mode=context.config.userdata.get('record_mode',
-                                                                DEFAULT_RECORD_MODE)):
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                    record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
         api_periods = list(set(get_odata_api_periods(distro)))
         expected_periods = [x.strip() for x in context.text.split(",")]
         assert set(api_periods) == set(api_periods), \
@@ -76,10 +75,12 @@ def step_impl(context):
 @then('I identify the periods for that dataset on PMD as')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    pmd_periods = list(set(get_pmd_periods(distro)))
-    expected_periods = [x.strip() for x in context.text.split(",")]
-    assert set(pmd_periods) == set(expected_periods), \
-        f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
+    with vcr.use_cassette("features/fixtures/cassettes/pmd4.yml",
+                    record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        pmd_periods = list(set(get_pmd_periods(distro)))
+        expected_periods = [x.strip() for x in context.text.split(",")]
+        assert set(pmd_periods) == set(expected_periods), \
+            f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
 @then(u'the next period to download is "{period_expected}"')
 def step_impl(context, period_expected):

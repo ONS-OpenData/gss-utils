@@ -1,0 +1,91 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/sparql-results+json,application/json,text/javascript,application/javascript
+      Connection:
+      - close
+      Host:
+      - staging.gss-data.org.uk
+      User-Agent:
+      - sparqlwrapper 1.8.5 (rdflib.github.io/sparqlwrapper)
+    method: GET
+    uri: https://staging.gss-data.org.uk/sparql?query=PREFIX+qb%3A+%3Chttp%3A//purl.org/linked-data/cube%23%3E+PREFIX+dim%3A+%3Chttp%3A//purl.org/linked-data/sdmx/2009/dimension%23%3E+SELECT+DISTINCT+%3Fperiod+WHERE+%7B+%3Fobs+qb%3AdataSet+%3Chttp%3A//gss-data.org.uk/data/gss_data/covid-19/nrs-deaths-involving-coronavirus-covid-19-in-scotland%23dataset%3E%3B+dim%3ArefPeriod+%3Fperiod+.+%7D&format=json&output=json&results=json
+  response:
+    body:
+      string: "{\n  \"head\" : {\n    \"vars\" : [\n      \"period\"\n    ]\n  },\n
+        \ \"results\" : {\n    \"bindings\" : [\n      {\n        \"period\" : {\n
+        \         \"type\" : \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2019-12-30T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-01-06T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-01-13T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-01-20T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-01-27T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-02-03T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-02-10T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-02-17T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-02-24T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-03-02T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-03-09T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-03-16T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-03-23T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-03-30T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-04-06T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-04-13T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-04-20T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-04-27T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-05-04T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-05-11T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-05-18T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-05-25T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-06-01T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-06-08T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-06-15T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2020-06-22T00:00:00/P1D\"\n
+        \       }\n      },\n      {\n        \"period\" : {\n          \"type\" :
+        \"uri\",\n          \"value\" : \"http://reference.data.gov.uk/id/gregorian-interval/2019-12-30T00:00:00/P175D\"\n
+        \       }\n      }\n    ]\n  }\n}"
+    headers:
+      Alt-Svc:
+      - clear
+      Connection:
+      - close
+      Content-Length:
+      - '4720'
+      Content-Type:
+      - application/sparql-results+json
+      Date:
+      - Fri, 22 Jan 2021 12:14:00 GMT
+      Server:
+      - nginx
+      Via:
+      - 1.1 google
+    status:
+      code: 200
+      message: OK
+version: 1
