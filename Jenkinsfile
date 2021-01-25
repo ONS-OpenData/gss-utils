@@ -5,15 +5,12 @@ pipeline {
     stages {
         stage('Test') {
             agent {
-                docker {
-                    image 'python:3.7'
-                    reuseNode true
-                    alwaysPull true
-                    args '-u root:root -v /tmp/.pipcache:/root/.cache'
+                dockerfile {
+                    args '-u root:root'
                 }
             }
             steps {
-                sh "./test.sh"
+                sh "behave -D record_mode=none --tags=-skip -f json.cucumber -o test-results.json"
             }
         }
     }
