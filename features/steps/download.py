@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 import pandas as pd
 
 from gssutils import *
-from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods, get_principle_dataframe
+from gssutils.transform.download import get_pmd_periods, get_odata_api_periods, get_principle_dataframe
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
