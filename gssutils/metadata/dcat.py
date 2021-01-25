@@ -9,6 +9,8 @@ import xypath.loader
 import os
 import logging
 
+import backoff
+import requests
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
@@ -17,6 +19,7 @@ from pathlib import Path
 from gssutils.metadata import DCAT, PROV, ODRL, SPDX
 from gssutils.metadata.base import Metadata, Status
 from gssutils.metadata.mimetype import ExcelTypes, ODS
+from gssutils.utils import pathify
 
 
 class Resource(Metadata):
@@ -135,7 +138,7 @@ class Distribution(Metadata):
     def __init__(self, scraper):
         super().__init__()
         self._session = scraper.session
-        self._info = scraper.info
+        self._seed = scraper.seed
 
     def __setattr__(self, key, value):
         if key == 'downloadURL':
@@ -165,7 +168,7 @@ class Distribution(Metadata):
 
     def as_pandas(self, **kwargs):
 
-        if "odataConversion" in self.info.keys():
+        if "odataConversion" in self._seed.keys():
             return construct_odata_dataframe(self)
 
         if self.mediaType in ExcelTypes:
@@ -228,7 +231,7 @@ def get_supplimentary_dataframes(distro: Distribution) -> dict:
     Supplement the base datframe with expand and foreign deifnition calls etc
     """
 
-    sup = distro.info['odatConversion']['supplementalEndpoints']
+    sup = distro._seed['odatConversion']['supplementalEndpoints']
 
     for name, url in sup, sup['endpoint']:
         
@@ -263,34 +266,30 @@ def construct_odata_dataframe(distro: Distribution, periods_wanted: list = None)
 def get_pmd_periods(distro: Distribution) -> list:
     """
     Given the downloadURL from the scraper, return a list of periods from pmd4
-    note - when testing with a seed, url here will be the dataURL from the info.json
     """
 
-    dataset = Path(os.path.dirname(os.path.abspath(__file__))).parent.split()[-1]
-    family = distro.info['families'][0]
     # Assumption that no cases of multiple datasets from a single API endpoint, so...
+    dataset_url = distro._seed['odataConversion']['datasetIdentifier']
+    endpoint_url = distro._seed['odataConversion']['publishedLocation']
+    distro._seed['odataConversion']['datasetIdentifier']
 
-    dataset_url = f'http://gss-data.org.uk/data/gss_data/{family}/{dataset}#dataset'
-    endpoint_url = distro.info['odataConversion']['publishedLocation']
-
-    logging.info('Dataset url is {}'.format(dataset_url))
-    logging.info('SPARQL endpoint is {}'.format(endpoint_url))
-
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?v WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?v . }}'
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?period . }}'
     logging.info(f'Query is {query}')
 
     sparql = SPARQLWrapper(endpoint_url)
-    query = sparql.setQuery(query)
-
+    sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
+
     result = sparql.query().convert()
 
     return [x['period']['value'] for x in result['results']['bindings']]
 
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_odata_api_periods(distro: Distribution) -> list:
     """
     Given the downloadURL from the scraper, return a list of periods from the odata api
     """
+
     r = distro._session.get(distro.downloadURL+'$apply=groupby((MonthId))')
     if r.status_code != 200:
         raise Exception(f'failed on url {distro.downloadURL} with code {r.status_code}')
@@ -298,13 +297,4 @@ def get_odata_api_periods(distro: Distribution) -> list:
 
     periods = [x["MonthId"] for x in period_dict["value"]]
 
-    formatted_periods = []
-    for period in periods:
-        
-        # format as per pmd
-        year = str(period)[:4]
-        month = str(period)[-2:]
-        period = f'/month/{year}-{month}'
-        formatted_periods.append(period)
-
-    return formatted_periods
+    return periods

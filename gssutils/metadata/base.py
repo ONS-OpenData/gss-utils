@@ -18,7 +18,7 @@ class Status(Enum):
 
 class Metadata:
 
-    _core_properties = ['uri', '_uri', '_graph']
+    _core_properties = ['uri', '_uri', '_graph', '_seed']
     _properties_metadata = {
         'label': (RDFS.label, Status.mandatory, lambda s: Literal(s, 'en')),
         'comment': (RDFS.comment, Status.mandatory, lambda s: Literal(s, 'en'))
@@ -27,6 +27,7 @@ class Metadata:
     def __init__(self):
         self._uri: Identifier = BNode()
         self._graph: Identifier = BNode()
+        self._seed: dict = None
 
     @property
     def uri(self):
