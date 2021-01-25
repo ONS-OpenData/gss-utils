@@ -1,5 +1,5 @@
 Pipfile.lock: Pipfile
-	$(eval CID := $(shell docker run -dit --rm python:3.9))
+	$(eval CID := $(shell docker run -dit --rm python:3.8))
 	docker cp Pipfile $(CID):/Pipfile
 	docker cp setup.py $(CID):/setup.py
 	docker exec $(CID) pip install pipenv
