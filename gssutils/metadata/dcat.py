@@ -102,14 +102,6 @@ class CatalogRecord(Metadata):
     })
 
 
-class FormatError(Exception):
-    """ Raised when the available file format can't be used
-    """
-
-    def __init__(self, message):
-        self.message = message
-
-
 class Distribution(Metadata):
 
     _core_properties = Metadata._core_properties + ['_session']

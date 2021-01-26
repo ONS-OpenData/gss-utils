@@ -9,7 +9,8 @@ from urllib.parse import urlparse
 import pandas as pd
 
 from gssutils import *
-from gssutils.transform.download import get_pmd_periods, get_odata_api_periods, get_principle_dataframe
+from gssutils.transform.download import get_pmd_periods, get_odata_api_periods, get_principle_dataframe, \
+                    get_supplementary_dataframes, merge_principle_supplementary_dataframes
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
@@ -49,12 +50,16 @@ def step_impl(context):
 @given('fetch the initial data from the API endpoint')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    context.df = get_principle_dataframe(distro, periods_wanted=context.required_periods)
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.df = get_principle_dataframe(distro, periods_wanted=context.required_periods)
 
 @given('fetch the supplementary data from the API endpoint')
 def step_impl(context):
-    # TODO - this
-    pass
+    distro = context.scraper.distribution(latest=True)
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.supplementary_datasets = get_supplementary_dataframes(distro)
 
 @then('the data is equal to "{name_of_fixture}"')
 def step_impl(context, name_of_fixture):
@@ -82,6 +87,18 @@ def step_impl(context):
         assert set(pmd_periods) == set(expected_periods), \
             f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
-@then(u'the next period to download is "{period_expected}"')
-def step_impl(context, period_expected):
-    raise NotImplementedError(f'STEP: Then the next period to download is "{period_expected}"')
+@then('the names and dataframes returned equate to')
+def step_impl(context):
+    for row in context.table:
+        key = row[0]
+        fixture_name = row[1]
+
+        df_got = context.supplementary_datasets[key]
+        df_expected = pd.read_csv(get_fixture(fixture_name))
+        
+        assert df_expected == context.supplementary_datasets[key], \
+            f'Data for "{key}" does not match expected. Got \n"{df_got}"\n, but expected \n"{df_expected}"\n.'
+    
+@then(u'I merge the dataframes based on primary keys')
+def step_impl(context):
+    context.df_merged = merge_principle_supplementary_dataframes(context.df, context.supplementary_datasets)

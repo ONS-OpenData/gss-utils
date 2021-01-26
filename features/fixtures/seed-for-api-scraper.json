@@ -4,7 +4,7 @@
   "description": "",
   "landingPage": "https://www.uktradeinfo.com/trade-data/regional/",
   "published": "2019-12-05",
-  "dataURL": "https://api.uktradeinfo.com/RTS?fake=.csv",
+  "dataURL": "https://api.uktradeinfo.com/RTS",
   "families": [
       "Trade"
   ],

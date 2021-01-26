@@ -1,6 +1,8 @@
 
 from io import BytesIO
+import json
 
+import pyexcel
 import xypath
 import messytables
 import requests
@@ -8,8 +10,19 @@ import backoff
 import pandas as pd
 import logging
 from SPARQLWrapper import SPARQLWrapper, JSON
+from cachecontrol import CacheControl, serialize
+from cachecontrol.caches.file_cache import FileCache
+from cachecontrol.heuristics import LastModified, ExpiresAfter
 
 from gssutils.metadata.mimetype import ExcelTypes, ODS
+
+class FormatError(Exception):
+    """ Raised when the available file format can't be used
+    """
+
+    def __init__(self, message):
+        self.message = message
+
 
 def get_simple_databaker_tabs(distro, **kwargs):
     """
@@ -72,86 +85,100 @@ def get_simple_csv_pandas(distro, **kwargs):
     raise FormatError(f'Unable to load {distro.mediaType} into Pandas DataFrame.')
 
 
-def find_missing_periods(odata_api_periods: list, pmd_periods: list) -> list:
-    """
-    Given two lists, one of periods from the odata api, another of periods
-    from pmd. Return items that are on the api but not pmd.
-    """
-    
-    # TODO - this function! returning everything for now
-    return odata_api_periods
-
-
 def get_principle_dataframe(distro, periods_wanted: list = None):
     """
     Given a distribution object and a list of periods of data we want
     return a dataframe
     """
     principle_url = distro.downloadURL
-    key = distro.info['odatConversion']['periodColumn']
+    key = distro._seed['odataConversion']['periodColumn']
 
-    principle_df = pd.dataframe()
+    principle_df = pd.DataFrame()
 
     if len(periods_wanted) is not None:
         for period in periods_wanted:
-            url = f"{principle_url}$filter={key} eq {period}"
-            principle_df = principle_df.append(_get_odata_data(url))
+            url = f"{principle_url}?$filter={key} eq {period}"
+            principle_df = principle_df.append(_get_odata_data(distro, url))
             
     else: 
         url = principle_url
-        principle_df = _get_odata_data(url)
+        principle_df = _get_odata_data(distro, url)
 
     return principle_df
 
-def get_supplimentary_dataframes(distro) -> dict:
+def get_supplementary_dataframes(distro) -> dict:
     """
     Supplement the base dataframe with expand and foreign deifnition calls etc
     """
 
-    sup = distro.info['odatConversion']['supplementalEndpoints']
+    sup = distro._seed['odataConversion']['supplementalEndpoints']
     
     sup_dfs = {}
 
-    for name, url in sup, sup['endpoint']:
-        sup_dfs[name] = _get_odata_data(url)
+    # use the longer session cache
+    long_cache = get_long_cache_session(distro)
+
+    for name, sup_dict in sup.items():
+        sup_dfs[name] = _get_odata_data(distro, sup_dict["endpoint"], session=long_cache)
 
     return sup_dfs
 
-def _get_odata_data(url) -> pd.DataFrame():
+def get_long_cache_session(distro):
+    """
+    Get or create a 2nd, longer living cache session
+    """
+    long_cache = CacheControl(requests.Session(),
+                            cache=FileCache('.cache2'),
+                            heuristic=LastModified())
+    return long_cache
 
-        #@backoff.on_exception(backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError))
 
-        sess = requests.session()
-        cached_sess = CacheControl(sess, cache=FileCache('.cache'), heuristic=ExpiresAfter(days=7))
+@backoff.on_exception(backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError))
+def _get_odata_data(distro, url, session=None) -> pd.DataFrame():
 
-        page = cached_sess.get(url)
-        contents = page.json()
+        # If explicitly passed a session use it, otherwise use the default scraper one
+        this_session = session if session is not None else distro._session
+
+        r = this_session.get(url)
+        logging.info("Trying url: " + url)
+        if r.status_code != 200:
+            raise Exception(f'Failed to get data from {url} with status code {r.status_code}')
+
+        contents = r.json()
         df = pd.DataFrame(contents['value'])
-        # print('Fetching data from {url}.'.format(url=page.url))
         while '@odata.nextLink' in contents.keys():
-            # print('Fetching more data from {url}.'.format(url=contents['@odata.nextLink']))
-            page = cached_sess.get(contents['@odata.nextLink'])
+            page = this_session.get(contents['@odata.nextLink'])
             contents = page.json()
             df = df.append(pd.DataFrame(contents['value']))
         return df
+
+def merge_principle_supplementary_dataframes(principle_df, supplementary_df_dict):
+    """
+    Given a principle odata datframe and a dictionary of supplementary dataframes, merge the
+    supplementary data into the principle dataframe. 
+    """
+
+    # TODO - merge in the supplementary data
+
+    return principle_df
 
 def construct_odata_dataframe(distro, periods_wanted: list = None):
     """
     Construct a dataframe via a series of api calls.
     """
 
-    # Unless periods have been explicitly requested, use PMD and the odataAPI to
-    # work out what periods of data we want
+    # Confirm we've been given the required periods
     if periods_wanted is None:
-        pmd_periods = get_pmd_periods(distro)
-        odata_api_periods = get_odata_api_periods(distro)
-        periods_wanted = find_missing_periods(odata_api_periods, pmd_periods)
-
+        raise Exception('When constructing an odata dataset, you need to pass in a "periods_wanted" keyword argument')
+ 
     # use those periods to construct the principle dataframe
-    df = get_principle_dataframe(distro.downloadURL, periods_wanted)
+    priciple_df = get_principle_dataframe(distro.downloadURL, periods_wanted)
 
     # expand this dataframe with supplementary data
-    df = get_supplimentary_dataframes(distro)
+    supplementary_df_dict = get_supplementary_dataframes(distro)
+
+    # merge the principle and supplementary datasets
+    df = merge_principle_supplementary_dataframes(priciple_df, supplementary_df_dict)
 
     return df
 
