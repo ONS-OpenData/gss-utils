@@ -10,12 +10,14 @@ import os
 import logging
 import requests
 
-import backoff
-import requests
+from cachecontrol import CacheControl
+from cachecontrol.caches.file_cache import FileCache
+from cachecontrol.heuristics import ExpiresAfter
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
 from pathlib import Path
+import backoff
 
 from gssutils.metadata import DCAT, PROV, ODRL, SPDX
 from gssutils.metadata.base import Metadata, Status
