@@ -9,7 +9,8 @@ from urllib.parse import urlparse
 import pandas as pd
 
 from gssutils import *
-from gssutils.metadata.dcat import get_pmd_periods, get_odata_api_periods, get_principle_dataframe
+from gssutils.transform.download import get_pmd_periods, get_odata_api_periods, get_principle_dataframe, \
+                    get_supplementary_dataframes, merge_principle_supplementary_dataframes
 
 
 DEFAULT_RECORD_MODE = 'new_episodes'
@@ -22,7 +23,9 @@ def get_fixture(file_name: str) -> Path:
 
 @given('I scrape datasets using info.json "{fixture_path}"')
 def step_impl(context, fixture_path: Path):
-    context.scraper = Scraper(seed=get_fixture(fixture_path))
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.scraper = Scraper(seed=get_fixture(fixture_path))
 
 @given('the dataset already exists on target PMD')
 def step_impl(context):
@@ -49,18 +52,22 @@ def step_impl(context):
 @given('fetch the initial data from the API endpoint')
 def step_impl(context):
     distro = context.scraper.distribution(latest=True)
-    context.df = get_principle_dataframe(distro, periods_wanted=context.required_periods)
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.df = get_principle_dataframe(distro, periods_wanted=context.required_periods)
 
 @given('fetch the supplementary data from the API endpoint')
 def step_impl(context):
-    # TODO - this
-    pass
+    distro = context.scraper.distribution(latest=True)
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.supplementary_datasets = get_supplementary_dataframes(distro)
 
 @then('the data is equal to "{name_of_fixture}"')
 def step_impl(context, name_of_fixture):
     df = pd.read_csv(get_fixture(name_of_fixture))
     assert df.equals(context.df), \
-        f"Data retrieved does not match data expected. Expected:\n {context.df}\v\nGot:\n{df}"
+        f"Data retrieved does not match data expected. Expected:\n {df}\v\nGot:\n{context.df}"
 
 @then('I identify the periods for that dataset on the API as')
 def step_impl(context):
@@ -68,8 +75,8 @@ def step_impl(context):
     with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
                     record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
         api_periods = list(set(get_odata_api_periods(distro)))
-        expected_periods = [x.strip() for x in context.text.split(",")]
-        assert set(api_periods) == set(api_periods), \
+        expected_periods = [int(x.strip()) for x in context.text.split(",")]
+        assert set(api_periods) == set(expected_periods), \
             f'Expecting "{expected_periods}". \nGot "{api_periods}".'
 
 @then('I identify the periods for that dataset on PMD as')
@@ -82,6 +89,18 @@ def step_impl(context):
         assert set(pmd_periods) == set(expected_periods), \
             f'Expecting "{expected_periods}". \nGot "{pmd_periods}".'
 
-@then(u'the next period to download is "{period_expected}"')
-def step_impl(context, period_expected):
-    raise NotImplementedError(f'STEP: Then the next period to download is "{period_expected}"')
+@then('the names and dataframes returned equate to')
+def step_impl(context):
+    for row in context.table:
+        key = row[0]
+        fixture_name = row[1]
+
+        df_got = context.supplementary_datasets[key]
+        df_expected = pd.read_csv(get_fixture(fixture_name))
+        
+        assert df_expected.equals(context.supplementary_datasets[key]), \
+            f'Data for "{key}" does not match expected. Got \n"{df_got}"\n, but expected \n"{df_expected}"\n.'
+    
+@then(u'I merge the dataframes based on primary keys')
+def step_impl(context):
+    context.df_merged = merge_principle_supplementary_dataframes(context.df, context.supplementary_datasets)
