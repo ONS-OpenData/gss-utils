@@ -209,7 +209,7 @@ def get_odata_api_periods(distro) -> list:
     Given the downloadURL from the scraper, return a list of periods from the odata api
     """
 
-    r = distro._session.get(distro.downloadURL+'$apply=groupby((MonthId))')
+    r = distro._session.get(distro.downloadURL+'?$apply=groupby((MonthId))')
     if r.status_code != 200:
         raise Exception(f'failed on url {distro.downloadURL} with code {r.status_code}')
     period_dict = r.json()

@@ -23,7 +23,9 @@ def get_fixture(file_name: str) -> Path:
 
 @given('I scrape datasets using info.json "{fixture_path}"')
 def step_impl(context, fixture_path: Path):
-    context.scraper = Scraper(seed=get_fixture(fixture_path))
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
+                record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
+        context.scraper = Scraper(seed=get_fixture(fixture_path))
 
 @given('the dataset already exists on target PMD')
 def step_impl(context):
@@ -65,7 +67,7 @@ def step_impl(context):
 def step_impl(context, name_of_fixture):
     df = pd.read_csv(get_fixture(name_of_fixture))
     assert df.equals(context.df), \
-        f"Data retrieved does not match data expected. Expected:\n {context.df}\v\nGot:\n{df}"
+        f"Data retrieved does not match data expected. Expected:\n {df}\v\nGot:\n{context.df}"
 
 @then('I identify the periods for that dataset on the API as')
 def step_impl(context):
@@ -73,8 +75,8 @@ def step_impl(context):
     with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
                     record_mode=context.config.userdata.get('record_mode','DEFAULT_RECORD_MODE')):
         api_periods = list(set(get_odata_api_periods(distro)))
-        expected_periods = [x.strip() for x in context.text.split(",")]
-        assert set(api_periods) == set(api_periods), \
+        expected_periods = [int(x.strip()) for x in context.text.split(",")]
+        assert set(api_periods) == set(expected_periods), \
             f'Expecting "{expected_periods}". \nGot "{api_periods}".'
 
 @then('I identify the periods for that dataset on PMD as')
@@ -96,7 +98,7 @@ def step_impl(context):
         df_got = context.supplementary_datasets[key]
         df_expected = pd.read_csv(get_fixture(fixture_name))
         
-        assert df_expected == context.supplementary_datasets[key], \
+        assert df_expected.equals(context.supplementary_datasets[key]), \
             f'Data for "{key}" does not match expected. Got \n"{df_got}"\n, but expected \n"{df_expected}"\n.'
     
 @then(u'I merge the dataframes based on primary keys')
