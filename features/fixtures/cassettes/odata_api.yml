@@ -44046,4 +44046,105 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://api.uktradeinfo.com/RTS?$filter=MonthId%20eq%20%5B'201901'%5D
+  response:
+    body:
+      string: '{"error":{"code":"","message":"The query specified in the URI is not
+        valid. A binary operator with incompatible types was detected. Found operand
+        types ''Edm.Int32'' and ''Edm.String'' for operator kind ''Equal''."}}'
+    headers:
+      Access-Control-Expose-Headers:
+      - Request-Context
+      Cache-Control:
+      - no-cache
+      Content-Length:
+      - '210'
+      Content-Type:
+      - application/json; odata.metadata=minimal; odata.streaming=true
+      Date:
+      - Wed, 27 Jan 2021 17:14:54 GMT
+      Expires:
+      - '-1'
+      OData-Version:
+      - '4.0'
+      Pragma:
+      - no-cache
+      Request-Context:
+      - appId=cid-v1:59e7e043-1220-455e-98c1-fd590dd50699
+      X-Azure-Ref:
+      - 0jJ8RYAAAAADgvaM5sg7dRr0LDShlN3lbTUFOMzBFREdFMDMwNwA5MGUzOThkOS02NGU2LTRlNTYtYjc0Yi1lNTRkZGNhYjNmZjQ=
+      X-Azure-Ref-OriginShield:
+      - 0jJ8RYAAAAAD+AiGcVELnTbh887PBnAdGTE9OMjFFREdFMDIyMQA5MGUzOThkOS02NGU2LTRlNTYtYjc0Yi1lNTRkZGNhYjNmZjQ=
+      X-Cache:
+      - TCP_MISS
+    status:
+      code: 400
+      message: Bad Request
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      If-None-Match:
+      - 344a7e4fb85b58784a4872c9e08c302c4562872f--gzip
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/file?uri=%2Feconomy%2Fnationalaccounts%2Fbalanceofpayments%2Fdatasets%2Fbalanceofpaymentsstatisticalbulletintables%2Fcurrent/balanceofpayments2020q1.xls
+  response:
+    body:
+      string: ''
+    headers:
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - REVALIDATED
+      CF-RAY:
+      - 618464901dc5e64c-LHR
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - attachment; filename="balanceofpayments2020q1.xls"
+      Date:
+      - Wed, 27 Jan 2021 18:03:51 GMT
+      Etag:
+      - 344a7e4fb85b58784a4872c9e08c302c4562872f--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cfduid=d3b431efdcc033c0a30934c58ddf817c21611770631; expires=Fri, 26-Feb-21
+        18:03:51 GMT; path=/; domain=.ons.gov.uk; HttpOnly; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 07e69d2e130000e64c1e3ac000000001
+    status:
+      code: 304
+      message: Not Modified
 version: 1

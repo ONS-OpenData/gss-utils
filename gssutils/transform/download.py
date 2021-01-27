@@ -1,4 +1,3 @@
-
 from io import BytesIO
 import json
 
@@ -85,21 +84,25 @@ def get_simple_csv_pandas(distro, **kwargs):
     raise FormatError(f'Unable to load {distro.mediaType} into Pandas DataFrame.')
 
 
-def get_principle_dataframe(distro, periods_wanted: list = None):
+def get_principle_dataframe(distro, chunks_wanted: list = None):
     """
-    Given a distribution object and a list of periods of data we want
+    Given a distribution object and a list of chunks of data we want
     return a dataframe
     """
     principle_url = distro.downloadURL
-    key = distro._seed['odataConversion']['periodColumn']
+    key = distro._seed['odataConversion']['chunkColumn']
 
     principle_df = pd.DataFrame()
 
-    if len(periods_wanted) is not None:
-        for period in periods_wanted:
-            url = f"{principle_url}?$filter={key} eq {period}"
+    if chunks_wanted is not None:
+        if type(chunks_wanted) is list:
+            for chunk in chunks_wanted:
+                url = f"{principle_url}?$filter={key} eq {chunk}"
+                principle_df = principle_df.append(_get_odata_data(distro, url))
+        else:
+            chunk = str(chunks_wanted)
+            url = f"{principle_url}?$filter={key} eq {chunk}"
             principle_df = principle_df.append(_get_odata_data(distro, url))
-            
     else: 
         url = principle_url
         principle_df = _get_odata_data(distro, url)
@@ -152,47 +155,59 @@ def _get_odata_data(distro, url, session=None) -> pd.DataFrame():
             df = df.append(pd.DataFrame(contents['value']))
         return df
 
-def merge_principle_supplementary_dataframes(principle_df, supplementary_df_dict):
+def merge_principle_supplementary_dataframes(distro, principle_df, supplementary_df_dict):
     """
     Given a principle odata datframe and a dictionary of supplementary dataframes, merge the
     supplementary data into the principle dataframe. 
     """
 
-    # TODO - merge in the supplementary data
+    sup = distro._seed['odataConversion']['supplementalEndpoints']
+
+    for df_name, attributes in sup.items():
+        primaryKey = attributes['primaryKey']
+        foreignKey = attributes['foreignKey']
+
+        principle_df = pd.merge(principle_df, supplementary_df_dict[df_name], how='left',
+                                left_on=foreignKey, right_on=primaryKey)
 
     return principle_df
 
-def construct_odata_dataframe(distro, periods_wanted: list = None):
+def construct_odata_dataframe(distro, chunks_wanted: list = None):
     """
     Construct a dataframe via a series of api calls.
     """
 
-    # Confirm we've been given the required periods
-    if periods_wanted is None:
-        raise Exception('When constructing an odata dataset, you need to pass in a "periods_wanted" keyword argument')
+    # Confirm we've been given the required chunks
+    if chunks_wanted is None:
+        raise Exception('When constructing an odata dataset, you need to pass in a "chunks_wanted" keyword argument')
  
-    # use those periods to construct the principle dataframe
-    priciple_df = get_principle_dataframe(distro.downloadURL, periods_wanted)
+    # use those chunks to construct the principle dataframe
+    priciple_df = get_principle_dataframe(distro, chunks_wanted)
 
     # expand this dataframe with supplementary data
     supplementary_df_dict = get_supplementary_dataframes(distro)
 
     # merge the principle and supplementary datasets
-    df = merge_principle_supplementary_dataframes(priciple_df, supplementary_df_dict)
+    df = merge_principle_supplementary_dataframes(distro, priciple_df, supplementary_df_dict)
 
     return df
 
-def get_pmd_periods(distro) -> list:
+def get_pmd_chunks(distro) -> list:
     """
-    Given the downloadURL from the scraper, return a list of periods from pmd4
+    Given the downloadURL from the scraper, return a list of chunks from pmd4
     """
 
     # Assumption that no cases of multiple datasets from a single API endpoint, so...
     dataset_url = distro._seed['odataConversion']['datasetIdentifier']
     endpoint_url = distro._seed['odataConversion']['publishedLocation']
+    print (distro._seed['odataConversion'])
+    chunkDimension = distro._seed['odataConversion']['chunkDimension']
+    print(distro._seed['odataConversion'].keys())
     distro._seed['odataConversion']['datasetIdentifier']
 
-    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?period WHERE {{ ?obs qb:dataSet <{dataset_url}>; dim:refPeriod ?period . }}'
+
+
+    query = f'PREFIX qb: <http://purl.org/linked-data/cube#> PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#> SELECT DISTINCT ?chunk WHERE {{ ?obs qb:dataSet <{dataset_url}>; {chunkDimension} ?chunk . }}'
     logging.info(f'Query is {query}')
 
     sparql = SPARQLWrapper(endpoint_url)
@@ -201,19 +216,19 @@ def get_pmd_periods(distro) -> list:
 
     result = sparql.query().convert()
 
-    return [x['period']['value'] for x in result['results']['bindings']]
+    return [x['chunk']['value'] for x in result['results']['bindings']]
 
 @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
-def get_odata_api_periods(distro) -> list:
+def get_odata_api_chunks(distro) -> list:
     """
-    Given the downloadURL from the scraper, return a list of periods from the odata api
+    Given the downloadURL from the scraper, return a list of chunks from the odata api
     """
 
     r = distro._session.get(distro.downloadURL+'?$apply=groupby((MonthId))')
     if r.status_code != 200:
         raise Exception(f'failed on url {distro.downloadURL} with code {r.status_code}')
-    period_dict = r.json()
+    chunk_dict = r.json()
 
-    periods = [x["MonthId"] for x in period_dict["value"]]
+    chunks = [x["MonthId"] for x in chunk_dict["value"]]
 
-    return periods
+    return chunks

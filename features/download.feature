@@ -14,14 +14,15 @@ Feature: Download Source data
         # TODO - create a backlog item
         # Scenario: Download an ods file as databaker
 
-        Scenario: ApiScraper - Establish existing dataset periods on PMD4
+        Scenario: ApiScraper - Establish existing dataset chunks on PMD4
             # Note:
             # Bit of a bodge as we don't currently have a datasets on PMD4 that's sourced
             # from an odata API via the APIScraper, so we're use a pre-existing PMD4 dataset
-            # for an isolated test scenario of the period get functionality.
+            # for an isolated test scenario of the chunk get functionality.
             Given I scrape datasets using info.json "seed-for-api-scraper-pmd4.json"
+            And I select the latest distribution as the distro
             And the dataset already exists on target PMD
-            Then I identify the periods for that dataset on PMD as
+            Then I identify the chunks for that dataset on PMD as
             """
             http://reference.data.gov.uk/id/gregorian-interval/2020-05-04T00:00:00/P1D, 
             http://reference.data.gov.uk/id/gregorian-interval/2020-04-20T00:00:00/P1D, 
@@ -52,9 +53,10 @@ Feature: Download Source data
             http://reference.data.gov.uk/id/gregorian-interval/2020-04-13T00:00:00/P1D
             """
 
-        Scenario: ApiScraper - Establish existing dataset periods on the API
+        Scenario: ApiScraper - Establish existing dataset chunks on the API
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
-            Then I identify the periods for that dataset on the API as
+            And I select the latest distribution as the distro
+            Then I identify the chunks for that dataset on the API as
             """
             201601, 201604, 201607, 201610, 202001, 202004, 202007, 201501, 201504, 201507, 
             201510, 201901, 201904, 201907, 201910, 201401, 201404, 201407, 201410, 201801,
@@ -63,37 +65,49 @@ Feature: Download Source data
             """
 
         # download specific chunks of main dataset
-        Scenario: ApiScraper - Download a period of data
+        Scenario: ApiScraper - Download a chunk of data
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
-            And specify the required periods as
+            And I select the latest distribution as the distro
+            And I specify the chunk column as "MonthId"
+            And I specify the required chunk as
             """
             201901
             """
             # TODO - next line currently passing trivially
             And caching is set to "<a caching short heuristic>"
             And fetch the initial data from the API endpoint
-            Then the data is equal to "odata_expected_api_data.csv"
+            Then the row count is "102377"
+            And the column count is "7"
+            And the chunk column only contains the required chunks
+
 
         # download supplimentary datasets
-        Scenario: ApiScraper - Download supplementary data as dictionary of 
+        Scenario: ApiScraper - Download supplementary data as dictionary
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
+            And I select the latest distribution as the distro
             And fetch the supplementary data from the API endpoint
             And caching is set to "<a caching long heuristic>"
-            Then the names and dataframes returned equate to
-                | keys                  | value                                 |
-                | FlowType              | odata_FlowType_fixture.csv            |
-                | GovRegionId           | odata_GovRegionId_fixture.csv         |
-                | CountryId             | odata_CountryId_fixture.csv           |
-                | CommoditySitc2Id      | odata_CommoditySitc2Id_fixture.csv    |
+            Then the names and sizes equate to
+                | keys      | value   |
+                | FlowType  | 4,3     |
+                | Region    | 14,5    |
+                | Country   | 262,15  |
+                | SITC      | 3593,11 |
 
         # merge supplimentary data to main dataset
         Scenario: ApiScraper - Merge dataframes based on primary keys within info.json
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
-            And specify the required periods as
+            And I select the latest distribution as the distro
+            And I specify the required chunk as
             """
             201901
             """
             And fetch the initial data from the API endpoint
             And fetch the supplementary data from the API endpoint
             Then I merge the dataframes based on primary keys
-            And the data is equal to "odata_api_expected_final_output.csv"
+            And the merged row count is "102377"
+            And the merged column count is "39"
+            And the sum of the value columns equate to
+                | column   | total           |
+                | Value    | 218273029127.0  |
+                | NetMass  | 115815781301.0  |

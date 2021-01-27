@@ -20,24 +20,26 @@
   },
   "odataConversion": {
       "publishedLocation": "https://staging.gss-data.org.uk/sparql",
-      "periodColumn": "MonthId",
+      "datasetIdentifier": "http://gss-data.org.uk/data/gss_data/trade/hmrc-ots#dataset",
+      "chunkColumn": "MonthId",
+      "chunkDimension": "dim:refPeriod",
       "supplementalEndpoints": {
           "FlowType": {
               "endpoint": "https://api.uktradeinfo.com/FlowType",
               "primaryKey": "FlowTypeId",
               "foreignKey": "FlowTypeId"
           },
-          "GovRegionId": {
+          "Region": {
               "endpoint": "https://api.uktradeinfo.com/Region",
               "primaryKey": "RegionId",
               "foreignKey": "GovRegionId"
           }, 
-          "CountryId": {
+          "Country": {
               "endpoint": "https://api.uktradeinfo.com/Country",
               "primaryKey": "CountryId",
               "foreignKey": "CountryId"
           },
-          "CommoditySitc2Id": {
+          "SITC": {
               "endpoint": "https://api.uktradeinfo.com/SITC",
               "primaryKey": "CommoditySitcId",
               "foreignKey": "CommoditySitc2Id"
