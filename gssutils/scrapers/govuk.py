@@ -269,7 +269,7 @@ def eth_facts_service(scraper, tree):
         distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
         distribution.issued = scraper.dataset.issued
         distribution.modified = scraper.dataset.modified
-        fileType = re.search('\(([^)]+)', str(tree.xpath("//*[@id='main-content']/div[17]/div/div[1]/div[4]/div[4]/a/text()"))).group(1)
+        fileType = re.search('\(([^)]+)', str(tree.xpath("//*//*[@itemtype='http://schema.org/DataDownload']/a/text()"))).group(1)
 
         distribution.mediaType = {
             'csv': 'text/csv',
