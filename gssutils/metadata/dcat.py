@@ -151,7 +151,8 @@ class Distribution(Metadata):
 
     def as_pandas(self, **kwargs):
 
-        if "odataConversion" in self._seed.keys():
-            return construct_odata_dataframe(self, **kwargs)
+        if self._seed is not None:
+            if "odataConversion" in self._seed.keys():
+                return construct_odata_dataframe(self, **kwargs)
             
         return get_simple_csv_pandas(self, **kwargs)
