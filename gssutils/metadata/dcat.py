@@ -4,7 +4,7 @@ from rdflib.namespace import DCTERMS, FOAF
 
 from gssutils.metadata import DCAT, PROV, ODRL
 from gssutils.metadata.base import Metadata, Status
-from gssutils.transform.download import construct_odata_dataframe, \ 
+from gssutils.transform.download import construct_odata_dataframe, \
         get_simple_csv_pandas, get_simple_databaker_tabs
 
 
