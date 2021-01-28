@@ -1,29 +1,11 @@
-import json
-from io import BytesIO
 
-import datetime
-import messytables
-import pandas as pd
-import pyexcel
-import xypath.loader
-import os
-import logging
-import requests
-
-from cachecontrol import CacheControl
-from cachecontrol.caches.file_cache import FileCache
-from cachecontrol.heuristics import ExpiresAfter
-from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
-from pathlib import Path
-import backoff
 
-from gssutils.metadata import DCAT, PROV, ODRL, SPDX
+from gssutils.metadata import DCAT, PROV, ODRL
 from gssutils.metadata.base import Metadata, Status
-from gssutils.metadata.mimetype import ExcelTypes, ODS
-from gssutils.transform.download import construct_odata_dataframe, get_simple_csv_pandas, get_simple_databaker_tabs
-from gssutils.utils import pathify
+from gssutils.transform.download import construct_odata_dataframe, \
+        get_simple_csv_pandas, get_simple_databaker_tabs
 
 
 class Resource(Metadata):

@@ -1,17 +1,17 @@
 from io import BytesIO
 import json
 
+import logging
 import pyexcel
 import xypath
 import messytables
 import requests
 import backoff
 import pandas as pd
-import logging
 from SPARQLWrapper import SPARQLWrapper, JSON
-from cachecontrol import CacheControl, serialize
+from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
-from cachecontrol.heuristics import LastModified, ExpiresAfter
+from cachecontrol.heuristics import ExpiresAfter
 
 from gssutils.metadata.mimetype import ExcelTypes, ODS
 
@@ -118,31 +118,15 @@ def get_supplementary_dataframes(distro) -> dict:
     
     sup_dfs = {}
 
-    # use the longer session cache
-    long_cache = get_long_cache_session(distro)
-
     for name, sup_dict in sup.items():
-        sup_dfs[name] = _get_odata_data(distro, sup_dict["endpoint"], session=long_cache)
+        sup_dfs[name] = _get_odata_data(distro, sup_dict["endpoint"])
 
     return sup_dfs
 
-def get_long_cache_session(distro):
-    """
-    Get or create a 2nd, longer living cache session
-    """
-    long_cache = CacheControl(requests.Session(),
-                            cache=FileCache('.cache2'),
-                            heuristic=LastModified())
-    return long_cache
-
-
 @backoff.on_exception(backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError))
-def _get_odata_data(distro, url, session=None) -> pd.DataFrame():
+def _get_odata_data(distro, url) -> pd.DataFrame():
 
-        # If explicitly passed a session use it, otherwise use the default scraper one
-        this_session = session if session is not None else distro._session
-
-        r = this_session.get(url)
+        r = distro._session.get(url)
         logging.info("Trying url: " + url)
         if r.status_code != 200:
             raise Exception(f'Failed to get data from {url} with status code {r.status_code}')
@@ -150,7 +134,7 @@ def _get_odata_data(distro, url, session=None) -> pd.DataFrame():
         contents = r.json()
         df = pd.DataFrame(contents['value'])
         while '@odata.nextLink' in contents.keys():
-            page = this_session.get(contents['@odata.nextLink'])
+            page = distro._session.get(contents['@odata.nextLink'])
             contents = page.json()
             df = df.append(pd.DataFrame(contents['value']))
         return df
