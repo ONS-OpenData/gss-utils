@@ -5,10 +5,15 @@ from urllib.parse import urljoin, urlparse
 
 from lxml import html
 
+from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import ODS, PDF
 from gssutils.metadata.pmdcat import Dataset
+from dateutil.parser import parse
+from gssutils.metadata.mimetype import *
+import re
 
+ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
 def content_api(scraper, tree):
     final_url = False
@@ -249,3 +254,34 @@ def content_api_sds(scraper, metadata):
                                 dist.byteSize = int(float(size[:-2]) * 1000000)
                     ds.distribution.append(dist)
                 scraper.catalog.dataset.append(ds)
+
+def eth_facts_service(scraper, tree):
+
+    scraper.dataset.publisher = GOV['department-for-education']
+    scraper.dataset.title = tree.xpath('//*[@id="title"]/text()')[0].strip()
+    scraper.dataset.contactPoint = tree.xpath('//*[@id="footer"]/div/div[4]/a[2]/@href')
+    scraper.dataset.issued = parse(tree.xpath('//*[@id="history"]/p[1]/span/text()')[0]).date()
+    scraper.dataset.modified = parse(tree.xpath('//*[@id="history"]/p[2]/span/text()')[0]).date()
+
+    for node in tree.xpath("//*//*[@itemtype='http://schema.org/DataDownload']/a"):
+        distribution = Distribution(scraper)
+        distribution.title = node.attrib['data-event-label']
+        distribution.downloadURL = urljoin(scraper.uri, node.attrib['href'])
+        distribution.issued = scraper.dataset.issued
+        distribution.modified = scraper.dataset.modified
+        fileType = re.search('\(([^)]+)', str(tree.xpath("//*[@id='main-content']/div[17]/div/div[1]/div[4]/div[4]/a/text()"))).group(1)
+
+        distribution.mediaType = {
+            'csv': 'text/csv',
+            'excel': 'application/vnd.ms-excel'
+        }.get(
+            fileType,
+            mimetypes.guess_type(distribution.downloadURL)[0]
+        )
+        if distribution.mediaType in ACCEPTED_MIMETYPES:
+            scraper.distributions.append(distribution)
+        else:
+            pass
+
+
+
