@@ -1,17 +1,17 @@
 from io import BytesIO
 import json
 
+import logging
 import pyexcel
 import xypath
 import messytables
 import requests
 import backoff
 import pandas as pd
-import logging
 from SPARQLWrapper import SPARQLWrapper, JSON
-from cachecontrol import CacheControl, serialize
+from cachecontrol import CacheControl
 from cachecontrol.caches.file_cache import FileCache
-from cachecontrol.heuristics import LastModified, ExpiresAfter
+from cachecontrol.heuristics import ExpiresAfter
 
 from gssutils.metadata.mimetype import ExcelTypes, ODS
 
@@ -132,7 +132,7 @@ def get_long_cache_session(distro):
     """
     long_cache = CacheControl(requests.Session(),
                             cache=FileCache('.cache2'),
-                            heuristic=LastModified())
+                            heuristic=ExpiresAfter(days=30))
     return long_cache
 
 
