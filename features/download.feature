@@ -21,7 +21,6 @@ Feature: Download Source data
             # for an isolated test scenario of the chunk get functionality.
             Given I scrape datasets using info.json "seed-for-api-scraper-pmd4.json"
             And I select the latest distribution as the distro
-            And the dataset already exists on target PMD
             Then I identify the chunks for that dataset on PMD as
             """
             http://reference.data.gov.uk/id/gregorian-interval/2020-05-04T00:00:00/P1D, 
@@ -73,8 +72,6 @@ Feature: Download Source data
             """
             201901
             """
-            # TODO - next line currently passing trivially
-            And caching is set to "<a caching short heuristic>"
             And fetch the initial data from the API endpoint
             Then the row count is "102377"
             And the column count is "7"
@@ -86,7 +83,6 @@ Feature: Download Source data
             Given I scrape datasets using info.json "seed-for-api-scraper.json"
             And I select the latest distribution as the distro
             And fetch the supplementary data from the API endpoint
-            And caching is set to "<a caching long heuristic>"
             Then the names and sizes equate to
                 | keys      | value   |
                 | FlowType  | 4,3     |

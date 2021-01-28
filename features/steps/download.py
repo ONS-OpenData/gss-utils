@@ -32,17 +32,6 @@ def step_impl(context, fixture_path: Path):
 def step_impl(context):
     context.distro = context.scraper.distribution(latest=True)
 
-
-@given('the dataset already exists on target PMD')
-def step_impl(context):
-    # TODO - this. for now I'm leaving it to pass trivially
-    pass
-
-@given('caching is set to "{caching_heuristic}"')
-def step_impl(context, caching_heuristic):
-    # TODO - this. for now I'm leaving it to pass trivially
-    pass
-
 @given(u'PMD chunks of')
 def step_impl(context):
     context.pmd_chunks = [x.strip() for x in context.text.split(",")]
