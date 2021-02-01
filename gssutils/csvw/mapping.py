@@ -27,7 +27,7 @@ default_map = {
 
 class CSVWMapping:
     def __init__(self):
-        self._csv_filename: Optional[URI] = None
+        self._csv_filename: Optional[Path] = None
         self._csv_stream: Optional[TextIO] = None
         self._mapping: Dict[str, Any] = {}
         self._column_names: List[str] = []
@@ -191,7 +191,7 @@ class CSVWMapping:
 
         # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
-            if "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
+            if isinstance(map_obj, dict) and "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
                 self._measureTemplate = URITemplate(map_obj["value"])
                 if "types" in map_obj:
                     self._measureTypes = map_obj["types"]
