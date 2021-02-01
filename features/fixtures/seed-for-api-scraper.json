@@ -1,0 +1,54 @@
+{
+  "title": "REGIONAL TRADE STATISTICS",
+  "publisher": "HM Revenue & Customs",
+  "description": "",
+  "landingPage": "https://www.uktradeinfo.com/trade-data/regional/",
+  "published": "2019-12-05",
+  "dataURL": "https://api.uktradeinfo.com/RTS",
+  "families": [
+      "Trade"
+  ],
+  "extract": {
+      "source": "application/json",
+      "stage": "Done"
+  },
+  "transform": {
+      "validate": false,
+      "airtable": "reclNM0WAApNZVyh4",
+      "main_issue": 12,
+      "to_rdf": "csv2rdf"
+  },
+  "odataConversion": {
+      "publishedLocation": "https://staging.gss-data.org.uk/sparql",
+      "datasetIdentifier": "http://gss-data.org.uk/data/gss_data/trade/hmrc-ots#dataset",
+      "chunkColumn": "MonthId",
+      "chunkDimension": "dim:refPeriod",
+      "supplementalEndpoints": {
+          "FlowType": {
+              "endpoint": "https://api.uktradeinfo.com/FlowType",
+              "primaryKey": "FlowTypeId",
+              "foreignKey": "FlowTypeId"
+          },
+          "Region": {
+              "endpoint": "https://api.uktradeinfo.com/Region",
+              "primaryKey": "RegionId",
+              "foreignKey": "GovRegionId"
+          }, 
+          "Country": {
+              "endpoint": "https://api.uktradeinfo.com/Country",
+              "primaryKey": "CountryId",
+              "foreignKey": "CountryId"
+          },
+          "SITC": {
+              "endpoint": "https://api.uktradeinfo.com/SITC",
+              "primaryKey": "CommoditySitcId",
+              "foreignKey": "CommoditySitc2Id"
+          } 
+        } 
+  },
+  "sizingNotes": "",
+  "notes": "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/",
+  "datasetNotes": [
+      "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/"
+  ]
+}

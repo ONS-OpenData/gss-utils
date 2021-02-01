@@ -1,16 +1,11 @@
-import json
-from io import BytesIO
 
-import messytables
-import pandas as pd
-import pyexcel
-import xypath.loader
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
+from typing import Optional
 
-from gssutils.metadata import DCAT, PROV, ODRL, SPDX
+from gssutils.metadata import DCAT, PROV, ODRL
 from gssutils.metadata.base import Metadata, Status
-from gssutils.metadata.mimetype import ExcelTypes, ODS
+from gssutils.transform.download import Downloadable
 
 
 class Resource(Metadata):
@@ -91,17 +86,8 @@ class CatalogRecord(Metadata):
     })
 
 
-class FormatError(Exception):
-    """ Raised when the available file format can't be used
-    """
-
-    def __init__(self, message):
-        self.message = message
-
-
-class Distribution(Metadata):
-
-    _core_properties = Metadata._core_properties + ['_session']
+class Distribution(Metadata, Downloadable):
+    _core_properties = Metadata._core_properties + ['_session', '_seed', '_mediaType']
     _type = DCAT.Distribution
     _properties_metadata = dict(Metadata._properties_metadata)
     _properties_metadata.update({
@@ -129,64 +115,12 @@ class Distribution(Metadata):
     def __init__(self, scraper):
         super().__init__()
         self._session = scraper.session
+        self._seed = scraper.seed
+        self._mediaType: Optional[str] = None
 
     def __setattr__(self, key, value):
         if key == 'downloadURL':
-            self._uri = URIRef(value)
+            self.uri = value
+        elif key == 'mediaType':
+            self._mediaType = value
         super().__setattr__(key, value)
-
-    def open(self):
-        stream = self._session.get(self.downloadURL, stream=True).raw
-        stream.decode_content = True
-        return stream
-
-    def as_databaker(self, **kwargs):
-        if self.mediaType in ExcelTypes:
-            with self.open() as fobj:
-                tableset = messytables.excel.XLSTableSet(fileobj=fobj)
-                tabs = list(xypath.loader.get_sheets(tableset, "*"))
-                return tabs
-        elif self.mediaType == ODS:
-            with self.open() as ods_obj:
-                excel_obj = BytesIO()
-                book = pyexcel.get_book(file_type='ods', file_content=ods_obj, library='pyexcel-ods3')
-                book.save_to_memory(file_type='xls', stream=excel_obj)
-                tableset = messytables.excel.XLSTableSet(fileobj=excel_obj)
-                tabs = list(xypath.loader.get_sheets(tableset, "*"))
-                return tabs
-        raise FormatError(f'Unable to load {self.mediaType} into Databaker.')
-
-    def as_pandas(self, **kwargs):
-        if self.mediaType in ExcelTypes:
-            with self.open() as fobj:
-                # pandas 0.25 now tries to seek(0), so we need to read and buffer the stream
-                buffered_fobj = BytesIO(fobj.read())
-                return pd.read_excel(buffered_fobj, **kwargs)
-        elif self.mediaType == ODS:
-            with self.open() as ods_obj:
-                if 'sheet_name' in kwargs:
-                    return pd.DataFrame(pyexcel.get_array(file_content=ods_obj,
-                                                          file_type='ods',
-                                                          library='pyexcel-ods3',
-                                                          **kwargs))
-                else:
-                    book = pyexcel.get_book(file_content=ods_obj,
-                                            file_type='ods',
-                                            library='pyexcel-ods3')
-                    return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
-        elif self.mediaType == 'text/csv':
-            with self.open() as csv_obj:
-                return pd.read_csv(csv_obj, **kwargs)
-        elif self.mediaType == 'application/json':
-            # Assume odata
-            to_fetch = self.downloadURL
-            tables = []
-            while to_fetch is not None:
-                data = self._session.get(to_fetch).json()
-                tables.append(pd.read_json(json.dumps(data['value']), orient='records'))
-                if 'odata.nextLink' in data and data['odata.nextLink'] != '':
-                    to_fetch = data['odata.nextLink']
-                else:
-                    to_fetch = None
-            return pd.concat(tables, ignore_index=True)
-        raise FormatError(f'Unable to load {self.mediaType} into Pandas DataFrame.')
