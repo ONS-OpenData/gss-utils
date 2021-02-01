@@ -1,11 +1,11 @@
 
 from rdflib import URIRef, Literal, XSD
 from rdflib.namespace import DCTERMS, FOAF
+from typing import Optional
 
 from gssutils.metadata import DCAT, PROV, ODRL
 from gssutils.metadata.base import Metadata, Status
-from gssutils.transform.download import construct_odata_dataframe, \
-        get_simple_csv_pandas, get_simple_databaker_tabs
+from gssutils.transform.download import Downloadable
 
 
 class Resource(Metadata):
@@ -86,9 +86,8 @@ class CatalogRecord(Metadata):
     })
 
 
-class Distribution(Metadata):
-
-    _core_properties = Metadata._core_properties + ['_session']
+class Distribution(Metadata, Downloadable):
+    _core_properties = Metadata._core_properties + ['_session', '_seed', '_mediaType']
     _type = DCAT.Distribution
     _properties_metadata = dict(Metadata._properties_metadata)
     _properties_metadata.update({
@@ -117,24 +116,11 @@ class Distribution(Metadata):
         super().__init__()
         self._session = scraper.session
         self._seed = scraper.seed
+        self._mediaType: Optional[str] = None
 
     def __setattr__(self, key, value):
         if key == 'downloadURL':
-            self._uri = URIRef(value)
+            self.uri = value
+        elif key == 'mediaType':
+            self._mediaType = value
         super().__setattr__(key, value)
-
-    def open(self):
-        stream = self._session.get(self.downloadURL, stream=True).raw
-        stream.decode_content = True
-        return stream
-
-    def as_databaker(self, **kwargs):
-        return get_simple_databaker_tabs(self, **kwargs)
-
-    def as_pandas(self, **kwargs):
-
-        if self._seed is not None:
-            if "odataConversion" in self._seed.keys():
-                return construct_odata_dataframe(self, **kwargs)
-            
-        return get_simple_csv_pandas(self, **kwargs)

@@ -5,7 +5,7 @@ from inspect import getmro
 
 from rdflib import RDFS, Literal, BNode, URIRef, RDF
 from rdflib.term import Identifier
-from typing import List
+from typing import List, Optional
 
 from gssutils.metadata import namespaces
 
@@ -16,7 +16,21 @@ class Status(Enum):
     recommended = 2
 
 
-class Metadata:
+class Resource:
+
+    def __init__(self):
+        self._uri: Identifier = BNode()
+
+    @property
+    def uri(self) -> str:
+        return str(self._uri)
+
+    @uri.setter
+    def uri(self, uri: str):
+        self._uri = URIRef(uri)
+
+
+class Metadata(Resource):
 
     _core_properties = ['uri', '_uri', '_graph', '_seed']
     _properties_metadata = {
@@ -25,17 +39,9 @@ class Metadata:
     }
 
     def __init__(self):
-        self._uri: Identifier = BNode()
+        super().__init__()
         self._graph: Identifier = BNode()
-        self._seed: dict = None
-
-    @property
-    def uri(self):
-        return str(self._uri)
-
-    @uri.setter
-    def uri(self, uri):
-        self._uri = URIRef(uri)
+        self._seed: Optional[dict] = None
 
     def get_graph(self):
         return str(self._graph)
