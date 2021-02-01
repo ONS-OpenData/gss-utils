@@ -16,7 +16,6 @@ requests = {extras = ["security"],version = "*"}
 certifi = "*"
 uritemplate = "*"
 jinja2 = "*"
-sparqlwrapper = "*"
 backoff = "*"
 
 [requires]
