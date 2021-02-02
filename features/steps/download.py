@@ -82,7 +82,7 @@ def step_impl(context):
 def step_impl(context):
     with vcr.use_cassette("features/fixtures/cassettes/odata_api.yml",
                           record_mode=context.config.userdata.get('record_mode', 'DEFAULT_RECORD_MODE')):
-        api_chunks = list(set(context.distro._get_odata_api_chunks()))
+        api_chunks = list(set(context.distro.get_odata_api_chunks()))
         expected_chunks = [int(x.strip()) for x in context.text.split(",")]
         assert set(api_chunks) == set(expected_chunks), \
             f'Expecting "{expected_chunks}". \nGot "{api_chunks}".'
@@ -92,7 +92,7 @@ def step_impl(context):
 def step_impl(context):
     with vcr.use_cassette("features/fixtures/cassettes/pmd4.yml",
                           record_mode=context.config.userdata.get('record_mode', 'DEFAULT_RECORD_MODE')):
-        pmd_chunks = list(set(context.distro._get_pmd_chunks()))
+        pmd_chunks = list(set(context.distro.get_pmd_chunks()))
         expected_chunks = [x.strip() for x in context.text.split(",")]
         assert set(pmd_chunks) == set(expected_chunks), \
             f'Expecting "{expected_chunks}". \nGot "{pmd_chunks}".'

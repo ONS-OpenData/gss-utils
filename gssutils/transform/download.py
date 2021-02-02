@@ -206,7 +206,7 @@ class Downloadable(Resource):
 
         return df
 
-    def _get_pmd_chunks(self) -> list:
+    def get_pmd_chunks(self) -> list:
         """
         Given the downloadURL from the scraper, return a list of chunks from pmd4
         """
@@ -232,7 +232,7 @@ SELECT DISTINCT ?chunk WHERE {{
         return [x['chunk']['value'] for x in result['results']['bindings']]
 
     @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
-    def _get_odata_api_chunks(self) -> list:
+    def get_odata_api_chunks(self) -> list:
         """
         Given the downloadURL from the scraper, return a list of chunks from the odata api
         """
