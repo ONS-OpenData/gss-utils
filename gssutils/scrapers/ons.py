@@ -110,7 +110,7 @@ def parse_as_local_date(dt: str):
     return isoparse(dt).astimezone(tz_ons).date()
 
 
-def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
+def handler_dataset_landing_page_fallback(scraper, this_dataset_page, update_date, tree):
     """
     At time of writing there's an issue with the latest version of datasets 404'ing on the
     versions page.
@@ -126,6 +126,7 @@ def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
 
     release_date = this_dataset_page["description"]["releaseDate"]
     this_distribution.issued = parse(release_date.strip()).date()
+    this_distribution.modified = parse_as_local_date(update_date.strip())
     
     # gonna have to go via html ...
     download_url = tree.xpath("//a[text()='xls']/@href")
@@ -160,15 +161,16 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         # get the response json into a python dict
         this_dataset_page = r.json()
 
-        # start a list of dataset versions (to hold current + all previous) as a list
-        # we'll start with just the current/latest version
-        versions_list = [ONS_PREFIX + this_dataset_page["uri"]+"/data"]
+        # create a list, with each entry a dict of a versions url and update date
+        versions_dict_list = []
 
-        # if there are older versions of this datasets availible.
-        # iterate and add their uri's to the versions list
+        # iterate all versions and populate the list
         try:
             for version_as_dict in this_dataset_page["versions"]:
-                versions_list.append(ONS_PREFIX+version_as_dict["uri"]+"/data")
+                versions_dict_list.append({
+                    "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
+                    "update_date": version_as_dict["updateDate"]
+                })
         except KeyError:
             logging.debug("No older versions found for {}.".format(dataset_page_url))
 
@@ -176,9 +178,12 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         # page (the page we're getting the distributions from) so we're taking the details for it from
         # the landing page to use as a fallback in that scenario.
         
-        
         # iterate through the lot, we're aiming to create at least one distribution object for each
-        for i, version_url in enumerate(versions_list):
+        for i, version_dict in enumerate(versions_dict_list):
+
+            version_url = version_dict["url"] 
+            version_update_date = version_dict["update_date"]
+
             logging.debug("Identified distribution url, building distribution object for: " + version_url)
 
             r = scraper.session.get(version_url)
@@ -186,8 +191,8 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 
                 # If we've got a 404 on the latest, fallback on using the details from the
                 # landing page instead
-                if r.status_code == 404 and i == len(versions_list)-1:
-                    handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree)
+                if r.status_code == 404 and i == len(versions_dict_list)-1:
+                    handler_dataset_landing_page_fallback(scraper, this_dataset_page, update_date, tree)
                     continue
                 else:
                     raise Exception("Scraper unable to acquire the page: {} with http code {}." \
@@ -213,6 +218,8 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 except KeyError:
                     logging.warning("Download {}. Of datasset versions {} of dataset {} does not have "
                                 "a release date".format(distribution_formats, version_url, dataset_page_url))
+                            
+                this_distribution.modified = parse_as_local_date(version_update_date.strip())
 
                 # I don't trust dicts with one constant field (they don't make sense), so just in case...
                 try:
