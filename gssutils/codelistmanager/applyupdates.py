@@ -49,9 +49,9 @@ def _refactor_table_mapping_with_updates(table_mapping: Dict, allow_human_input:
 
     standardise_labels(table_mapping)
 
+    correct_id_if_table(table_mapping)
+
     catalog_label: str = table_mapping.get("rdfs:label")
 
     ensure_dcat_metadata_populated(pmdcat_base_uri, allow_human_input, concept_scheme_uri,
                                    table_mapping, dt_now, catalog_label)
-
-    correct_id_if_table(table_mapping)
