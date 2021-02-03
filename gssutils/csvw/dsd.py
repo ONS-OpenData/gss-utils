@@ -64,5 +64,5 @@ class DSD(NamedTuple):
 
 class DataSet(NamedTuple):
     at_id: URI = '#dataset'
-    at_type: Union[URI, List[URI]] = ["qb:DataSet", "dcat:Dataset"]
+    at_type: Union[URI, List[URI]] = ["qb:DataSet", "pmdcat:DataCube"]
     qb_structure: DSD = DSD()
