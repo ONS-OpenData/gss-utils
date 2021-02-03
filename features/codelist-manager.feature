@@ -300,3 +300,95 @@ Scenario: Creating New Global Level Metadata File from CSV with atypical column 
       }
     }
     """
+
+Scenario: Handling multi-table schemas.
+    Given We have a CSV file named "my-favourite-code-list.csv" with headers
+      """
+      Some Column Name,Some Other Column Name
+      """
+    And We have a metadata file of the form
+      """
+        {
+          "@context": "http://www.w3.org/ns/csvw",
+          "tables": [
+            {
+              "@id": "table-one",
+              "url": "table-one.csv",
+              "tableSchema": {},
+              "rdfs:label": "Table One"
+            },
+            {
+              "@id": "table-two",
+              "url": "table-two.csv",
+              "tableSchema": {},
+              "prov:hadDerivation": {
+                "@type": "skos:ConceptScheme"
+              },
+              "rdfs:label": "Table Two"
+            }
+          ]
+        }
+      """
+    When We run an automatic upgrade on the metadata file
+    Then The following properties are set
+      """
+        {
+          "@context": "http://www.w3.org/ns/csvw",
+          "tables": [
+            {
+              "@id": "table-one",
+              "url": "table-one.csv",
+              "tableSchema": {},
+              "rdfs:label": "Table One"
+            },
+            {
+              "@id": "table-two",
+              "url": "table-two.csv",
+              "tableSchema": {},
+              "prov:hadDerivation": {
+                "@type": ["skos:ConceptScheme", "http://publishmydata.com/pmdcat#ConceptScheme"]
+              },
+              "rdfs:label": "Table Two",
+              "rdfs:seeAlso": [
+                  {
+                      "@id": "table-two/dataset"
+                  },
+                  {
+                      "@id": "http://gss-data.org.uk/catalog/vocabularies"
+                  },
+                  {
+                      "@id": "table-two/catalog-record"
+                  }
+              ]
+            }
+          ]
+        }
+      """
+
+Scenario: Correct the "@id" when it's "#table" and we have skos:inScheme defined.
+    Given We have a metadata file of the form
+      """
+      {
+        "@context": "http://www.w3.org/ns/csvw",
+        "@id": "#table",
+        "url": "some-file.csv",
+        "tableSchema": {
+          "columns": [
+            {
+                "propertyUrl": "skos:inScheme",
+                "valueUrl": "http://gss-data.org.uk/def/concept-scheme/this-scheme-id"
+            }
+          ]
+        },
+        "prov:hadDerivation": {
+          "@type": "skos:ConceptScheme"
+        }
+      }
+      """
+    When We run an automatic upgrade on the metadata file
+    Then The following properties are set
+      """
+      {
+        "@id": "http://gss-data.org.uk/def/concept-scheme/this-scheme-id"
+      }
+      """
