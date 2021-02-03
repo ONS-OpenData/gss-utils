@@ -301,7 +301,7 @@ Scenario: Creating New Global Level Metadata File from CSV with atypical column 
     }
     """
 
-  Scenario: Handling multi-table schemas.
+Scenario: Handling multi-table schemas.
     Given We have a CSV file named "my-favourite-code-list.csv" with headers
       """
       Some Column Name,Some Other Column Name
@@ -363,4 +363,32 @@ Scenario: Creating New Global Level Metadata File from CSV with atypical column 
             }
           ]
         }
+      """
+
+Scenario: Correct the "@id" when it's "#table" and we have skos:inScheme defined.
+    Given We have a metadata file of the form
+      """
+      {
+        "@context": "http://www.w3.org/ns/csvw",
+        "@id": "#table",
+        "url": "some-file.csv",
+        "tableSchema": {
+          "columns": [
+            {
+                "propertyUrl": "skos:inScheme",
+                "valueUrl": "http://gss-data.org.uk/def/concept-scheme/this-scheme-id"
+            }
+          ]
+        },
+        "prov:hadDerivation": {
+          "@type": "skos:ConceptScheme"
+        }
+      }
+      """
+    When We run an automatic upgrade on the metadata file
+    Then The following properties are set
+      """
+      {
+        "@id": "http://gss-data.org.uk/def/concept-scheme/this-scheme-id"
+      }
       """

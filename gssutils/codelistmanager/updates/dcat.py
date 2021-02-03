@@ -37,7 +37,8 @@ def ensure_dcat_metadata_populated(
         allow_human_input,
         concept_scheme_uri,
         dataset_uri,
-        catalog_label
+        catalog_label,
+        dt_now
     )
 
     catalog_record_catalog_link = find(rdfs_see_also, is_catalog_record_link_node)

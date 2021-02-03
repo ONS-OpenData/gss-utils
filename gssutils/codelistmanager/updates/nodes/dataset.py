@@ -14,7 +14,8 @@ def configure_dataset_node(
         allow_human_input: bool,
         concept_scheme_uri: str,
         dataset_uri: str,
-        catalog_label: str
+        catalog_label: str,
+        dt_now: str
 ):
     override(dataset_node, {
         "@id": dataset_uri,
@@ -27,13 +28,18 @@ def configure_dataset_node(
         },
         f"{pmdcat_base_uri}graph": {
             "@id": concept_scheme_uri
-        }
+        },
+        "dc:modified": {"@type": "dateTime",
+                        "@value": dt_now}
     })
 
     supplement(dataset_node, {
         "rdfs:label": catalog_label,
         "dc:title": catalog_label,
-        "rdfs:comment": f"Dataset representing the '{catalog_label}' code list."
+        "rdfs:comment": f"Dataset representing the '{catalog_label}' code list.",
+        "dc:issued": {"@type": "dateTime",
+                      "@value": dt_now}
+
     })
 
     if allow_human_input:
@@ -63,18 +69,6 @@ def configure_dataset_node(
                 "name": "dcat:landingPage",
                 "input_request": "Landing Page URL (user landing for Download)",
                 "to_value": lambda landing_uri: {"@id": landing_uri}
-            },
-            {
-                "name": "dc:issued",
-                "input_request": "Date issued/created/published (YYYY-mm-dd)",
-                "to_value": lambda input_value: {"@type": "dateTime",
-                                                 "@value": datetime.strptime(input_value, "%Y-%m-%d").isoformat()}
-            },
-            {
-                "name": "dc:modified",
-                "input_request": "Date modified (YYYY-mm-dd)",
-                "to_value": lambda input_value: {"@type": "dateTime",
-                                                 "@value": datetime.strptime(input_value, "%Y-%m-%d").isoformat()}
             },
             {
                 "name": f"{pmdcat_base_uri}markdownDescription",
