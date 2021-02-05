@@ -128,6 +128,10 @@ class Cube:
         Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
         """
         graph_name = pathify(self.title) if self.graph is None else pathify(self.graph)
+        if isinstance(self.scraper.dataset.family, list):
+            primary_family = self.scraper.dataset.family[0]
+        else:
+            primary_family = self.scraper.dataset.family
 
         if is_many_to_one:
             # Sanity check, because this isn't an obvious as I'd like / a bit weird
@@ -137,15 +141,15 @@ class Cube:
             assert pathify(Path(os.getcwd()).name) == graph_name, err_msg
 
             logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/') \
+            dataset_path = pathify(f'gss_data/{primary_family}/') \
                            + graph_name
         elif is_multi_cube:
             logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
+            dataset_path = pathify(f'gss_data/{primary_family}/'
                                    + Path(os.getcwd()).name + "/") + graph_name
         else:
             logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
+            dataset_path = pathify(f'gss_data/{primary_family}/'
                                    + Path(os.getcwd()).name)
         self.scraper.set_dataset_id(dataset_path)
 

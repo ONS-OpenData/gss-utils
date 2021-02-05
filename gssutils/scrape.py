@@ -187,10 +187,13 @@ class Scraper:
                 self.dataset.description = self.seed["description"]
             if not hasattr(self.dataset, 'publisher') and "publisher" in self.seed.keys():
                 self.dataset.publisher = GOV[pathify(self.seed["publisher"])]
-            if not hasattr(self.dataset, 'family') and "families" in self.seed.keys():
-                self.dataset.family = pathify(self.seed["families"][0])
-            if not hasattr(self.dataset, 'theme') and "families" in self.seed.keys():
-                self.set_theme(f'{GDP}{pathify(self.seed["families"][0])}')
+            if "families" in self.seed.keys():
+                if not hasattr(self.dataset, 'family'):
+                    self.dataset.family = [pathify(x) for x in self.seed["families"]] \
+                        if len(self.seed["families"]) > 0 else pathify(self.seed["families"][0])
+                if not hasattr(self.dataset, 'theme'):
+                    self.dataset.theme = [GDP[pathify(x)] for x in self.seed["families"]] \
+                        if len(self.seed["families"]) > 0 else GDP[pathify(self.seed["families"][0])]
                 
         except Exception as e:
             raise MetadataError("Aborting. Issue encountered while attempting checking "

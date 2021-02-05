@@ -50,6 +50,14 @@ def step_impl(context):
     )
 
 
+@then('the TriG at "{trig_file}" should contain')
+def step_impl(context, trig_file):
+    test_graph_diff(
+        Graph().parse(format='trig', source=trig_file),
+        Graph().parse(format='trig', data=context.text)
+    )
+
+
 @step("the RDF should contain")
 def step_impl(context):
     test_graph_diff(
