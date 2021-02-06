@@ -18,7 +18,7 @@ Feature: Creating cubes
       @prefix theme: <http://gss-data.org.uk/def/concept/statistics-authority-themes/> .
       @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-      <http://gss-data.org.uk/data/gss_data/trade/gss-utils-catalog-entry> a pmdcat:Dataset ;
+      <http://gss-data.org.uk/data/gss_data/trade/ons-quarterly-balance-of-payments-catalog-entry> a pmdcat:Dataset ;
           rdfs:label "Quarterly Balance of Payments"@en ;
           gdp:family gdp:trade ;
           dct:creator gov:office-for-national-statistics ;
