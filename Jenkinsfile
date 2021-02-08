@@ -5,6 +5,7 @@ pipeline {
             agent {
                 dockerfile {
                     args '-u root:root'
+                    reuseNode true
                 }
             }
             steps {

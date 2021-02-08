@@ -128,25 +128,27 @@ class Cube:
         Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
         """
         graph_name = pathify(self.title) if self.graph is None else pathify(self.graph)
+        if isinstance(self.scraper.dataset.family, list):
+            primary_family = pathify(self.scraper.dataset.family[0])
+        else:
+            primary_family = pathify(self.scraper.dataset.family)
 
+        main_dataset_id = info_json.get('id', Path.cwd().name)
         if is_many_to_one:
             # Sanity check, because this isn't an obvious as I'd like / a bit weird
             err_msg = 'Aborting. Where you are writing multiple cubes to a single output graph, the ' \
                       + 'pathified graph specified needs to match you pathified current working directory. ' \
                       + 'Got "{}", expected "{}".'.format(graph_name, pathify(Path(os.getcwd()).name))
-            assert pathify(Path(os.getcwd()).name) == graph_name, err_msg
+            assert main_dataset_id == graph_name, err_msg
 
             logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/') \
-                           + graph_name
+            dataset_path = f'gss_data/{primary_family}/{graph_name}'
         elif is_multi_cube:
             logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
-                                   + Path(os.getcwd()).name + "/") + graph_name
+            dataset_path = f'gss_data/{primary_family}/{main_dataset_id}/{graph_name}'
         else:
             logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
-            dataset_path = pathify(f'gss_data/{self.scraper.dataset.family}/'
-                                   + Path(os.getcwd()).name)
+            dataset_path = f'gss_data/{primary_family}/{main_dataset_id}'
         self.scraper.set_dataset_id(dataset_path)
 
         # output the tidy data
