@@ -24,6 +24,7 @@ prefix_map: Dict[str, URI] = {
     "og": "http://ogp.me/ns#",
     "org": "http://www.w3.org/ns/org#",
     "owl": "http://www.w3.org/2002/07/owl#",
+    "pmdcat": "http://publishmydata.com/pmdcat#",
     "prov": "http://www.w3.org/ns/prov#",
     "qb": "http://purl.org/linked-data/cube#",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
