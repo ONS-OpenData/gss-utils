@@ -265,6 +265,13 @@ Feature: Scrape dataset info
   Scenario: ONS scrape from url
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/datasets/coronaviruspersonalandeconomicwellbeingimpacts"
 
+  Scenario: ONS scrape single distribution url
+    Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports"
+    And select the distribution given by
+      | key       | value                                                                 |
+      | latest    | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet     |
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/previous/v11/mret.csdb"
+
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
     Then the publication date should match "2020-07-03"
