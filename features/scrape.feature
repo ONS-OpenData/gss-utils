@@ -265,7 +265,7 @@ Feature: Scrape dataset info
   Scenario: ONS scrape from url
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/wellbeing/datasets/coronaviruspersonalandeconomicwellbeingimpacts"
 
-  Scenario: ONS scrape single distribution url
+  Scenario: ONS scrape a distribution with zero versions
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports"
     And select the distribution given by
       | key       | value                                                                 |
