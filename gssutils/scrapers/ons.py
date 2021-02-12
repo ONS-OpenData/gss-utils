@@ -164,15 +164,25 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         # create a list, with each entry a dict of a versions url and update date
         versions_dict_list = []
 
-        # iterate all versions and populate the list
-        try:
-            for version_as_dict in this_dataset_page["versions"]:
-                versions_dict_list.append({
-                    "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
-                    "update_date": version_as_dict["updateDate"]
-                })
-        except KeyError:
-            logging.debug("No older versions found for {}.".format(dataset_page_url))
+        # Where the dataset is versioned, use the versions as the distributions
+        all_versions = this_dataset_page["versions"]
+
+        # Where there's multiple versions, iterate all and populate a list
+        if len(all_versions) != 0:
+            try:
+                for version_as_dict in all_versions:
+                    versions_dict_list.append({
+                        "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
+                        "update_date": version_as_dict["updateDate"]
+                    })
+            except KeyError:
+                logging.debug("No older versions found for {}.".format(dataset_page_url))
+        else:
+            # Otherwise creatd a single item list representing the current/only release of the data
+            versions_dict_list.append({
+                        "url": ONS_PREFIX+this_dataset_page["uri"]+"/data",
+                        "update_date": this_dataset_page["description"]["releaseDate"]
+                    })
 
         # NOTE - we've had an issue with the very latest dataset not being updated on the previous versions
         # page (the page we're getting the distributions from) so we're taking the details for it from
