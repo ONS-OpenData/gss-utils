@@ -270,7 +270,7 @@ Feature: Scrape dataset info
     And select the distribution given by
       | key       | value                                                                 |
       | latest    | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet     |
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/previous/v11/mret.csdb"
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports/2011to2016/nuts1serviceexports20112016.xls"
 
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
