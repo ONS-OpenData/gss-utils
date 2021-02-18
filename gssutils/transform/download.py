@@ -156,15 +156,18 @@ class Downloadable(Resource):
         contents = r.json()
         df = pd.DataFrame(contents['value'])
 
+        # This one supports OData (Stat Wales)
         while 'odata.nextLink' in contents.keys():
             page = self._session.get(contents['odata.nextLink'])
             contents = page.json()
             df = df.append(pd.DataFrame(contents['value']))
 
+        # This one supports OData (HMRC Trade UK API)
         while '@odata.nextLink' in contents.keys():
             page = self._session.get(contents['@odata.nextLink'])
             contents = page.json()
             df = df.append(pd.DataFrame(contents['value']))
+            
         return df
 
     def _merge_principle_supplementary_dataframes(self, principle_df, supplementary_df_dict):
