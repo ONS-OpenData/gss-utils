@@ -109,7 +109,6 @@ class Downloadable(Resource):
         Given a distribution object and a list of chunks of data we want
         return a dataframe
         """
-        principle_url = self.uri
         
         principle_df = pd.DataFrame()
 
@@ -118,17 +117,16 @@ class Downloadable(Resource):
 
             if type(chunks_wanted) is list:
                 for chunk in chunks_wanted:
-                    principle_df = principle_df.append(self._get_odata_data(principle_url, params={
+                    principle_df = principle_df.append(self._get_odata_data(self.uri, params={
                         '$filter': f'{key} eq {chunk}'
                     }))
             else:
                 chunk = str(chunks_wanted)
-                principle_df = principle_df.append(self._get_odata_data(principle_url, params={
+                principle_df = principle_df.append(self._get_odata_data(self.uri, params={
                     '$filter': f'{key} eq {chunk}'
                 }))
         else:
-            url = principle_url
-            principle_df = self._get_odata_data(url)
+            principle_df = self._get_odata_data(self.uri)
 
         return principle_df
 
