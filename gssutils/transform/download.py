@@ -155,6 +155,12 @@ class Downloadable(Resource):
 
         contents = r.json()
         df = pd.DataFrame(contents['value'])
+
+        while 'odata.nextLink' in contents.keys():
+            page = self._session.get(contents['odata.nextLink'])
+            contents = page.json()
+            df = df.append(pd.DataFrame(contents['value']))
+
         while '@odata.nextLink' in contents.keys():
             page = self._session.get(contents['@odata.nextLink'])
             contents = page.json()
