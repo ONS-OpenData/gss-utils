@@ -164,7 +164,10 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         versions_dict_list = []
 
         # Where the dataset is versioned, use the versions as the distributions
-        all_versions = this_dataset_page["versions"]
+        try:
+            all_versions = this_dataset_page["versions"]
+        except KeyError:
+            all_versions = []
 
         # Release dates:
         # --------------
