@@ -1,0 +1,25 @@
+{
+    "title": "Rough Sleeper Count",
+    "publisher": "Welsh Government",
+    "description": "Information on the estimated number of persons sleeping rough over a two week period and the number of persons observed sleeping rough.",
+    "landingPage": "https://statswales.gov.wales/Catalogue/Housing/Homelessness/Rough-Sleepers?_ga=2.25938557.1961980591.1578476376-1464158188.1573115284",
+    "dataURL": "http://open.statswales.gov.wales/en-gb/dataset/hous2101",
+    "datasetNotes": [
+        "Data can be found on this landing page in the form of Power BI."
+    ],
+    "published": "2019-02-05",
+    "families": [
+        "Homelessness"
+    ],
+    "extract": {
+        "source": "application/json",
+        "stage": "Documented"
+    },
+    "transform": {
+        "airtable": "rec62YB0Xi4MEwyGE",
+        "github": "1",
+        "main_issue": 27
+    },
+    "sizingNotes": "Available through the odata route, so simple to get, but may need a number of separate downloads / produce a number of different data sets, so needs a fair amount of up-front analysis",
+    "notes": ""
+}
