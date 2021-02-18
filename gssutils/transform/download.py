@@ -100,29 +100,22 @@ class Downloadable(Resource):
                 return pd.read_csv(csv_obj, **kwargs)
         elif self._mediaType == 'application/json':
             # Assume odata
-            to_fetch = self.uri
-            tables = []
-            while to_fetch is not None:
-                data = self._session.get(to_fetch).json()
-                tables.append(pd.read_json(json.dumps(data['value']), orient='records'))
-                if 'odata.nextLink' in data and data['odata.nextLink'] != '':
-                    to_fetch = data['odata.nextLink']
-                else:
-                    to_fetch = None
-            return pd.concat(tables, ignore_index=True)
+
+            return self._get_principle_dataframe()
         raise FormatError(f'Unable to load {self._mediaType} into Pandas DataFrame.')
 
-    def _get_principle_dataframe(self, chunks_wanted: list = None):
+    def _get_principle_dataframe(self, chunks_wanted: Optional[list] = None):
         """
         Given a distribution object and a list of chunks of data we want
         return a dataframe
         """
         principle_url = self.uri
-        key = self._seed['odataConversion']['chunkColumn']
-
+        
         principle_df = pd.DataFrame()
 
         if chunks_wanted is not None:
+            key = self._seed['odataConversion']['chunkColumn']
+
             if type(chunks_wanted) is list:
                 for chunk in chunks_wanted:
                     principle_df = principle_df.append(self._get_odata_data(principle_url, params={
