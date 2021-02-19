@@ -5,6 +5,7 @@ scraper_list = [
     ('https://api.beta.ons.gov.uk', onscmd.scrape),
     ('https://www.ons.gov.uk/', ons.scrape),
     ('https://www.gov.uk/government/', govuk.content_api),
+    ('https://www.ethnicity-facts-figures.service.gov.uk/', govuk.eth_facts_service),
     ('https://www.nrscotland.gov.uk/statistics-and-data/statistics/', nrscotland.statistics_handler),
     ('https://www.nrscotland.gov.uk/covid19stats', nrscotland.covid_handler),
     ('https://www.nisra.gov.uk/publications/', nisra.scrape),
