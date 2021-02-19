@@ -194,15 +194,18 @@ Feature: Scrape dataset info
     And select the distribution given by
       | key       | value                                                                    |
       | mediaType | application/vnd.ms-excel        |
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/previous/v11/mret.xlsx"
+      | latest    | true                            |
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.xlsx"
     And select the distribution given by
       | key       | value                           |
       | mediaType | text/csv                        |
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/previous/v11/mret.csv"
+      | latest    | true                            |
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.csv"
     And select the distribution given by
       | key       | value                           |
       | mediaType | text/prs.ons+csdb               |
-    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/previous/v11/mret.csdb"
+      | latest    | true                            |
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet/current/mret.csdb"
 
   Scenario: NHS Digital collection select latest
     Given I scrape the page "https://digital.nhs.uk/data-and-information/publications/statistical/adult-social-care-outcomes-framework-ascof"
