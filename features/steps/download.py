@@ -47,6 +47,11 @@ def step_impl(context):
                           record_mode=context.config.userdata.get('record_mode', 'DEFAULT_RECORD_MODE')):
         context.df = context.distro._get_principle_dataframe(chunks_wanted=context.required_chunks)
 
+@given('fetch the chunkless data from the API endpoint')
+def step_impl(context):
+    with vcr.use_cassette("features/fixtures/cassettes/odata_api_chunkless.yml",
+                          record_mode=context.config.userdata.get('record_mode', 'DEFAULT_RECORD_MODE')):
+        context.df = context.distro._get_principle_dataframe()
 
 @given('fetch the supplementary data from the API endpoint')
 def step_impl(context):

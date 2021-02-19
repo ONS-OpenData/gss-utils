@@ -77,6 +77,13 @@ Feature: Download Source data
             And the column count is "7"
             And the chunk column only contains the required chunks
 
+        # download an entire main dataset
+        Scenario: ApiScraper - Download a chunkless dataset
+            Given I scrape datasets using info.json "seed-for-api-scraper-chunkless.json"
+            And I select the latest distribution as the distro
+            And fetch the chunkless data from the API endpoint
+            Then the row count is "460"
+            And the column count is "17"
 
         # download supplimentary datasets
         Scenario: ApiScraper - Download supplementary data as dictionary
