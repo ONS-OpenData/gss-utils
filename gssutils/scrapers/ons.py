@@ -176,7 +176,14 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         # WAS SUPERCEDED (so the release fate of the NEXT version of the data).
         # ......this takes a bit of unpicking.
 
-        initial_release = this_dataset_page["description"]["releaseDate"]
+        try:
+            initial_release = this_dataset_page["description"]["releaseDate"]
+        except KeyError:
+            # No initial release date for the dataset has been provided
+            # We're just going to ignore v1, we don't have a use for it
+            # and with no provided release date ... not a lot to be done
+            initial_release = None
+
         next_release = None
         # Where there's multiple versions, iterate all and populate a list
         if len(all_versions) != 0:
@@ -186,10 +193,12 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                         release_date = initial_release
                     else:
                         release_date = next_release
-                    versions_dict_list.append({
-                        "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
-                        "issued": release_date
-                    })
+                    
+                    if release_date is not None:
+                        versions_dict_list.append({
+                            "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
+                            "issued": release_date
+                        })
                     next_release = version_as_dict["updateDate"]
             except KeyError:
                 logging.debug("No older versions found for {}.".format(dataset_page_url))
@@ -235,24 +244,17 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 # Create an empty Distribution object to represent this distribution
                 # from here we're just looking to fill in it's fields
                 this_distribution = Distribution(scraper)
-
-                # Every distribution SHOULD have a release date, but it seems they're not
-                # always included. If it happens continue but throw a warning.
-                try:
-                    release_date = this_page["description"]["releaseDate"]
-                    this_distribution.issued = parse_as_local_date(issued)
-                except KeyError:
-                    logging.warning("Download {}. Of datasset versions {} of dataset {} does not have "
-                                "a release date".format(distribution_formats, version_url, dataset_page_url))
-                            
+                this_distribution.issued = parse_as_local_date(issued)
+   
                 # I don't trust dicts with one constant field (they don't make sense), so just in case...
                 try:
                     download_url = ONS_DOWNLOAD_PREFIX + this_page["uri"] + "/" + dl["file"].strip()
                     this_distribution.downloadURL = download_url
                 except:
-                    # raise up this time. If we don't have a downloadURL it's not much use
-                    raise ValueError("Unable to create complete download url for {} on page {}" \
+                    # Throw a warning and abandon this distribution, ff we don't have a downloadURL it's not much use
+                    logging.warning("Unable to create complete download url for {} on page {}" \
                                      .format(dl, version_url))
+                    continue
 
                 # we've had some issues with type-guessing so we're getting the media type
                 # by checking the download url ending
