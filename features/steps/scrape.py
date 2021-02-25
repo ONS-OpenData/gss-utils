@@ -152,6 +152,13 @@ def step_impl(context, tabname):
         context.pandas = context.distribution.as_pandas(sheet_name=tabname)
 
 
+@step('select the oldest "{media_type}" distribution')
+def step_impl(context, media_type):
+    oldest = min([x.issued for x in context.scraper.distributions])
+    context.distribution = context.scraper.distribution(issued=oldest, mediaType=media_type)
+    assert_is_not_none(context.distribution)
+
+
 @then("the dataframe should have {rows:d} rows")
 def step_impl(context, rows):
     dfrows, dfcols = context.pandas.shape

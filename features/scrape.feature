@@ -275,6 +275,12 @@ Feature: Scrape dataset info
       | latest    | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet     |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports/2011to2016/nuts1serviceexports20112016.xls"
 
+  Scenario: ONS scrape distributions but ignore initial versions with no stated release date
+    Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity"
+    And select the oldest "text/csv" distribution
+    Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity/current/previous/v3/mq10.csv"
+
+
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
     Then the publication date should match "2020-07-03"

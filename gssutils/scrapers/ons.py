@@ -176,13 +176,10 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
         # WAS SUPERCEDED (so the release fate of the NEXT version of the data).
         # ......this takes a bit of unpicking.
 
-        try:
-            initial_release = this_dataset_page["description"]["releaseDate"]
-        except KeyError:
-            # No initial release date for the dataset has been provided
-            # We're just going to ignore v1, we don't have a use for it
-            # and with no provided release date ... not a lot to be done
-            initial_release = None
+        # If no initial release date for the dataset has been provided
+        # We're just going to ignore v1, we don't have a use for it
+        # and with no provided release date ... not a lot to be done
+        initial_release = this_dataset_page["description"].get("releaseDate", None)
 
         next_release = None
         # Where there's multiple versions, iterate all and populate a list
