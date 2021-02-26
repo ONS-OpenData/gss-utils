@@ -114,10 +114,13 @@ def _map_concept_scheme_uri_to_concept_base(concept_scheme_uri: str) -> str:
     Family and Global codelists don't follow this rule and since URIs aren't auto-generated it isn't such a problem.
     """
     hash_url_match_regex = r"(.*)#scheme(/.*)?"
+    family_global_concept_scheme_uri_regex = r"(.*/)concept-scheme(/.*)?"
     if re.match(hash_url_match_regex, concept_scheme_uri):
         return re.sub(hash_url_match_regex, "\\1#concept\\2", concept_scheme_uri)
+    elif re.match(family_global_concept_scheme_uri_regex, concept_scheme_uri):
+        return re.sub(family_global_concept_scheme_uri_regex, "\\1concept\\2", concept_scheme_uri)
     else:
-        return concept_scheme_uri
+        raise Exception(f"Unmatched concept URI format for '{concept_scheme_uri}'.")
 
 
 def _map_file_path_to_label(file_path: Path) -> str:

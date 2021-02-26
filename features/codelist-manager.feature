@@ -152,7 +152,7 @@ Feature: Create and Manage CodeList Metadata files
                         },
                         "required": false,
                         "propertyUrl": "skos:broader",
-                        "valueUrl": "http://gss-data.org.uk/def/concept-scheme/my-favourite-code-list/{parent_notation}"
+                        "valueUrl": "http://gss-data.org.uk/def/concept/my-favourite-code-list/{parent_notation}"
                     },
                     {
                         "titles": "Sort Priority",
@@ -180,7 +180,7 @@ Feature: Create and Manage CodeList Metadata files
                     }
                 ],
                 "primaryKey": "notation",
-                "aboutUrl": "http://gss-data.org.uk/def/concept-scheme/my-favourite-code-list/{notation}"
+                "aboutUrl": "http://gss-data.org.uk/def/concept/my-favourite-code-list/{notation}"
             },
             "prov:hadDerivation": {
                 "@id": "http://gss-data.org.uk/def/concept-scheme/my-favourite-code-list",
@@ -207,14 +207,14 @@ Feature: Create and Manage CodeList Metadata files
                 "columns": [
                     {
                         "propertyUrl": "skos:broader",
-                        "valueUrl": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list/{parent_notation}"
+                        "valueUrl": "http://gss-data.org.uk/def/my-favourite-family/concept/my-favourite-code-list/{parent_notation}"
                     },
                     {
                         "propertyUrl": "skos:inScheme",
                         "valueUrl": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list"
                     }
                 ],
-                "aboutUrl": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list/{notation}"
+                "aboutUrl": "http://gss-data.org.uk/def/my-favourite-family/concept/my-favourite-code-list/{notation}"
             },
             "prov:hadDerivation": {
                 "@id": "http://gss-data.org.uk/def/my-favourite-family/concept-scheme/my-favourite-code-list"
