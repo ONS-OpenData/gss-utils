@@ -266,6 +266,9 @@ def step_impl(context):
     context.csvw.set_input(context.csv_filename, context.csv_io)
     context.json_io.seek(0)
     context.csvw.set_mapping(json.load(context.json_io))
+    context.json_io.seek(0)
+    context.csvw.set_accretive_upload(json.load(context.json_io))
+
     if hasattr(context, 'registry'):
         context.csvw.set_registry(URI(context.registry))
     if hasattr(context, 'dataset_uri'):

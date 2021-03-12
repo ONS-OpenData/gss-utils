@@ -1,0 +1,52 @@
+{
+  "title": "UK trade in goods by industry, country and commodity, exports",
+  "publisher": "Office for National Statistics",
+  "description": "Experimental dataset providing a breakdown of UK trade in goods by industry, country and commodity on a balance of payments basis. Data are subject to disclosure control, which means some data have been suppressed to protect confidentiality of individual traders.",
+  "landingPage": [
+    "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/uktradeingoodsbyindustrycountryandcommodityimports",
+    "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/uktradeingoodsbyindustrycountryandcommodityexports"
+  ],
+  "published": "2019-04-14",
+  "families": [
+    "Trade"
+  ],
+  "extract": {
+    "source": "XLS",
+    "stage": "Done"
+  },
+  "transform": {
+    "airtable": [
+      "rec6SvP3d4MJ3pXYR",
+      "recduvpZS53BpXU3W"
+    ],
+    "main_issue": 3,
+    "columns": {
+      "Year": {
+        "dimension": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
+        "value": "http://reference.data.gov.uk/id/year/{year}"
+      },
+      "Country": {
+        "dimension": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
+        "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{country}"
+      },
+      "Direction": {
+        "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
+        "value": "http://gss-data.org.uk/def/concept/flow-directions/{direction}"
+      },
+      "Marker": {
+        "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#obsStatus",
+        "value": "http://gss-data.org.uk/def/concept/marker/{marker}"
+      },
+      "Value": {
+        "unit": "http://gss-data.org.uk/def/concept/measurement-units/gbp",
+        "measure": "http://gss-data.org.uk/def/measure/gbp-total",
+        "datatype": "number"
+      }
+    }
+  },
+  "load": {
+    "accretiveUpload": true
+  },
+  "sizingNotes": "",
+  "notes": ""
+}

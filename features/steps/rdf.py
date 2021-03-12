@@ -7,6 +7,7 @@ from rdflib import Graph
 from dateutil.parser import parse
 from datetime import datetime, timezone
 from gssutils.metadata import THEME
+import distutils.util
 
 
 @step("set the base URI to <{uri}>")
@@ -64,6 +65,18 @@ def step_impl(context):
         Graph().parse(format='turtle', data=context.turtle),
         Graph().parse(format='turtle', data=context.text)
     )
+
+
+@step("the ask query '{query_file}' should return {expected_query_result}")
+def step_impl(context, query_file: str, expected_query_result: str):
+    query_file = Path('features') / 'fixtures' / query_file
+    with open(query_file) as f:
+        query = f.read()
+    g = Graph().parse(format='turtle', data=context.turtle)
+    results = list(g.query(query))
+    ask_result = results[0]
+    expected_ask_result = bool(distutils.util.strtobool(expected_query_result))
+    assert(ask_result == expected_ask_result)
 
 
 @step("set the family to '{family}'")

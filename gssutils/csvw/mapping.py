@@ -43,6 +43,7 @@ class CSVWMapping:
         self._foreign_keys: Optional[List[ForeignKey]] = None
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
+        self._accretive_upload: bool = False
 
     @staticmethod
     def namify(column_header: str):
@@ -93,6 +94,11 @@ class CSVWMapping:
         self._column_names = reader.fieldnames
         for col in self._column_names:
             self._columns[col] = Column(name=CSVWMapping.namify(col), titles=col, datatype="string")
+
+    def set_accretive_upload(self, info_json: Dict):
+        if "load" in info_json and "accretiveUpload" in info_json["load"]:
+            self._accretive_upload = info_json["load"]["accretiveUpload"]
+        # Else default of false
 
     def set_mapping(self, mapping):
         if 'transform' in mapping and 'columns' in mapping['transform']:
@@ -382,18 +388,23 @@ class CSVWMapping:
             valueUrl=URI("qb:Observation")
         )
         self._validate()
-        return {
+        csvw_structure = {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),
-            "@id": self.join_dataset_uri("#tables"),
-            "prov:hadDerivation": DataSet(
+            "@id": self.join_dataset_uri("#tables")
+        }
+
+        if not self._accretive_upload:
+            # Don't want to upload DSD twice where we're just adding new data to existing data.
+            csvw_structure["prov:hadDerivation"] = DataSet(
                 at_id=self.join_dataset_uri('#dataset'),
                 qb_structure=DSD(
                     at_id=self.join_dataset_uri('#structure'),
                     qb_component=self._components
                 )
             )
-        }
+
+        return csvw_structure
 
     def _as_tables(self):
         table_uri = URI(Path(self._csv_filename).name)  # default is that metadata is filename + '-metadata.json'
