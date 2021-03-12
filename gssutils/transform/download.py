@@ -211,6 +211,10 @@ class Downloadable(Resource):
         Given the downloadURL from the scraper, return a list of chunks from pmd4
         """
 
+        if 'load' in self._seed and 'accretiveUpload' in self._seed['load'] and not self._seed['load']['accretiveUpload']: 
+            return list()
+
+
         # Assumption that no cases of multiple datasets from a single API endpoint, so...
         dataset_url = self._seed['odataConversion']['datasetIdentifier']
         endpoint_url = self._seed['odataConversion']['publishedLocation']
