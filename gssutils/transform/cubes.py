@@ -100,10 +100,10 @@ class Cube:
 
         # Use the info.json for the mapping by default, but let people
         # pass a new one in (for where we need to get clever)
-        if self.info_json_dict is None:
-            map_obj.set_mapping(info_json)
-        else:
-            map_obj.set_mapping(self.info_json_dict)
+        info_json = info_json if self.info_json_dict is None else self.info_json_dict
+
+        map_obj.set_accretive_upload(info_json)
+        map_obj.set_mapping(info_json)
 
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
@@ -154,10 +154,16 @@ class Cube:
         # output the tidy data
         self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}.csv', index=False)
 
-        # Output the trig
-        trig_to_use = self.scraper.generate_trig()
-        with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
-            metadata.write(trig_to_use)
+        is_accretive_upload = info_json is not None and "load" in info_json and "accretiveUpload" in info_json["load"] \
+                              and info_json["load"]["accretiveUpload"]
+
+        # Don't output trig file if we're performing an accretive upload.
+        # We don't want to duplicate information we already have.
+        if not is_accretive_upload:
+            # Output the trig
+            trig_to_use = self.scraper.generate_trig()
+            with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
+                metadata.write(trig_to_use)
 
         # Output csv and csvw
         populated_map_obj = self._populate_csvw_mapping(destination_folder, pathify(self.title), info_json)
