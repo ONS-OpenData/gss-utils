@@ -17,18 +17,10 @@ from behave import *
 from nose.tools import *
 from rdflib import Graph, Dataset
 
-from gssutils import CSVWMetadata, CSVWMapping
+from gssutils import CSVWMapping
 from gssutils.csvw.namespaces import URI
 
 DEFAULT_RECORD_MODE = 'new_episodes'
-
-
-@given("table2qb configuration at '{url}'")
-def step_impl(context, url):
-    with vcr.use_cassette('features/fixtures/csvw.yml',
-                          record_mode=context.config.userdata.get('record_mode',
-                                                                  DEFAULT_RECORD_MODE)):
-        context.schema = CSVWMetadata(url)
 
 
 @step("a CSV file '{filename}'")
@@ -49,24 +41,6 @@ def step_impl(context, filename):
         else:
             raise ValueError('Can only open files of type ".csv" and ".csv.gz" '
                             'not {}.'.format(filename))
-
-
-@when("I create a CSVW schema '{filename}'")
-def step_impl(context, filename):
-    context.schema_filename = Path(filename)
-    context.schema_io = StringIO()
-    context.csv_io.seek(0)
-    context.schema.create_io(
-        context.csv_io,
-        context.schema_io,
-        str(context.csv_filename.relative_to(context.schema_filename.parent))
-    )
-
-
-@then("The schema is valid JSON")
-def step_impl(context):
-    context.schema_io.seek(0)
-    json.load(context.schema_io)
 
 
 @then("The input format of the csv is recorded as csv")
@@ -104,34 +78,6 @@ def step_impl(context):
     response = csvlint.wait()
     sys.stdout.write(csvlint.logs().decode('utf-8'))
     assert_equal(response['StatusCode'], 0)
-
-
-@when("I create a CSVW metadata file '{filename}' for base '{base}' and path '{path}'")
-def step_impl(context, filename, base, path):
-    context.metadata_filename = Path(filename)
-    context.metadata_io = StringIO()
-    context.csv_io.seek(0)
-    if hasattr(context, 'json_io'):
-        context.json_io.seek(0)
-        context.schema.create_io(
-            context.csv_io,
-            context.metadata_io,
-            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-            mapping=context.json_io,
-            base_url=base,
-            base_path=path,
-            with_external=False
-        )
-    else:
-        context.schema.create_io(
-            context.csv_io,
-            context.metadata_io,
-            str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-            with_transform=True,
-            base_url=base,
-            base_path=path,
-            with_external=False
-        )
 
 
 @then("the metadata is valid JSON-LD")
@@ -184,25 +130,6 @@ def step_impl(context):
     context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io)
 
 
-@when("I create a CSVW metadata file '{filename}' for base '{base}' and path '{path}' with dataset metadata")
-def step_impl(context, filename, base, path):
-    context.metadata_filename = Path(filename)
-    context.metadata_io = StringIO()
-    context.csv_io.seek(0)
-    context.scraper.set_base_uri(urljoin(base, '/'))
-    context.scraper.set_dataset_id(path)
-    quads = context.scraper.as_quads()
-    context.schema.create_io(
-        context.csv_io,
-        context.metadata_io,
-        str(context.csv_filename.relative_to(context.metadata_filename.parent)),
-        with_transform=True,
-        base_url=base,
-        base_path=path,
-        dataset_metadata=quads
-    )
-
-
 def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[str] = ()):
     client = docker.from_env()
     files = ['data.ttl']
@@ -210,7 +137,7 @@ def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: 
         files.extend(extra_files)
     tests = client.containers.create(
         'gsscogs/gdp-sparql-tests',
-        command=f'''sparql-test-runner -t /usr/local/tests/{group} -p dsgraph='<urn:x-arq:DefaultGraph>' '''
+        command=f'''sparql-test-runner -t /usr/local/tests/{group} -m 10 '''
                 f'''{" ".join('/tmp/' + f for f in files)}'''
     )
     archive = BytesIO()
@@ -252,11 +179,6 @@ def step_impl(context, map_file):
     context.json_io = StringIO()
     mapping = json.load(open(Path('features') / 'fixtures' / map_file))
     json.dump(mapping, context.json_io)
-
-
-@step("component registry at '{url}'")
-def step_impl(context, url):
-    context.schema = CSVWMetadata(url)
 
 
 @when("I create a CSVW file from the mapping and CSV")
