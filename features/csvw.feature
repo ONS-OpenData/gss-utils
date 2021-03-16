@@ -80,9 +80,8 @@ Feature: Create CSVW metadata
       @prefix sdmx-c: <http://purl.org/linked-data/sdmx/2009/code#> .
       @prefix gss-dim: <http://gss-data.org.uk/def/dimension/> .
       @prefix gss-meas: <http://gss-data.org.uk/def/measure/> .
-      @prefix pmdcat: <http://publishmydata.com/pmdcat#> .
 
-      <#dataset> a qb:DataSet, pmdcat:DataCube ;
+      <#dataset> a qb:DataSet ;
         qb:structure <#structure> .
 
       <#structure> a qb:DataStructureDefinition ;
