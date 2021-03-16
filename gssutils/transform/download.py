@@ -221,7 +221,7 @@ class Downloadable(Resource):
         query = f'''PREFIX qb: <http://purl.org/linked-data/cube#>
 PREFIX dim: <http://purl.org/linked-data/sdmx/2009/dimension#>
 SELECT DISTINCT ?chunk WHERE {{
-    ?obs qb:dataSet <{dataset_url}>; {chunk_dimension} ?chunk .
+    ?obs qb:dataSet <{dataset_url}>; <{chunk_dimension}> ?chunk .
 }}'''
         logging.info(f'Query is {query}')
 
