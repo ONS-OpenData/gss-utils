@@ -1,15 +1,10 @@
-
-import logging
 import mimetypes
-from urllib.parse import urljoin
 
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import GOV, THEME
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import CSV
-from gssutils.metadata.pmdcat import Dataset
 
 def assert_get_one(thing, name_of_thing):
     """
