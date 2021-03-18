@@ -7,7 +7,6 @@ from gssutils.scrape import Scraper
 from gssutils.utils import pathify, is_interactive
 from gssutils.tracing.transform import TransformTrace
 from gssutils.refdata import *
-from gssutils.csvw.t2q import CSVWMetadata
 from gssutils.csvw.mapping import CSVWMapping
 from gssutils.csvw.codelistRDF import CSVCodelists
 from gssutils.transform.cubes import Cubes

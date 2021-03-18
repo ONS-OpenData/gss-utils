@@ -44,8 +44,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': ['create-schema=gssutils.csvw:create_schema',
-                            'create-transform=gssutils.csvw:create_transform',
-                            'codelist-manager=gssutils.codelistmanager.main:codelist_manager']
+        'console_scripts': ['codelist-manager=gssutils.codelistmanager.main:codelist_manager']
     }
 )
