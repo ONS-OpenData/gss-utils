@@ -1,5 +1,5 @@
 from gssutils.scrapers import ons, onscmd, govuk, nrscotland, nisra, hmrc, ni_govuk, isd_scotland, nhs_digital, statswales,\
-    govscot, dcni, govwales
+    govscot, dcni, govwales, lcc
 
 scraper_list = [
     ('https://api.beta.ons.gov.uk', onscmd.scrape),
@@ -21,5 +21,6 @@ scraper_list = [
     ('https://www.gov.scot', govscot.scrape),
     ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape),
     ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape),
-    ('https://gov.wales/', govwales.scrape)
+    ('https://gov.wales/', govwales.scrape),
+    ('https://www.lowcarboncontracts.uk/data-portal/dataset', lcc.scrape)
 ]

@@ -261,6 +261,14 @@ Feature: Scrape dataset info
     Given I scrape the page "https://gov.wales/notifications-deaths-residents-related-covid-19-adult-care-homes"
     Then select the distribution whose title starts with "Notifications of deaths of residents related to COVID-19"
     
+  Scenario: LCC dataset landing page
+    Given I scrape the page "https://www.lowcarboncontracts.uk/data-portal/dataset/actual-ilr-income"
+    And select the distribution given by
+      | key       | value      |
+      | latest    | True       |
+    Then the data can be downloaded from "https://www.lowcarboncontracts.uk/data-portal/dataset/6c993439-d686-4f49-83b1-2c6e27fd17d5/resource/580a5094-ce9c-46ad-bf05-a5460a5f97b2/download/actual-ilr-income.csv"
+    And the publication date should match "2021-03-18"
+
   Scenario: ONS scrape from seed with non supported page type
     Given I fetch the seed path "seed-ons-personal-well-being.json"
     Then building scrapper should fail with "Aborting operation This page type is not supported."
@@ -271,15 +279,14 @@ Feature: Scrape dataset info
   Scenario: ONS scrape a distribution with zero versions
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports"
     And select the distribution given by
-      | key       | value                                                                 |
-      | latest    | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet     |
+      | key       | value        |
+      | latest    | True         |
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/internationaltrade/datasets/regionalisedestimatesofukserviceexports/2011to2016/nuts1serviceexports20112016.xls"
 
   Scenario: ONS scrape distributions but ignore initial versions with no stated release date
     Given I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity"
     And select the oldest "text/csv" distribution
     Then the data can be downloaded from "https://www.ons.gov.uk/file?uri=/businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity/current/previous/v3/mq10.csv"
-
 
   Scenario: deal with ONS publication datetime as Europe/London date.
     Given I scrape the page "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/deathsinvolvingcovid19inthecaresectorenglandandwales"
