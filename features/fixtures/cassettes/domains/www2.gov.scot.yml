@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www2.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables
+  response:
+    body:
+      string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body\
+        \ bgcolor=\"white\">\r\n<center><h1>301 Moved Permanently</h1></center>\r\n\
+        <hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '178'
+      Content-Security-Policy:
+      - 'default-src: ''none'';'
+      Content-Type:
+      - text/html
+      Date:
+      - Wed, 27 Jan 2021 08:28:34 GMT
+      Location:
+      - https://www.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Robots-Tag:
+      - noindex
+    status:
+      code: 301
+      message: Moved Permanently
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www2.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables
+  response:
+    body:
+      string: "<html>\r\n<head><title>301 Moved Permanently</title></head>\r\n<body\
+        \ bgcolor=\"white\">\r\n<center><h1>301 Moved Permanently</h1></center>\r\n\
+        <hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '178'
+      Content-Security-Policy:
+      - 'default-src: ''none'';'
+      Content-Type:
+      - text/html
+      Date:
+      - Wed, 27 Jan 2021 18:32:49 GMT
+      Location:
+      - https://www.gov.scot/Topics/Statistics/Browse/Housing-Regeneration/HSfS/KeyInfoTables
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Robots-Tag:
+      - noindex
+    status:
+      code: 301
+      message: Moved Permanently
+version: 1
