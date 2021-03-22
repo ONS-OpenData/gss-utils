@@ -15,6 +15,14 @@ import re
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
+def assert_get_one(thing, name_of_thing):
+    """
+    Helper to assert we have one of a thing when we're expecting one of a thing, then
+    return that one thing de-listified
+    """
+    assert len(thing) == 1, f'Aborting. Xpath expecting 1 "{name_of_thing}", got {len(thing)}'
+    return thing[0]
+
 def content_api(scraper, tree):
     final_url = False
     uri_components = urlparse(scraper.uri)
@@ -283,5 +291,34 @@ def eth_facts_service(scraper, tree):
         else:
             pass
 
+
+def guidance_scraper(scraper, tree):
+
+    title = assert_get_one(tree.xpath('//h1'), 'get title')
+    scraper.dataset.title = title.text
+    
+    description = assert_get_one(tree.xpath("//p[contains(@class, 'gem-c-lead-paragraph')]"), 'get description')
+    scraper.dataset.description = description.text
+    
+    # issued = 
+
+    # modified = 
+
+    # licence =
+
+    # organistion
+
+    # contact
+
+    #for data_source in tree.xpath(''):
+
+        #distro = Distribution(scraper)
+
+        #distro.title
+        #distro.description
+        #distro.downloadURL
+        #distro.mediaType
+
+        #scraper.distributions.append(distro)
 
 
