@@ -301,3 +301,9 @@ Feature: Scrape dataset info
 
     Monthly statistics from the 4 different alcohol duty regimes
     """
+
+  Scenario: gov.uk guidance page
+    Given I scrape the page "https://www.gov.uk/guidance/pay-no-import-duty-and-vat-on-medical-supplies-equipment-and-protective-garments-covid-19"
+    And select the distribution whose title starts with "COVID-19"
+    Then the data can be downloaded from "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/937658/OFF-SEN-Disaster-Relief-List-20201116_vaccine.csv"
+    And dct:publisher should be `gov:hm-revenue-customs`
