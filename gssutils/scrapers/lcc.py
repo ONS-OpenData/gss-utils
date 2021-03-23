@@ -1,14 +1,9 @@
-
-import logging
 import mimetypes
-from urllib.parse import urljoin
 from dateutil.parser import parse
 from lxml import html
 
-from gssutils.metadata import GOV, THEME
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import CSV
-from gssutils.metadata.pmdcat import Dataset
 
 from gssutils.scrapers.helpers import assert_get_one
 
@@ -29,6 +24,8 @@ def scrape(scraper, tree):
 
     issued_element = assert_get_one(article.xpath('./div/section/table/tbody/tr[1]/td/span'), "issued element")
     scraper.dataset.issued = parse(issued_element.text.split("(")[0].strip())
+
+    scraper.dataset.license = "http://reference.data.gov.uk/id/open-government-licence"
     
     for resource in assert_get_one(article.xpath('./div/section[1]/ul[1]'), "resource list").xpath('./li/a'):
 

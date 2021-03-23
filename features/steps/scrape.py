@@ -15,9 +15,7 @@ DEFAULT_RECORD_MODE = 'new_episodes'
 
 def cassette(uri):
     host = urlparse(uri).hostname
-    if host == 'www.gov.uk':
-        return f'features/fixtures/cassettes/{host}.yml'
-    return 'features/fixtures/scrape.yml'
+    return f'features/fixtures/cassettes/domains/{host}.yml'
 
 
 @given('I scrape the page "{uri}"')

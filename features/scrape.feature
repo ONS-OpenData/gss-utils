@@ -267,6 +267,7 @@ Feature: Scrape dataset info
       | key       | value      |
       | latest    | True       |
     Then the data can be downloaded from "https://www.lowcarboncontracts.uk/data-portal/dataset/6c993439-d686-4f49-83b1-2c6e27fd17d5/resource/580a5094-ce9c-46ad-bf05-a5460a5f97b2/download/actual-ilr-income.csv"
+    And the publication date should match "2021-03-18"
 
   Scenario: ONS scrape from seed with non supported page type
     Given I fetch the seed path "seed-ons-personal-well-being.json"
