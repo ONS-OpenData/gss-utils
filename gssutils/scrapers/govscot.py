@@ -1,18 +1,17 @@
+from datetime import datetime
+from dateutil.parser import parse
+import logging
+from lxml import html
 import mimetypes
 import re
 from urllib.parse import urljoin, urlparse
-
-from dateutil.parser import parse
 
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import *
 
-from datetime import datetime
+from gssutils.scrapers.helpers import assert_get_one
 
-from lxml import html
-
-import logging
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
@@ -68,8 +67,8 @@ def collections(scraper, tree):
 				logging.warning("No issued date found, placement date added (1900-01-01)")
 				pass
 
+			# Distributions as embedded in page body
 			dists = pubTree.xpath('//*[@id="page-content"]/div[3]/div/div/div[2]/section/div/div[2]/h3/a')
-
 			for element in dists:
 				dist = Distribution(scraper)
 				dist.title = element.text
@@ -79,6 +78,19 @@ def collections(scraper, tree):
 					scraper.distributions.append(dist)
 				else:
 					pass
+
+			# Distributions as supportin files (attached top-right of page) of the principle dataset
+			dists = pubTree.xpath('//a[contains(@class, "supporting-file__link")]')
+			for element in dists:
+				dist = Distribution(scraper)
+				dist.title = assert_get_one(pubTree.xpath('//h1'), 'title for distribution').text.strip()
+				dist.downloadURL = urljoin("https://www.gov.scot", element.attrib['href'])
+				dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+				if dist.mediaType in ACCEPTED_MIMETYPES:
+					scraper.distributions.append(dist)
+				else:
+					pass
+
 
 def scrape(scraper, tree):
 

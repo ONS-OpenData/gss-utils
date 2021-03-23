@@ -2,7 +2,6 @@
 import logging
 import mimetypes
 from urllib.parse import urljoin
-
 from dateutil.parser import parse
 from lxml import html
 
@@ -11,13 +10,7 @@ from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import CSV
 from gssutils.metadata.pmdcat import Dataset
 
-def assert_get_one(thing, name_of_thing):
-    """
-    Helper to assert we have one of a thing when we're expecting one of a thing, then
-    return that one thing de-listified
-    """
-    assert len(thing) == 1, f'Aborting. Xpath expecting 1 "{name_of_thing}", got {len(thing)}'
-    return thing[0]
+from gssutils.scrapers.helpers import assert_get_one
 
 def scrape(scraper, tree):
     """
