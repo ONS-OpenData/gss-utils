@@ -189,6 +189,10 @@ Feature: Scrape dataset info
     And dct:publisher should be `gov:the-scottish-government`
     And dct:issued should match `"20[0-9]{2}-[01][0-9]-[0-3][0-9]"\^\^xsd:date`
 
+  Scenario: Scrape gov.scot collection
+    Given I scrape the page "https://www.gov.scot/collections/homelessness-statistics/"
+    Then there should be "60" distributions
+
   Scenario: ONS MRETS as csv, xlsx and structured text
     Given I scrape the page "https://www.ons.gov.uk/economy/nationalaccounts/balanceofpayments/datasets/tradeingoodsmretsallbopeu2013timeseriesspreadsheet"
     And select the distribution given by
