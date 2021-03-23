@@ -40439,8 +40439,6 @@ interactions:
         10:30:06 GMT; path=/; domain=.ons.gov.uk; HttpOnly; SameSite=Lax
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
-      Transfer-Encoding:
-      - chunked
       Vary:
       - Accept-Encoding, User-Agent
       X-Frame-Options:
@@ -41001,6 +40999,482 @@ interactions:
       - '1'
       cf-request-id:
       - 09003b8a86000054beba3b8000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a69gNCTEgRlhADGliqqA0zjkOXFT1v+NwBSmDn+335XlV
+        Dr9jQOOyGt9W9eEDqFERzB6jCalMwVvDIthMAQZ9GU7XkK9qez+oXFIKsIDMqD6IszGk/wWUxbEr
+        rqkhnWGTgdVBFfKie7AYcan9TJizwwUye5sIXbE8u9TvhtxfiiEGCtViiUzVRPeXr+2ZRD4wfpYo
+        8QYtHzjIlnxqqdW4yjEBhHRvuOWQnfNRD0d9ftZ6/H0nrfWr+MD5m0fdNWbH2D0KtduxJXqWmVSJ
+        4OVfZCxk4Vbvlz+ZCULrbNsPn2RHc2EBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2728afe58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '254'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:26 GMT
+      Etag:
+      - 02a4eb992b40a932685fbe5751b526441e84bde0--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2c7d0000e58f1db4c000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAE2PsU7EMAyGX6XKfHfNlQV1RgwINlhADG5iSlCa5BwHrqr67jhqhZA8+Lf9f7YX
+        ZeNP8BFsVv3boj6cR9UrwtHFAH60KZXBOwMsmmHwmDt9OZ+uPl/V+n5QuaTkcUJp0nwv7sqR+jdS
+        FsuueE4Va4EhI6uDKuREt2hiiNPcjhRztnHCzM4kirYYlt3tbsjtpQAxkp9NLIFphmD/3dh+QZCB
+        meMEZD473WnZYTEbcqlervpFfvIosDvgekqdOZ71Ud8+dze91hInrfWr+NC6zaMeNmzDsXmq4GYn
+        l+BY2pIlwpc/kWMhg1u+//8IA/paWddf4GDxhWsBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e290c0fe58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '260'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:26 GMT
+      Etag:
+      - 57ba7044a932dce331b3e17d48a2a1f49db3d6b1--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2daa0000e58ffe17e000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QTWvDMAz9K8HntnGSjdKcS0+DXbbLxg6urRWDY7myvDWU/PfJNAx8eE+8D8l3
+        5fA3BjQuq/Hzrr59ADUqurjE5hwgd4fr06D1vte97rrh8Kx3t5BvavnaqFxSCjBBZEPzSZw1Q+Y/
+        QNljXBnPqUY6wyYDq40q5IW3YDHiNLcXwpwdTpDZ20ToimWpb1dDbq/FEAOF2WKJTLOJjuAiBSZU
+        HVrGMxCjAwuTIFn0IDUOsiWfWIRqvCuCAJJ3NFy3qeds9X476Ld+GLWWt9Naf4gPnH941OsjuWFs
+        jmt2s4aX6FkUghLB+z/JWMjCA6+/8GLOEOpkWf4Aaz/5Cm0BAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2a2e1ee58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '266'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 17b2274fb218db7b50a68721fffd35b798a3c03d--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2e5a0000e58f6f9ca000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/julytoseptember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2QMU/DMBCF/0rkuW3chKWZEQNiAxYQg2MflZFju3dnqBXlv3NRA5KHe+f3vmd5
+        Vi79xJCMIzW8z+rTB1CDwrPLbMYAdDxd+sM10FUtHztFJecAE0Q2WB/Eu6Zk/w1IPsVNcc0rxBk2
+        BKx2qqAX3YJNMU21PWMicmkCYm8zJlcsS2G7Bai9FIMMGKpNJTJWEx3CWQpMWH1fJVROBJlhGgE7
+        fTxJiQOy6DOLTQ2zQgggtHvD61s63em9vtv3+qXrB63lHLTWb5ID528Z9SjchlPz/EduNnSJnuVe
+        pozw+i8oFbRwm7cfeDIjhHWzLL8S92O9WwEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2b6879e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '256'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - c3973733850eb5c1ad248f47a9bc7f1125ba84cf--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2f1f0000e58f4cb4f000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a64LohoQYECMsIIZcYk5BaRxsB66q+t9xuAopg5/z3veS
+        xQT8yQldYDO+LeYjJjCjoXMo4k4J+Hi4JL6Y9X1nuJaSYIIsjuYHNbaI7r+BOGLelMylEYITxyBm
+        ZypF1T14zDjN/ZmQOeAELNEXwlC9aFu/Bbj/qo4EKM0eaxaaXQ4EZy1wqflcoZgEP2uGwR5vtSAA
+        e4pF1GLGxRAkUNK9k/aOwQ52b4e9vXm2dvw7B2vtq+YgxGvG3DVmJ9g9KrXbsDVH0TudCsHLv2Cs
+        5OE6bz9/cidIbbOuv8L0uNFQAQAA
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2c8ae3e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '249'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 2f62f1b219834ac1f4e8b28a5af1f423c6811199--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2fd90000e58f2fb09000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0rl+e6ag4nOiAHBBguIIZeYIyiNg+PAVVX/Ow6tkDL4Oe99L5nB
+        00+KZH2B4XWG9xARBuCzz2JPEcvhEssFlrcdlJpzxBGTWJ7u1NcSuv9GLoHSpmTKDeCt2IICO6gc
+        VPfoKNE49WemUjyNWCS4zOSrEy3rt0Dpv6plQY6To5qEJ5s841kLbGy+T5vUMAmNlt3HlTneaIfH
+        4jhkURcMMzBGVNitlfaU5tkfzf7aPBkz/J2DMeZFc+jDmoH7FdsJdY8N3G3kmoLotU6Z8flfFKrs
+        cJ23/z/YE8a2WZZfG+iXKFUBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2dad19e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '248'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - cf5910533fc8dc5cd11c19fb8dc46c3b333ac3b8--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb30840000e58f2886a000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2018/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QsU7EMAz9lSrzcQ0HA3Q+MSGxwAJiSBNzipTGwXbgqqr/jqNWSB7es997tryY
+        gL85oQtsho/FfMUEZjCljil6JxGzuDEBH6+Jr2b9PBiupSSYQAc0P6m8GbX/A8Qq35nMpeUEJ45B
+        zMFUisp78JhxmvsLIXPACViiL4ShermE0u8G7r+rIwFKs8eahWaXA8FFF7jUdOgFRyDBAB4mRSd7
+        +6BrArCnWNrhZlgMQQLNOztp16jm8cZq3b+e7gZrtY7W2nf1QYibx7xsyZ1gd96zuz285iiqUFQI
+        3v4JYyUPG96/8OxGSK2zrn8huzIUYgEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2eef62e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '253'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 769dc5b8eb00264aabfa1cbf6c73ed82d4fd885c--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb314d0000e58f6d0fd000000001
     status:
       code: 200
       message: OK
