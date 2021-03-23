@@ -294,6 +294,23 @@ def eth_facts_service(scraper, tree):
 
 def guidance_scraper(scraper, tree):
 
+    # Get the json from the content api version of the page in question
+    content_api_url = f'https://www.gov.uk/api/content/{scraper.uri.replace("https://www.gov.uk/", "")}'
+    r = scraper.session.get(content_api_url)
+    if r.status_code != 200:
+        raise Exception(f'Failed to get url "{content_api_url}", status_code "{r.status_code}".')
+    page_json = r.json()
+
+    # Print out everything so we can see we are actually getting the json
+    # TODO - remove this later/when you dont need it
+    print(page_json)
+
+    # Hopefully .... that's everything we need to populate the datasets. and distro.(s)
+    # as oer the below, but from the json (page_json is a dict, just npull out what you need from it)
+
+"""
+def guidance_scraper(scraper, tree):
+    
     title = assert_get_one(tree.xpath('//h1'), 'get title')
     scraper.dataset.title = title.text.strip()
     
@@ -329,5 +346,5 @@ def guidance_scraper(scraper, tree):
         distro.modified = scraper.dataset.modified
 
         scraper.distributions.append(distro)
-
+"""
 
