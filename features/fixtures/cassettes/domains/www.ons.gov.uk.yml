@@ -40084,4 +40084,1398 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://gss-cogs.github.io/ref_common/reference/codelists/ons-topics.csv
+  response:
+    body:
+      string: !!binary |
+        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
+        EOH/AWQglidVdwAA
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=600
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '8448'
+      Content-Type:
+      - text/csv; charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:01:44 GMT
+      ETag:
+      - W/"60536328-7755"
+      Last-Modified:
+      - Thu, 18 Mar 2021 14:26:48 GMT
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31556952
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 varnish
+      X-Cache:
+      - MISS
+      X-Cache-Hits:
+      - '0'
+      X-Fastly-Request-ID:
+      - e96c00fce2553779e63e4ed6c3dcbf6c783942b9
+      X-GitHub-Request-Id:
+      - C8F8:125F2:3F3F:4238:6059BC88
+      X-Served-By:
+      - cache-lhr7374-LHR
+      X-Timer:
+      - S1616493704.081047,VS0,VE106
+      expires:
+      - Tue, 23 Mar 2021 10:11:44 GMT
+      x-proxy-cache:
+      - MISS
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - EXPIRED
+      CF-RAY:
+      - 6346fb7f891354be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - text/html;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:06 GMT
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406; expires=Thu, 22-Apr-21
+        10:30:06 GMT; path=/; domain=.ons.gov.uk; HttpOnly; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b83b6000054bec2a3a000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAN1VTU/cMBD9K5ZPoGZ3s0AR3VOrQj8kqFqgQm1VIW88JGYdO9hjaIT47x072XS3
+        ouLCXirlMJ68mec3M7bvuYcClTV8dv+QcQdaIMh3SiM4MddwKFB4QM9nP+55cIrP+ET2vomDkiKF
+        HpWyGc3b0U0QjuL4Q/Y0tgVBwJ8D5QrRitMWoQazTg+FNbZuJ6Wz3ktbg0dVNM7KUCAln8yD1oDK
+        +AmtwqIj9sLIwgaDToGfxOQeE718ROBTDIOoXrBuu9QtkSx1RpxoHBXSXgcDO/lOvlqX56K4FoYA
+        LdpauKLaFIst0M7BoZVQQE3WTj59tRE5QZMWDw1ulGatMRtS8ldjNsPyWGMO0lyjoqQQp53ProT2
+        kHGtzKI/X0JT0PpZOwGsrLTalu2//G8c7VJD9xvbhqzl+bnUtDNlystGlMCzZ9ZJCSX4wqmmv6pI
+        HsaN8C/LONYHMopky1D2/vAzxfpQUxfaNXi3M1UwQdffrcKW3SmslGEXVBufsmAFzCgD7MiUWvmq
+        T+vZ1ifrsGJHwmPGOvsCov3NuoWvlIMUf07xH0LsSpaw7ETJWCafJfjKMv21V4mIPBk7tkZak7Ez
+        GwaimLJbx+jtMQlbQHtnnYyN5INmqvUdgVy843j2x98rTs6+BbGYGSe/RzcsaWpuVUEwanINKA5X
+        K/+/VdAITNU5QzLicA6nhdQhKYvDBrVQmrSvTORrUjEu7e04LFKWOg7jsQhOsFO4CWAEuRE0NJU1
+        8d+LvT22lW9P93d32d7L/fzgJe/eW6ADQI9fxND1PR3lO6N8ep7ns/SN8zz/HhngF552YAKeiJZF
+        MB/er4+S3PHcGYWd1Tj4Oiy8Da6Azo49fVsnPO0AbaOKdBM8/AbZpzSvDAgAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb807ac454be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '673'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:06 GMT
+      Etag:
+      - 6dffeafb811b955434f3b1eb562974b84b059ccf--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b8450000054bea8b98000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a69gNCTEgRlhADGliqqA0zjkOXFT1v+NwBSmDn+335XlV
+        Dr9jQOOyGt9W9eEDqFERzB6jCalMwVvDIthMAQZ9GU7XkK9qez+oXFIKsIDMqD6IszGk/wWUxbEr
+        rqkhnWGTgdVBFfKie7AYcan9TJizwwUye5sIXbE8u9TvhtxfiiEGCtViiUzVRPeXr+2ZRD4wfpYo
+        8QYtHzjIlnxqqdW4yjEBhHRvuOWQnfNRD0d9ftZ6/H0nrfWr+MD5m0fdNWbH2D0KtduxJXqWmVSJ
+        4OVfZCxk4Vbvlz+ZCULrbNsPn2RHc2EBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb836fb854be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '254'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:06 GMT
+      Etag:
+      - 02a4eb992b40a932685fbe5751b526441e84bde0--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b8624000054becd040000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAE2PsU7EMAyGX6XKfHfNlQV1RgwINlhADG5iSlCa5BwHrqr67jhqhZA8+Lf9f7YX
+        ZeNP8BFsVv3boj6cR9UrwtHFAH60KZXBOwMsmmHwmDt9OZ+uPl/V+n5QuaTkcUJp0nwv7sqR+jdS
+        FsuueE4Va4EhI6uDKuREt2hiiNPcjhRztnHCzM4kirYYlt3tbsjtpQAxkp9NLIFphmD/3dh+QZCB
+        meMEZD473WnZYTEbcqlervpFfvIosDvgekqdOZ71Ud8+dze91hInrfWr+NC6zaMeNmzDsXmq4GYn
+        l+BY2pIlwpc/kWMhg1u+//8IA/paWddf4GDxhWsBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb8489a454be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '260'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:06 GMT
+      Etag:
+      - 57ba7044a932dce331b3e17d48a2a1f49db3d6b1--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b86d3000054bec41c7000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QTWvDMAz9K8HntnGSjdKcS0+DXbbLxg6urRWDY7myvDWU/PfJNAx8eE+8D8l3
+        5fA3BjQuq/Hzrr59ADUqurjE5hwgd4fr06D1vte97rrh8Kx3t5BvavnaqFxSCjBBZEPzSZw1Q+Y/
+        QNljXBnPqUY6wyYDq40q5IW3YDHiNLcXwpwdTpDZ20ToimWpb1dDbq/FEAOF2WKJTLOJjuAiBSZU
+        HVrGMxCjAwuTIFn0IDUOsiWfWIRqvCuCAJJ3NFy3qeds9X476Ld+GLWWt9Naf4gPnH941OsjuWFs
+        jmt2s4aX6FkUghLB+z/JWMjCA6+/8GLOEOpkWf4Aaz/5Cm0BAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb85bbef54be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '266'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:07 GMT
+      Etag:
+      - 17b2274fb218db7b50a68721fffd35b798a3c03d--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b8792000054be8da30000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/julytoseptember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2QMU/DMBCF/0rkuW3chKWZEQNiAxYQg2MflZFju3dnqBXlv3NRA5KHe+f3vmd5
+        Vi79xJCMIzW8z+rTB1CDwrPLbMYAdDxd+sM10FUtHztFJecAE0Q2WB/Eu6Zk/w1IPsVNcc0rxBk2
+        BKx2qqAX3YJNMU21PWMicmkCYm8zJlcsS2G7Bai9FIMMGKpNJTJWEx3CWQpMWH1fJVROBJlhGgE7
+        fTxJiQOy6DOLTQ2zQgggtHvD61s63em9vtv3+qXrB63lHLTWb5ID528Z9SjchlPz/EduNnSJnuVe
+        pozw+i8oFbRwm7cfeDIjhHWzLL8S92O9WwEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb870e9254be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '256'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:07 GMT
+      Etag:
+      - c3973733850eb5c1ad248f47a9bc7f1125ba84cf--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b8868000054be90147000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a64LohoQYECMsIIZcYk5BaRxsB66q+t9xuAopg5/z3veS
+        xQT8yQldYDO+LeYjJjCjoXMo4k4J+Hi4JL6Y9X1nuJaSYIIsjuYHNbaI7r+BOGLelMylEYITxyBm
+        ZypF1T14zDjN/ZmQOeAELNEXwlC9aFu/Bbj/qo4EKM0eaxaaXQ4EZy1wqflcoZgEP2uGwR5vtSAA
+        e4pF1GLGxRAkUNK9k/aOwQ52b4e9vXm2dvw7B2vtq+YgxGvG3DVmJ9g9KrXbsDVH0TudCsHLv2Cs
+        5OE6bz9/cidIbbOuv8L0uNFQAQAA
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb88795354be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '249'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:07 GMT
+      Etag:
+      - 2f62f1b219834ac1f4e8b28a5af1f423c6811199--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b894d000054bed4b73000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0rl+e6ag4nOiAHBBguIIZeYIyiNg+PAVVX/Ow6tkDL4Oe99L5nB
+        00+KZH2B4XWG9xARBuCzz2JPEcvhEssFlrcdlJpzxBGTWJ7u1NcSuv9GLoHSpmTKDeCt2IICO6gc
+        VPfoKNE49WemUjyNWCS4zOSrEy3rt0Dpv6plQY6To5qEJ5s841kLbGy+T5vUMAmNlt3HlTneaIfH
+        4jhkURcMMzBGVNitlfaU5tkfzf7aPBkz/J2DMeZFc+jDmoH7FdsJdY8N3G3kmoLotU6Z8flfFKrs
+        cJ23/z/YE8a2WZZfG+iXKFUBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb895b2354be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '248'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:07 GMT
+      Etag:
+      - cf5910533fc8dc5cd11c19fb8dc46c3b333ac3b8--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b89d4000054bea8808000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2018/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QsU7EMAz9lSrzcQ0HA3Q+MSGxwAJiSBNzipTGwXbgqqr/jqNWSB7es997tryY
+        gL85oQtsho/FfMUEZjCljil6JxGzuDEBH6+Jr2b9PBiupSSYQAc0P6m8GbX/A8Qq35nMpeUEJ45B
+        zMFUisp78JhxmvsLIXPACViiL4ShermE0u8G7r+rIwFKs8eahWaXA8FFF7jUdOgFRyDBAB4mRSd7
+        +6BrArCnWNrhZlgMQQLNOztp16jm8cZq3b+e7gZrtY7W2nf1QYibx7xsyZ1gd96zuz285iiqUFQI
+        3v4JYyUPG96/8OxGSK2zrn8huzIUYgEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 6346fb8a6d1a54be-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '253'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 10:30:07 GMT
+      Etag:
+      - 769dc5b8eb00264aabfa1cbf6c73ed82d4fd885c--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 09003b8a86000054beba3b8000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a69gNCTEgRlhADGliqqA0zjkOXFT1v+NwBSmDn+335XlV
+        Dr9jQOOyGt9W9eEDqFERzB6jCalMwVvDIthMAQZ9GU7XkK9qez+oXFIKsIDMqD6IszGk/wWUxbEr
+        rqkhnWGTgdVBFfKie7AYcan9TJizwwUye5sIXbE8u9TvhtxfiiEGCtViiUzVRPeXr+2ZRD4wfpYo
+        8QYtHzjIlnxqqdW4yjEBhHRvuOWQnfNRD0d9ftZ6/H0nrfWr+MD5m0fdNWbH2D0KtduxJXqWmVSJ
+        4OVfZCxk4Vbvlz+ZCULrbNsPn2RHc2EBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2728afe58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '254'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:26 GMT
+      Etag:
+      - 02a4eb992b40a932685fbe5751b526441e84bde0--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2c7d0000e58f1db4c000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2020/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAE2PsU7EMAyGX6XKfHfNlQV1RgwINlhADG5iSlCa5BwHrqr67jhqhZA8+Lf9f7YX
+        ZeNP8BFsVv3boj6cR9UrwtHFAH60KZXBOwMsmmHwmDt9OZ+uPl/V+n5QuaTkcUJp0nwv7sqR+jdS
+        FsuueE4Va4EhI6uDKuREt2hiiNPcjhRztnHCzM4kirYYlt3tbsjtpQAxkp9NLIFphmD/3dh+QZCB
+        meMEZD473WnZYTEbcqlervpFfvIosDvgekqdOZ71Ud8+dze91hInrfWr+NC6zaMeNmzDsXmq4GYn
+        l+BY2pIlwpc/kWMhg1u+//8IA/paWddf4GDxhWsBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e290c0fe58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '260'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:26 GMT
+      Etag:
+      - 57ba7044a932dce331b3e17d48a2a1f49db3d6b1--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2daa0000e58ffe17e000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QTWvDMAz9K8HntnGSjdKcS0+DXbbLxg6urRWDY7myvDWU/PfJNAx8eE+8D8l3
+        5fA3BjQuq/Hzrr59ADUqurjE5hwgd4fr06D1vte97rrh8Kx3t5BvavnaqFxSCjBBZEPzSZw1Q+Y/
+        QNljXBnPqUY6wyYDq40q5IW3YDHiNLcXwpwdTpDZ20ToimWpb1dDbq/FEAOF2WKJTLOJjuAiBSZU
+        HVrGMxCjAwuTIFn0IDUOsiWfWIRqvCuCAJJ3NFy3qeds9X476Ld+GLWWt9Naf4gPnH941OsjuWFs
+        jmt2s4aX6FkUghLB+z/JWMjCA6+/8GLOEOpkWf4Aaz/5Cm0BAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2a2e1ee58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '266'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 17b2274fb218db7b50a68721fffd35b798a3c03d--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2e5a0000e58f6f9ca000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/julytoseptember2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2QMU/DMBCF/0rkuW3chKWZEQNiAxYQg2MflZFju3dnqBXlv3NRA5KHe+f3vmd5
+        Vi79xJCMIzW8z+rTB1CDwrPLbMYAdDxd+sM10FUtHztFJecAE0Q2WB/Eu6Zk/w1IPsVNcc0rxBk2
+        BKx2qqAX3YJNMU21PWMicmkCYm8zJlcsS2G7Bai9FIMMGKpNJTJWEx3CWQpMWH1fJVROBJlhGgE7
+        fTxJiQOy6DOLTQ2zQgggtHvD61s63em9vtv3+qXrB63lHLTWb5ID528Z9SjchlPz/EduNnSJnuVe
+        pozw+i8oFbRwm7cfeDIjhHWzLL8S92O9WwEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2b6879e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '256'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - c3973733850eb5c1ad248f47a9bc7f1125ba84cf--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2f1f0000e58f4cb4f000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/apriltojune2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0qV+e6a64LohoQYECMsIIZcYk5BaRxsB66q+t9xuAopg5/z3veS
+        xQT8yQldYDO+LeYjJjCjoXMo4k4J+Hi4JL6Y9X1nuJaSYIIsjuYHNbaI7r+BOGLelMylEYITxyBm
+        ZypF1T14zDjN/ZmQOeAELNEXwlC9aFu/Bbj/qo4EKM0eaxaaXQ4EZy1wqflcoZgEP2uGwR5vtSAA
+        e4pF1GLGxRAkUNK9k/aOwQ52b4e9vXm2dvw7B2vtq+YgxGvG3DVmJ9g9KrXbsDVH0TudCsHLv2Cs
+        5OE6bz9/cidIbbOuv8L0uNFQAQAA
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2c8ae3e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '249'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 2f62f1b219834ac1f4e8b28a5af1f423c6811199--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb2fd90000e58f2fb09000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/januarytomarch2019/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD2PMU/EMAyF/0rl+e6ag4nOiAHBBguIIZeYIyiNg+PAVVX/Ow6tkDL4Oe99L5nB
+        00+KZH2B4XWG9xARBuCzz2JPEcvhEssFlrcdlJpzxBGTWJ7u1NcSuv9GLoHSpmTKDeCt2IICO6gc
+        VPfoKNE49WemUjyNWCS4zOSrEy3rt0Dpv6plQY6To5qEJ5s841kLbGy+T5vUMAmNlt3HlTneaIfH
+        4jhkURcMMzBGVNitlfaU5tkfzf7aPBkz/J2DMeZFc+jDmoH7FdsJdY8N3G3kmoLotU6Z8flfFKrs
+        cJ23/z/YE8a2WZZfG+iXKFUBAAA=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2dad19e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '248'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - cf5910533fc8dc5cd11c19fb8dc46c3b333ac3b8--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb30840000e58f2886a000000001
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - __cfduid=dd824aa53a739f07271c98a43c59e38d71616495406
+      User-Agent:
+      - python-requests/2.25.1
+    method: GET
+    uri: https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp/octobertodecember2018/data
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAD1QsU7EMAz9lSrzcQ0HA3Q+MSGxwAJiSBNzipTGwXbgqqr/jqNWSB7es997tryY
+        gL85oQtsho/FfMUEZjCljil6JxGzuDEBH6+Jr2b9PBiupSSYQAc0P6m8GbX/A8Qq35nMpeUEJ45B
+        zMFUisp78JhxmvsLIXPACViiL4ShermE0u8G7r+rIwFKs8eahWaXA8FFF7jUdOgFRyDBAB4mRSd7
+        +6BrArCnWNrhZlgMQQLNOztp16jm8cZq3b+e7gZrtY7W2nf1QYibx7xsyZ1gd96zuz285iiqUFQI
+        3v4JYyUPG96/8OxGSK2zrn8huzIUYgEAAA==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Methods:
+      - GET
+      Access-Control-Allow-Origin:
+      - '*'
+      Allow:
+      - DELETE, GET, HEAD, POST, PUT, OPTIONS, PATCH
+      CF-Cache-Status:
+      - MISS
+      CF-RAY:
+      - 63482e2eef62e58f-MAN
+      Cache-Control:
+      - public, max-age=14400
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '253'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Tue, 23 Mar 2021 13:59:27 GMT
+      Etag:
+      - 769dc5b8eb00264aabfa1cbf6c73ed82d4fd885c--gzip
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Frame-Options:
+      - SAMEORIGIN
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '1'
+      cf-request-id:
+      - 0900fb314d0000e58f6d0fd000000001
+    status:
+      code: 200
+      message: OK
 version: 1
