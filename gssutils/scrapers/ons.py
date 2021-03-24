@@ -1,7 +1,11 @@
 import logging
 
+from csv import DictReader
+from io import StringIO
+
 from dateutil import tz
 from dateutil.parser import parse, isoparse
+from urllib.parse import urlparse, urlunparse
 
 from gssutils.metadata.dcat import Distribution
 from gssutils.metadata.mimetype import Excel, ODS, CSV, ExcelOpenXML, CSDB
@@ -10,7 +14,8 @@ import mimetypes
 
 # save ourselves some typing later
 ONS_PREFIX = "https://www.ons.gov.uk"
-ONS_DOWNLOAD_PREFIX = ONS_PREFIX+"/file?uri="
+ONS_DOWNLOAD_PREFIX = ONS_PREFIX + "/file?uri="
+ONS_TOPICS_CSV = 'https://gss-cogs.github.io/ref_common/reference/codelists/ons-topics.csv'
 
 
 def scrape(scraper, tree):
@@ -28,8 +33,8 @@ def scrape(scraper, tree):
     # any issues getting it, or if we can't load the response into json - throw an error
     r = scraper.session.get(scraper.uri + "/data")
     if r.status_code != 200:
-        raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code" \
-                         " returned was '{}.".format(scraper.Øuri+"/data", r.status_code))
+        raise ValueError("Aborting. Issue encountered while attempting to scrape '{}'. Http code"
+                         " returned was '{}.".format(scraper.uri + "/data", r.status_code))
     try:
         landing_page = r.json()
     except Exception as e:
@@ -77,7 +82,7 @@ def scrape(scraper, tree):
     # stick "mailto:" on the start because metadata expects it.
     try:
         contact_dict = landing_page["description"]["contact"]
-        scraper.dataset.contactPoint = "mailto:"+contact_dict["email"].strip()
+        scraper.dataset.contactPoint = "mailto:" + contact_dict["email"].strip()
     except KeyError:
         # if we're skipping a field, we might want to know
         logging.debug("no description.contact key in json, skipping")
@@ -85,6 +90,22 @@ def scrape(scraper, tree):
     # boiler plate
     scraper.dataset.publisher = 'https://www.gov.uk/government/organisations/office-for-national-statistics'
     scraper.dataset.license = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+
+    # theme isn't provided explicitly in the JSON, so we need to use the URL path
+    # and match it against the taxonomy codelist from GitHub
+    topics_response = scraper.session.get(
+        ONS_TOPICS_CSV,
+        stream=True
+    )
+    topics_reader = DictReader(StringIO(topics_response.content.decode('utf-8')))
+    prefix = None
+    parsed_uri = urlparse(scraper.uri)
+    for row in topics_reader:
+        if parsed_uri.path.startswith(row['Path']):
+            if prefix is None or len(prefix) < len(row['Path']):
+                prefix = row['Path']
+
+    scraper.dataset.theme = urlunparse(parsed_uri._replace(path=prefix))
 
     # From this point the json structure vary based on the page type
     # so we're switching to page-type specific handling
@@ -118,15 +139,15 @@ def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
     this function will create what the latest version should be, using the information on the
     base dataset landing page.
     """
-    
+
     logging.warning("Using fallback logic to scrape latest distribution from dataset landing page (rather "
-                   "than previous page). This scrape will only have a single distribution of xls.")
-    
+                    "than previous page). This scrape will only have a single distribution of xls.")
+
     this_distribution = Distribution(scraper)
 
     release_date = this_dataset_page["description"]["releaseDate"]
     this_distribution.issued = parse(release_date.strip()).date()
-    
+
     # gonna have to go via html ...
     download_url = tree.xpath("//a[text()='xls']/@href")
     this_distribution.downloadURL = download_url
@@ -140,18 +161,16 @@ def handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree):
 
     logging.debug("Created distribution for download '{}'.".format(download_url))
     scraper.distributions.append(this_distribution)
-    
-    
+
 
 def handler_dataset_landing_page(scraper, landing_page, tree):
-
     # A dataset landing page has uri's to one or more datasets via it's "datasets" field.
     # We need to look at each in turn, this is an example one as json:
     # https://www.ons.gov.uk//businessindustryandtrade/internationaltrade/datasets/uktradeingoodsbyclassificationofproductbyactivity/current/data
     for dataset_page_url in landing_page["datasets"]:
 
         # Get the page as json. Throw an information error if we fail for whatever reason
-        dataset_page_json_url = ONS_PREFIX+dataset_page_url["uri"]+"/data"
+        dataset_page_json_url = ONS_PREFIX + dataset_page_url["uri"] + "/data"
         r = scraper.session.get(dataset_page_json_url)
         if r.status_code != 200:
             raise ValueError("Scrape of url '{}' failed with status code {}." \
@@ -190,45 +209,45 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                         release_date = initial_release
                     else:
                         release_date = next_release
-                    
+
                     if release_date is not None:
                         versions_dict_list.append({
-                            "url": ONS_PREFIX+version_as_dict["uri"]+"/data",
+                            "url": ONS_PREFIX + version_as_dict["uri"] + "/data",
                             "issued": release_date
                         })
                     next_release = version_as_dict["updateDate"]
             except KeyError:
                 logging.debug("No older versions found for {}.".format(dataset_page_url))
-        
+
         # Add the current release
         versions_dict_list.append({
-                "url": ONS_PREFIX+this_dataset_page["uri"]+"/data",
-                "issued": initial_release if next_release is None else next_release
-            })
+            "url": ONS_PREFIX + this_dataset_page["uri"] + "/data",
+            "issued": initial_release if next_release is None else next_release
+        })
 
         # NOTE - we've had an issue with the very latest dataset not being updated on the previous versions
         # page (the page we're getting the distributions from) so we're taking the details for it from
         # the landing page to use as a fallback in that scenario.
-        
+
         # iterate through the lot, we're aiming to create at least one distribution object for each
         for i, version_dict in enumerate(versions_dict_list):
 
-            version_url = version_dict["url"] 
+            version_url = version_dict["url"]
             issued = version_dict["issued"]
 
             logging.debug("Identified distribution url, building distribution object for: " + version_url)
 
             r = scraper.session.get(version_url)
             if r.status_code != 200:
-                
+
                 # If we've got a 404 on the latest, fallback on using the details from the
                 # landing page instead
-                if r.status_code == 404 and i == len(versions_dict_list)-1:
+                if r.status_code == 404 and i == len(versions_dict_list) - 1:
                     handler_dataset_landing_page_fallback(scraper, this_dataset_page, tree)
                     continue
                 else:
-                    raise Exception("Scraper unable to acquire the page: {} with http code {}." \
-                                .format(version_url, r.status_code))
+                    raise Exception("Scraper unable to acquire the page: {} with http code {}."
+                                    .format(version_url, r.status_code))
 
             # get the response json into a python dict
             this_page = r.json()
@@ -242,15 +261,15 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
                 # from here we're just looking to fill in it's fields
                 this_distribution = Distribution(scraper)
                 this_distribution.issued = parse_as_local_date(issued)
-   
+
                 # I don't trust dicts with one constant field (they don't make sense), so just in case...
                 try:
                     download_url = ONS_DOWNLOAD_PREFIX + this_page["uri"] + "/" + dl["file"].strip()
                     this_distribution.downloadURL = download_url
                 except:
                     # Throw a warning and abandon this distribution, ff we don't have a downloadURL it's not much use
-                    logging.warning("Unable to create complete download url for {} on page {}" \
-                                     .format(dl, version_url))
+                    logging.warning("Unable to create complete download url for {} on page {}"
+                                    .format(dl, version_url))
                     continue
 
                 # we've had some issues with type-guessing so we're getting the media type
@@ -277,7 +296,6 @@ def handler_dataset_landing_page(scraper, landing_page, tree):
 
 
 def handler_static_adhoc(scraper, landing_page, tree):
-
     # A static adhoc is a one-off unscheduled release
     # These pages should be simpler and should lack the historical distributions
 
