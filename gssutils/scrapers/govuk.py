@@ -44,6 +44,8 @@ def content_api(scraper, tree):
         scraper.distributions = scraper.dataset.distribution
     elif schema == 'statistical_data_set':
         content_api_sds(scraper, metadata)
+    elif schema == 'detailed_guide':
+        content_api_guidance(scraper, metadata)
     else:
         logging.warning(f'Unknown schema type {schema}')
 
@@ -292,21 +294,51 @@ def eth_facts_service(scraper, tree):
             pass
 
 
-def guidance_scraper(scraper, tree):
-
-    # Get the json from the content api version of the page in question
+def content_api_guidance(scraper, tree):
+    
     content_api_url = f'https://www.gov.uk/api/content/{scraper.uri.replace("https://www.gov.uk/", "")}'
     r = scraper.session.get(content_api_url)
     if r.status_code != 200:
         raise Exception(f'Failed to get url "{content_api_url}", status_code "{r.status_code}".')
     page_json = r.json()
 
-    # Print out everything so we can see we are actually getting the json
-    # TODO - remove this later/when you dont need it
-    print(page_json)
+    if 'title' in page_json:
+        scraper.dataset.title = page_json['title']
+    
+    if 'description' in page_json:
+        scraper.dataset.description = page_json['description']
 
-    # Hopefully .... that's everything we need to populate the datasets. and distro.(s)
-    # as oer the below, but from the json (page_json is a dict, just npull out what you need from it)
+    if 'first_published_at' in page_json:
+        scraper.dataset.issued = parse(page_json['first_published_at'])
+
+    if 'public_updated_at' in page_json:
+        scraper.dataset.modified = parse(page_json['public_updated_at'])
+
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+
+    if 'links' in page_json and 'organisations' in page_json['links']:
+        orgs = page_json['links']['organisations']
+        if len(orgs) == 0:
+            logging.warning("No publishing organisations listed.")
+        elif len(orgs) >= 1:
+            if len(orgs) > 1:
+                logging.warning('More than one organisation listed, taking the first.')
+            scraper.dataset.publisher = orgs[0]["web_url"]
+
+    for attachment in page_json['details']['attachments']:
+        distro = Distribution(scraper)
+
+        distro.title = attachment['title']
+
+        distro.downloadURL = attachment['url']
+
+        distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
+
+        distro.issued = scraper.dataset.issued
+
+        distro.modified = scraper.dataset.modified
+
+        scraper.distributions.append(distro)
 
 """
 def guidance_scraper(scraper, tree):
