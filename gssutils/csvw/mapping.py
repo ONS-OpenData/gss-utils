@@ -81,10 +81,10 @@ class CSVWMapping:
             with open(csv_filename, newline='', encoding='utf-8') as f:
                 self.set_input(csv_filename, f)
         elif str(csv_filename).endswith("csv.gz"):
-            with gzip.open(csv_filename, encoding='utf-8') as f:
+            with gzip.open(csv_filename, 'rt', encoding='utf-8') as f:
                 self.set_input(csv_filename, f)
         else:
-            raise ValueError("Only csv types of .csv and /csv.gz are supported."
+            raise ValueError("Only csv types of .csv and csv.gz are supported."
                     " Not {}".format(csv_filename))
 
     def set_input(self, filename: URI, stream: TextIO):
