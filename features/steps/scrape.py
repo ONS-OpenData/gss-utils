@@ -94,6 +94,12 @@ def step_impl(context, email):
     assert_equal(context.scraper.contact, email)
 
 
+@step('there should be "{num_of_distributions}" distributions')
+def step_impl(context, num_of_distributions):
+    assert len(context.scraper.distributions) == int(num_of_distributions), \
+        f'expected {len(context.scraper.distributions)} distributions, but got {num_of_distributions}'
+
+
 @then("{prefix}:{property} should be `{object}`")
 def step_impl(context, prefix, property, object):
     ns = {'dct': DCTERMS, 'dcat': DCAT, 'rdfs': RDFS}.get(prefix)
