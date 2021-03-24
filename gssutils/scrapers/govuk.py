@@ -15,14 +15,6 @@ import re
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
-def assert_get_one(thing, name_of_thing):
-    """
-    Helper to assert we have one of a thing when we're expecting one of a thing, then
-    return that one thing de-listified
-    """
-    assert len(thing) == 1, f'Aborting. Xpath expecting 1 "{name_of_thing}", got {len(thing)}'
-    return thing[0]
-
 def content_api(scraper, tree):
     final_url = False
     uri_components = urlparse(scraper.uri)
@@ -265,6 +257,7 @@ def content_api_sds(scraper, metadata):
                     ds.distribution.append(dist)
                 scraper.catalog.dataset.append(ds)
 
+
 def eth_facts_service(scraper, tree):
 
     scraper.dataset.publisher = GOV['department-for-education']
@@ -339,44 +332,3 @@ def content_api_guidance(scraper, tree):
         distro.modified = scraper.dataset.modified
 
         scraper.distributions.append(distro)
-
-"""
-def guidance_scraper(scraper, tree):
-    
-    title = assert_get_one(tree.xpath('//h1'), 'get title')
-    scraper.dataset.title = title.text.strip()
-    
-    description = assert_get_one(tree.xpath("//p[contains(@class, 'gem-c-lead-paragraph')]"), 'get description')
-    scraper.dataset.description = description.text.strip()
-    
-    assert len(tree.xpath('//dd')) == 3, f"Was expecting 3 dd elements, got: {len(tree.xpath('//dd'))}"
-
-    issued = assert_get_one(tree.xpath('//dd[2]'), 'get issued')
-    scraper.dataset.issued = parse(issued.text.strip())
-
-    modified = assert_get_one(tree.xpath('//dd[3]'), 'get modified')
-    scraper.dataset.modified = parse(modified.text.strip())
-    
-    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
-
-    publisher = assert_get_one(tree.xpath('//dd[1]/a'), 'get publisher')
-    scraper.dataset.publisher = f"https://www.gov.uk{publisher.get('href')}"
-
-    for attachment in tree.xpath('//section[contains(@class, "attachment embedded")]'):
-    
-        distro = Distribution(scraper)
-
-        distro.title = assert_get_one(attachment.xpath('./div/h3'), 'get distro title').text.strip()
-
-        download_element = assert_get_one(attachment.xpath('.//span[contains(@class, "download")]/a'), 'get download URL')
-        distro.downloadURL = download_element.get('href')
-
-        distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL)
-
-        distro.issued = scraper.dataset.issued
-
-        distro.modified = scraper.dataset.modified
-
-        scraper.distributions.append(distro)
-"""
-
