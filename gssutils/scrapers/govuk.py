@@ -15,6 +15,14 @@ import re
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
+def assert_get_one(thing, name_of_thing):
+    """
+    Helper to assert we have one of a thing when we're expecting one of a thing, then
+    return that one thing de-listified
+    """
+    assert len(thing) == 1, f'Aborting. Xpath expecting 1 "{name_of_thing}", got {len(thing)}'
+    return thing[0]
+
 def content_api(scraper, tree):
     final_url = False
     uri_components = urlparse(scraper.uri)
@@ -36,6 +44,8 @@ def content_api(scraper, tree):
         scraper.distributions = scraper.dataset.distribution
     elif schema == 'statistical_data_set':
         content_api_sds(scraper, metadata)
+    elif schema == 'detailed_guide':
+        content_api_guidance(scraper, metadata)
     else:
         logging.warning(f'Unknown schema type {schema}')
 
@@ -284,4 +294,89 @@ def eth_facts_service(scraper, tree):
             pass
 
 
+def content_api_guidance(scraper, tree):
+    
+    content_api_url = f'https://www.gov.uk/api/content/{scraper.uri.replace("https://www.gov.uk/", "")}'
+    r = scraper.session.get(content_api_url)
+    if r.status_code != 200:
+        raise Exception(f'Failed to get url "{content_api_url}", status_code "{r.status_code}".')
+    page_json = r.json()
+
+    if 'title' in page_json:
+        scraper.dataset.title = page_json['title']
+    
+    if 'description' in page_json:
+        scraper.dataset.description = page_json['description']
+
+    if 'first_published_at' in page_json:
+        scraper.dataset.issued = parse(page_json['first_published_at'])
+
+    if 'public_updated_at' in page_json:
+        scraper.dataset.modified = parse(page_json['public_updated_at'])
+
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+
+    if 'links' in page_json and 'organisations' in page_json['links']:
+        orgs = page_json['links']['organisations']
+        if len(orgs) == 0:
+            logging.warning("No publishing organisations listed.")
+        elif len(orgs) >= 1:
+            if len(orgs) > 1:
+                logging.warning('More than one organisation listed, taking the first.')
+            scraper.dataset.publisher = orgs[0]["web_url"]
+
+    for attachment in page_json['details']['attachments']:
+        distro = Distribution(scraper)
+
+        distro.title = attachment['title']
+
+        distro.downloadURL = attachment['url']
+
+        distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
+
+        distro.issued = scraper.dataset.issued
+
+        distro.modified = scraper.dataset.modified
+
+        scraper.distributions.append(distro)
+
+"""
+def guidance_scraper(scraper, tree):
+    
+    title = assert_get_one(tree.xpath('//h1'), 'get title')
+    scraper.dataset.title = title.text.strip()
+    
+    description = assert_get_one(tree.xpath("//p[contains(@class, 'gem-c-lead-paragraph')]"), 'get description')
+    scraper.dataset.description = description.text.strip()
+    
+    assert len(tree.xpath('//dd')) == 3, f"Was expecting 3 dd elements, got: {len(tree.xpath('//dd'))}"
+
+    issued = assert_get_one(tree.xpath('//dd[2]'), 'get issued')
+    scraper.dataset.issued = parse(issued.text.strip())
+
+    modified = assert_get_one(tree.xpath('//dd[3]'), 'get modified')
+    scraper.dataset.modified = parse(modified.text.strip())
+    
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+
+    publisher = assert_get_one(tree.xpath('//dd[1]/a'), 'get publisher')
+    scraper.dataset.publisher = f"https://www.gov.uk{publisher.get('href')}"
+
+    for attachment in tree.xpath('//section[contains(@class, "attachment embedded")]'):
+    
+        distro = Distribution(scraper)
+
+        distro.title = assert_get_one(attachment.xpath('./div/h3'), 'get distro title').text.strip()
+
+        download_element = assert_get_one(attachment.xpath('.//span[contains(@class, "download")]/a'), 'get download URL')
+        distro.downloadURL = download_element.get('href')
+
+        distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL)
+
+        distro.issued = scraper.dataset.issued
+
+        distro.modified = scraper.dataset.modified
+
+        scraper.distributions.append(distro)
+"""
 

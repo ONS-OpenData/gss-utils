@@ -22,5 +22,6 @@ scraper_list = [
     ('https://www2.gov.scot/Topics/Statistics/Browse/', govscot.scrape),
     ('https://www.communities-ni.gov.uk/publications/topic', dcni.scrape),
     ('https://gov.wales/', govwales.scrape),
-    ('https://www.lowcarboncontracts.uk/data-portal/dataset', lcc.scrape)
+    ('https://www.lowcarboncontracts.uk/data-portal/dataset', lcc.scrape),
+    ('https://www.gov.uk/guidance', govuk.content_api)
 ]
