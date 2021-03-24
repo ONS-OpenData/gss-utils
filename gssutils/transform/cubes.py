@@ -157,7 +157,11 @@ class Cube:
         self.scraper.set_dataset_id(dataset_path)
 
         # output the tidy data
-        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}{self.output_extension}', index=False, **self.pandas_kwargs)
+
+        # note: we're defaulting to index False, but allow the DE to specify it (for whatever reason)
+        show_index = False if "index" not in self.pandas_kwargs else self.pandas_kwargs["index"]
+        self.pandas_kwargs.pop('index', None)
+        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}{self.output_extension}', index=show_index, **self.pandas_kwargs)
 
         is_accretive_upload = info_json is not None and "load" in info_json and "accretiveUpload" in info_json["load"] \
                               and info_json["load"]["accretiveUpload"]
