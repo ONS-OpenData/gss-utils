@@ -35,11 +35,11 @@ class Cubes:
             logging.warning("The passing of job_name= has been depreciated and no longer does anything, please"
                             "remove this keyword argument")
 
-    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None):
+    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, **kwargs):
         """
         Add a single datacube to the cubes class.
         """
-        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict))
+        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict, **kwargs))
 
     def output_all(self):
         """
@@ -83,14 +83,16 @@ class Cube:
     A class to encapsulate the dataframe and associated metadata that constitutes a single datacube
     """
 
-    def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict):
+    def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict, **kwargs):
 
-        self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
+        self.scraper = copy.deepcopy(scraper)   # don't copy a pointer, snapshot a thing
         self.dataframe = dataframe
         self.title = title
         self.scraper.set_base_uri(base_uri)
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
+        self.pandas_kwargs = kwargs
+        self.output_extension = ".csv" if "gzip" not in kwargs.values() else ".csv.gz"
 
     def _instantiate_map(self, destination_folder, pathified_title, info_json):
         """
@@ -105,7 +107,7 @@ class Cube:
         map_obj.set_accretive_upload(info_json)
         map_obj.set_mapping(info_json)
 
-        map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
+        map_obj.set_csv(destination_folder / f'{pathified_title}{self.output_extension}')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
 
         return map_obj
@@ -152,7 +154,11 @@ class Cube:
         self.scraper.set_dataset_id(dataset_path)
 
         # output the tidy data
-        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}.csv', index=False)
+
+        # note: we're defaulting to index False, but allow the DE to specify it (for whatever reason)
+        show_index = False if "index" not in self.pandas_kwargs else self.pandas_kwargs["index"]
+        self.pandas_kwargs.pop('index', None)
+        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}{self.output_extension}', index=show_index, **self.pandas_kwargs)
 
         is_accretive_upload = info_json is not None and "load" in info_json and "accretiveUpload" in info_json["load"] \
                               and info_json["load"]["accretiveUpload"]
@@ -162,9 +168,9 @@ class Cube:
         if not is_accretive_upload:
             # Output the trig
             trig_to_use = self.scraper.generate_trig()
-            with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
+            with open(destination_folder / f'{pathify(self.title)}{self.output_extension}-metadata.trig', 'wb') as metadata:
                 metadata.write(trig_to_use)
 
         # Output csv and csvw
         populated_map_obj = self._populate_csvw_mapping(destination_folder, pathify(self.title), info_json)
-        populated_map_obj.write(destination_folder / f'{pathify(self.title)}.csv-metadata.json')
+        populated_map_obj.write(destination_folder / f'{pathify(self.title)}{self.output_extension}-metadata.json')
