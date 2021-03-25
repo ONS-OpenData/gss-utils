@@ -39,9 +39,6 @@ class Cubes:
         """
         Add a single datacube to the cubes class.
         """
-
-        # Catch any kwargs the de is trying to pass through to pandas
-        kwargs = {k:v for (k, v) in kwargs.items() if k not in ["info_dict_json", "graph"]}
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict, **kwargs))
 
     def output_all(self):
