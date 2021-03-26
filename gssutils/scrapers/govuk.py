@@ -4,6 +4,7 @@ from datetime import datetime
 from urllib.parse import urljoin, urlparse
 
 from lxml import html
+import json
 
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
@@ -287,30 +288,36 @@ def eth_facts_service(scraper, tree):
             pass
 
 
-def content_api_guidance(scraper, tree):
-    
-    content_api_url = f'https://www.gov.uk/api/content/{scraper.uri.replace("https://www.gov.uk/", "")}'
-    r = scraper.session.get(content_api_url)
-    if r.status_code != 200:
-        raise Exception(f'Failed to get url "{content_api_url}", status_code "{r.status_code}".')
-    page_json = r.json()
+def content_api_guidance(scraper, metadata):
 
-    if 'title' in page_json:
-        scraper.dataset.title = page_json['title']
-    
-    if 'description' in page_json:
-        scraper.dataset.description = page_json['description']
+    title = metadata.get("title", None)
+    if title is None:
+        logging.warning(f'The title for dataset {scraper.url} not set, title field missing from content api')
+    else:
+        scraper.dataset.title = title
 
-    if 'first_published_at' in page_json:
-        scraper.dataset.issued = parse(page_json['first_published_at'])
+    description = metadata.get("description", None)
+    if description is None:
+        logging.warning(f'The description for dataset {scraper.url} not set, description field missing from content api')
+    else:
+        scraper.dataset.description = description
 
-    if 'public_updated_at' in page_json:
-        scraper.dataset.modified = parse(page_json['public_updated_at'])
+    first_published_at = metadata.get("first_published_at", None)
+    if first_published_at is None:
+        logging.warning(f'The issued date for dataset {scraper.url} not set, issued date field missing from content api')
+    else:
+        scraper.dataset.issued = first_published_at
+
+    public_updated_at = metadata.get("public_updated_at", None)
+    if public_updated_at is None:
+        logging.warning(f'The modified date for dataset {scraper.url} not set, modified date field missing from content api')
+    else:
+        scraper.dataset.modified = public_updated_at
 
     scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
 
-    if 'links' in page_json and 'organisations' in page_json['links']:
-        orgs = page_json['links']['organisations']
+    if 'links' in metadata and 'organisations' in metadata['links']:
+        orgs = metadata['links']['organisations']
         if len(orgs) == 0:
             logging.warning("No publishing organisations listed.")
         elif len(orgs) >= 1:
@@ -318,17 +325,30 @@ def content_api_guidance(scraper, tree):
                 logging.warning('More than one organisation listed, taking the first.')
             scraper.dataset.publisher = orgs[0]["web_url"]
 
-    for attachment in page_json['details']['attachments']:
-        distro = Distribution(scraper)
+    try:
+        for attachment in metadata['details']['attachments']:
+            distro = Distribution(scraper)
 
-        distro.title = attachment['title']
+            dist_title = attachment.get('title', None)
+            if dist_title is None:
+                logging.warning(f'The distribution title for dataset {scraper.url} not set, distribution title field missing from content api')
+            else:
+                distro.title = dist_title
 
-        distro.downloadURL = attachment['url']
+            dist_downloadURL = attachment.get('url', None)
+            if dist_downloadURL is None:
+                logging.warning(f'The distribution download URL for dataset {scraper.url} not set, distribution download URL field missing from content api')
+            else:
+                distro.downloadURL = attachment['url']
 
-        distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
+            distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
 
-        distro.issued = scraper.dataset.issued
+            distro.issued = scraper.dataset.issued
 
-        distro.modified = scraper.dataset.modified
+            distro.modified = scraper.dataset.modified
 
-        scraper.distributions.append(distro)
+            scraper.distributions.append(distro)
+
+    except KeyError:
+      logging.warning(f'Failed to extract attachment {json.dumps(attachment, indent=2)}')
+
