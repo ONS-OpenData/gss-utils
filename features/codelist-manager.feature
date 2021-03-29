@@ -228,6 +228,44 @@ Feature: Create and Manage CodeList Metadata files
       Label,Notation,Parent Notation,Sort Priority,Description
       """
     And We have an info json config of the form
+    # `id` is used in preference over the historical `title` column.
+      """
+      {
+        "id": "almost-the-best-data-set",
+        "title": "The Best Dataset Ever"
+      }
+      """
+    Given The code list is in the "My Favourite Family" family
+    When We generate a CSVW metadata file at the dataset level
+    Then The following properties are set
+      """
+        {
+            "@id": "http://gss-data.org.uk/data/gss_data/my-favourite-family/almost-the-best-data-set#scheme/my-favourite-code-list",
+            "tableSchema": {
+                "columns": [
+                    {
+                        "propertyUrl": "skos:broader",
+                        "valueUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/almost-the-best-data-set#concept/my-favourite-code-list/{parent_notation}"
+                    },
+                    {
+                        "propertyUrl": "skos:inScheme",
+                        "valueUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/almost-the-best-data-set#scheme/my-favourite-code-list"
+                    }
+                ],
+                "aboutUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/almost-the-best-data-set#concept/my-favourite-code-list/{notation}"
+            },
+            "prov:hadDerivation": {
+                "@id": "http://gss-data.org.uk/data/gss_data/my-favourite-family/almost-the-best-data-set#scheme/my-favourite-code-list"
+            }
+        }
+      """
+
+    Scenario: Creating New Metadata File at the dataset level from CSV using title (where id does not exist).
+    Given We have a CSV file named "my-favourite-code-list.csv" with headers
+      """
+      Label,Notation,Parent Notation,Sort Priority,Description
+      """
+    And We have an info json config of the form
       """
       {
         "title": "The Best Dataset Ever"
@@ -238,23 +276,7 @@ Feature: Create and Manage CodeList Metadata files
     Then The following properties are set
       """
         {
-            "@id": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#scheme/my-favourite-code-list",
-            "tableSchema": {
-                "columns": [
-                    {
-                        "propertyUrl": "skos:broader",
-                        "valueUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#concept/my-favourite-code-list/{parent_notation}"
-                    },
-                    {
-                        "propertyUrl": "skos:inScheme",
-                        "valueUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#scheme/my-favourite-code-list"
-                    }
-                ],
-                "aboutUrl": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#concept/my-favourite-code-list/{notation}"
-            },
-            "prov:hadDerivation": {
-                "@id": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#scheme/my-favourite-code-list"
-            }
+            "@id": "http://gss-data.org.uk/data/gss_data/my-favourite-family/the-best-dataset-ever#scheme/my-favourite-code-list"
         }
       """
 
