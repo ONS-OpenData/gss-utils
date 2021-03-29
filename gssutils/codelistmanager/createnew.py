@@ -223,6 +223,9 @@ def _map_str_to_code_list_level(level: str) -> CodeListLevel:
 
 
 def _get_dataset_name_path(info_json_config: Dict) -> str:
+    if "id" in info_json_config:
+        return info_json_config["id"]
+
     return pathify(info_json_config["title"])
 
 
