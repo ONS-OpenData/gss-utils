@@ -325,21 +325,15 @@ def content_api_guidance(scraper, metadata):
                 logging.warning('More than one organisation listed, taking the first.')
             scraper.dataset.publisher = orgs[0]["web_url"]
 
-    try:
-        for attachment in metadata['details']['attachments']:
+    for attachment in metadata['details']['attachments']:
+        try:
             distro = Distribution(scraper)
 
-            dist_title = attachment.get('title', None)
-            if dist_title is None:
-                logging.warning(f'The distribution title for dataset {scraper.url} not set, distribution title field missing from content api')
-            else:
-                distro.title = dist_title
+            dist_title = attachment.get('title')
+            distro.title = dist_title
 
-            dist_downloadURL = attachment.get('url', None)
-            if dist_downloadURL is None:
-                logging.warning(f'The distribution download URL for dataset {scraper.url} not set, distribution download URL field missing from content api')
-            else:
-                distro.downloadURL = attachment['url']
+            dist_downloadURL = attachment.get('url')
+            distro.downloadURL = attachment['url']
 
             distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
 
@@ -349,6 +343,6 @@ def content_api_guidance(scraper, metadata):
 
             scraper.distributions.append(distro)
 
-    except KeyError:
-      logging.warning(f'Failed to extract attachment {json.dumps(attachment, indent=2)}')
+        except KeyError:
+            logging.warning(f'Failed to extract attachment {json.dumps(attachment, indent=2)}')
 
