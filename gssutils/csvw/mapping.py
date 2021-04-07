@@ -44,6 +44,7 @@ class CSVWMapping:
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
         self._accretive_upload: bool = False
+        self._containing_graph_uri: Optional[URI] = None
 
     @staticmethod
     def namify(column_header: str):
@@ -110,6 +111,9 @@ class CSVWMapping:
         if self._foreign_keys is None:
             self._foreign_keys = []
         self._foreign_keys.append(foreign_key)
+
+    def set_containing_graph_uri(self, uri: URI):
+        self._containing_graph_uri = uri
 
     def set_dataset_uri(self, uri: URI, dataset_root_uri: Optional[URI] = None):
         f"""
@@ -392,15 +396,25 @@ class CSVWMapping:
             valueUrl=URI("qb:Observation")
         )
         self._validate()
+
+        containing_graph_uri = self._containing_graph_uri or self.join_dataset_uri("#graph")
         csvw_structure = {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),
-            "@id": self.join_dataset_uri("#tables")
+            "@id": containing_graph_uri,
+            # sd:NamedGraph => https://www.w3.org/TR/sparql11-service-description/#sd-NamedGraph
+            "rdf:type": {
+                "@id": "sd:NamedGraph"
+            },
+            "sd:name": {
+                "@id": containing_graph_uri
+            }
         }
 
         if not self._accretive_upload:
             # Don't want to upload DSD twice where we're just adding new data to existing data.
-            csvw_structure["prov:hadDerivation"] = DataSet(
+            # void:rootResource => https://www.w3.org/TR/void/#root-resource
+            csvw_structure["void:rootResource"] = DataSet(
                 at_id=self.join_dataset_uri('#dataset'),
                 qb_structure=DSD(
                     at_id=self.join_dataset_uri('#structure'),

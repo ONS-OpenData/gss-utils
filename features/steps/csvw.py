@@ -181,6 +181,11 @@ def step_impl(context, map_file):
     json.dump(mapping, context.json_io)
 
 
+@step("a containing graph URI '{uri}'")
+def step_impl(context, uri):
+    context.containing_graph_uri = uri
+
+
 @when("I create a CSVW file from the mapping and CSV")
 def step_impl(context):
     context.csvw = CSVWMapping()
@@ -190,6 +195,9 @@ def step_impl(context):
     context.csvw.set_mapping(json.load(context.json_io))
     context.json_io.seek(0)
     context.csvw.set_accretive_upload(json.load(context.json_io))
+
+    if "containing_graph_uri" in context and context.containing_graph_uri is not None:
+        context.csvw.set_containing_graph_uri(context.containing_graph_uri)
 
     if hasattr(context, 'registry'):
         context.csvw.set_registry(URI(context.registry))
