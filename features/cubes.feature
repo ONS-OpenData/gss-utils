@@ -38,3 +38,16 @@ Feature: Creating cubes
     And I specify a datacube named "test cube 3" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     And I specify a datacube named "test cube 4" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     Then the datacube outputs can be created
+
+  Scenario: ignore JOB_NAME
+    Given the 'JOB_NAME' environment variable is 'GSS_data/beta.gss-data.org.uk/family/trade/DCMS-Sectors-Economic-Estimates-Year-Trade-in-services'
+    And I want to create datacubes from the seed "seed-dcms-trade-in-services-info.json"
+    And I specify a datacube named "DCMS trade in services" with data "dcms-trade-in-services.csv" and a scrape using the seed "seed-dcms-trade-in-services-info.json"
+    Then the datacube outputs can be created
+    And the TriG at "out/dcms-trade-in-services.csv-metadata.trig" should contain
+      """
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+      <http://gss-data.org.uk/data/gss_data/trade/dcms-dcms-sectors-economic-estimates-year-trade-in-services-catalog-entry>
+          rdfs:label "DCMS Sectors Economic Estimates 2018: Trade in services"@en .
+      """
