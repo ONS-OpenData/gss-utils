@@ -213,7 +213,11 @@ class CSVWMapping:
                         )
         # Now iterate over column headers in the given CSV file
         for name in self._column_names:
-            if self._mapping is not None and name in self._mapping and isinstance(self._mapping[name], dict):
+            if (
+                self._mapping is not None 
+                and name in self._mapping 
+                and isinstance(self._mapping[name], dict)
+            ):
                 obj = self._mapping[name]
                 if "dimension" in obj and "value" in obj:
                     self._keys.append(self._columns[name].name)
@@ -231,7 +235,7 @@ class CSVWMapping:
                             )
                         )
                     ))
-                elif "parent" in obj and "value" in obj:
+                elif "parent" in obj:
                     # a local dimension that has a super property
                     description: Optional[str] = obj.get("description", None)
                     label: str = obj.get("label", name)
