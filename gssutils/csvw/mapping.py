@@ -397,7 +397,13 @@ class CSVWMapping:
         )
         self._validate()
 
-        containing_graph_uri = self._containing_graph_uri or self.join_dataset_uri("#graph")
+        if self._containing_graph_uri is None:
+            print("WARNING: _containing_graph_uri is unset. Imputing graph URI from context.")
+            containing_graph_uri = self._dataset_uri.replace("gss-data.org.uk/data/gss_data",
+                                                             "gss-data.org.uk/graph/gss_data")
+        else:
+            containing_graph_uri = self._containing_graph_uri
+
         csvw_structure = {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),

@@ -107,6 +107,7 @@ class Cube:
 
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
+        map_obj.set_containing_graph_uri(self.scraper.dataset.graph)
 
         return map_obj
 

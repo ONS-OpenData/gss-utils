@@ -432,9 +432,9 @@ Scenario: A user wishes to specify a parent dimension for a locally defined data
     @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
     @prefix void: <http://rdfs.org/ns/void#>.
 
-    <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#graph>
+    <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>
         a sd:NamedGraph;
-        sd:name <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#graph>;
+        sd:name <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>;
         void:rootResource <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset>.
     """
 
@@ -442,7 +442,7 @@ Scenario: Manually Overriding CSV-W's graph URI works.
     Given a CSV file 'product-observations.csv'
     And a JSON map file 'mapping-info.json'
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
-    And a containing graph URI 'http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    And a containing graph URI 'http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
     And gsscogs/csv2rdf generates RDF
@@ -452,8 +452,8 @@ Scenario: Manually Overriding CSV-W's graph URI works.
     @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
     @prefix void: <http://rdfs.org/ns/void#>.
 
-    <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>
+    <http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>
         a sd:NamedGraph;
-        sd:name <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>;
+        sd:name <http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>;
         void:rootResource <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset>.
     """
