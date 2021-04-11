@@ -24,7 +24,6 @@ setuptools.setup(
                       'pandas',
                       'pyexcel',
                       'pyexcel-io',
-                      'pyexcel-xls',
                       'pyexcel-ods3',
                       'html2text',
                       'rdflib==4.2.2',

@@ -63,6 +63,8 @@ class Downloadable(Resource):
                 tableset = messytables.excel.XLSTableSet(fileobj=fobj)
                 tabs = list(xypath.loader.get_sheets(tableset, "*"))
                 return tabs
+
+        """
         elif self._mediaType == ODS:
             with self.open() as ods_obj:
                 excel_obj = BytesIO()
@@ -71,6 +73,8 @@ class Downloadable(Resource):
                 tableset = messytables.excel.XLSTableSet(fileobj=excel_obj)
                 tabs = list(xypath.loader.get_sheets(tableset, "*"))
                 return tabs
+        """
+
         raise FormatError(f'Unable to load {self._mediaType} into Databaker.')
 
     def _get_simple_csv_pandas(self, **kwargs) -> Union[Dict[str, pd.DataFrame], pd.DataFrame]:
@@ -83,6 +87,8 @@ class Downloadable(Resource):
                 # pandas 0.25 now tries to seek(0), so we need to read and buffer the stream
                 buffered_fobj = BytesIO(fobj.read())
                 return pd.read_excel(buffered_fobj, **kwargs)
+
+        """"
         elif self._mediaType == ODS:
             with self.open() as ods_obj:
                 if 'sheet_name' in kwargs:
@@ -95,7 +101,9 @@ class Downloadable(Resource):
                                             file_type='ods',
                                             library='pyexcel-ods3')
                     return {sheet.name: pd.DataFrame(sheet.get_array(**kwargs)) for sheet in book}
-        elif self._mediaType == 'text/csv':
+        """
+
+        if self._mediaType == 'text/csv':
             with self.open() as csv_obj:
                 return pd.read_csv(csv_obj, **kwargs)
         elif self._mediaType == 'application/json':
