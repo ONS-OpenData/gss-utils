@@ -398,3 +398,23 @@ Scenario: Ensure column definition `value` field is respected when `parent` is n
     And gsscogs/csv2rdf generates RDF
     And the RDF should pass the Data Cube integrity constraints
     And the ask query 'dsd-components-exist.sparql' should return False
+
+
+Scenario: A user wishes to specify a parent dimension for a locally defined dataset dimension
+    Given a CSV file 'life-expectancy.csv'
+    And a JSON map file 'life-expectancy.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/health/life-expectancy-in-newport'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the RDF should contain
+    """
+      @base <http://gss-data.org.uk/data/gss_data/health/life-expectancy-in-newport> .
+      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      @prefix qb: <http://purl.org/linked-data/cube#> .
+
+      <#dimension/region> a qb:DimensionProperty ;
+          qb:codeList <http://gss-data.org.uk/data/gss_data/health/life-expectancy-in-newport#scheme/region> ;
+          rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> .
+    """

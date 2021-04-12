@@ -1,0 +1,36 @@
+{
+    "id": "life-expectancy-in-newport",
+    "title": "Life Expectancy in Newport",
+    "publisher": "Office for National Statistics",
+    "description": "Experimental dataset providing a breakdown of Life Expectancy.",
+    "landingPage": [
+        "https://www.ons.gov.uk/life-expectancy"
+    ],
+    "published": "2019-04-14",
+    "families": [
+        "Health"
+    ],
+    "extract": {
+        "source": "XLS",
+        "stage": "Done"
+    },
+    "transform": {
+        "airtable": [
+            "rec6SvP3d4MJ3pXYR",
+            "recduvpZS53BpXU3W"
+        ],
+        "main_issue": 3,
+        "columns": {
+            "Region": {
+                "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod"
+            },
+            "Life Expectancy": {
+                "unit": "http://gss-data.org.uk/def/concept/years",
+                "measure": "http://gss-data.org.uk/def/measure/life-expectancy",
+                "datatype": "number"
+            }
+        }
+    },
+    "sizingNotes": "",
+    "notes": ""
+}

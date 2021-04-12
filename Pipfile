@@ -9,6 +9,7 @@ nose = "*"
 vcrpy = "*"
 docker = "*"
 pipenv-setup = "*"
+v = {editable = true,version = "*"}
 
 [packages]
 gssutils = {editable = true,path = "."}

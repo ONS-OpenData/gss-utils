@@ -4,6 +4,7 @@ from datetime import datetime
 from urllib.parse import urljoin, urlparse
 
 from lxml import html
+import json
 
 from gssutils.metadata import GOV
 from gssutils.metadata.dcat import Distribution
@@ -36,6 +37,8 @@ def content_api(scraper, tree):
         scraper.distributions = scraper.dataset.distribution
     elif schema == 'statistical_data_set':
         content_api_sds(scraper, metadata)
+    elif schema == 'detailed_guide':
+        content_api_guidance(scraper, metadata)
     else:
         logging.warning(f'Unknown schema type {schema}')
 
@@ -255,6 +258,7 @@ def content_api_sds(scraper, metadata):
                     ds.distribution.append(dist)
                 scraper.catalog.dataset.append(ds)
 
+
 def eth_facts_service(scraper, tree):
 
     scraper.dataset.publisher = GOV['department-for-education']
@@ -284,4 +288,61 @@ def eth_facts_service(scraper, tree):
             pass
 
 
+def content_api_guidance(scraper, metadata):
+
+    title = metadata.get("title", None)
+    if title is None:
+        logging.warning(f'The title for dataset {scraper.url} not set, title field missing from content api')
+    else:
+        scraper.dataset.title = title
+
+    description = metadata.get("description", None)
+    if description is None:
+        logging.warning(f'The description for dataset {scraper.url} not set, description field missing from content api')
+    else:
+        scraper.dataset.description = description
+
+    first_published_at = metadata.get("first_published_at", None)
+    if first_published_at is None:
+        logging.warning(f'The issued date for dataset {scraper.url} not set, issued date field missing from content api')
+    else:
+        scraper.dataset.issued = first_published_at
+
+    public_updated_at = metadata.get("public_updated_at", None)
+    if public_updated_at is None:
+        logging.warning(f'The modified date for dataset {scraper.url} not set, modified date field missing from content api')
+    else:
+        scraper.dataset.modified = public_updated_at
+
+    scraper.dataset.license = 'http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+
+    if 'links' in metadata and 'organisations' in metadata['links']:
+        orgs = metadata['links']['organisations']
+        if len(orgs) == 0:
+            logging.warning("No publishing organisations listed.")
+        elif len(orgs) >= 1:
+            if len(orgs) > 1:
+                logging.warning('More than one organisation listed, taking the first.')
+            scraper.dataset.publisher = orgs[0]["web_url"]
+
+    for attachment in metadata['details']['attachments']:
+        try:
+            distro = Distribution(scraper)
+
+            dist_title = attachment.get('title')
+            distro.title = dist_title
+
+            dist_downloadURL = attachment.get('url')
+            distro.downloadURL = attachment['url']
+
+            distro.mediaType, _ = mimetypes.guess_type(distro.downloadURL) 
+
+            distro.issued = scraper.dataset.issued
+
+            distro.modified = scraper.dataset.modified
+
+            scraper.distributions.append(distro)
+
+        except KeyError:
+            logging.warning(f'Failed to extract attachment {json.dumps(attachment, indent=2)}')
 
