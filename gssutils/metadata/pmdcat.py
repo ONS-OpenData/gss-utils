@@ -45,7 +45,8 @@ class Dataset(dcat.Dataset):
     _properties_metadata = dict(dcat.Dataset._properties_metadata)
     _properties_metadata.update({
         'metadataGraph': (PMDCAT.metadataGraph, Status.mandatory, URIRef),
-        'graph': (PMDCAT.graph, Status.mandatory, URIRef),
+        # pmdcat:graph declares the graph containing the qb:DataSet
+        'pmdcatGraph': (PMDCAT.graph, Status.mandatory, URIRef),
         'datasetContents': (PMDCAT.datasetContents, Status.mandatory, lambda d: URIRef(d.uri)),
         'markdownDescription': (PMDCAT.markdownDescription, Status.recommended, lambda l: Literal(l, MARKDOWN)),
         'sparqlEndpoint': (VOID.sparqlEndpoint, Status.mandatory, URIRef),
@@ -66,6 +67,4 @@ class Dataset(dcat.Dataset):
             # TODO: remove the following once we distinguish between the modification datetime of a dataset
             #       in PMD and the last modification datetime of the dataset by the publisher.
             value = datetime.now(timezone.utc).astimezone()
-        elif key == 'datasetContents':
-            value._graph = self._graph
         super().__setattr__(key, value)

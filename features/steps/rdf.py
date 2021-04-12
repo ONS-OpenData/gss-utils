@@ -108,9 +108,9 @@ def step_impl(context, uri):
     eq_(str(context.scraper.dataset.datasetContents.uri), uri)
 
 
-@step("the metadata graph should be <{uri}>")
+@step("the pmdcat:graph should be <{uri}>")
 def step_impl(context, uri):
-    eq_(str(context.scraper.dataset.graph), uri)
+    eq_(str(context.scraper.dataset.pmdcatGraph), uri)
 
 
 @step("the modified date should be quite recent")

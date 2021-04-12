@@ -32,7 +32,7 @@ class Resource:
 
 class Metadata(Resource):
 
-    _core_properties = ['uri', '_uri', '_graph', '_seed']
+    _core_properties = ['uri', '_uri', '_containing_graph', '_seed']
     _properties_metadata = {
         'label': (RDFS.label, Status.mandatory, lambda s: Literal(s, 'en')),
         'comment': (RDFS.comment, Status.mandatory, lambda s: Literal(s, 'en'))
@@ -40,14 +40,20 @@ class Metadata(Resource):
 
     def __init__(self):
         super().__init__()
-        self._graph: Identifier = BNode()
+        self._containing_graph: Identifier = BNode()
         self._seed: Optional[dict] = None
 
-    def get_graph(self):
-        return str(self._graph)
+    def get_containing_graph(self):
+        """
+        The graph URI which this object's triples are to be stored in.
+        """
+        return str(self._containing_graph)
 
-    def set_graph(self, uri):
-        self._graph = URIRef(uri)
+    def set_containing_graph(self, uri):
+        """
+        The graph URI which this object's triples are to be stored in.
+        """
+        self._containing_graph = URIRef(uri)
 
     def __setattr__(self, name, value):
         if name in self._properties_metadata:
@@ -80,7 +86,7 @@ class Metadata(Resource):
         return (lambda x: x if type(x) == list else [x])(self.__dict__[local_name])
 
     def add_to_dataset(self, dataset):
-        graph = dataset.graph(self._graph)
+        graph = dataset.graph(self._containing_graph)
         for c in getmro(type(self)):
             if hasattr(c, '_type'):
                 if type(c._type) == tuple:
