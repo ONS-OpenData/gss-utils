@@ -38,11 +38,10 @@ def publications(scraper, tree):
 			dist = Distribution(scraper)
 			dist.title = element.text
 			dist.downloadURL = urljoin("https://www.gov.scot", element.attrib['href'])
-			dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+			dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
 			if dist.mediaType in ACCEPTED_MIMETYPES:
 				scraper.distributions.append(dist)
-			else:
-				pass
+
 
 def collections(scraper, tree):
 
@@ -73,11 +72,9 @@ def collections(scraper, tree):
 				dist = Distribution(scraper)
 				dist.title = element.text
 				dist.downloadURL = urljoin("https://www.gov.scot", element.attrib['href'])
-				dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+				dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
 				if dist.mediaType in ACCEPTED_MIMETYPES:
 					scraper.distributions.append(dist)
-				else:
-					pass
 
 			# Distributions as supportin files (attached top-right of page) of the principle dataset
 			dists = pubTree.xpath('//a[contains(@class, "supporting-file__link")]')
@@ -85,11 +82,9 @@ def collections(scraper, tree):
 				dist = Distribution(scraper)
 				dist.title = assert_get_one(pubTree.xpath('//h1'), 'title for distribution').text.strip()
 				dist.downloadURL = urljoin("https://www.gov.scot", element.attrib['href'])
-				dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+				dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
 				if dist.mediaType in ACCEPTED_MIMETYPES:
 					scraper.distributions.append(dist)
-				else:
-					pass
 
 
 def scrape(scraper, tree):
@@ -145,7 +140,7 @@ def scrape_old(scraper, tree):
 					dist.title = match.group(1)
 					scraper.dataset.issued = parse(match.group(5), dayfirst=True).date()
 					dist.downloadURL = urljoin(scraper.uri, cell.xpath('a/@href')[0])
-					dist.mediaType, encoding = mimetypes.guess_type(dist.downloadURL)
+					dist.mediaType, _ = mimetypes.guess_type(dist.downloadURL)
 				scraper.distributions.append(dist)
 		except:
 			break
