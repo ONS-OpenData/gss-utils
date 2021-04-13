@@ -38,3 +38,16 @@ Feature: Creating cubes
     And I specify a datacube named "test cube 3" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     And I specify a datacube named "test cube 4" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     Then the datacube outputs can be created
+
+
+  Scenario: Override of the containing Graph URI works
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And I add a cube "test cube 1" with data "quarterly-balance-of-payments.csv" and a scrape seed "seed-temp-scrape-quarterly-balance-of-payments.json" with override containing graph "http://containing-graph-uri"
+    Then the datacube outputs can be created
+    Then generate RDF from the n=0 cube's CSV-W output
+    And the RDF should contain
+    """
+    @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+
+    <http://containing-graph-uri> a sd:NamedGraph.
+    """

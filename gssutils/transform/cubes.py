@@ -5,6 +5,7 @@ import copy
 
 from pathlib import Path
 from urllib.parse import urljoin
+from typing import Optional
 
 from gssutils.csvw.mapping import CSVWMapping
 from gssutils.utils import pathify
@@ -35,11 +36,12 @@ class Cubes:
             logging.warning("The passing of job_name= has been depreciated and no longer does anything, please"
                             "remove this keyword argument")
 
-    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None):
+    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None):
         """
         Add a single datacube to the cubes class.
         """
-        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict))
+        self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
+                               override_containing_graph))
 
     def output_all(self):
         """
@@ -82,8 +84,10 @@ class Cube:
     """
     A class to encapsulate the dataframe and associated metadata that constitutes a single datacube
     """
+    override_containing_graph_uri: Optional[str]
 
-    def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict):
+    def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
+                 override_containing_graph_uri: Optional[str] = None):
 
         self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
@@ -91,6 +95,7 @@ class Cube:
         self.scraper.set_base_uri(base_uri)
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
+        self.override_containing_graph_uri = override_containing_graph_uri
 
     def _instantiate_map(self, destination_folder, pathified_title, info_json):
         """
@@ -107,7 +112,11 @@ class Cube:
 
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
-        map_obj.set_containing_graph_uri(self.scraper.dataset.pmdcatGraph)
+
+        if self.override_containing_graph_uri:
+            map_obj.set_containing_graph_uri(self.override_containing_graph_uri)
+        else:
+            map_obj.set_containing_graph_uri(self.scraper.dataset.pmdcatGraph)
 
         return map_obj
 
