@@ -349,7 +349,8 @@ class Scraper:
 
     def update_dataset_uris(self):
         self.dataset.uri = urljoin(self._base_uri, f'data/{self._dataset_id}-catalog-entry')
-        self.dataset.set_graph(urljoin(self._base_uri, f'graph/{self._dataset_id}-metadata'))
+        # Set the pmdcat:graph triple. It should point at the graph containing the qb:DataSet.
+        self.dataset.pmdcatGraph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
 
     def set_family(self, family):
         self.dataset.family = family
@@ -367,10 +368,10 @@ class Scraper:
         else:
             catalog.uri = urljoin(self._base_uri, 'catalog/datasets')
         metadata_graph = urljoin(self._base_uri, f'graph/{self._dataset_id}-metadata')
-        catalog.set_graph(metadata_graph)
+        catalog.set_containing_graph(metadata_graph)
         catalog.record = pmdcat.CatalogRecord()
         catalog.record.uri = urljoin(self._base_uri, f'data/{self._dataset_id}-catalog-record')
-        catalog.record.set_graph(metadata_graph)
+        catalog.record.set_containing_graph(metadata_graph)
         catalog.record.label = self.dataset.label + " Catalog Record"
         catalog.record.metadataGraph = metadata_graph
         catalog.record.issued = self.dataset.issued
@@ -379,8 +380,8 @@ class Scraper:
         # need to ensure that all the pointed to things are in the same graph
         if hasattr(catalog.record.primaryTopic, 'distribution'):
             for dist in ensure_list(catalog.record.primaryTopic.distribution):
-                dist.set_graph(metadata_graph)
-        self.dataset.graph = urljoin(self._base_uri, f'graph/{self._dataset_id}')
+                dist.set_containing_graph(metadata_graph)
+        self.dataset.set_containing_graph(metadata_graph)
         self.dataset.datasetContents = pmdcat.DataCube()
         self.dataset.datasetContents.uri = urljoin(self._base_uri, f'data/{self._dataset_id}#dataset')
         self.dataset.sparqlEndpoint = urljoin(self._base_uri, '/sparql')

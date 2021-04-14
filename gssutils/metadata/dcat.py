@@ -53,9 +53,9 @@ class Dataset(Resource):
         if key == 'distribution':
             if type(value) == list:
                 for d in value:
-                    d._graph = self._graph
+                    d._containing_graph = self._containing_graph
             else:
-                value._graph = self._graph
+                value._containing_graph = self._containing_graph
         super().__setattr__(key, value)
 
 

@@ -51,7 +51,7 @@ Feature: PMD metadata
       And I scrape the page "https://www.ons.gov.uk/businessindustryandtrade/business/businessinnovation/datasets/foreigndirectinvestmentinvolvingukcompanies2013inwardtables"
       And generate TriG
       Then the dataset contents URI should be <http://gss-data.org.uk/data/gss_data/trade/ons-fdi-inward#dataset>
-      And the metadata graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward>
+      And the pmdcat:graph should be <http://gss-data.org.uk/graph/gss_data/trade/ons-fdi-inward>
       And the modified date should be quite recent
 
     Scenario: licensed dataset
