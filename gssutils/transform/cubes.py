@@ -87,7 +87,7 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str] = None):
+                 override_containing_graph_uri: Optional[str]):
 
         self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
