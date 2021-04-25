@@ -23,7 +23,7 @@ ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 # and retry when we hit one.
 # see: https://github.com/GSS-Cogs/gss-utils/issues/239
 # TODO - remove this precaution in the longer term. JSONDecodedError's are not excluive to this issue.
-@backoff.on_exception(backoff.expo, json.JSONDecodeError, max_time=600)
+@backoff.on_exception(backoff.expo, json.JSONDecodeError, max_time=300)
 def content_api(scraper, tree):
     final_url = False
     uri_components = urlparse(scraper.uri)
