@@ -1,0 +1,87 @@
+Label,Notation,Parent Notation,Sort Priority
+"01 Crop and animal production, hunting and related service activities",01,,1
+02 Forestry and logging,02,,2
+03 Fishing and aquaculture,03,,3
+05 Mining of coal and lignite,05,,4
+06 Extraction of crude petroleum and natural gas,06,,5
+07 Mining of metal ores,07,,6
+08 Other mining and quarrying,08,,7
+09 Mining support service activities,09,,8
+10 Manufacture of food products,10,,9
+11 Manufacture of beverages,11,,10
+12 Manufacture of tobacco products,12,,11
+13 Manufacture of textiles,13,,12
+14 Manufacture of wearing apparel,14,,13
+15 Manufacture of leather and related products,15,,14
+"16 Manufacture of wood and of products of wood and cork, except furniture; manufacture of articles of straw and plaiting materials",16,,15
+17 Manufacture of paper and paper products,17,,16
+18 Printing and reproduction of recorded media,18,,17
+19 Manufacture of coke and refined petroleum products,19,,18
+20 Manufacture of chemicals and chemical products,20,,19
+21 Manufacture of basic pharmaceutical products and pharmaceutical preparations,21,,20
+22 Manufacture of rubber and plastic products,22,,21
+23 Manufacture of other non-metallic mineral products,23,,22
+24 Manufacture of basic metals,24,,23
+"25 Manufacture of fabricated metal products, except machinery and equipment",25,,24
+"26 Manufacture of computer, electronic and optical products",26,,25
+27 Manufacture of electrical equipment,27,,26
+28 Manufacture of machinery and equipment n.e.c.,28,,27
+"29 Manufacture of motor vehicles, trailers and semi-trailers",29,,28
+30 Manufacture of other transport equipment,30,,29
+31 Manufacture of furniture,31,,30
+32 Other manufacturing,32,,31
+33 Repair and installation of machinery and equipment,33,,32
+"35 Electricity, gas, steam and air conditioning supply",35,,33
+"36 Water collection, treatment and supply",36,,34
+37 Sewerage,37,,35
+"38 Waste collection, treatment and disposal activities; materials recovery",38,,36
+39 Remediation activities and other waste management services.,39,,37
+41 Construction of buildings,41,,38
+42 Civil engineering,42,,39
+43 Specialised construction activities,43,,40
+45 Wholesale and retail trade and repair of motor vehicles and motorcycles,45,,41
+"46 Wholesale trade, except of motor vehicles and motorcycles",46,,42
+"47 Retail trade, except of motor vehicles and motorcycles",47,,43
+49 Land transport and transport via pipelines,49,,44
+50 Water transport,50,,45
+51 Air transport,51,,46
+52 Warehousing and support activities for transportation,52,,47
+53 Postal and courier activities,53,,48
+55 Accommodation,55,,49
+56 Food and beverage service activities,56,,50
+58 Publishing activities,58,,51
+"59 Motion picture, video and television programme production, sound recording and music publishing activities",59,,52
+60 Programming and broadcasting activities,60,,53
+61 Telecommunications,61,,54
+"62 Computer programming, consultancy and related activities",62,,55
+63 Information service activities,63,,56
+"64 Financial service activities, except insurance and pension funding",64,,57
+"65 Insurance, reinsurance and pension funding, except compulsory social security",65,,58
+66 Activities auxiliary to financial services and insurance activities,66,,59
+68 Real estate activities,68,,60
+69 Legal and accounting activities,69,,61
+70 Activities of head offices; management consultancy activities,70,,62
+71 Architectural and engineering activities; technical testing and analysis,71,,63
+72 Scientific research and development,72,,64
+73 Advertising and market research,73,,65
+"74 Other professional, scientific and technical activities",74,,66
+75 Veterinary activities,75,,67
+77 Rental and leasing activities,77,,68
+78 Employment activities,78,,69
+"79 Travel agency, tour operator and other reservation service and related activities",79,,70
+80 Security and investigation activities,80,,71
+81 Services to buildings and landscape activities,81,,72
+"82 Office administrative, office support and other business support activities",82,,73
+84 Public administration and defence; compulsory social security,84,,74
+85 Education,85,,75
+86 Human health activities,86,,76
+87 Residential care activities,87,,77
+88 Social work activities without accommodation,88,,78
+"90 Creative, arts and entertainment activities",90,,79
+"91 Libraries, archives, museums and other cultural activities",91,,80
+92 Gambling and betting activities,92,,81
+93 Sports activities and amusement and recreation activities,93,,82
+94 Activities of membership organisations,94,,83
+95 Repair of computers and personal and household goods,95,,84
+96 Other personal service activities,96,,85
+U Unknown industry,U ,,86

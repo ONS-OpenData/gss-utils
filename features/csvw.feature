@@ -21,7 +21,8 @@ Feature: Create CSVW metadata
       @prefix sdmx-d: <http://purl.org/linked-data/sdmx/2009/dimension#> .
       @prefix sdmx-c: <http://purl.org/linked-data/sdmx/2009/code#> .
       @prefix gss-dim: <http://gss-data.org.uk/def/dimension/> .
-      @prefix gss-meas: <http://gss-data.org.uk/def/measure/> .
+      @prefix trade-dim: <http://gss-data.org.uk/def/trade/property/dimension/> .
+      @prefix trade-meas: <http://gss-data.org.uk/def/trade/measure/> .
       @prefix cl_area: <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/> .
 
       <#dataset> a qb:DataSet ;
@@ -32,33 +33,32 @@ Feature: Create CSVW metadata
                      <#component/commodity>, <#component/country>, <#component/value>, <#component/year>, <#component/unit> .
 
       <#component/direction> a qb:ComponentSpecification ;
-        qb:dimension gss-dim:flow-directions .
+        qb:dimension trade-dim:flow-directions .
 
       <#component/unit> a qb:ComponentSpecification ;
         qb:attribute sdmx-a:unitMeasure .
 
       <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity/2008/D5/46/IM/T> a qb:Observation ;
-          <#dimension/commodity> <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/commodity/T> ;
+          trade-dim:commodity <http://gss-data.org.uk/def/trade/concept/commodity/T> ;
           <#dimension/industry> <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/industry/46> ;
-          gss-dim:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/IM> ;
-          gss-dim:ons-partner-geography <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/D5> ;
+          trade-dim:flow-directions <http://gss-data.org.uk/def/concept/flow-directions/IM> ;
+          trade-dim:ons-partner-geography <http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/D5> ;
           sdmx-a:unitMeasure <http://gss-data.org.uk/def/concept/measurement-units/gbp> ;
           sdmx-d:refPeriod <http://reference.data.gov.uk/id/year/2008> ;
-          qb:measureType gss-meas:gbp-total ;
-          gss-meas:gbp-total 4.9837e+04 ;
+          qb:measureType trade-meas:gbp-total ;
+          trade-meas:gbp-total 4.9837e+04 ;
           qb:dataSet <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset> ;
       .
     """
 
-  @skip
   Scenario: Data Cube, metadata and reference data for PMD4
     Given a CSV file 'product-observations.csv'
     And a JSON map file 'mapping-info.json'
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
     When I create a CSVW file from the mapping and CSV
     And gsscogs/csv2rdf generates RDF
-    And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf, sdmx-bop-catalog.ttl, flow-directions.ttl, flow-directions-catalog.ttl"
-    And I add local codelists "commodity.csv, industry.csv"
+    And I add extra RDF files "cube.ttl, sdmx-dimension.ttl, trade-components.ttl, sdmx-bop.rdf, sdmx-bop-catalog.ttl"
+    And I add extra CSV-W "properties.csv, flow-directions.csv, commodity.csv, industry.csv"
     Then the RDF should pass the PMD4 constraints
 
   Scenario: Local dimensions with descriptions and super properties

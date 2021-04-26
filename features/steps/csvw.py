@@ -130,11 +130,13 @@ def step_impl(context):
     context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io)
 
 
-def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[str] = ()):
+def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[bytes] = ()):
     client = docker.from_env()
     files = ['data.ttl']
     if len(extra_files) > 0:
         files.extend(extra_files)
+    if len(extra_data) > 0:
+        files.extend(f"extra_{i}.ttl" for i in range(0, len(extra_data)))
     tests = client.containers.create(
         'gsscogs/gdp-sparql-tests',
         command=f'''sparql-test-runner -t /usr/local/tests/{group} -m 10 '''
@@ -156,8 +158,7 @@ def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: 
             add_ttl = TarInfo(filename)
             add_ttl.size = len(add_turtle)
             add_ttl.mtime = time.time()
-            t.addfile(add_ttl, BytesIO(add_turtle.encode('utf-8')))
-            files.append(filename)
+            t.addfile(add_ttl, BytesIO(add_turtle))
     archive.seek(0)
     tests.put_archive('/tmp/', archive)
     tests.start()
@@ -220,10 +221,10 @@ def step_impl(context, uri):
 
 @step("the RDF should pass the PMD4 constraints")
 def step_impl(context):
-    if hasattr(context, 'extra_files') and len(context.extra_files) > 0:
-        result = run_ics('pmd/pmd4', context.turtle, context.extra_files)
-    else:
-        result = run_ics('pmd/pmd4', context.turtle)
+    result = run_ics('pmd/pmd4',
+                     context.turtle,
+                     getattr(context, 'extra_files', ()),
+                     getattr(context, 'extra_data', ()))
     assert_equal(result, 0)
 
 
@@ -232,12 +233,12 @@ def step_impl(context, files):
     context.extra_files = [f.strip() for f in files.split(',')]
 
 
-@step('I add local codelists "{files}"')
+@step('I add extra CSV-W "{files}"')
 def step_impl(context, files):
-    codelists = [f.strip() for f in files.split(',')]
+    csvw_files = [f.strip() for f in files.split(',')]
     context.extra_data = []
-    for csv in codelists:
-        csv_path = Path('features') / 'fixtures' / 'extra' / csv
+    for csv_filename in csvw_files:
+        csv_path = Path('features') / 'fixtures' / 'extra' / csv_filename
         metadata_path = csv_path.with_suffix('.csv-metadata.json')
         with csv_path.open('r') as csv_file, metadata_path.open('r') as metadata_file:
             context.extra_data.append(run_csv2rdf(csv_path.name, metadata_file.name, csv_file, metadata_file))

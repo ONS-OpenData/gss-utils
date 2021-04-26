@@ -1,0 +1,91 @@
+{
+    "@context": [
+        "http://www.w3.org/ns/csvw",
+        {
+            "@language": "en"
+        }
+    ],
+    "@id": "http://gss-data.org.uk/def/trade/ontology/properties",
+    "prov:hadDerivation": {
+        "@id": "http://gss-data.org.uk/def/trade/ontology/properties",
+        "@type": "owl:Ontology"
+    },
+    "url": "properties.csv",
+    "tableSchema": {
+        "columns": [
+            {
+                "titles": "Namespace",
+                "required": true,
+                "name": "namespace",
+                "datatype": "string",
+                "suppressOutput": true
+            },
+            {
+                "titles": "Label",
+                "required": true,
+                "name": "label",
+                "datatype": "string",
+                "propertyUrl": "rdfs:label"
+            },
+            {
+                "titles": "Path",
+                "required": true,
+                "name": "path",
+                "datatype": "string",
+                "suppressOutput": true
+            },
+            {
+                "titles": "Qb Property Type",
+                "required": true,
+                "name": "qb_property_type",
+                "datatype": "string",
+                "propertyUrl": "rdf:type",
+                "valueUrl": "{qb_property_type}"
+            },
+            {
+                "titles": "Parent Property",
+                "required": false,
+                "name": "parent_property",
+                "datatype": "anyURI",
+                "propertyUrl": "rdfs:subPropertyOf",
+                "valueUrl": "{parent_property}"
+            },
+            {
+                "titles": "Source",
+                "required": false,
+                "name": "source",
+                "datatype": "anyURI",
+                "propertyUrl": "rdfs:isDefinedBy",
+                "valueUrl": "{source}"
+            },
+            {
+                "titles": "Range",
+                "required": true,
+                "name": "range",
+                "datatype": "anyURI",
+                "propertyUrl": "rdfs:range",
+                "valueUrl": "{range}"
+            },
+            {
+                "titles": "Codelist",
+                "name": "codelist",
+                "datatype": "anyURI",
+                "propertyUrl": "qb:codeList",
+                "valueUrl": "{codelist}"
+            },
+            {
+                "titles": "Comment",
+                "required": false,
+                "name": "comment",
+                "datatype": "string",
+                "propertyUrl": "rdfs:comment"
+            }
+        ],
+        "primaryKey": [
+            "path"
+        ],
+        "aboutUrl": "http://gss-data.org.uk/def/{+namespace}/property/{+path}"
+    },
+    "rdfs:label": "GSS Trade Properties",
+    "dc:title": "GSS Trade Properties"
+}

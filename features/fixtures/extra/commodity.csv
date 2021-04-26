@@ -1,0 +1,57 @@
+Label,Notation,Parent Notation,Sort Priority
+Total,T,,1
+Live animals,00,,2
+Meat & meat preparations,01,,3
+Dairy products & eggs,02,,4
+Cereals,04,,5
+Vegetables & fruit,05,,6
+"Coffee, tea, cocoa etc",07,,7
+Animal feeding stuffs,08,,8
+"Hides, skins & furskins",21,,9
+Oil-seeds & oleaginous fruits,22,,10
+Wood & cork,24,,11
+Pulp & waste paper,25,,12
+Other crude animal & vegetable materials,29,,13
+Processed oils & fats,43,,14
+Medicinal & pharmaceutical products,54,,15
+Toilet & cleansing preparations,55,,16
+Processed fertilisers,56,,17
+Other chemicals,59,,18
+Iron & steel,67,,19
+Non-ferrous metals,68,,20
+Miscellaneous metal manufactures,69,,21
+Road vehicles,78,,22
+Other transport equipment,79,,23
+Electrical machinery,7E,,24
+Mechanical machinery,7M,,25
+Other manufactures,8O,,26
+Paper & paperboard,64,,27
+Fish & shellfish,03,,28
+"Coal, coke & briquettes",32,,29
+Rubber manufactures,62,,30
+Crude rubber,23,,31
+Crude minerals & fertilisers,27,,32
+Oil,33,,33
+Gas,34,,34
+Organic chemicals,51,,35
+plus88 Scientific & photographic,87,,36
+Metal ores & scrap,28,,37
+Inorganic chemicals,52,,38
+Plastics in primary forms,57,,39
+Mineral manufactures,66,,40
+"Dyeing, tanning & colouring materials",53,,41
+Wood & cork manufactures,63,,42
+Textile fabrics,65,,43
+Sugar,06,,44
+Miscellaneous foods,09,,45
+Beverages,11,,46
+Animal oils & fats,41,,47
+Vegetable oils & fats,42,,48
+Plastics in non-primary forms,58,,49
+Leather manufactures,61,,50
+Clothing,84,,51
+Tobacco,12,,52
+Textile fibres,26,,53
+Footwear,85,,54
+Unspecified goods,9,,55
+Electricity,35,,56
