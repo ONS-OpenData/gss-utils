@@ -38,6 +38,7 @@ class Cubes:
         # Create the default output directories for the CubesWriters in play
         for writer in self.writers:
             this_out_path: Path = writer.get_out_path()
+            assert isinstance(this_out_path, Path), f'Writer {writer.__name__} is not returning an output path.'
             this_out_path.mkdir(exist_ok=True, parents=True)
 
         self.base_uri = base_uri
