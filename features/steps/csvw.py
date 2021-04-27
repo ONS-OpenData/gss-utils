@@ -54,24 +54,26 @@ def step_impl(context):
     client = docker.from_env()
     csvlint = client.containers.create(
         'gsscogs/csvlint',
-        command=f'csvlint -s /tmp/{context.schema_filename}'
+        command=f'csvlint -s /tmp/{context.metadata_filename}'
     )
     archive = BytesIO()
-    context.schema_io.seek(0, SEEK_END)
-    schema_size = context.schema_io.tell()
-    context.schema_io.seek(0)
+    context.metadata_io.seek(0, SEEK_END)
+    metadata_size = context.metadata_io.tell()
+    context.metadata_io.seek(0)
     context.csv_io.seek(0, SEEK_END)
     csv_size = context.csv_io.tell()
     context.csv_io.seek(0)
     with TarFile(fileobj=archive, mode='w') as t:
-        tis = TarInfo(str(context.schema_filename))
-        tis.size = schema_size
+        tis = TarInfo(str(context.metadata_filename))
+        tis.size = metadata_size
         tis.mtime = time.time()
-        t.addfile(tis, BytesIO(context.schema_io.getvalue().encode('utf-8')))
+        t.addfile(tis, BytesIO(context.metadata_io.read().encode('utf-8')))
         tic = TarInfo(str(context.csv_filename))
         tic.size = csv_size
         tic.mtime = time.time()
-        t.addfile(tic, BytesIO(context.csv_io.getvalue().encode('utf-8')))
+        t.addfile(tic, BytesIO(context.csv_io.read().encode('utf-8')))
+        if hasattr(context, 'codelists'):
+            t.add(Path('features') / 'fixtures' / context.codelists, arcname=context.codelists)
     archive.seek(0)
     csvlint.put_archive('/tmp/', archive)
     csvlint.start()
@@ -87,7 +89,8 @@ def step_impl(context):
     g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
-def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metadata_io: TextIO):
+def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metadata_io: TextIO,
+                codelists_base: Optional[str] = None):
     client = docker.from_env()
     csv2rdf = client.containers.create(
         'gsscogs/csv2rdf',
@@ -109,6 +112,9 @@ def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metad
         tic.size = csv_size
         tic.mtime = time.time()
         t.addfile(tic, BytesIO(csv_io.read().encode('utf-8')))
+        if codelists_base is not None:
+            t.add(Path('features') / 'fixtures' / codelists_base, arcname=codelists_base)
+
     archive.seek(0)
     csv2rdf.put_archive('/tmp/', archive)
     csv2rdf.start()
@@ -127,7 +133,8 @@ def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metad
 
 @step("gsscogs/csv2rdf generates RDF")
 def step_impl(context):
-    context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io)
+    context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io,
+                                 getattr(context, 'codelists', None))
 
 
 def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[bytes] = ()):
@@ -204,6 +211,8 @@ def step_impl(context):
         context.csvw.set_registry(URI(context.registry))
     if hasattr(context, 'dataset_uri'):
         context.csvw.set_dataset_uri(context.dataset_uri)
+    if hasattr(context, 'codelists'):
+        context.csvw.set_local_codelist_base(context.codelists)
     context.metadata_io = StringIO()
     context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
     context.csvw.write(context.metadata_io)
@@ -249,3 +258,8 @@ def step_impl(context):
     mapping = {'transform': {'columns': json.loads(context.text)}}
     context.json_io = StringIO()
     json.dump(mapping, context.json_io)
+
+
+@step('local codelists in "{codelists}"')
+def step_impl(context, codelists):
+    context.codelists = codelists
