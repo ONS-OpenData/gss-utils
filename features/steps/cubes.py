@@ -48,7 +48,7 @@ def step_impl(context, cube_name, csv_data, seed_name, override_containing_graph
 
 @step('the datacube outputs can be created')
 def step_impl(context):
-    context.cubes.output_all(raise_all_exceptions=True)
+    context.cubes.output_all(raise_writer_exceptions=True)
 
 
 @step('generate RDF from the n={n} cube\'s CSV-W output')

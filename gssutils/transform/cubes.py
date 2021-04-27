@@ -41,11 +41,11 @@ class Cubes:
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
                                override_containing_graph, writer_override))
 
-    def output_all(self, raise_all_exceptions: bool = False):
+    def output_all(self, raise_writer_exceptions: bool = False):
         """
         Output every cube object we've added to the cubes() class.
 
-        raise_all_exceptions: lets us flag off gracefully handling output errors per-driver
+        raise_writer_exceptions: lets us flag off gracefully handling output errors per-driver
         (because we do want things to fail loudly while testing)
         """
 
@@ -78,7 +78,7 @@ class Cubes:
         for cube in self.cubes:
             try:
                 cube.output(self.destination_folder, is_multi_cube, is_many_to_one, self.info,
-                        self.writers, raise_all_exceptions)
+                        self.writers, raise_writer_exceptions)
             except Exception as err:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                 .format(cube.title)) from err
@@ -108,7 +108,7 @@ class Cube:
         self.writer_override = writer_override
 
 
-    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers, raise_all_exceptions):
+    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers, raise_writer_exceptions):
         """
         Outputs the required per-platform inputs for a single 'Cube' held in the 'Cubes' object
         """
@@ -122,9 +122,8 @@ class Cube:
         
         for writer in writers:
 
-            # We're going to catch this, as one platform output failing shouldn't stop us trying the next
-            # TODO: we do NOT want this to be the case when running tests as nothing will ever fail,
-            # so do something clever for "we are testing" scenarios.
+            # We're going to catch this, as one writer output failing shouldn't stop us trying the next
+            # note - flagged off while testing, see "raise_writer_exceptions" coming from Cubes.output_all()
             try:
                 this_writer = writer(destination_folder, is_multi_cube, is_many_to_one, info_json, cube=self)
 
@@ -134,7 +133,7 @@ class Cube:
             
             except Exception as err:
                 logging.warning(f'Output failed for writer {type(writer)} with exception:\n {err}') 
-                if raise_all_exceptions:
+                if raise_writer_exceptions:
                     raise err
    
 
