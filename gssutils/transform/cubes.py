@@ -1,15 +1,13 @@
+from enum import Enum
 import json
 import logging
 import os
 import copy
 
 from pathlib import Path
-from urllib.parse import urljoin
 from typing import Optional
 
-from gssutils.csvw.mapping import CSVWMapping
-from gssutils.utils import pathify
-
+from gssutils.transform.writers import PMD4Writer
 
 class Cubes:
     """
@@ -17,7 +15,7 @@ class Cubes:
     """
 
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
-                 job_name=None):
+                 job_name=None, writers=PMD4Writer):
 
         with open(info_json, "r") as info_file:
             self.info = json.load(info_file)
@@ -26,6 +24,7 @@ class Cubes:
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = {}
 
+        self.writers = writers
         self.destination_folder = Path(destination_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
         self.base_uri = base_uri
@@ -36,12 +35,13 @@ class Cubes:
             logging.warning("The passing of job_name= has been depreciated and no longer does anything, please"
                             "remove this keyword argument")
 
-    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None):
+    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None,
+            writer_override = None):
         """
         Add a single datacube to the cubes class.
         """
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
-                               override_containing_graph))
+                               override_containing_graph, writer_override))
 
     def output_all(self):
         """
@@ -61,6 +61,9 @@ class Cubes:
         # Are we outputting more than one cube? We need to know this before we output
         is_multi_cube = len(self.cubes) >= 2
 
+        # NOTE - this whole bit of pre-output logic is very coupled to pmd and graphs,
+        # ideally we want to get rid of it 
+
         # The many-to-one scenario
         # If all cubes are getting written to a single graph it plays hell with the
         # single vs multiple namespaces logic, so we're going to explicitly check for and handle that
@@ -73,7 +76,8 @@ class Cubes:
 
         for cube in self.cubes:
             try:
-                cube.output(self.destination_folder, is_multi_cube, is_many_to_one, self.info)
+                cube.output(self.destination_folder, is_multi_cube, is_many_to_one, self.info,
+                        self.writers)
             except Exception as err:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                 .format(cube.title)) from err
@@ -87,9 +91,9 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str]):
+                 override_containing_graph_uri: Optional[str], writer_override):
 
-        self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
+        self.scraper = copy.deepcopy(scraper)  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
         self.title = title
         self.scraper.set_base_uri(base_uri)
@@ -97,84 +101,37 @@ class Cube:
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
         self.override_containing_graph_uri = override_containing_graph_uri
 
-    def _instantiate_map(self, destination_folder, pathified_title, info_json):
+        # I'm not 100% but it's conceivable that we'll want to output a subset of the
+        # defined cubes to different places, so we're including a per-cube writer override
+        # as a precaution against that eventuality.
+        self.writer_override = writer_override
+
+
+    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers):
         """
-        Create a basic CSVWMapping object for this cube
-        """
-        map_obj = CSVWMapping()
-
-        # Use the info.json for the mapping by default, but let people
-        # pass a new one in (for where we need to get clever)
-        info_json = info_json if self.info_json_dict is None else self.info_json_dict
-
-        map_obj.set_accretive_upload(info_json)
-        map_obj.set_mapping(info_json)
-
-        map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
-        map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
-
-        if self.override_containing_graph_uri:
-            map_obj.set_containing_graph_uri(self.override_containing_graph_uri)
-        else:
-            map_obj.set_containing_graph_uri(self.scraper.dataset.pmdcatGraph)
-
-        return map_obj
-
-    def _populate_csvw_mapping(self, destination_folder, pathified_title,
-                               info_json):
-        """
-        Use the provided details object to generate then fully populate the mapping class
+        Outputs the required per-platform inputs for a single 'Cube' held in the 'Cubes' object
         """
 
-        # The base CSVWMapping class
-        map_obj = self._instantiate_map(destination_folder, pathified_title, info_json)
+        # DE knows best
+        if self.writer_override:
+            writers = self.writer_override
 
-        # TODO - IF we do codelist generation here, this would be the point of intervention
+        # Force writer iterable, so we can support outputting a cube with more than one
+        writers = [writers] if not isinstance(writers, list) and not isinstance(writers, tuple) else writers
+        
+        for writer in writers:
 
-        return map_obj
+            # We're going to catch this, as one platform output failing shouldn't stop us trying the next
+            # TODO: we do NOT want this to be the case when running tests as nothing will ever fail,
+            # so do something clever for "we are testing" scenarios.
+            try:
+                this_writer = writer(destination_folder, is_multi_cube, is_many_to_one, info_json, cube=self)
 
-    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json):
-        """
-        Outputs the csv and csv-w schema for a single 'Cube' held in the 'Cubes' object
-        """
-        graph_name = pathify(self.title) if self.graph is None else pathify(self.graph)
-        if isinstance(self.scraper.dataset.family, list):
-            primary_family = pathify(self.scraper.dataset.family[0])
-        else:
-            primary_family = pathify(self.scraper.dataset.family)
+                 # TODO - can wrap this whole loop fairly trivially, but undecided on points of intervention, decide
+                for operation in this_writer.operational_sequence:
+                    operation()
+            
+            except Exception as err:
+                logging.warning(f'Output failed for writer {type(writer)} with exception:\n {err}')    
 
-        main_dataset_id = info_json.get('id', Path.cwd().name)
-        if is_many_to_one:
-            # Sanity check, because this isn't an obvious as I'd like / a bit weird
-            err_msg = 'Aborting. Where you are writing multiple cubes to a single output graph, the ' \
-                      + 'pathified graph specified needs to match you pathified current working directory. ' \
-                      + 'Got "{}", expected "{}".'.format(graph_name, pathify(Path(os.getcwd()).name))
-            assert main_dataset_id == graph_name, err_msg
 
-            logging.warning("Output Scenario 1: Many cubes written to the default output (cwd())")
-            dataset_path = f'gss_data/{primary_family}/{graph_name}'
-        elif is_multi_cube:
-            logging.warning("Output Scenario 2: Many cubes written to many stated outputs")
-            dataset_path = f'gss_data/{primary_family}/{main_dataset_id}/{graph_name}'
-        else:
-            logging.warning("Output Scenario 3: A single cube written to the default output (cwd())")
-            dataset_path = f'gss_data/{primary_family}/{main_dataset_id}'
-        self.scraper.set_dataset_id(dataset_path)
-
-        # output the tidy data
-        self.dataframe.to_csv(destination_folder / f'{pathify(self.title)}.csv', index=False)
-
-        is_accretive_upload = info_json is not None and "load" in info_json and "accretiveUpload" in info_json["load"] \
-                              and info_json["load"]["accretiveUpload"]
-
-        # Don't output trig file if we're performing an accretive upload.
-        # We don't want to duplicate information we already have.
-        if not is_accretive_upload:
-            # Output the trig
-            trig_to_use = self.scraper.generate_trig()
-            with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
-                metadata.write(trig_to_use)
-
-        # Output csv and csvw
-        populated_map_obj = self._populate_csvw_mapping(destination_folder, pathify(self.title), info_json)
-        populated_map_obj.write(destination_folder / f'{pathify(self.title)}.csv-metadata.json')
