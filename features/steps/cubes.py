@@ -1,4 +1,3 @@
-import json
 
 from behave import *
 from nose.tools import *
