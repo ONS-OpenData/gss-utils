@@ -15,16 +15,23 @@ class Cubes:
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
                  job_name=None, writers=PMD4Writer):
 
-        # I don't _think_ we're using the destintation_path keyword anywhere but we'll run a depreciation
+        # I don't _think_ we're using the destination_path keyword anywhere but we'll run a depreciation
         # warning for a bit rather than straight remove it as a precaution -27/4/2021- 
         if destination_path != "out":
             logging.warning(f'The Cubes(destination_path=) keyword is being depreciated. Please remove '
+                    'it from your transform')
+
+        # I don't _think_ we're using the base_uri keyword anywhere but we'll run a depreciation
+        # warning for a bit rather than straight remove it as a precaution -27/4/2021- 
+        if base_uri != "http://gss-data.org.uk":
+            logging.warning(f'The Cubes(base_uri=) keyword is being depreciated. Please remove '
                     'it from your transform')
 
         with open(info_json, "r") as info_file:
             self.info = json.load(info_file)
             
         # Force writer iterable, so we can support outputting a cube with more than one
+        # without making users pass in lists of 1
         writers = [writers] if not isinstance(writers, list) and not isinstance(writers, tuple) else writers
         self.writers: List[CubeWriter] = writers
 

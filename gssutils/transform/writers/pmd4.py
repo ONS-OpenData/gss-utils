@@ -43,6 +43,9 @@ class PMD4Writer(CubeWriter):
 
         assert isinstance(info_json, dict), ('arg info_json should be'  
             f' of type "dict", got {type(info_json)}.')
+        # Where we don't have a mapping field, add one to avoid iteration errors later
+        if "columns" not in info_json["transform"]:
+            info_json["transform"]["columns"] = {}
         self.info_json: dict = info_json
 
         self.destination_folder: Path = self.get_out_path()
