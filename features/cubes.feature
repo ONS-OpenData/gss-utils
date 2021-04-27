@@ -40,6 +40,7 @@ Feature: Creating cubes
       | title         | I am a title           |
       | description   | I am the description   |
 
+  # TODO - switch this to our actual "both platforms" example
   Scenario: Output a single cube entity as viable inputs to both CMD and PMD4
     Given I want to create "PMD4 and CMD" datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     And I specify a datacube named "test cube 1" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
