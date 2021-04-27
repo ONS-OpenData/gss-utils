@@ -5,9 +5,8 @@ from nose.tools import *
 from gssutils import *
 from io import BytesIO, SEEK_END, StringIO, TextIOBase
 
-
 from csvw import run_csv2rdf
-
+from gssutils.transform.writers import PMD4Writer, CMDWriter
 
 def get_fixture(file_name):
     """Helper to get specific files out of the fixtures dir"""
@@ -16,9 +15,21 @@ def get_fixture(file_name):
     return fixture_file_path
 
 
-@given('I want to create datacubes from the seed "{seed_name}"')
-def step_impl(context, seed_name):
-    context.cubes = Cubes(get_fixture(seed_name))
+def get_write_driver(writer):
+    """
+    Given a string name fo a driver, returns the class(es) in use
+    """
+    writer_drivers = {
+        "PMD4": PMD4Writer,
+        "CMD": CMDWriter
+    }
+    assert writer in writer_drivers, f'No writer named "{writer}" exists.'
+    return writer_drivers[writer]
+
+
+@given('I want to create "{writer}" datacubes from the seed "{seed_name}"')
+def step_impl(context, writer, seed_name):
+    context.cubes = Cubes(get_fixture(seed_name), writers=get_write_driver(writer))
 
 
 @step('I specify a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
