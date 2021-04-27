@@ -20,7 +20,8 @@ def get_write_driver(writer):
     """
     writer_drivers = {
         "PMD4": PMD4Writer,
-        "CMD": CMDWriter
+        "CMD": CMDWriter,
+        "PMD4 and CMD": [PMD4Writer, CMDWriter]
     }
     assert writer in writer_drivers, f'No writer named "{writer}" exists.'
     return writer_drivers[writer]
@@ -47,7 +48,7 @@ def step_impl(context, cube_name, csv_data, seed_name, override_containing_graph
 
 @step('the datacube outputs can be created')
 def step_impl(context):
-    context.cubes.output_all()
+    context.cubes.output_all(raise_all_exceptions=True)
 
 
 @step('generate RDF from the n={n} cube\'s CSV-W output')

@@ -41,9 +41,12 @@ class Cubes:
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
                                override_containing_graph, writer_override))
 
-    def output_all(self):
+    def output_all(self, raise_all_exceptions: bool = False):
         """
         Output every cube object we've added to the cubes() class.
+
+        raise_all_exceptions: lets us flag off gracefully handling output errors per-driver
+        (because we do want things to fail loudly while testing)
         """
 
         if len(self.cubes) == 0:
@@ -75,7 +78,7 @@ class Cubes:
         for cube in self.cubes:
             try:
                 cube.output(self.destination_folder, is_multi_cube, is_many_to_one, self.info,
-                        self.writers)
+                        self.writers, raise_all_exceptions)
             except Exception as err:
                 raise Exception("Exception encountered while processing datacube '{}'." \
                                 .format(cube.title)) from err
@@ -105,7 +108,7 @@ class Cube:
         self.writer_override = writer_override
 
 
-    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers):
+    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers, raise_all_exceptions):
         """
         Outputs the required per-platform inputs for a single 'Cube' held in the 'Cubes' object
         """
@@ -130,6 +133,9 @@ class Cube:
                     operation()
             
             except Exception as err:
-                logging.warning(f'Output failed for writer {type(writer)} with exception:\n {err}')    
+                logging.warning(f'Output failed for writer {type(writer)} with exception:\n {err}') 
+                if raise_all_exceptions:
+                    raise err
+   
 
 
