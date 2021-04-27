@@ -13,6 +13,13 @@ class PMD4Writer(CubeWriter):
     and metadata to satisfy the PMD4 platform
     """
 
+    @staticmethod
+    def get_out_path():
+        """
+        Returns the output directory of the driver
+        """
+        return Path("out")
+
     def check_inputs(self):
         """
         Confirm that the driver has been passed the required args
@@ -22,14 +29,9 @@ class PMD4Writer(CubeWriter):
         # Note: you could arguably have this inside Cubes() but I'm not convinced
         # the arguments to each writer should be the same. They are _for now_ but
         # that seems like a thing that could/should change in the longer term.
-        destination_folder = self.args[0]
-        is_multi_cube = self.args[1]
-        is_many_to_one = self.args[2]
-        info_json = self.args[3]
-
-        assert destination_folder.is_dir(), ('you have spcified a destination '
-            f'directory of {destination_folder} but that directory does not exist')
-        self.destination_folder: Path = destination_folder
+        is_multi_cube = self.args[0]
+        is_many_to_one = self.args[1]
+        info_json = self.args[2]
 
         assert isinstance(is_multi_cube, bool), ('arg is_multi_cube should be'
             f' of type "bool", got {type(is_multi_cube)}.')
@@ -42,6 +44,8 @@ class PMD4Writer(CubeWriter):
         assert isinstance(info_json, dict), ('arg info_json should be'  
             f' of type "dict", got {type(info_json)}.')
         self.info_json: dict = info_json
+
+        self.destination_folder: Path = self.get_out_path()
         
     def format_data(self):
         """

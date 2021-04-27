@@ -3,9 +3,9 @@ import logging
 import copy
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
-from gssutils.transform.writers import PMD4Writer
+from gssutils.transform.writers import PMD4Writer, CubeWriter
 
 class Cubes:
     """
@@ -15,16 +15,28 @@ class Cubes:
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
                  job_name=None, writers=PMD4Writer):
 
+        # I don't _think_ we're using the destintation_path keyword anywhere but we'll run a depreciation
+        # warning for a bit rather than straight remove it as a precaution -27/4/2021- 
+        if destination_path != "out":
+            logging.warning(f'The Cubes(destination_path=) keyword is being depreciated. Please remove '
+                    'it from your transform')
+
         with open(info_json, "r") as info_file:
             self.info = json.load(info_file)
+            
+        # Force writer iterable, so we can support outputting a cube with more than one
+        writers = [writers] if not isinstance(writers, list) and not isinstance(writers, tuple) else writers
+        self.writers: List[CubeWriter] = writers
+
+        # Create the default output directories for the CubesWriters in play
+        for writer in self.writers:
+            this_out_path: Path = writer.get_out_path()
+            this_out_path.mkdir(exist_ok=True, parents=True)
 
         # Where we don't have a mapping field, add one to avoid iteration errors later
         if "columns" not in self.info["transform"].keys():
             self.info["transform"]["columns"] = {}
 
-        self.writers = writers
-        self.destination_folder = Path(destination_path)
-        self.destination_folder.mkdir(exist_ok=True, parents=True)
         self.base_uri = base_uri
         self.cubes = []
         self.has_ran = False
@@ -77,7 +89,7 @@ class Cubes:
 
         for cube in self.cubes:
             try:
-                cube.output(self.destination_folder, is_multi_cube, is_many_to_one, self.info,
+                cube.output(is_multi_cube, is_many_to_one, self.info,
                         self.writers, raise_writer_exceptions)
             except Exception as err:
                 raise Exception("Exception encountered while processing datacube '{}'." \
@@ -108,7 +120,7 @@ class Cube:
         self.writer_override = writer_override
 
 
-    def output(self, destination_folder, is_multi_cube, is_many_to_one, info_json, writers, raise_writer_exceptions):
+    def output(self, is_multi_cube, is_many_to_one, info_json, writers, raise_writer_exceptions):
         """
         Outputs the required per-platform inputs for a single 'Cube' held in the 'Cubes' object
         """
@@ -116,16 +128,13 @@ class Cube:
         # DE knows best
         if self.writer_override:
             writers = self.writer_override
-
-        # Force writer iterable, so we can support outputting a cube with more than one
-        writers = [writers] if not isinstance(writers, list) and not isinstance(writers, tuple) else writers
         
         for writer in writers:
 
             # We're going to catch this, as one writer output failing shouldn't stop us trying the next
             # note - flagged off while testing, see "raise_writer_exceptions" coming from Cubes.output_all()
             try:
-                this_writer = writer(destination_folder, is_multi_cube, is_many_to_one, info_json, cube=self)
+                this_writer = writer(is_multi_cube, is_many_to_one, info_json, cube=self)
 
                  # TODO - can wrap this whole loop fairly trivially, but undecided on points of intervention, decide
                 for operation in this_writer.operational_sequence:

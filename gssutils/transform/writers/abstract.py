@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-
 import pandas as pd
 
 class CubeWriter(metaclass=ABCMeta):
@@ -28,6 +27,17 @@ class CubeWriter(metaclass=ABCMeta):
             self.validate_data,
             self.output_data
             )
+
+    @staticmethod
+    @abstractmethod
+    def get_out_path():
+        """
+        Returns the output directory of the driver
+
+        Note: staticmethod so we can call this before instantiation
+        and raise early for incorrect configuration
+        """
+        pass
 
     @abstractmethod
     def check_inputs(self):
