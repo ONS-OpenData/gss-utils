@@ -40,10 +40,6 @@ class Cubes:
             this_out_path: Path = writer.get_out_path()
             this_out_path.mkdir(exist_ok=True, parents=True)
 
-        # Where we don't have a mapping field, add one to avoid iteration errors later
-        if "columns" not in self.info["transform"].keys():
-            self.info["transform"]["columns"] = {}
-
         self.base_uri = base_uri
         self.cubes = []
         self.has_ran = False
