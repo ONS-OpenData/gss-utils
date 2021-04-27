@@ -140,18 +140,18 @@ class PMD4Writer(CubeWriter):
 
         # Use the info.json for the mapping by default, but let people
         # pass a new one in (for where we need to get clever)
-        info_json = info_json if self.info_json_dict is None else self.info_json_dict
+        info_json = info_json if self.cube.info_json_dict is None else self.cube.info_json_dict
 
         map_obj.set_accretive_upload(info_json)
         map_obj.set_mapping(info_json)
 
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
-        map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
+        map_obj.set_dataset_uri(urljoin(self.cube.scraper._base_uri, f'data/{self.cube.scraper._dataset_id}'))
 
-        if self.override_containing_graph_uri:
-            map_obj.set_containing_graph_uri(self.override_containing_graph_uri)
+        if self.cube.override_containing_graph_uri:
+            map_obj.set_containing_graph_uri(self.cube.override_containing_graph_uri)
         else:
-            map_obj.set_containing_graph_uri(self.scraper.dataset.pmdcatGraph)
+            map_obj.set_containing_graph_uri(self.cube.scraper.dataset.pmdcatGraph)
 
         return map_obj
 
@@ -162,7 +162,7 @@ class PMD4Writer(CubeWriter):
         """
 
         # The base CSVWMapping class
-        map_obj = self._instantiate_map(destination_folder, pathified_title, info_json)
+        map_obj = self.cube._instantiate_map(destination_folder, pathified_title, info_json)
 
         # TODO - IF we do codelist generation here, this would be the point of intervention
 
