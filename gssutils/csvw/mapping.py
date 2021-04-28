@@ -389,10 +389,7 @@ class CSVWMapping:
                 ))
                 if self._codelist_base is not None:
                     codelist_csv = (self._codelist_base / pathify(name)).with_suffix('.csv')
-                    if self._metadata_filename is not None:
-                        codelist_relative_uri = URI(codelist_csv.relative_to(self._metadata_filename.parent))
-                    else:
-                        codelist_relative_uri = URI(codelist_csv)
+                    codelist_relative_uri = URI(codelist_csv)
                     self._external_tables.append(Table(
                         url=codelist_relative_uri,
                         tableSchema=URI("https://gss-cogs.github.io/family-schemas/codelist-schema.json"),
