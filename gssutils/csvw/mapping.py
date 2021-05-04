@@ -45,6 +45,7 @@ class CSVWMapping:
         self._measureTypes: Optional[List[str]] = None
         self._accretive_upload: bool = False
         self._containing_graph_uri: Optional[URI] = None
+        self._suppress_catalog_and_dsd_output: bool = False
 
     @staticmethod
     def namify(column_header: str):
@@ -106,6 +107,9 @@ class CSVWMapping:
             self._mapping = mapping['transform']['columns']
         else:
             logging.error(f'No column mapping found.')
+
+    def set_suppress_catalog_and_dsd_output(self, should_suppress: bool):
+        self._suppress_catalog_and_dsd_output = should_suppress
 
     def set_additional_foreign_key(self, foreign_key: ForeignKey):
         if self._foreign_keys is None:
@@ -417,7 +421,7 @@ class CSVWMapping:
             }
         }
 
-        if not self._accretive_upload:
+        if not self._accretive_upload and not self._suppress_catalog_and_dsd_output:
             # Don't want to upload DSD twice where we're just adding new data to existing data.
             # void:rootResource => https://www.w3.org/TR/void/#root-resource
             csvw_structure["void:rootResource"] = DataSet(

@@ -25,14 +25,17 @@ def step_impl(context, seed_name):
 def step_impl(context, cube_name, csv_data, seed_name):
     scraper = Scraper(seed=get_fixture(seed_name))
     df = pd.read_csv(get_fixture(csv_data))
-    context.cubes.add_cube(scraper, df, cube_name)
+    suppress_catalog_dsd_output = context.suppress_catalog_dsd_output if "suppress_catalog_dsd_output" in context else False
+    context.cubes.add_cube(scraper, df, cube_name, suppress_catalog_and_dsd_output=suppress_catalog_dsd_output)
 
 
 @step('I add a cube "{cube_name}" with data "{csv_data}" and a scrape seed "{seed_name}" with override containing graph "{override_containing_graph}"')
 def step_impl(context, cube_name, csv_data, seed_name, override_containing_graph):
     scraper = Scraper(seed=get_fixture(seed_name))
     df = pd.read_csv(get_fixture(csv_data))
-    context.cubes.add_cube(scraper, df, cube_name, override_containing_graph=override_containing_graph)
+    suppress_catalog_dsd_output = context.suppress_catalog_dsd_output if "suppress_catalog_dsd_output" in context else False
+    context.cubes.add_cube(scraper, df, cube_name, override_containing_graph=override_containing_graph,
+                           suppress_catalog_and_dsd_output=suppress_catalog_dsd_output)
 
 
 @step('the datacube outputs can be created')

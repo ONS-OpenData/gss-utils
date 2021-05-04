@@ -199,6 +199,9 @@ def step_impl(context):
     if "containing_graph_uri" in context and context.containing_graph_uri is not None:
         context.csvw.set_containing_graph_uri(context.containing_graph_uri)
 
+    if "suppress_catalog_dsd_output" in context:
+        context.csvw.set_suppress_catalog_and_dsd_output(context.suppress_catalog_dsd_output)
+
     if hasattr(context, 'registry'):
         context.csvw.set_registry(URI(context.registry))
     if hasattr(context, 'dataset_uri'):
@@ -216,6 +219,11 @@ def step_impl(context, endpoint):
 @step("a dataset URI '{uri}'")
 def step_impl(context, uri):
     context.dataset_uri = uri
+
+
+@step("and the catalog and DSD metadata output should be suppressed")
+def step_impl(context):
+    context.suppress_catalog_dsd_output = True
 
 
 @step("the RDF should pass the PMD4 constraints")

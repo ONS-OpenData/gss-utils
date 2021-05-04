@@ -51,3 +51,16 @@ Feature: Creating cubes
 
     <http://containing-graph-uri> a sd:NamedGraph.
     """
+
+    Scenario: Suppressing catalog and DSD output should ensure trig file not generated
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And I specify a datacube named "trig file output test cube 1" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    Then the datacube outputs can be created
+    And the file at "out/trig-file-output-test-cube-1.csv-metadata.trig" should exist
+
+    Scenario: Suppressing catalog and DSD output should ensure trig file not generated
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And and the catalog and DSD metadata output should be suppressed
+    And I specify a datacube named "trig file output test cube 2" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    Then the datacube outputs can be created
+    And the file at "out/trig-file-output-test-cube-2.csv-metadata.trig" should not exist
