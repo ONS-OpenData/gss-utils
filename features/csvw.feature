@@ -164,6 +164,7 @@ Feature: Create CSVW metadata
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/hmrc_rts'
     When I create a CSVW file from the mapping and CSV
     Then the metadata is valid JSON-LD
+    And gsscogs/csvlint validates ok
     And gsscogs/csv2rdf generates RDF
     And the RDF should pass the Data Cube integrity constraints
     And the RDF should contain
@@ -468,3 +469,37 @@ Scenario: Manually Overriding CSV-W's graph URI works.
     And gsscogs/csvlint validates ok
     And gsscogs/csv2rdf generates RDF
     And the RDF should pass the Data Cube integrity constraints
+
+  Scenario: Validate measure types
+    Given a CSV file 'observations.csv'
+      | Period  | Value | Measure Type | Unit          |
+      | 2018-Q1 | 2430  | net-mass     | kg-thousands  |
+      | 2018-Q4 | 10    | entotal      | gbp-thousands |
+    And a column map
+    """
+    {
+      "Period": {
+        "label": "Quarter",
+        "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
+        "value": "http://reference.data.gov.uk/id/quarter/{period}",
+        "codelist": false
+      },
+      "Measure Type": {
+        "dimension": "http://purl.org/linked-data/cube#measureType",
+        "value": "http://gss-data.org.uk/def/measure/{measure_type}",
+        "types": ["net-mass", "total"]
+      },
+      "Unit": {
+        "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
+        "value": "http://gss-data.org.uk/def/concept/measurement-units/{unit}"
+      },
+      "Value": {
+        "datatype": "integer"
+      }
+    }
+    """
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/hmrc_rts'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csvlint should fail with "entotal"
+

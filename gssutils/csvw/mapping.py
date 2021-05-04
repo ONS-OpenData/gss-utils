@@ -14,7 +14,7 @@ from gssutils import pathify
 from gssutils.csvw.dsd import DataSet, DimensionComponent, MeasureComponent, AttributeComponent, Component, \
     DimensionProperty, DSD, Resource, MeasureProperty, AttributeProperty
 from gssutils.csvw.namespaces import prefix_map, URI
-from gssutils.csvw.table import Column, TableSchema, Table, ForeignKey, ColumnReference
+from gssutils.csvw.table import Column, TableSchema, Table, ForeignKey, Datatype, ColumnReference
 
 default_map = {
     "Value": {
@@ -203,7 +203,24 @@ class CSVWMapping:
 
             return get_conventional_local_codelist_concept_uri_template(column_name)
 
-        # Look to see whether the measure type has its own column
+        def add_local_codelist(name: str):
+            if self._codelist_base is not None:
+                codelist_csv = (self._codelist_base / pathify(name)).with_suffix('.csv')
+                codelist_relative_uri = URI(codelist_csv)
+                self._external_tables.append(Table(
+                    url=codelist_relative_uri,
+                    tableSchema=URI("https://gss-cogs.github.io/family-schemas/codelist-schema.json"),
+                    suppressOutput=True
+                ))
+                self.add_foreign_key(ForeignKey(
+                    columnReference=self._columns[name].name,
+                    reference=ColumnReference(
+                        resource=codelist_relative_uri,
+                        columnReference="notation"
+                    )
+                ))
+
+    # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
             if isinstance(map_obj, dict) and "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
                 self._measureTemplate = URITemplate(map_obj["value"])
@@ -229,9 +246,19 @@ class CSVWMapping:
                 obj = self._mapping[name]
                 if "dimension" in obj and "value" in obj:
                     self._keys.append(self._columns[name].name)
+                    datatype = "string"
+                    # if this is a measure type column and has a "types" list, we can validate the
+                    # expected values of the column using a regular expression, see
+                    # https://www.w3.org/TR/tabular-data-primer/#h-enumeration-regexp
+                    if obj["dimension"] == "http://purl.org/linked-data/cube#measureType" and "types" in obj:
+                        datatype = Datatype(
+                            base="string",
+                            format=f"^({'|'.join(obj['types'])})$"
+                        )
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["dimension"]),
-                        valueUrl=URI(obj["value"])
+                        valueUrl=URI(obj["value"]),
+                        datatype=datatype
                     )
                     self._components.append(DimensionComponent(
                         at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
@@ -270,6 +297,8 @@ class CSVWMapping:
                             rdfs_isDefinedBy=source
                         )
                     ))
+                    if "codelist" not in obj:
+                        add_local_codelist(name)
                 elif "description" in obj or "label" in obj:
                     # local dimension with a definition/label and maybe source of the definition
                     description: Optional[str] = obj.get("description", None)
@@ -296,6 +325,8 @@ class CSVWMapping:
                             rdfs_isDefinedBy=source
                         )
                     ))
+                    if "codelist" not in obj:
+                        add_local_codelist(name)
                 elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),
@@ -387,21 +418,8 @@ class CSVWMapping:
                         rdfs_comment=description
                     )
                 ))
-                if self._codelist_base is not None:
-                    codelist_csv = (self._codelist_base / pathify(name)).with_suffix('.csv')
-                    codelist_relative_uri = URI(codelist_csv)
-                    self._external_tables.append(Table(
-                        url=codelist_relative_uri,
-                        tableSchema=URI("https://gss-cogs.github.io/family-schemas/codelist-schema.json"),
-                        suppressOutput=True
-                    ))
-                    self.add_foreign_key(ForeignKey(
-                        columnReference=self._columns[name].name,
-                        reference=ColumnReference(
-                            resource=codelist_relative_uri,
-                            columnReference="notation"
-                        )
-                    ))
+                add_local_codelist(name)
+
         self._columns["virt_dataset"] = Column(
             name="virt_dataset",
             virtual=True,

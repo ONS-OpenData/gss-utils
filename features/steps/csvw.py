@@ -51,6 +51,18 @@ def step_impl(context):
 
 @step("gsscogs/csvlint validates ok")
 def step_impl(context):
+    response, logs = run_csvlint(context)
+    assert_equal(response['StatusCode'], 0)
+
+
+@step('gsscogs/csvlint should fail with "{expected}"')
+def step_impl(context, expected):
+    response, logs = run_csvlint(context)
+    assert_equal(response['StatusCode'], 1)
+    assert expected in logs
+
+
+def run_csvlint(context):
     client = docker.from_env()
     csvlint = client.containers.create(
         'gsscogs/csvlint',
@@ -79,7 +91,7 @@ def step_impl(context):
     csvlint.start()
     response = csvlint.wait()
     sys.stdout.write(csvlint.logs().decode('utf-8'))
-    assert_equal(response['StatusCode'], 0)
+    return (response, csvlint.logs().decode('utf-8'))
 
 
 @then("the metadata is valid JSON-LD")
