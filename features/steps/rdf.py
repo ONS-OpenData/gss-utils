@@ -59,6 +59,16 @@ def step_impl(context, trig_file):
     )
 
 
+@then('the file at "{file}" should not exist')
+def step_impl(context, file):
+    assert not Path(file).exists()
+
+
+@then('the file at "{file}" should exist')
+def step_impl(context, file):
+    assert Path(file).exists()
+
+
 @step("the RDF should contain")
 def step_impl(context):
     test_graph_diff(
