@@ -42,12 +42,14 @@ class Cubes:
             logging.warning("The passing of job_name= has been depreciated and no longer does anything, please"
                             "remove this keyword argument")
 
-    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None):
+    def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None,
+                 suppress_catalog_and_dsd_output: bool = False):
         """
         Add a single datacube to the cubes class.
         """
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
-                               override_containing_graph, self.local_codelists))
+                               override_containing_graph, suppress_catalog_and_dsd_output,
+                               self.local_codelists))
 
     def output_all(self):
         """
@@ -93,7 +95,7 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str] = None,
+                 override_containing_graph_uri: Optional[str], suppress_catalog_and_dsd_output: bool,
                  local_codelists: Optional[str] = None):
 
         self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
@@ -103,6 +105,7 @@ class Cube:
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
         self.override_containing_graph_uri: Optional[URI] = URI(override_containing_graph_uri)
+        self.suppress_catalog_and_dsd_output = suppress_catalog_and_dsd_output
         self.local_codelists = local_codelists
 
     def _instantiate_map(self, destination_folder, pathified_title, info_json):
@@ -117,6 +120,7 @@ class Cube:
 
         map_obj.set_accretive_upload(info_json)
         map_obj.set_mapping(info_json)
+        map_obj.set_suppress_catalog_and_dsd_output(self.suppress_catalog_and_dsd_output)
 
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
@@ -178,9 +182,9 @@ class Cube:
         is_accretive_upload = info_json is not None and "load" in info_json and "accretiveUpload" in info_json["load"] \
                               and info_json["load"]["accretiveUpload"]
 
-        # Don't output trig file if we're performing an accretive upload.
+        # Don't output trig file if we're performing an accretive upload (or we have been asked to suppress it).
         # We don't want to duplicate information we already have.
-        if not is_accretive_upload:
+        if not is_accretive_upload and not self.suppress_catalog_and_dsd_output:
             # Output the trig
             trig_to_use = self.scraper.generate_trig()
             with open(destination_folder / f'{pathify(self.title)}.csv-metadata.trig', 'wb') as metadata:
