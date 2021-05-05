@@ -41,11 +41,12 @@ class PMD4Writer(CubeWriter):
             f' of type "bool", got {type(is_many_to_one)}.')
         self.is_many_to_one: bool = is_many_to_one
 
-        assert isinstance(info_json, dict), ('arg info_json should be'  
-            f' of type "dict", got {type(info_json)}.')
-        # Where we don't have a mapping field, add one to avoid iteration errors later
-        if "columns" not in info_json["transform"]:
-            info_json["transform"]["columns"] = {}
+        if info_json:
+            assert isinstance(info_json, dict), ('arg info_json should be'  
+                f' of type "dict", got {type(info_json)}.')
+            # Where we don't have a mapping field, add one to avoid iteration errors later
+            if "columns" not in info_json["transform"]:
+                info_json["transform"]["columns"] = {}
         self.info_json: dict = info_json
 
         self.destination_folder: Path = self.get_out_path()

@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from gssutils.transform.writers.abstract import CubeWriter
+from gssutils import pathify
 
 class CMDWriter(CubeWriter):
     """
@@ -36,11 +37,12 @@ class CMDWriter(CubeWriter):
             f' of type "bool", got {type(is_many_to_one)}.')
         self.is_many_to_one: bool = is_many_to_one
 
-        assert isinstance(info_json, dict), ('arg info_json should be'  
-            f' of type "dict", got {type(info_json)}.')
-        # Where we don't have a mapping field, add one to avoid iteration errors later
-        if "columns" not in info_json["transform"]:
-            info_json["transform"]["columns"] = {}
+        if info_json:
+            assert isinstance(info_json, dict), ('arg info_json should be'  
+                f' of type "dict", got {type(info_json)}.')
+            # Where we don't have a mapping field, add one to avoid iteration errors later
+            if "columns" not in info_json["transform"]:
+                info_json["transform"]["columns"] = {}
         self.info_json: dict = info_json
 
         self.destination_folder: Path = self.get_out_path()
@@ -63,7 +65,7 @@ class CMDWriter(CubeWriter):
         Output the encapsulated dataframe to the required format and
         to the required place
         """
-        pass
+        self.cube.dataframe.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
 
     def format_metadata(self):
         """
