@@ -54,7 +54,10 @@ class PMD4Writer(CubeWriter):
     def format_data(self):
         """
         Where modifications to the underlying dataframe are required,
-        they happen here
+        they happen here. These changed occur to ALL dataframes
+        written by this CubeWriter.
+
+        You're modifying self.cube.dataframe
         """
         # TODO - somehow
         pass

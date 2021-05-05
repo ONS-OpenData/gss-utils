@@ -1,5 +1,8 @@
+import logging
 import json
 from pathlib import Path
+
+import pandas as pd
 
 from gssutils.transform.writers.abstract import CubeWriter
 from gssutils import pathify
@@ -50,7 +53,10 @@ class CMDWriter(CubeWriter):
     def format_data(self):
         """
         Where modifications to the underlying dataframe are required,
-        they happen here
+        they happen here. These changed occur to ALL dataframes
+        written by this CubeWriter.
+
+        You're modifying self.cube.dataframe
         """
         pass
 
@@ -65,22 +71,39 @@ class CMDWriter(CubeWriter):
         Output the encapsulated dataframe to the required format and
         to the required place
         """
-        self.cube.dataframe.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
+        column_map = self.info_json["transform"]["columns"]
+
+        assert "Value" in column_map, (f'To create a CMD v4 output you need to have specified'
+                ' a "Value" column via your column mapping.')
+
+        marker_column = [x for x in self.cube.dataframe if x in ["Markers", "Marker"]]
+        attribute_columns = {k:v for (k, v) in column_map.items() if "attribute" in v}
+
+        for unwanted_col in attribute_columns:
+            column_map.pop(unwanted_col)
+        column_map.pop("Value")
+
+        assert "Value" in self.cube.dataframe, (f'Column map is specifying a "Value" column '
+                f'but one does not exist in your dataframe, got {self.cube.dataframe.values}')
+
+        additional_column_count = len(marker_column) + len(attribute_columns)
+        v4_col = f'V4_{additional_column_count}'
+
+        new_columns = list(attribute_columns.keys()) + list(column_map.keys())
+
+        # TODO - change it in place, this will eat memory as-is
+        df = pd.DataFrame()
+        df[v4_col] = self.cube.dataframe["Value"]
+        for col in new_columns:
+            df[col] = self.cube.dataframe[col]
+
+        df.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
 
     def format_metadata(self):
         """
         Where modifications to the underlying metadata are required,
         they happen here
         """
-        
-        # Currently unsure what CMD needs so (for now) we're gonna dump a simple json dict
-        # alongside the csv
-
-        with open(f'{self.destination_folder}/metadata.json', 'w') as f:
-            json.dump({
-                "title": self.cube.scraper.title,
-                "description": self.cube.scraper.description
-            }, f, indent=2)
 
     def validate_metadata(self):
         """
@@ -93,4 +116,11 @@ class CMDWriter(CubeWriter):
         Output the encapsulated metadata to the required format and
         to the required place
         """
-        pass
+        # Currently unsure what CMD needs so (for now) we're gonna dump a simple json dict
+        # alongside the csv
+
+        with open(f'{self.destination_folder}/metadata.json', 'w') as f:
+            json.dump({
+                "title": self.cube.scraper.title,
+                "description": self.cube.scraper.description
+            }, f, indent=2)
