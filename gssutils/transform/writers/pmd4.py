@@ -116,12 +116,15 @@ class PMD4Writer(CubeWriter):
         """
 
         # True, if all the statements are
-        is_accretive_upload = all([
-            not self.info_json,
-            "load" in self.info_json,
-            "accretiveUpload" in self.info_json["load"],
-            self.info_json["load"]["accretiveUpload"]
-        ])
+        if "load" in self.info_json:
+            is_accretive_upload = all([
+                not self.info_json,
+                "load" in self.info_json,
+                "accretiveUpload" in self.info_json["load"],
+                self.info_json["load"]["accretiveUpload"]
+            ])
+        else:
+            is_accretive_upload = False
 
         # Don't output trig file if we're performing an accretive upload.
         # We don't want to duplicate information we already have.
@@ -170,7 +173,7 @@ class PMD4Writer(CubeWriter):
         """
 
         # The base CSVWMapping class
-        map_obj = self.cube._instantiate_map(destination_folder, pathified_title, info_json)
+        map_obj = self._instantiate_map(destination_folder, pathified_title, info_json)
 
         # TODO - IF we do codelist generation here, this would be the point of intervention
 

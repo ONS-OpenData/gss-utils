@@ -23,6 +23,7 @@ class CubeWriter(metaclass=ABCMeta):
             self.check_inputs,
             self.format_metadata,
             self.validate_metadata,
+            self.output_metadata,
             self.format_data,
             self.validate_data,
             self.output_data
