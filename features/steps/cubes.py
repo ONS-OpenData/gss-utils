@@ -93,10 +93,14 @@ def step_impl(context, writer_str, cube_name, desired_output):
         output_dataframe = output_dataframe.drop("Value", axis=1)
         fixture_dataframe = fixture_dataframe.drop("Value", axis=1)
     elif chosen_writer.__name__ == "CMDWriter":
-        v4_cols = [x for x in fixture_dataframe.columns.values if x.startswith("v4")]
+        v4_cols = [x for x in fixture_dataframe.columns.values if x.lower().startswith("v4")]
         assert len(v4_cols) == 1, ('The fixture files you are comparing to a CMD output'
             f' need to contain exactly one column with the prefix "v4_". Got {len(v4_cols)}')
         v4_col = v4_cols[0]
+
+        assert v4_col in output_dataframe.columns.values, (f'The output does not include the '
+            'required V4 prefixed column required. In your fixture this column is specified '
+            f'as {v4_col} but output has columns {output_dataframe.columns.values}')
 
         output_dataframe = output_dataframe.drop(v4_col, axis=1)
         fixture_dataframe = fixture_dataframe.drop(v4_col, axis=1)
