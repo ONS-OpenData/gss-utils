@@ -480,6 +480,15 @@ Scenario: Manually Overriding CSV-W's graph URI works.
     And gsscogs/csv2rdf generates RDF
     And the RDF should pass the Data Cube integrity constraints
 
+  Scenario: Invalid with respect to local codelists
+    Given a CSV file 'notifications-dodgy.csv'
+    And a JSON map file 'notifications.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/covid-19/wg-notifications-of-deaths-of-residents-related-to-covid-19-in-adult-care-homes'
+    And local codelists in "local-codelists"
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csvlint should fail with "non-covid"
+
   Scenario: Validate measure types
     Given a CSV file 'observations.csv'
       | Period  | Value | Measure Type | Unit          |

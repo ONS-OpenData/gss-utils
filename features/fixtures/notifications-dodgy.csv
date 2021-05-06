@@ -1,0 +1,8 @@
+Notification Date,Area Code,Location of Death,Cause of Death,Care Provided,Value
+day/2018-01-01,W92000004,total,total,total,3
+day/2019-01-01,W92000004,total,total,total,1
+day/2020-01-01,W92000004,total,covid-suspected,total,0
+day/2020-01-01,W92000004,total,covid-confirmed,with-nursing,0
+day/2020-01-01,W92000004,total,covid-total,with-nursing,0
+day/2020-01-01,W92000004,total,non-covid,total,8
+day/2020-01-01,W92000004,total,total,total,8
