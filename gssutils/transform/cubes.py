@@ -8,7 +8,7 @@ from typing import Optional, List
 
 from gssutils.transform.writers import PMD4Writer, CMDWriter, CubeWriter
 
-STANDARD_formatERS = {"PMD4": PMD4Writer, "CMD": CMDWriter}
+STANDARD_FORMATERS = {"PMD4": PMD4Writer, "CMD": CMDWriter}
 
 class Cubes:
     """
@@ -43,7 +43,7 @@ class Cubes:
         self.cubes = []
         self.has_ran = False
         self.formaters = formaters
-        self._known_formaters = STANDARD_formatERS
+        self._known_formaters = STANDARD_FORMATERS
         
         if job_name is not None:
             # Another depreciation warning, 5/5/2010. This has been up a while already so aim to remove from roughly 1/7/2021
