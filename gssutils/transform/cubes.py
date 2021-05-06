@@ -8,7 +8,7 @@ from typing import Optional, List
 
 from gssutils.transform.writers import PMD4Writer, CMDWriter, CubeWriter
 
-STANDARD_FORMATTERS = {"PMD4": PMD4Writer, "CMD": CMDWriter}
+STANDARD_formatERS = {"PMD4": PMD4Writer, "CMD": CMDWriter}
 
 class Cubes:
     """
@@ -16,7 +16,7 @@ class Cubes:
     """
 
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
-                 job_name=None, writers=PMD4Writer, formatters=None):
+                 job_name=None, writers=PMD4Writer, formaters={}):
 
         # I don't _think_ we're using the destination_path keyword anywhere (and it's irrelevant with the
         # introduction of CubeWriter) but we'll run a depreciation warning for a few months rather than 
@@ -42,8 +42,8 @@ class Cubes:
         self.base_uri = base_uri
         self.cubes = []
         self.has_ran = False
-        self.formatters = formatters
-        self._known_formatters = STANDARD_FORMATTERS
+        self.formaters = formaters
+        self._known_formaters = STANDARD_formatERS
         
         if job_name is not None:
             # Another depreciation warning, 5/5/2010. This has been up a while already so aim to remove from roughly 1/7/2021
@@ -51,32 +51,32 @@ class Cubes:
                             "remove this keyword argument")
 
     # TODO... eventully. <metadata_thing> not <scraper>. An output driver deserves a paired input driver.
-    # note - whenw e do have the outputdriver type check the inputdriver for compatibiity, voila, we is decoupled.
+    # note - when/if we do this, have the outputdriver type check the inputdriver for compatibiity, voila, we is decoupled.
     def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None,
-            writer_override = None, formatters=None):
+            writer_override = None, formaters={}):
         """
         Add a single datacube to the cubes class.
         """
 
-        # If there are no Cube() level formatters fall back on any declared at the Cubes() level
+        # If there are no Cube() level formaters fall back on any declared at the Cubes() level
         # If we've got both, use both.
-        if not formatters:
-            formatters = self.formatters
-        elif formatters and self.formatters:
+        if not formaters:
+            formaters = self.formaters
+        elif formaters and self.formaters:
             # TODO - do we need to handle clashes here?
-            formatters = {**formatters, **self.formatters}
+            formaters = {**formaters, **self.formaters}
 
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
-                               override_containing_graph, writer_override, formatters, self._known_formatters))
+                               override_containing_graph, writer_override, formaters, self._known_formaters))
 
-    def register_formatters(self, name, writer_class):
+    def register_formater(self, name, writer_class):
         """
-        Allow the user to register formatters for CubeWriter classes beyond
+        Allow the user to register formaters for CubeWriter classes beyond
         those currently defined in gssutils
         """
         # TODO - think, duplicates, good or bad?
         # do we _want_ to let people override a global applied writer per cube?
-        self._known_formatters[name] = writer_class
+        self._known_formaters[name] = writer_class
 
 
     def output_all(self, raise_writer_exceptions: bool = True):
@@ -130,7 +130,7 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str], writer_override, formatters, known_formatters):
+                 override_containing_graph_uri: Optional[str], writer_override, formaters, known_formaters):
 
         self.scraper = copy.deepcopy(scraper)  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
@@ -139,8 +139,8 @@ class Cube:
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
         self.override_containing_graph_uri = override_containing_graph_uri
-        self.formatters = formatters
-        self._known_formatters = known_formatters
+        self.formaters = formaters
+        self._known_formaters = known_formaters
 
         # I'm not 100% but it's conceivable that we'll want to output subset of the
         # defined cubes to different places, so we're including a per-cube writer override
@@ -158,21 +158,21 @@ class Cube:
             writers = self.writer_override
 
         for writer in writers:
-            logging.warning(f'Columns at start of loop {self.dataframe.columns.values}')
 
             # We're going to catch an error here as one writer output failing shouldn't stop us trying the next
             # note - flagged off while testing, see "raise_writer_exceptions" coming from Cubes.output_all()
             try:
                 this_writer = writer(is_multi_cube, is_many_to_one, info_json, cube=self)
-                # If we've regstered any formatter fuctions at Cubes() or Cube() level that match
+                # If we've regstered any formater fuctions at Cubes() or Cube() level that match
                 # the specified writer, attach them here.
-                for formatter_name, format_funcs in self.formatters.items():
-                    if self._known_formatters[formatter_name] == writer:
-                        # Formatters can be either a singleton or a list, force list
-                        format_funcs = [format_funcs] if not isinstance(format_funcs, list) else format_funcs
-                        for format_func in format_funcs:
-                            this_writer.formatters.append(format_func)
-
+                if self.formaters:
+                    for formater_name, format_funcs in self.formaters.items():
+                        if self._known_formaters[formater_name] == writer:
+                            # formaters can be either a singleton or a list, force list
+                            format_funcs = [format_funcs] if not isinstance(format_funcs, list) else format_funcs
+                            for format_func in format_funcs:
+                                this_writer.formaters.append(format_func)
+                            
                 for operation in this_writer.operational_sequence:
                     operation()
             

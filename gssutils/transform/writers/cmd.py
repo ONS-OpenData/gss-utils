@@ -96,6 +96,9 @@ class CMDWriter(CubeWriter):
         df[v4_col] = self.cube.dataframe["Value"]
         for col in new_columns:
             df[col] = self.cube.dataframe[col]
+            if col in column_map:
+                if "associated_notations" in column_map[col]:
+                    df[column_map[col]["associated_notations"]] = self.cube.dataframe[column_map[col]["associated_notations"]]
 
         df.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
 
@@ -104,6 +107,7 @@ class CMDWriter(CubeWriter):
         Where modifications to the underlying metadata are required,
         they happen here
         """
+        pass
 
     def validate_metadata(self):
         """

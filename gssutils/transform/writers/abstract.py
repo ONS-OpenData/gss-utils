@@ -7,16 +7,16 @@ class CubeWriter(metaclass=ABCMeta):
     a datacube and its metadata
     """
 
-    def __init__(self, *args, cube = None, formatters = [], **kwargs):
+    def __init__(self, *args, cube = None, formaters = [], **kwargs):
 
-        assert cube, ('Every writer must be passed a Cube object, via '
-                'the cube keyword argument')
+        assert cube, ('Every "CubeWriter" driver must be passed something that '
+            'represents a cube of data via the cube= keyword argument')
 
         # TODO - assert the types of everything match
         self.cube = cube
         self.args: list = args
         self.kwargs: dict = kwargs
-        self.formatters: list = formatters
+        self.formaters: list = formaters
 
         # The order we do things.
         # Shouldn't change, but lets set it up so it can
@@ -36,7 +36,7 @@ class CubeWriter(metaclass=ABCMeta):
         Where dataframe modifying functions are passed into the CubeWriter
         they happen here.
         """
-        for post_processer in self.formatters:
+        for post_processer in self.formaters:
             self.cube.dataframe = post_processer(self.cube.dataframe)
 
     @staticmethod

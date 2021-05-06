@@ -7,12 +7,36 @@ from io import BytesIO, SEEK_END, StringIO, TextIOBase
 
 from csvw import run_csv2rdf
 from gssutils.transform.writers import PMD4Writer, CMDWriter
+from features.fixtures.formaters import formater_cmd_example1, formater_pmd4_example1
+
+def get_predefined_formater(formater_name):
+    """
+    Helper to let us pull cube formatters out of
+    fixtures by name
+    """
+    predefined_formaters = {
+        "formater_cmd_example1": formater_cmd_example1,
+        "formater_pmd4_example1": formater_pmd4_example1
+    }
+    return predefined_formaters[formater_name]
+
 
 def get_fixture(file_name):
     """Helper to get specific files out of the fixtures dir"""
     feature_path = Path(os.path.dirname(os.path.abspath(__file__))).parent
     fixture_file_path = Path(feature_path, "fixtures", file_name)
     return fixture_file_path
+
+
+def select_cube_by_name(context, cube_name):
+    """
+    Given a name, get the appropriate cube object from the list
+    of cubes in context.cubes
+    """
+    chosen_cube_as_list = [x for x in context.cubes.cubes if x.title == cube_name]
+    assert len(chosen_cube_as_list) == 1, (f'A cube of title {cube_name} '
+        f'not found. Got {[x.title for x in context.cubes]}')
+    return chosen_cube_as_list[0]
 
 
 def get_write_driver(writer):
@@ -65,15 +89,17 @@ def step_impl(context, n):
     context.turtle = run_csv2rdf(csv_file_path, metadata_file_path, csv_io, metadata_io)
 
 
+@given(u'I attach to datacube "{cube_name}" a "{writer_str}" formater named "{formater_name}"')
+def step_impl(context, cube_name, writer_str, formater_name):
+    chosen_cube = select_cube_by_name(context, cube_name)
+    chosen_cube.formaters[writer_str] = get_predefined_formater(formater_name)
+
+
 @then(u'the "{writer_str}" output for "{cube_name}" matches "{desired_output}"')
 def step_impl(context, writer_str, cube_name, desired_output):
 
     chosen_writer = get_write_driver(writer_str)
-
-    chosen_cube_as_list = [x for x in context.cubes.cubes if x.title == cube_name]
-    assert len(chosen_cube_as_list) == 1, (f'A cube of title {cube_name} '
-        f'not found. Got {[x.title for x in context.cubes]}')
-    chosen_cube = chosen_cube_as_list[0]
+    chosen_cube = select_cube_by_name(context, cube_name)
 
     # TODO - something a tad more subtle than glob!
     # Also, use Path
@@ -88,7 +114,7 @@ def step_impl(context, writer_str, cube_name, desired_output):
     # TODO - better than this
     # Precision differences in the obs (I think) are making direct comparissons
     # of dataframes a nightmare, so (for now) we're dropping the observations
-    # column and type casting the whole dataframe to str.
+    # column and type casting the both dataframes to str.
     if chosen_writer.__name__ == "PMD4Writer":
         output_dataframe = output_dataframe.drop("Value", axis=1)
         fixture_dataframe = fixture_dataframe.drop("Value", axis=1)
