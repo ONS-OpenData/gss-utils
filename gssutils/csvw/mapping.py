@@ -44,6 +44,8 @@ class CSVWMapping:
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
         self._accretive_upload: bool = False
+        self._containing_graph_uri: Optional[URI] = None
+        self._suppress_catalog_and_dsd_output: bool = False
 
     @staticmethod
     def namify(column_header: str):
@@ -106,10 +108,16 @@ class CSVWMapping:
         else:
             logging.error(f'No column mapping found.')
 
+    def set_suppress_catalog_and_dsd_output(self, should_suppress: bool):
+        self._suppress_catalog_and_dsd_output = should_suppress
+
     def set_additional_foreign_key(self, foreign_key: ForeignKey):
         if self._foreign_keys is None:
             self._foreign_keys = []
         self._foreign_keys.append(foreign_key)
+
+    def set_containing_graph_uri(self, uri: URI):
+        self._containing_graph_uri = uri
 
     def set_dataset_uri(self, uri: URI, dataset_root_uri: Optional[URI] = None):
         f"""
@@ -392,15 +400,31 @@ class CSVWMapping:
             valueUrl=URI("qb:Observation")
         )
         self._validate()
+
+        if self._containing_graph_uri is None:
+            print("WARNING: _containing_graph_uri is unset. Imputing graph URI from context.")
+            containing_graph_uri = self._dataset_uri.replace("gss-data.org.uk/data/gss_data",
+                                                             "gss-data.org.uk/graph/gss_data")
+        else:
+            containing_graph_uri = self._containing_graph_uri
+
         csvw_structure = {
             "@context": ["http://www.w3.org/ns/csvw", {"@language": "en"}],
             "tables": self._as_tables(),
-            "@id": self.join_dataset_uri("#tables")
+            "@id": containing_graph_uri,
+            # sd:NamedGraph => https://www.w3.org/TR/sparql11-service-description/#sd-NamedGraph
+            "rdf:type": {
+                "@id": "sd:NamedGraph"
+            },
+            "sd:name": {
+                "@id": containing_graph_uri
+            }
         }
 
-        if not self._accretive_upload:
+        if not self._accretive_upload and not self._suppress_catalog_and_dsd_output:
             # Don't want to upload DSD twice where we're just adding new data to existing data.
-            csvw_structure["prov:hadDerivation"] = DataSet(
+            # void:rootResource => https://www.w3.org/TR/void/#root-resource
+            csvw_structure["void:rootResource"] = DataSet(
                 at_id=self.join_dataset_uri('#dataset'),
                 qb_structure=DSD(
                     at_id=self.join_dataset_uri('#structure'),

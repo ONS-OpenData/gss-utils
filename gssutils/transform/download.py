@@ -8,6 +8,7 @@ import pandas as pd
 import pyexcel
 import requests
 import xypath
+from os import environ
 from typing import Union, Dict, Optional
 
 from gssutils.metadata.base import Resource
@@ -213,7 +214,7 @@ class Downloadable(Resource):
 
         # Assumption that no cases of multiple datasets from a single API endpoint, so...
         dataset_url = self._seed['odataConversion']['datasetIdentifier']
-        endpoint_url = self._seed['odataConversion']['publishedLocation']
+        endpoint_url = environ.get('SPARQL_URL', 'https://staging.gss-data.org.uk/sparql')
         logging.debug(self._seed['odataConversion'])
         chunk_dimension = self._seed['odataConversion']['chunkDimension']
         logging.debug(self._seed['odataConversion'].keys())
@@ -237,7 +238,7 @@ SELECT DISTINCT ?chunk WHERE {{
         Given the downloadURL from the scraper, return a list of chunks from the odata api
         """
 
-        r = self._session.get(self.uri, params={'apply': 'groupby((MonthId))'})
+        r = self._session.get(self.uri, params={'$apply': 'groupby((MonthId))'})
         if r.status_code != 200:
             raise Exception(f'failed on url {self.uri} with code {r.status_code}')
         chunk_dict = r.json()

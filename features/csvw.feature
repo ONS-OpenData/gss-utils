@@ -389,7 +389,7 @@ Scenario: Ensure column definition `value` field is respected when `parent` is n
           .
     """
 
- Scenario: Do not output Data Structure Definition or Trig when performing an accretive upload
+ Scenario: Do not output Data Structure Definition when performing an accretive upload
     Given a CSV file 'product-observations.csv'
     And a JSON map file 'mapping-info-accretive-test.json'
     And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
@@ -399,6 +399,16 @@ Scenario: Ensure column definition `value` field is respected when `parent` is n
     And the RDF should pass the Data Cube integrity constraints
     And the ask query 'dsd-components-exist.sparql' should return False
 
+ Scenario: Do not output Data Structure Definition when output suppressed
+    Given a CSV file 'product-observations.csv'
+    And a JSON map file 'mapping-info.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    And and the catalog and DSD metadata output should be suppressed
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the ask query 'dsd-components-exist.sparql' should return False
 
 Scenario: A user wishes to specify a parent dimension for a locally defined dataset dimension
     Given a CSV file 'life-expectancy.csv'
@@ -417,4 +427,43 @@ Scenario: A user wishes to specify a parent dimension for a locally defined data
       <#dimension/region> a qb:DimensionProperty ;
           qb:codeList <http://gss-data.org.uk/data/gss_data/health/life-expectancy-in-newport#scheme/region> ;
           rdfs:subPropertyOf <http://purl.org/linked-data/sdmx/2009/dimension#refPeriod> .
+    """
+
+  Scenario: CSV-W's Graph URI is automatically specified if not overridden.
+    Given a CSV file 'product-observations.csv'
+    And a JSON map file 'mapping-info.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the RDF should contain
+    """
+    @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+    @prefix void: <http://rdfs.org/ns/void#>.
+
+    <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>
+        a sd:NamedGraph;
+        sd:name <http://gss-data.org.uk/graph/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>;
+        void:rootResource <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset>.
+    """
+
+Scenario: Manually Overriding CSV-W's graph URI works.
+    Given a CSV file 'product-observations.csv'
+    And a JSON map file 'mapping-info.json'
+    And a dataset URI 'http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    And a containing graph URI 'http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity'
+    When I create a CSVW file from the mapping and CSV
+    Then the metadata is valid JSON-LD
+    And gsscogs/csv2rdf generates RDF
+    And the RDF should pass the Data Cube integrity constraints
+    And the RDF should contain
+    """
+    @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+    @prefix void: <http://rdfs.org/ns/void#>.
+
+    <http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>
+        a sd:NamedGraph;
+        sd:name <http://gss-data.org.uk/graph2/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity>;
+        void:rootResource <http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#dataset>.
     """

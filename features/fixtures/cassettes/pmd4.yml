@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: query=PREFIX+qb%3A+%3Chttp%3A%2F%2Fpurl.org%2Flinked-data%2Fcube%23%3E%0APREFIX+dim%3A+%3Chttp%3A%2F%2Fpurl.org%2Flinked-data%2Fsdmx%2F2009%2Fdimension%23%3E%0ASELECT+DISTINCT+%3Fchunk+WHERE+%7B%0A++++%3Fobs+qb%3AdataSet+%3Chttp%3A%2F%2Fgss-data.org.uk%2Fdata%2Fgss_data%2Fcovid-19%2Fnrs-deaths-involving-coronavirus-covid-19-in-scotland%23dataset%3E%3B+dim%3ArefPeriod+%3Fchunk+.%0A%7D
+    body: query=PREFIX+qb%3A+%3Chttp%3A%2F%2Fpurl.org%2Flinked-data%2Fcube%23%3E%0APREFIX+dim%3A+%3Chttp%3A%2F%2Fpurl.org%2Flinked-data%2Fsdmx%2F2009%2Fdimension%23%3E%0ASELECT+DISTINCT+%3Fchunk+WHERE+%7B%0A++++%3Fobs+qb%3AdataSet+%3Chttp%3A%2F%2Fgss-data.org.uk%2Fdata%2Fgss_data%2Fcovid-19%2Fnrs-deaths-involving-coronavirus-covid-19-in-scotland%23dataset%3E%3B+%3Chttp%3A%2F%2Fpurl.org%2Flinked-data%2Fsdmx%2F2009%2Fdimension%23refPeriod%3E+%3Fchunk+.%0A%7D
     headers:
       Accept:
       - application/sparql-results+json
@@ -9,7 +9,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '386'
+      - '450'
       Content-Type:
       - application/x-www-form-urlencoded
       User-Agent:
@@ -82,7 +82,7 @@ interactions:
       Content-Type:
       - application/sparql-results+json
       Date:
-      - Mon, 01 Feb 2021 10:38:47 GMT
+      - Mon, 19 Apr 2021 15:59:28 GMT
       Server:
       - nginx
       Via:

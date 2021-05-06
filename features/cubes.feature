@@ -39,6 +39,7 @@ Feature: Creating cubes
     And I specify a datacube named "test cube 4" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
     Then the datacube outputs can be created
 
+
   Scenario: ignore JOB_NAME
     Given the 'JOB_NAME' environment variable is 'GSS_data/beta.gss-data.org.uk/family/trade/DCMS-Sectors-Economic-Estimates-Year-Trade-in-services'
     And I want to create datacubes from the seed "seed-dcms-trade-in-services-info.json"
@@ -51,3 +52,28 @@ Feature: Creating cubes
       <http://gss-data.org.uk/data/gss_data/trade/dcms-dcms-sectors-economic-estimates-year-trade-in-services-catalog-entry>
           rdfs:label "DCMS Sectors Economic Estimates 2018: Trade in services"@en .
       """
+      
+  Scenario: Override of the containing Graph URI works
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And I add a cube "test cube 1" with data "quarterly-balance-of-payments.csv" and a scrape seed "seed-temp-scrape-quarterly-balance-of-payments.json" with override containing graph "http://containing-graph-uri"
+    Then the datacube outputs can be created
+    Then generate RDF from the n=0 cube's CSV-W output
+    And the RDF should contain
+    """
+    @prefix sd: <http://www.w3.org/ns/sparql-service-description#>.
+
+    <http://containing-graph-uri> a sd:NamedGraph.
+    """
+
+    Scenario: Suppressing catalog and DSD output should ensure trig file not generated
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And I specify a datacube named "trig file output test cube 1" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    Then the datacube outputs can be created
+    And the file at "out/trig-file-output-test-cube-1.csv-metadata.trig" should exist
+
+    Scenario: Suppressing catalog and DSD output should ensure trig file not generated
+    Given I want to create datacubes from the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    And and the catalog and DSD metadata output should be suppressed
+    And I specify a datacube named "trig file output test cube 2" with data "quarterly-balance-of-payments.csv" and a scrape using the seed "seed-temp-scrape-quarterly-balance-of-payments.json"
+    Then the datacube outputs can be created
+    And the file at "out/trig-file-output-test-cube-2.csv-metadata.trig" should not exist

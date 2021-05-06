@@ -20,7 +20,7 @@
   "odataConversion": {
       "publishedLocation": "https://staging.gss-data.org.uk/sparql",
       "datasetIdentifier": "http://gss-data.org.uk/data/gss_data/covid-19/nrs-deaths-involving-coronavirus-covid-19-in-scotland#dataset",
-      "chunkDimension": "dim:refPeriod"
+      "chunkDimension": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod"
   },
   "sizingNotes": "",
   "notes": "Updated with a revised landing page as the stats have moved, this this is available via an API https://www.uktradeinfo.com/api-documentation/",
