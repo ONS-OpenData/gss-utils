@@ -238,7 +238,9 @@ SELECT DISTINCT ?chunk WHERE {{
         Given the downloadURL from the scraper, return a list of chunks from the odata api
         """
 
-        r = self._session.get(self.uri, params={'$apply': 'groupby((MonthId))'})
+        chunk_dimension = self._seed['odataConversion']['chunkDimension']
+
+        r = self._session.get(self.uri, params={'$apply': f"groupby(({chunk_dimension}))"})
         if r.status_code != 200:
             raise Exception(f'failed on url {self.uri} with code {r.status_code}')
         chunk_dict = r.json()
