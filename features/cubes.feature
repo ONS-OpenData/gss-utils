@@ -34,8 +34,8 @@ Feature: Creating cubes
     Given I want to create "PMD4 and CMD" datacubes from the seed "cubes/seed-cmdpmd-ons-quarterly-country-and-regional-gdp.json"
     # TODO - no way we should be defining the seed twice, unpick this
     And I specify a datacube named "test cube 1" with data "cubes/input-pmdcmd-gdp.csv" and a scrape using the seed "cubes/seed-cmdpmd-ons-quarterly-country-and-regional-gdp.json"
-    And I attach to datacube "test cube 1" a "CMD" formater named "formater_cmd_example1"
-    And I attach to datacube "test cube 1" a "PMD4" formater named "formater_pmd4_example1"
+    And I attach to datacube "test cube 1" a predefined "CMD" formater named "formater_cmd_gdp_example"
+    And I attach to datacube "test cube 1" a predefined "PMD4" formater named "formater_pmd4_gdp_example"
     Then the datacube outputs can be created
     And the "PMD4" output for "test cube 1" matches "cubes/output-pmd-quarterly-country-and-regional-gdp.csv"
     And the "CMD" output for "test cube 1" matches "cubes/output-cmd-regional-gdp-by-year-time-series-v3.csv"

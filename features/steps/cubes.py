@@ -1,5 +1,7 @@
 
+import shutil
 from behave import *
+import logging
 import glob
 from nose.tools import *
 from gssutils import *
@@ -7,7 +9,13 @@ from io import BytesIO, SEEK_END, StringIO, TextIOBase
 
 from csvw import run_csv2rdf
 from gssutils.transform.writers import PMD4Writer, CMDWriter
-from features.fixtures.formaters import formater_cmd_example1, formater_pmd4_example1
+from features.fixtures.cubes.formaters import formater_cmd_gdp_example, formater_pmd4_gdp_example
+
+WRITER_DRIVERS = {
+        "PMD4": PMD4Writer,
+        "CMD": CMDWriter,
+        "PMD4 and CMD": [PMD4Writer, CMDWriter]
+    }
 
 def get_predefined_formater(formater_name):
     """
@@ -15,8 +23,8 @@ def get_predefined_formater(formater_name):
     fixtures by name
     """
     predefined_formaters = {
-        "formater_cmd_example1": formater_cmd_example1,
-        "formater_pmd4_example1": formater_pmd4_example1
+        "formater_cmd_gdp_example": formater_cmd_gdp_example,
+        "formater_pmd4_gdp_example": formater_pmd4_gdp_example
     }
     return predefined_formaters[formater_name]
 
@@ -25,6 +33,7 @@ def get_fixture(file_name):
     """Helper to get specific files out of the fixtures dir"""
     feature_path = Path(os.path.dirname(os.path.abspath(__file__))).parent
     fixture_file_path = Path(feature_path, "fixtures", file_name)
+    logging.warning(f'Fixture from {fixture_file_path}')
     return fixture_file_path
 
 
@@ -43,18 +52,23 @@ def get_write_driver(writer):
     """
     Given a string name fo a driver, returns the class(es) in use
     """
-    writer_drivers = {
-        "PMD4": PMD4Writer,
-        "CMD": CMDWriter,
-        "PMD4 and CMD": [PMD4Writer, CMDWriter]
-    }
-    assert writer in writer_drivers, f'No writer named "{writer}" exists.'
-    return writer_drivers[writer]
+    assert writer in WRITER_DRIVERS, f'No writer named "{writer}" exists.'
+    return WRITER_DRIVERS[writer]
 
 
 @given('I want to create "{writer}" datacubes from the seed "{seed_name}"')
 def step_impl(context, writer, seed_name):
+    # Note: currently we're using a lot of assumptions around writing outputs
+    # then reading them back in for testing.
+    # (a) long term - do better (i.e don't do that).
+    # (b) short term, clear the Cubes() output directories between writes
+    #     to avoid race conditions.
+    for writer_driver in [x for x in WRITER_DRIVERS.values() if not isinstance(x, list)]:
+        writer_out_path = writer_driver.get_out_path()
+        if writer_out_path.exists():
+            shutil.rmtree(writer_out_path.absolute())
     context.cubes = Cubes(get_fixture(seed_name), writers=get_write_driver(writer))
+    logging.warning(f'Cubes has {context.cubes.formaters}')
 
 
 @step('I specify a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
@@ -89,17 +103,16 @@ def step_impl(context, n):
     context.turtle = run_csv2rdf(csv_file_path, metadata_file_path, csv_io, metadata_io)
 
 
-@given(u'I attach to datacube "{cube_name}" a "{writer_str}" formater named "{formater_name}"')
+@given(u'I attach to datacube "{cube_name}" a predefined "{writer_str}" formater named "{formater_name}"')
 def step_impl(context, cube_name, writer_str, formater_name):
     chosen_cube = select_cube_by_name(context, cube_name)
-    chosen_cube.formaters[writer_str] = get_predefined_formater(formater_name)
+    chosen_cube.attached_formaters[writer_str] = get_predefined_formater(formater_name)
 
 
 @then(u'the "{writer_str}" output for "{cube_name}" matches "{desired_output}"')
 def step_impl(context, writer_str, cube_name, desired_output):
 
     chosen_writer = get_write_driver(writer_str)
-    chosen_cube = select_cube_by_name(context, cube_name)
 
     # TODO - something a tad more subtle than glob!
     # Also, use Path
@@ -134,9 +147,17 @@ def step_impl(context, writer_str, cube_name, desired_output):
     output_dataframe = output_dataframe.astype(str)
     fixture_dataframe = fixture_dataframe.astype(str)
 
-    assert output_dataframe.equals(fixture_dataframe), ('\nThe transformed dataframe: \n\n'
-        f'{output_dataframe} \n\nis not identical to the expected dataframe:\n\n {fixture_dataframe}\n')
+    # If this fails they're not equal ..but.. dumping two dataframes to screen won't be much use.
+    # Dev note: yes iteration is slow, but this only tiggers if there's a problem, at the point
+    # it's worth the wait to see what that problem is
+    assert output_dataframe.equals(fixture_dataframe), (f'''
+        -- Dataframes do not match --
+        Created dataframe:
+        {output_dataframe}
 
+        Fixture Dataframe
+        {fixture_dataframe}
+    ''')
 
 # TODO - set to pass trivially while we sort out the plumbing
 # and figuring out exactly what kind of metadata output a v4 is gonna need

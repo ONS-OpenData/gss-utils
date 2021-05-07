@@ -16,7 +16,7 @@ class Cubes:
     """
 
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
-                 job_name=None, writers=PMD4Writer, formaters={}):
+                 job_name=None, writers=PMD4Writer, formaters=None):
 
         # I don't _think_ we're using the destination_path keyword anywhere (and it's irrelevant with the
         # introduction of CubeWriter) but we'll run a depreciation warning for a few months rather than 
@@ -51,23 +51,26 @@ class Cubes:
                             "remove this keyword argument")
 
     # TODO... eventully. <metadata_thing> not <scraper>. An output driver deserves a paired input driver.
-    # note - when/if we do this, have the outputdriver type check the inputdriver for compatibiity, voila, we is decoupled.
     def add_cube(self, scraper, dataframe, title, graph=None, info_json_dict=None, override_containing_graph=None,
-            writer_override = None, formaters={}):
+            writer_override = None, formaters=None):
         """
         Add a single datacube to the cubes class.
         """
 
         # If there are no Cube() level formaters fall back on any declared at the Cubes() level
         # If we've got both, use both.
-        if not formaters:
-            formaters = self.formaters
-        elif formaters and self.formaters:
+        if formaters and self.formaters:
             # TODO - do we need to handle clashes here?
-            formaters = {**formaters, **self.formaters}
+            attached_formaters = {**formaters, **self.formaters}
+        elif self.formaters:
+            attached_formaters = self.formaters
+        elif formaters:
+            attached_formaters = formaters
+        else:
+            attached_formaters = {}
 
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
-                               override_containing_graph, writer_override, formaters, self._known_formaters))
+                               override_containing_graph, writer_override, attached_formaters, self._known_formaters))
 
     def register_formater(self, name, writer_class):
         """
@@ -79,7 +82,7 @@ class Cubes:
         self._known_formaters[name] = writer_class
 
 
-    def output_all(self, raise_writer_exceptions: bool = True):
+    def output_all(self, raise_writer_exceptions: bool = False):
         """
         Output every cube object we've added to the cubes() class.
 
@@ -130,7 +133,7 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str], writer_override, formaters, known_formaters):
+                 override_containing_graph_uri: Optional[str], writer_override, attached_formaters, known_formaters):
 
         self.scraper = copy.deepcopy(scraper)  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
@@ -139,7 +142,7 @@ class Cube:
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
         self.override_containing_graph_uri = override_containing_graph_uri
-        self.formaters = formaters
+        self.attached_formaters = attached_formaters
         self._known_formaters = known_formaters
 
         # I'm not 100% but it's conceivable that we'll want to output subset of the
@@ -165,14 +168,14 @@ class Cube:
                 this_writer = writer(is_multi_cube, is_many_to_one, info_json, cube=self)
                 # If we've regstered any formater fuctions at Cubes() or Cube() level that match
                 # the specified writer, attach them here.
-                if self.formaters:
-                    for formater_name, format_funcs in self.formaters.items():
+                if self.attached_formaters:
+                    for formater_name, format_funcs in self.attached_formaters.items():
                         if self._known_formaters[formater_name] == writer:
                             # formaters can be either a singleton or a list, force list
                             format_funcs = [format_funcs] if not isinstance(format_funcs, list) else format_funcs
                             for format_func in format_funcs:
                                 this_writer.formaters.append(format_func)
-                            
+
                 for operation in this_writer.operational_sequence:
                     operation()
             

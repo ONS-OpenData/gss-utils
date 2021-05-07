@@ -58,19 +58,6 @@ class CMDWriter(CubeWriter):
 
         You're modifying self.cube.dataframe
         """
-        pass
-
-    def validate_data(self):
-        """
-        Where you validate the datacube
-        """
-        pass
-
-    def output_data(self):
-        """
-        Output the encapsulated dataframe to the required format and
-        to the required place
-        """
         column_map = self.info_json["transform"]["columns"]
 
         assert "Value" in column_map, (f'To create a CMD v4 output you need to have specified'
@@ -84,23 +71,38 @@ class CMDWriter(CubeWriter):
         column_map.pop("Value")
 
         assert "Value" in self.cube.dataframe, (f'Column map is specifying a "Value" column '
-                f'but one does not exist in your dataframe, got {self.cube.dataframe.values}')
+                f'but one does not exist in your dataframe, got {self.cube.dataframe.columns.values}')
 
+       # V4s have optional number of non dimension columns, equal to a data marker column and
+        # anything we've described as an attribute
         additional_column_count = len(marker_column) + len(attribute_columns)
-        v4_col = f'V4_{additional_column_count}'
-
+ 
+        # V4 headers are p[<v4_ cell> <optional columns> <dimensions as pairs of  1 code and 1 label column>]
         new_columns = list(attribute_columns.keys()) + list(column_map.keys())
 
-        # TODO - change it in place, this will eat memory as-is
+        # TODO - change dataframe in place thens sort, this will eat memory as-is
         df = pd.DataFrame()
-        df[v4_col] = self.cube.dataframe["Value"]
+        df[f'V4_{additional_column_count}'] = self.cube.dataframe["Value"]
         for col in new_columns:
             df[col] = self.cube.dataframe[col]
             if col in column_map:
                 if "associated_notations" in column_map[col]:
                     df[column_map[col]["associated_notations"]] = self.cube.dataframe[column_map[col]["associated_notations"]]
 
-        df.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
+        self.cube.dataframe = df
+
+    def validate_data(self):
+        """
+        Where you validate the datacube
+        """
+        pass
+
+    def output_data(self):
+        """
+        Output the encapsulated dataframe to the required format and
+        to the required place
+        """
+        self.cube.dataframe.to_csv(self.destination_folder / f'{pathify(self.cube.title)}.csv', index=False)
 
     def format_metadata(self):
         """

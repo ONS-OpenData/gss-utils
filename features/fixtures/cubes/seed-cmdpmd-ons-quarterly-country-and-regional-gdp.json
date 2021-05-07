@@ -1,0 +1,56 @@
+{
+    "id": "ons-quarterly-country-and-regional-gdp",
+    "title": "Quarterly country and regional GDP",
+    "publisher": "Office for National Statistics",
+    "description": "Quarterly economic activity within Wales and the nine English regions (North East, North West, Yorkshire and The Humber, East Midlands, West Midlands, East of England, London, South East, and South West).",
+    "landingPage": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/datasets/quarterlycountryandregionalgdp",
+    "published": "2020-07-31",
+    "families": [
+        "Trade"
+    ],
+    "extract": {
+        "source": "CMD"
+    },
+    "transform": {
+        "airtable": "recg15iQbWgNh4nB6",
+        "stage": [
+            "To Do"
+        ],
+        "main_issue": 85,
+        "columns": {
+            "Period": {
+                "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod",
+                "value": "http://reference.data.gov.uk/id/{period}"
+            },
+            "Reference Area": {
+                "parent": "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
+                "value": "{reference_area}"
+            },
+            "Industry Section": {
+                "dimension": "http://gss-data.org.uk/def/trade/property/dimension/industry-section",
+                "value": "http://gss-data.org.uk/def/trade/concept/industry-section/{industry_section}",
+                "codelist": "http://gss-data.org.uk/def/trade/concept-scheme/industry-section",
+                "associated_notations": "Industry Section Label"
+            },
+            "Measure Type": {
+                "dimension": "http://purl.org/linked-data/cube#measureType",
+                "value": "http://gss-data.org.uk/def/trade/measure/{measure_type}",
+                "types": [
+                    "gdp-from-gva",
+                    "q-on-q-delta-gdp-from-gva",
+                    "q-on-last-year-q-delta-gdp-from-gva",
+                    "y-on-y-delta-gdp-from-gva"
+                ]
+            },
+            "Unit": {
+                "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
+                "value": "http://gss-data.org.uk/def/concept/measurement-units/{unit}"
+            },
+            "Value": {
+                "datatype": "decimal"
+            }
+        }
+    },
+    "sizingNotes": "",
+    "notes": ""
+}
