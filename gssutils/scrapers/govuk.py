@@ -1,3 +1,4 @@
+import backoff
 import logging
 import mimetypes
 from datetime import datetime
@@ -16,6 +17,13 @@ import re
 
 ACCEPTED_MIMETYPES = [ODS, Excel, ExcelOpenXML, ExcelTypes, ZIP, CSV, CSDB]
 
+# Note: we encountered what appeared to be inconsistant behaviour from the govuk apis during
+# the period 20/4/2021 - 25/4/2021, this resulted in intermittently empty json responses from
+# key apis. As an attempt to mitiigate this have added a generous (5 mins) exponential backoff 
+# and retry when we hit one.
+# see: https://github.com/GSS-Cogs/gss-utils/issues/239
+# TODO - remove this precaution in the longer term. JSONDecodedError's are not excluive to this issue.
+@backoff.on_exception(backoff.expo, json.JSONDecodeError, max_time=300)
 def content_api(scraper, tree):
     final_url = False
     uri_components = urlparse(scraper.uri)
