@@ -1,0 +1,17 @@
+Label,Notation,Parent Notation,Sort Priority,Description
+Exports,exports,,1,
+Imports,imports,,2,
+Dispatches,dispatches,exports,4,Exports to the EU made on an HMRC basis
+Arrivals,arrivals,imports,5,Imports from the EU made on an HMRC basis
+Balance,balance,,3,Net Exports (Exports minus Imports)
+EU Exports,eu-exports,exports,4,
+EU Imports,eu-imports,imports,5,
+Non-EU Exports,non-eu-exports,exports,6,
+Non-EU Imports,non-eu-imports,imports,7,
+Credits,credits,,8,
+Debits,debits,,9,
+Balances,balances,,10,
+Terms of Trade,terms-of-trade,,11,
+Inward,inward,,12,
+Outward,outward,,13,
+Not Applicable,not-applicable,,14,

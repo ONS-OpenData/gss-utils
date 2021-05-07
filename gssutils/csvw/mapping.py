@@ -3,7 +3,7 @@ import gzip
 import json
 import logging
 from io import TextIOBase
-from pathlib import Path
+from pathlib import PurePosixPath as Path
 from typing import List, Optional, Dict, TextIO, Any, Set, Union
 from urllib.parse import urljoin
 import re
@@ -14,7 +14,7 @@ from gssutils import pathify
 from gssutils.csvw.dsd import DataSet, DimensionComponent, MeasureComponent, AttributeComponent, Component, \
     DimensionProperty, DSD, Resource, MeasureProperty, AttributeProperty
 from gssutils.csvw.namespaces import prefix_map, URI
-from gssutils.csvw.table import Column, TableSchema, Table, ForeignKey
+from gssutils.csvw.table import Column, TableSchema, Table, ForeignKey, Datatype, ColumnReference
 
 default_map = {
     "Value": {
@@ -39,12 +39,13 @@ class CSVWMapping:
         self._components: List[Component] = []
         self._registry: Optional[URI] = None
         self._keys: List[str] = []
-        self._metadata_filename: Optional[URI] = None
+        self._metadata_filename: Optional[Path] = None
         self._foreign_keys: Optional[List[ForeignKey]] = None
         self._measureTemplate: Optional[URITemplate] = None
         self._measureTypes: Optional[List[str]] = None
         self._accretive_upload: bool = False
         self._containing_graph_uri: Optional[URI] = None
+        self._codelist_base: Optional[Path] = None
         self._suppress_catalog_and_dsd_output: bool = False
 
     @staticmethod
@@ -97,6 +98,9 @@ class CSVWMapping:
         for col in self._column_names:
             self._columns[col] = Column(name=CSVWMapping.namify(col), titles=col, datatype="string")
 
+    def set_local_codelist_base(self, base: str):
+        self._codelist_base = Path(base)
+
     def set_accretive_upload(self, info_json: Dict):
         if "load" in info_json and "accretiveUpload" in info_json["load"]:
             self._accretive_upload = info_json["load"]["accretiveUpload"]
@@ -111,7 +115,7 @@ class CSVWMapping:
     def set_suppress_catalog_and_dsd_output(self, should_suppress: bool):
         self._suppress_catalog_and_dsd_output = should_suppress
 
-    def set_additional_foreign_key(self, foreign_key: ForeignKey):
+    def add_foreign_key(self, foreign_key: ForeignKey):
         if self._foreign_keys is None:
             self._foreign_keys = []
         self._foreign_keys.append(foreign_key)
@@ -135,7 +139,7 @@ class CSVWMapping:
         self._dataset_uri = uri
 
         if dataset_root_uri is None:
-            print("WARNING: dataset_root_uri is unset. " +
+            logging.warning("Dataset_root_uri is unset. " +
                   "In future this warning will be converted to an error and terminate your build.")
 
             # Legacy compatibility code:
@@ -203,7 +207,24 @@ class CSVWMapping:
 
             return get_conventional_local_codelist_concept_uri_template(column_name)
 
-        # Look to see whether the measure type has its own column
+        def add_local_codelist(name: str):
+            if self._codelist_base is not None:
+                codelist_csv = (self._codelist_base / pathify(name)).with_suffix('.csv')
+                codelist_relative_uri = URI(codelist_csv)
+                self._external_tables.append(Table(
+                    url=codelist_relative_uri,
+                    tableSchema=URI("https://gss-cogs.github.io/family-schemas/codelist-schema.json"),
+                    suppressOutput=True
+                ))
+                self.add_foreign_key(ForeignKey(
+                    columnReference=self._columns[name].name,
+                    reference=ColumnReference(
+                        resource=codelist_relative_uri,
+                        columnReference="notation"
+                    )
+                ))
+
+    # Look to see whether the measure type has its own column
         for map_name, map_obj in self._mapping.items():
             if isinstance(map_obj, dict) and "dimension" in map_obj and map_obj["dimension"] == "http://purl.org/linked-data/cube#measureType":
                 self._measureTemplate = URITemplate(map_obj["value"])
@@ -229,9 +250,19 @@ class CSVWMapping:
                 obj = self._mapping[name]
                 if "dimension" in obj and "value" in obj:
                     self._keys.append(self._columns[name].name)
+                    datatype = "string"
+                    # if this is a measure type column and has a "types" list, we can validate the
+                    # expected values of the column using a regular expression, see
+                    # https://www.w3.org/TR/tabular-data-primer/#h-enumeration-regexp
+                    if obj["dimension"] == "http://purl.org/linked-data/cube#measureType" and "types" in obj:
+                        datatype = Datatype(
+                            base="string",
+                            format=f"^({'|'.join(obj['types'])})$"
+                        )
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["dimension"]),
-                        valueUrl=URI(obj["value"])
+                        valueUrl=URI(obj["value"]),
+                        datatype=datatype
                     )
                     self._components.append(DimensionComponent(
                         at_id=self.join_dataset_uri(f"#component/{pathify(name)}"),
@@ -270,6 +301,8 @@ class CSVWMapping:
                             rdfs_isDefinedBy=source
                         )
                     ))
+                    if "codelist" not in obj:
+                        add_local_codelist(name)
                 elif "description" in obj or "label" in obj:
                     # local dimension with a definition/label and maybe source of the definition
                     description: Optional[str] = obj.get("description", None)
@@ -296,6 +329,8 @@ class CSVWMapping:
                             rdfs_isDefinedBy=source
                         )
                     ))
+                    if "codelist" not in obj:
+                        add_local_codelist(name)
                 elif "attribute" in obj and "value" in obj:
                     self._columns[name] = self._columns[name]._replace(
                         propertyUrl=URI(obj["attribute"]),
@@ -387,6 +422,8 @@ class CSVWMapping:
                         rdfs_comment=description
                     )
                 ))
+                add_local_codelist(name)
+
         self._columns["virt_dataset"] = Column(
             name="virt_dataset",
             virtual=True,
@@ -472,7 +509,7 @@ class CSVWMapping:
 
     def write(self, out: Union[URI, TextIO]):
         if not isinstance(out, TextIOBase):
-            self._metadata_filename = out
+            self._metadata_filename = Path(out)
             stream = open(out, "w", encoding="utf-8")
         else:
             stream = out

@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 from typing import Optional
 
 from gssutils.csvw.mapping import CSVWMapping
+from gssutils.csvw.namespaces import URI
 from gssutils.utils import pathify
 
 
@@ -17,7 +18,7 @@ class Cubes:
     """
 
     def __init__(self, info_json="info.json", destination_path="out", base_uri="http://gss-data.org.uk",
-                 job_name=None):
+                 job_name=None, codelists_path: Optional[str] = None):
 
         with open(info_json, "r") as info_file:
             self.info = json.load(info_file)
@@ -29,6 +30,11 @@ class Cubes:
         self.destination_folder = Path(destination_path)
         self.destination_folder.mkdir(exist_ok=True, parents=True)
         self.base_uri = base_uri
+        self.local_codelists: Optional[str] = None
+        if codelists_path is not None:
+            self.local_codelists = codelists_path
+        elif (Path(destination_path) / '..' / 'codelists').exists():
+            self.local_codelists = "../codelists"
         self.cubes = []
         self.has_ran = False
         
@@ -42,7 +48,8 @@ class Cubes:
         Add a single datacube to the cubes class.
         """
         self.cubes.append(Cube(self.base_uri, scraper, dataframe, title, graph, info_json_dict,
-                               override_containing_graph, suppress_catalog_and_dsd_output))
+                               override_containing_graph, suppress_catalog_and_dsd_output,
+                               self.local_codelists))
 
     def output_all(self):
         """
@@ -88,7 +95,8 @@ class Cube:
     override_containing_graph_uri: Optional[str]
 
     def __init__(self, base_uri, scraper, dataframe, title, graph, info_json_dict,
-                 override_containing_graph_uri: Optional[str], suppress_catalog_and_dsd_output: bool):
+                 override_containing_graph_uri: Optional[str], suppress_catalog_and_dsd_output: bool,
+                 local_codelists: Optional[str] = None):
 
         self.scraper = scraper  # note - the metadata of a scrape, not the actual data source
         self.dataframe = dataframe
@@ -96,8 +104,9 @@ class Cube:
         self.scraper.set_base_uri(base_uri)
         self.graph = graph
         self.info_json_dict = copy.deepcopy(info_json_dict)  # don't copy a pointer, snapshot a thing
-        self.override_containing_graph_uri = override_containing_graph_uri
+        self.override_containing_graph_uri: Optional[URI] = URI(override_containing_graph_uri)
         self.suppress_catalog_and_dsd_output = suppress_catalog_and_dsd_output
+        self.local_codelists = local_codelists
 
     def _instantiate_map(self, destination_folder, pathified_title, info_json):
         """
@@ -116,7 +125,10 @@ class Cube:
         map_obj.set_csv(destination_folder / f'{pathified_title}.csv')
         map_obj.set_dataset_uri(urljoin(self.scraper._base_uri, f'data/{self.scraper._dataset_id}'))
 
-        if self.override_containing_graph_uri:
+        if self.local_codelists is not None:
+            map_obj.set_local_codelist_base(self.local_codelists)
+
+        if self.override_containing_graph_uri is not None:
             map_obj.set_containing_graph_uri(self.override_containing_graph_uri)
         else:
             map_obj.set_containing_graph_uri(self.scraper.dataset.pmdcatGraph)

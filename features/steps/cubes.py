@@ -18,7 +18,10 @@ def get_fixture(file_name):
 
 @given('I want to create datacubes from the seed "{seed_name}"')
 def step_impl(context, seed_name):
-    context.cubes = Cubes(get_fixture(seed_name))
+    if hasattr(context, 'codelists'):
+        context.cubes = Cubes(get_fixture(seed_name), codelists_path="../" + context.codelists)
+    else:
+        context.cubes = Cubes(get_fixture(seed_name))
 
 
 @step('I specify a datacube named "{cube_name}" with data "{csv_data}" and a scrape using the seed "{seed_name}"')
@@ -53,5 +56,8 @@ def step_impl(context, n):
 
     csv_io = open(csv_file_path, 'r', encoding='utf-8')
     metadata_io = open(metadata_file_path, 'r', encoding='utf-8')
-    context.turtle = run_csv2rdf(csv_file_path, metadata_file_path, csv_io, metadata_io)
-
+    context.turtle = run_csv2rdf(str(csv_file_path),
+                                 str(metadata_file_path),
+                                 csv_io,
+                                 metadata_io,
+                                 getattr(context, 'codelists', None))

@@ -51,33 +51,47 @@ def step_impl(context):
 
 @step("gsscogs/csvlint validates ok")
 def step_impl(context):
+    response, logs = run_csvlint(context)
+    assert_equal(response['StatusCode'], 0)
+
+
+@step('gsscogs/csvlint should fail with "{expected}"')
+def step_impl(context, expected):
+    response, logs = run_csvlint(context)
+    assert_equal(response['StatusCode'], 1)
+    assert expected in logs
+
+
+def run_csvlint(context):
     client = docker.from_env()
     csvlint = client.containers.create(
         'gsscogs/csvlint',
-        command=f'csvlint -s /tmp/{context.schema_filename}'
+        command=f'csvlint -s /tmp/{context.metadata_filename}'
     )
     archive = BytesIO()
-    context.schema_io.seek(0, SEEK_END)
-    schema_size = context.schema_io.tell()
-    context.schema_io.seek(0)
+    context.metadata_io.seek(0, SEEK_END)
+    metadata_size = context.metadata_io.tell()
+    context.metadata_io.seek(0)
     context.csv_io.seek(0, SEEK_END)
     csv_size = context.csv_io.tell()
     context.csv_io.seek(0)
     with TarFile(fileobj=archive, mode='w') as t:
-        tis = TarInfo(str(context.schema_filename))
-        tis.size = schema_size
+        tis = TarInfo(str(context.metadata_filename))
+        tis.size = metadata_size
         tis.mtime = time.time()
-        t.addfile(tis, BytesIO(context.schema_io.getvalue().encode('utf-8')))
+        t.addfile(tis, BytesIO(context.metadata_io.read().encode('utf-8')))
         tic = TarInfo(str(context.csv_filename))
         tic.size = csv_size
         tic.mtime = time.time()
-        t.addfile(tic, BytesIO(context.csv_io.getvalue().encode('utf-8')))
+        t.addfile(tic, BytesIO(context.csv_io.read().encode('utf-8')))
+        if hasattr(context, 'codelists'):
+            t.add(Path('features') / 'fixtures' / context.codelists, arcname=context.codelists)
     archive.seek(0)
     csvlint.put_archive('/tmp/', archive)
     csvlint.start()
     response = csvlint.wait()
     sys.stdout.write(csvlint.logs().decode('utf-8'))
-    assert_equal(response['StatusCode'], 0)
+    return (response, csvlint.logs().decode('utf-8'))
 
 
 @then("the metadata is valid JSON-LD")
@@ -87,7 +101,8 @@ def step_impl(context):
     g.parse(source=BytesIO(context.metadata_io.getvalue().encode('utf-8')), format='json-ld')
 
 
-def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metadata_io: TextIO):
+def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metadata_io: TextIO,
+                codelists_base: Optional[str] = None):
     client = docker.from_env()
     csv2rdf = client.containers.create(
         'gsscogs/csv2rdf',
@@ -109,6 +124,9 @@ def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metad
         tic.size = csv_size
         tic.mtime = time.time()
         t.addfile(tic, BytesIO(csv_io.read().encode('utf-8')))
+        if codelists_base is not None:
+            t.add(Path('features') / 'fixtures' / codelists_base, arcname=codelists_base)
+
     archive.seek(0)
     csv2rdf.put_archive('/tmp/', archive)
     csv2rdf.start()
@@ -127,14 +145,17 @@ def run_csv2rdf(csv_filename: str, metadata_filename: str, csv_io: TextIO, metad
 
 @step("gsscogs/csv2rdf generates RDF")
 def step_impl(context):
-    context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io)
+    context.turtle = run_csv2rdf(context.csv_filename, context.metadata_filename, context.csv_io, context.metadata_io,
+                                 getattr(context, 'codelists', None))
 
 
-def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[str] = ()):
+def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: List[bytes] = ()):
     client = docker.from_env()
     files = ['data.ttl']
     if len(extra_files) > 0:
         files.extend(extra_files)
+    if len(extra_data) > 0:
+        files.extend(f"extra_{i}.ttl" for i in range(0, len(extra_data)))
     tests = client.containers.create(
         'gsscogs/gdp-sparql-tests',
         command=f'''sparql-test-runner -t /usr/local/tests/{group} -m 10 '''
@@ -156,8 +177,7 @@ def run_ics(group: str, turtle: bytes, extra_files: List[str] = (), extra_data: 
             add_ttl = TarInfo(filename)
             add_ttl.size = len(add_turtle)
             add_ttl.mtime = time.time()
-            t.addfile(add_ttl, BytesIO(add_turtle.encode('utf-8')))
-            files.append(filename)
+            t.addfile(add_ttl, BytesIO(add_turtle))
     archive.seek(0)
     tests.put_archive('/tmp/', archive)
     tests.start()
@@ -206,6 +226,8 @@ def step_impl(context):
         context.csvw.set_registry(URI(context.registry))
     if hasattr(context, 'dataset_uri'):
         context.csvw.set_dataset_uri(context.dataset_uri)
+    if hasattr(context, 'codelists'):
+        context.csvw.set_local_codelist_base(context.codelists)
     context.metadata_io = StringIO()
     context.metadata_filename = context.csv_filename.with_name(context.csv_filename.name + '-metadata.json')
     context.csvw.write(context.metadata_io)
@@ -228,10 +250,10 @@ def step_impl(context):
 
 @step("the RDF should pass the PMD4 constraints")
 def step_impl(context):
-    if hasattr(context, 'extra_files') and len(context.extra_files) > 0:
-        result = run_ics('pmd/pmd4', context.turtle, context.extra_files)
-    else:
-        result = run_ics('pmd/pmd4', context.turtle)
+    result = run_ics('pmd/pmd4',
+                     context.turtle,
+                     getattr(context, 'extra_files', ()),
+                     getattr(context, 'extra_data', ()))
     assert_equal(result, 0)
 
 
@@ -240,12 +262,12 @@ def step_impl(context, files):
     context.extra_files = [f.strip() for f in files.split(',')]
 
 
-@step('I add local codelists "{files}"')
+@step('I add extra CSV-W "{files}"')
 def step_impl(context, files):
-    codelists = [f.strip() for f in files.split(',')]
+    csvw_files = [f.strip() for f in files.split(',')]
     context.extra_data = []
-    for csv in codelists:
-        csv_path = Path('features') / 'fixtures' / 'extra' / csv
+    for csv_filename in csvw_files:
+        csv_path = Path('features') / 'fixtures' / 'extra' / csv_filename
         metadata_path = csv_path.with_suffix('.csv-metadata.json')
         with csv_path.open('r') as csv_file, metadata_path.open('r') as metadata_file:
             context.extra_data.append(run_csv2rdf(csv_path.name, metadata_file.name, csv_file, metadata_file))
@@ -256,3 +278,8 @@ def step_impl(context):
     mapping = {'transform': {'columns': json.loads(context.text)}}
     context.json_io = StringIO()
     json.dump(mapping, context.json_io)
+
+
+@step('local codelists in "{codelists}"')
+def step_impl(context, codelists):
+    context.codelists = codelists

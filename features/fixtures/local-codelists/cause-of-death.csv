@@ -1,0 +1,6 @@
+Label,Notation,Parent Notation,Sort Priority
+All causes,total,,0
+Non COVID-19,non-covid-total,total,1
+COVID-19 suspected or confirmed,covid-total,total,2
+COVID-19 confirmed,covid-confirmed,covid-total,3
+COVID-19 suspected,covid-suspected,covid-total,4

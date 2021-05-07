@@ -1,0 +1,9 @@
+Label,Notation,Parent Notation,Sort Priority
+Total,total,,0
+Ambulance,ambulance,total,1
+At the service,at-the-service,total,2
+Hospice,hospice,total,3
+Hospital,hospital,total,4
+Other,other,total,5
+Person's own home,persons-own-home,total,6
+Unknown,unknown,total,7

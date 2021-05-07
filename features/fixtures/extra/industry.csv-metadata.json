@@ -1,0 +1,117 @@
+{
+    "@context": "http://www.w3.org/ns/csvw",
+    "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry",
+    "url": "industry.csv",
+    "rdfs:label": "Industry",
+    "dc:title": "Industry",
+    "tableSchema": {
+        "columns": [
+            {
+                "titles": "Label",
+                "name": "label",
+                "datatype": "string",
+                "required": true,
+                "propertyUrl": "rdfs:label"
+            },
+            {
+                "titles": "Notation",
+                "name": "notation",
+                "datatype": {
+                    "base": "string",
+                    "format": "^-?[\\w\\.\\/\\+]+(-[\\w\\.\\/\\+]+)*$"
+                },
+                "required": true,
+                "propertyUrl": "skos:notation"
+            },
+            {
+                "titles": "Parent Notation",
+                "name": "parent_notation",
+                "datatype": {
+                    "base": "string",
+                    "format": "^(-?[\\w\\.\\/\\+]+(-[\\w\\.\\/\\+]+)*|)$"
+                },
+                "required": false,
+                "propertyUrl": "skos:broader",
+                "valueUrl": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/industry/{parent_notation}"
+            },
+            {
+                "titles": "Sort Priority",
+                "name": "sort_priority",
+                "datatype": "integer",
+                "required": false,
+                "propertyUrl": "http://www.w3.org/ns/ui#sortPriority"
+            },
+            {
+                "virtual": true,
+                "propertyUrl": "rdf:type",
+                "valueUrl": "skos:Concept"
+            },
+            {
+                "virtual": true,
+                "propertyUrl": "skos:inScheme",
+                "valueUrl": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry"
+            }
+        ],
+        "primaryKey": "notation",
+        "aboutUrl": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#concept/industry/{notation}"
+    },
+    "prov:hadDerivation": {
+        "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry",
+        "@type": [
+            "skos:ConceptScheme",
+            "http://publishmydata.com/pmdcat#ConceptScheme"
+        ]
+    },
+    "rdfs:seeAlso": [
+        {
+            "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry/dataset",
+            "@type": [
+                "dcat:Dataset",
+                "http://publishmydata.com/pmdcat#Dataset"
+            ],
+            "http://publishmydata.com/pmdcat#datasetContents": {
+                "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry"
+            },
+            "http://publishmydata.com/pmdcat#graph": {
+                "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry"
+            },
+            "dc:modified": {
+                "@type": "dateTime",
+                "@value": "2021-04-13T20:41:21.175325"
+            },
+            "rdfs:label": "Industry",
+            "dc:title": "Industry",
+            "rdfs:comment": "Dataset representing the 'Industry' code list.",
+            "dc:issued": {
+                "@type": "dateTime",
+                "@value": "2021-04-13T20:41:21.175325"
+            }
+        },
+        {
+            "@id": "http://gss-data.org.uk/catalog/vocabularies",
+            "dcat:record": {
+                "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry/catalog-record"
+            }
+        },
+        {
+            "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry/catalog-record",
+            "@type": "dcat:CatalogRecord",
+            "foaf:primaryTopic": {
+                "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry/dataset"
+            },
+            "http://publishmydata.com/pmdcat#metadataGraph": {
+                "@id": "http://gss-data.org.uk/data/gss_data/trade/ons-uk-trade-in-goods-by-industry-country-and-commodity#scheme/industry"
+            },
+            "dc:title": "Industry Catalog Record",
+            "rdfs:label": "Industry Catalog Record",
+            "dc:issued": {
+                "@type": "dateTime",
+                "@value": "2021-04-13T20:41:21.175325"
+            },
+            "dc:modified": {
+                "@type": "dateTime",
+                "@value": "2021-04-13T20:41:21.175325"
+            }
+        }
+    ]
+}

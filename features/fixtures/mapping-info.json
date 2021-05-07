@@ -26,12 +26,16 @@
         "value": "http://reference.data.gov.uk/id/year/{year}"
       },
       "Country": {
-        "dimension": "http://gss-data.org.uk/def/dimension/ons-partner-geography",
+        "dimension": "http://gss-data.org.uk/def/trade/property/dimension/ons-partner-geography",
         "value": "http://gss-data.org.uk/def/concept-scheme/sdmx-bop/cl_area/{country}"
       },
       "Direction": {
-        "dimension": "http://gss-data.org.uk/def/dimension/flow-directions",
+        "dimension": "http://gss-data.org.uk/def/trade/property/dimension/flow-directions",
         "value": "http://gss-data.org.uk/def/concept/flow-directions/{direction}"
+      },
+      "Commodity": {
+        "dimension": "http://gss-data.org.uk/def/trade/property/dimension/commodity",
+        "value": "http://gss-data.org.uk/def/trade/concept/commodity/{commodity}"
       },
       "Marker": {
         "attribute": "http://purl.org/linked-data/sdmx/2009/attribute#obsStatus",
@@ -39,7 +43,7 @@
       },
       "Value": {
         "unit": "http://gss-data.org.uk/def/concept/measurement-units/gbp",
-        "measure": "http://gss-data.org.uk/def/measure/gbp-total",
+        "measure": "http://gss-data.org.uk/def/trade/measure/gbp-total",
         "datatype": "number"
       }
     }
