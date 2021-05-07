@@ -76,3 +76,4 @@ Feature: PMD metadata
       And set the theme to <business-industry-trade-energy>
       And generate TriG
       Then the TriG should contain triples given by "pmd4-metadata.ttl"
+
